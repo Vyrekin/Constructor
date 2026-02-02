@@ -32,16 +32,114 @@
         }
 
         [data-theme="dark"] {
-            --primary: #5c7cfa;
-            --primary-soft: #182030;
-            --secondary: #748ffc;
-            --surface: #1a1d2d;
-            --bg-app: #0f111a;
-            --text-main: #edf2f7;
-            --text-muted: #a0aec0;
-            --border: #2d3748;
-            --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.5);
+            /* Premium Slate Dark Palette */
+            --primary: #6366f1;
+            --primary-soft: rgba(99, 102, 241, 0.15);
+            --secondary: #818cf8;
+            --surface: #1e293b;
+            --bg-app: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+
+            /* Enhanced Dark Shadows */
+            --shadow-float: 0 10px 40px rgba(0, 0, 0, 0.6);
             --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Dark Mode Specific Overrides */
+        [data-theme="dark"] .app-header {
+            background: rgba(15, 23, 42, 0.85);
+            /* Dark glass */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .bg-light {
+            background-color: #1e293b !important;
+            /* Surface for standard light bg */
+        }
+
+        [data-theme="dark"] .card-diamond,
+        [data-theme="dark"] .condition-block,
+        [data-theme="dark"] .formula-card,
+        [data-theme="dark"] .section-title-espo,
+        [data-theme="dark"] .inter-op-select,
+        [data-theme="dark"] .formula-item,
+        [data-theme="dark"] .modal-content,
+        [data-theme="dark"] .dropdown-menu {
+            background-color: var(--surface);
+            border-color: var(--border);
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] .condition-header {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-bottom-color: var(--border);
+        }
+
+        [data-theme="dark"] .formula-box,
+        [data-theme="dark"] .drop-zone {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-color: var(--border);
+            color: var(--text-muted);
+        }
+
+        [data-theme="dark"] .drop-zone:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select,
+        [data-theme="dark"] .input-group-text {
+            background-color: #0f172a;
+            border-color: var(--border);
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] .form-control::placeholder {
+            color: #475569;
+        }
+
+        [data-theme="dark"] .nav-link {
+            color: #cbd5e1;
+        }
+
+        [data-theme="dark"] .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        [data-theme="dark"] .nav-link.active {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        [data-theme="dark"] .btn-light {
+            background-color: var(--surface);
+            border-color: var(--border);
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] .btn-light:hover {
+            background-color: #334155;
+            color: #fff;
+        }
+
+        [data-theme="dark"] .text-muted {
+            color: #94a3b8 !important;
+        }
+
+        [data-theme="dark"] .border {
+            border-color: var(--border) !important;
+        }
+
+        /* Fix Espo Condition Colors in Dark Mode */
+        [data-theme="dark"] .op-ta,
+        [data-theme="dark"] .op-abo,
+        [data-theme="dark"] .op-okrim {
+            filter: brightness(0.9);
+            /* Slightly dim the bright badges */
         }
 
         body {
@@ -59,7 +157,7 @@
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
-            padding: 0.5rem 0;
+            padding: 0.25rem 0;
         }
 
         /* Navigation Tabs */
@@ -84,14 +182,14 @@
             border-radius: var(--radius-card);
             box-shadow: var(--shadow-card);
             transition: transform 0.2s;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         /* Accordion Customization */
         .accordion-item {
             border: 1px solid var(--border);
             border-radius: 16px !important;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             overflow: hidden;
             background: var(--surface);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
@@ -102,7 +200,7 @@
             color: var(--text-main);
             font-weight: 600;
             border-radius: 16px !important;
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 0.85rem;
         }
 
         .accordion-button:not(.collapsed) {
@@ -129,15 +227,15 @@
         .counter-box {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: var(--radius-card);
             text-align: center;
             box-shadow: var(--shadow-float);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .counter-number {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 700;
             line-height: 1;
         }
@@ -213,7 +311,7 @@
             background-color: var(--primary);
             border: none;
             border-radius: var(--radius-btn);
-            padding: 0.8rem 1.5rem;
+            padding: 0.5rem 1.25rem;
             box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
             font-weight: 600;
             transition: all 0.2s;
@@ -229,7 +327,7 @@
         .drop-zone {
             border: 2px dashed var(--border);
             border-radius: var(--radius-card);
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             background-color: #fafafa;
             transition: all 0.3s;
@@ -294,8 +392,8 @@
             background: #fff;
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             position: relative;
         }
@@ -418,18 +516,48 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             font-weight: 700;
             font-size: 0.85rem;
-            margin: 1.5rem 0 1rem 0;
             cursor: pointer;
-            padding: 10px 20px;
+            padding: 6px 20px;
             border-radius: 10px;
             transition: all 0.2s;
             border: 1px solid var(--border);
             background: #fff;
+            width: fit-content;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 2;
+            white-space: nowrap;
+        }
+
+        .section-title-row {
+            display: flex;
+            align-items: center;
             width: 100%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            position: relative;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .section-title-row::before,
+        .section-title-row::after {
+            content: "";
+            height: 1px;
+            background: #000;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .section-title-row::before {
+            width: 40px;
+            /* Fixed small width to keep button on the left */
+            margin-right: 15px;
+        }
+
+        .section-title-row::after {
+            flex-grow: 1;
+            margin-left: 15px;
         }
 
         .section-title-espo.text-primary {
@@ -485,14 +613,14 @@
 
         #espo-include-list,
         #espo-exclude-list {
-            min-height: 40px;
+            min-height: 20px;
             border-radius: 8px;
             transition: all 0.2s;
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
-            padding: 8px;
+            padding: 4px 0;
         }
 
         #espo-include-list:empty,
@@ -541,7 +669,7 @@
             gap: 6px;
             align-items: center;
             min-height: 50px;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             line-height: 1.6;
         }
 
@@ -594,8 +722,8 @@
             top: 70px;
             z-index: 900;
             background: var(--bg-app);
-            padding-top: 10px;
-            margin-top: -10px;
+            padding-top: 5px;
+            margin-top: -5px;
         }
 
         .sticky-controls-wrapper {
@@ -604,16 +732,16 @@
             /* Adjusted to sit below the formula card */
             z-index: 890;
             background: var(--bg-app);
-            padding-bottom: 15px;
-            margin-bottom: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .formula-card {
             background: #fff;
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 1.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
             box-shadow: var(--shadow-card);
             position: relative;
             transition: all 0.3s ease;
@@ -657,12 +785,13 @@
             min-height: 50px;
             margin-bottom: 0.5rem;
             line-height: 1.6;
-            max-height: 62px;
+            max-height: 54px;
             /* Approx 1 line + padding */
             overflow: hidden;
             position: relative;
             transition: max-height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             padding-right: 50px;
+            margin-bottom: 0.25rem;
             /* Space for the dots */
         }
 
@@ -778,7 +907,7 @@
             background: #fff;
             border: 1px solid var(--border);
             border-radius: 18px;
-            padding: 12px;
+            padding: 8px 12px;
             box-shadow: var(--shadow-sm);
         }
 
@@ -809,7 +938,7 @@
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius-card);
-            padding: 1.5rem;
+            padding: 1rem;
             animation: slideUpFade 0.4s ease-out;
             box-shadow: var(--shadow-card);
         }
@@ -966,15 +1095,15 @@
         </div>
     </header>
 
-    <div class="container-fluid px-4 py-4">
-        <div class="row g-4">
+    <div class="container-fluid px-3 py-3">
+        <div class="row g-3">
 
             <!-- Main Content Area -->
             <div class="col-lg-9">
 
                 <!-- VIEW 1: CONSTRUCTOR -->
                 <div id="view-constructor" class="view-section">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="fw-bold mb-0">Фільтри сегментації</h5>
                         <button class="btn btn-sm btn-outline-danger btn-light border-0 text-danger"
                             onclick="clearFilters()">
@@ -983,7 +1112,7 @@
                     </div>
 
                     <!-- Improved Active Filters Area (Legacy + Formula Support) -->
-                    <div id="active-filters-summary" class="mb-4">
+                    <div id="active-filters-summary" class="mb-3">
                         <div class="formula-card" id="main-formula-card">
                             <div class="d-flex align-items-center justify-content-between mb-2" style="cursor: pointer;"
                                 onclick="toggleFormulaCard()">
@@ -997,31 +1126,28 @@
                             <div class="formula-content-wrapper">
                                 <div class="mb-3">
                                     <div id="formula-filters-view">
-                                        <div class="formula-box" id="formula-display">
-                                            <span class="text-muted small">Немає фільтрів</span>
-                                        </div>
+                                        <div class="formula-box" id="formula-display" style="display:none;"></div>
                                     </div>
                                 </div>
 
                                 <!-- Espo-style Hierarchical View -->
                                 <div id="standard-filters-view" class="standard-view px-2">
                                     <div id="filters-blocks-container">
-                                        <div class="section-title-espo text-primary"
-                                            onclick="openFilterPicker('Include', event)">
-                                            <i class="bi bi-plus-circle-fill"></i> Включити
+                                        <div class="section-title-row">
+                                            <div class="section-title-espo text-primary"
+                                                onclick="openFilterPicker('Include', event)">
+                                                <i class="bi bi-plus-circle-fill"></i> Включити
+                                            </div>
                                         </div>
                                         <div id="espo-include-list"></div>
 
-                                        <div class="section-title-espo text-danger mt-4"
-                                            onclick="openFilterPicker('Exclude', event)">
-                                            <i class="bi bi-dash-circle-fill"></i> Виключити
+                                        <div class="section-title-row">
+                                            <div class="section-title-espo text-danger"
+                                                onclick="openFilterPicker('Exclude', event)">
+                                                <i class="bi bi-dash-circle-fill"></i> Виключити
+                                            </div>
                                         </div>
                                         <div id="espo-exclude-list"></div>
-
-                                        <div class="text-center w-100 py-3 text-muted small" id="no-filters-msg">
-                                            Натисніть <span class="text-primary fw-bold px-1">Включити</span> або <span
-                                                class="text-danger fw-bold px-1">Виключити</span> щоб додати фільтр
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1031,70 +1157,90 @@
                     <div class="sticky-controls-wrapper">
                         <div class="compact-control-card">
                             <div class="row g-2 align-items-center">
-                                <!-- Left: Tabs -->
-                                <div class="col-lg-8">
-                                    <ul class="nav nav-pills custom-filter-tabs border-0 shadow-none p-0"
-                                        id="filterTabs" role="tablist">
-                                        <li class="nav-item">
-                                            <button class="nav-link active" id="tab-c1" data-bs-toggle="pill"
-                                                data-bs-target="#pane-c1" type="button" role="tab"><i
-                                                    class="bi bi-box-seam"></i> ЕН</button>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button class="nav-link" id="tab-c2" data-bs-toggle="pill"
-                                                data-bs-target="#pane-c2" type="button" role="tab"><i
-                                                    class="bi bi-person-badge"></i> Клієнт</button>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button class="nav-link" id="tab-c3" data-bs-toggle="pill"
-                                                data-bs-target="#pane-c3" type="button" role="tab"><i
-                                                    class="bi bi-cash-coin"></i> Фінанси</button>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button class="nav-link" id="tab-c4" data-bs-toggle="pill"
-                                                data-bs-target="#pane-c4" type="button" role="tab"><i
-                                                    class="bi bi-person-vcard"></i> Профіль</button>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button class="nav-link" id="tab-c5" data-bs-toggle="pill"
-                                                data-bs-target="#pane-c5" type="button" role="tab"><i
-                                                    class="bi bi-geo-alt"></i> Локації</button>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button class="nav-link" id="tab-c6" data-bs-toggle="pill"
-                                                data-bs-target="#pane-c6" type="button" role="tab"><i
-                                                    class="bi bi-phone"></i> Пристрої</button>
-                                        </li>
-                                        <li class="nav-item">
-                                            <button class="nav-link" id="tab-c7" data-bs-toggle="pill"
-                                                data-bs-target="#pane-c7" type="button" role="tab"><i
-                                                    class="bi bi-check-circle"></i> Згоди</button>
-                                        </li>
-                                    </ul>
+                                <!-- Left: Tabs (guaranteed single row) -->
+                                <div class="col-lg-9">
+                                    <div class="overflow-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+                                        <ul class="nav nav-pills custom-filter-tabs border-0 shadow-none p-0 flex-nowrap"
+                                            id="filterTabs" role="tablist">
+                                            <li class="nav-item">
+                                                <button class="nav-link active" id="tab-c1" data-bs-toggle="pill"
+                                                    data-bs-target="#pane-c1" type="button" role="tab"><i
+                                                        class="bi bi-box-seam"></i> ЕН</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" id="tab-c2" data-bs-toggle="pill"
+                                                    data-bs-target="#pane-c2" type="button" role="tab"><i
+                                                        class="bi bi-person-badge"></i> Клієнт</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" id="tab-c3" data-bs-toggle="pill"
+                                                    data-bs-target="#pane-c3" type="button" role="tab"><i
+                                                        class="bi bi-cash-coin"></i> Фінанси</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" id="tab-c4" data-bs-toggle="pill"
+                                                    data-bs-target="#pane-c4" type="button" role="tab"><i
+                                                        class="bi bi-person-vcard"></i> Профіль</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" id="tab-c5" data-bs-toggle="pill"
+                                                    data-bs-target="#pane-c5" type="button" role="tab"><i
+                                                        class="bi bi-geo-alt"></i> Локації</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" id="tab-c6" data-bs-toggle="pill"
+                                                    data-bs-target="#pane-c6" type="button" role="tab"><i
+                                                        class="bi bi-phone"></i> Пристрої</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" id="tab-c7" data-bs-toggle="pill"
+                                                    data-bs-target="#pane-c7" type="button" role="tab"><i
+                                                        class="bi bi-check-circle"></i> Згоди</button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
 
-                                <!-- Right: Mode Toggle -->
-                                <div class="col-lg-4 ps-3 border-start">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="bg-primary-soft p-1 rounded-circle">
-                                                <i class="bi bi-gear-wide-connected text-primary"
-                                                    style="font-size: 0.8rem;"></i>
-                                            </div>
-                                            <span class="small fw-bold text-nowrap">Режим:</span>
-                                        </div>
-                                        <div class="btn-group btn-group-sm" role="group">
+                                <!-- Right: Mode Toggle (Visual Switch) -->
+                                <div class="col-lg-3 ps-2 border-start">
+                                    <div class="d-flex align-items-center justify-content-center h-100 gap-2">
+                                        <span class="fw-bold text-muted text-uppercase"
+                                            style="font-size: 0.7rem;">Режим:</span>
+
+                                        <!-- Custom Toggle Switch -->
+                                        <div class="position-relative d-inline-flex bg-light rounded-pill p-1 border">
                                             <input type="radio" class="btn-check" name="global-filter-mode"
                                                 id="mode-include" value="Include" checked
                                                 onchange="window.currentFilterMode='Include'">
-                                            <label class="btn btn-outline-primary px-3"
+                                            <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
                                                 for="mode-include">Включити</label>
 
                                             <input type="radio" class="btn-check" name="global-filter-mode"
                                                 id="mode-exclude" value="Exclude"
                                                 onchange="window.currentFilterMode='Exclude'">
-                                            <label class="btn btn-outline-danger px-3"
+                                            <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
                                                 for="mode-exclude">Виключити</label>
+
+                                            <style>
+                                                .mode-label {
+                                                    color: var(--text-muted);
+                                                    font-size: 0.7rem;
+                                                    transition: all 0.3s ease-in-out;
+                                                    border: 1px solid transparent;
+                                                }
+
+                                                #mode-include:checked+label {
+                                                    background-color: var(--primary);
+                                                    color: white;
+                                                    box-shadow: 0 2px 6px rgba(67, 97, 238, 0.4);
+                                                }
+
+                                                #mode-exclude:checked+label {
+                                                    background-color: #dc3545;
+                                                    color: white;
+                                                    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.4);
+                                                }
+                                            </style>
                                         </div>
                                     </div>
                                 </div>
@@ -1413,7 +1559,7 @@
                     </div>
 
                     <!-- Constructor Results (Moved to Bottom) -->
-                    <div id="constructor-results" class="d-none animate-fade-in mt-4">
+                    <div id="constructor-results" class="d-none animate-fade-in mt-3">
                         <div class="card-diamond p-3">
                             <h6 class="fw-bold mb-3 small text-uppercase">Попередній перегляд (Топ 5)</h6>
                             <div class="table-responsive rounded-3 border">
@@ -1464,7 +1610,7 @@
                             <!-- Drag & Drop -->
                             <div class="col-md-6">
                                 <label class="form-label fw-bold">Джерело даних</label>
-                                <div class="drop-zone py-4 px-3" id="dropZone"
+                                <div class="drop-zone py-3 px-3" id="dropZone"
                                     style="border: 2px dashed var(--border); border-radius: var(--radius-card); background-color: #fafafa; text-align: center; cursor: pointer;">
                                     <i class="bi bi-cloud-upload fs-1 text-primary mb-2"></i>
                                     <p class="mb-1 text-dark fw-bold">Перетягніть файл сюди</p>
@@ -1500,7 +1646,7 @@
                             </div>
                         </div>
 
-                        <hr class="my-5 opacity-10">
+                        <hr class="my-3 opacity-10">
 
                         <div class="row align-items-end g-3">
                             <div class="col-md-4">
@@ -1530,7 +1676,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-check form-switch mb-4 d-flex align-items-center">
+                                <div class="form-check form-switch mb-3 d-flex align-items-center">
                                     <input class="form-check-input ms-0 me-3" type="checkbox" id="excludeClients"
                                         style="transform: scale(1.4);" checked onchange="updateState()">
                                     <label class="form-check-label text-secondary" for="excludeClients"
@@ -1565,7 +1711,7 @@
                 <!-- VIEW 3: AI ASSISTANT -->
                 <div id="view-ai" class="view-section d-none">
                     <div class="card-diamond p-3">
-                        <div class="d-flex align-items-center mb-4">
+                        <div class="d-flex align-items-center mb-3">
                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
                                 style="width:56px; height:56px; box-shadow: 0 5px 15px rgba(67,97,238,0.3);">
                                 <i class="bi bi-magic fs-4"></i>
@@ -1579,7 +1725,7 @@
                             </div>
                         </div>
 
-                        <div class="row g-3 align-items-end mb-4">
+                        <div class="row g-3 align-items-end mb-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-danger">Формат вибірки
                                     (Обов'язково)*</label>
@@ -1668,25 +1814,8 @@
                         </button>
                     </div>
 
-                    <!-- 2. Actions (Moved Up) -->
+                    <!-- 2. Shortcuts / Presets (Moved under Counter) -->
                     <div class="card-diamond p-3 mb-3">
-                        <label class="form-label text-muted small fw-bold text-uppercase">Дія з вибіркою</label>
-                        <select class="form-select mb-2">
-                            <option value="cdp">Зберегти в CDP</option>
-                            <option value="csv">Завантажити .CSV</option>
-                            <option value="api">Відправити по API</option>
-                        </select>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text bg-white text-muted small">К-сть</span>
-                            <input type="number" class="form-control" value="1000" min="1" placeholder="Всі">
-                        </div>
-                        <button class="btn btn-primary w-100 py-2 fw-semibold" onclick="handleExportAction()">
-                            <i class="bi bi-cloud-download me-2"></i>Сформувати
-                        </button>
-                    </div>
-
-                    <!-- 3. Shortcuts / Presets (Moved Up) -->
-                    <div class="card-diamond p-3">
                         <h6 class="fw-bold mb-3 small text-uppercase text-muted">Швидкі шаблони</h6>
                         <div class="d-grid gap-2">
                             <button
@@ -1696,8 +1825,7 @@
                                         class="bi bi-star-fill"></i></span>
                                 <div style="line-height:1.1">
                                     <span class="d-block fw-bold small">Клієнти VIP</span>
-                                    <span class="text-muted" style="font-size: 0.7rem;">Чек > 5000,
-                                        iPhone</span>
+                                    <span class="text-muted" style="font-size: 0.7rem;">Чек > 5000, iPhone</span>
                                 </div>
                             </button>
                             <button
@@ -1707,52 +1835,136 @@
                                         class="bi bi-exclamation-triangle-fill"></i></span>
                                 <div style="line-height:1.1">
                                     <span class="d-block fw-bold small">Ризик відтоку</span>
-                                    <span class="text-muted" style="font-size: 0.7rem;">60 днів без
-                                        активності</span>
+                                    <span class="text-muted" style="font-size: 0.7rem;">60 днів без активності</span>
                                 </div>
                             </button>
                         </div>
                     </div>
 
-                    <!-- 4. Format Selection (Moved from Main) -->
-                    <div class="card-diamond p-3 border shadow-sm">
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <div class="bg-primary-soft p-2 rounded-circle">
-                                <i class="bi bi-file-earmark-text text-primary"></i>
-                            </div>
-                            <h6 class="fw-bold mb-0 small text-uppercase">Формат звіту</h6>
-                        </div>
+                    <!-- 3. Actions & Format (Unified Block) -->
+                    <div class="card-diamond p-3 mb-3">
+                        <h6 class="fw-bold mb-3 small text-uppercase text-muted border-bottom pb-2">Експорт результатів
+                        </h6>
+
+                        <!-- Row 1: Action Type -->
                         <div class="mb-3">
-                            <label class="form-label small text-muted mb-1">Оберіть формат вибірки:</label>
-                            <select id="constructor-format-side" class="form-select form-select-sm"
-                                onchange="document.getElementById('constructor-format').value = this.value">
-                                <option value="" selected disabled>Оберіть формат...</option>
-                                <option value="phone">Телефон</option>
-                                <option value="cid">CID</option>
-                                <option value="email">E-mail</option>
-                                <option value="audience_id">ID Аудиторії</option>
+                            <label class="form-label text-muted small fw-bold text-uppercase mb-1"
+                                style="font-size: 0.7rem;">Оберіть дію:</label>
+                            <select id="export-action-type" class="form-select form-select-sm"
+                                onchange="toggleExportFields()">
+                                <option value="preview">Попередній перегляд (Тільки графіки)</option>
+                                <option value="csv">Завантажити CSV файл</option>
+                                <option value="cdp">Відправити в CDP</option>
+                                <option value="api">API Запит (JSON)</option>
                             </select>
                         </div>
-                        <button class="btn btn-primary w-100 shadow-sm py-2" onclick="syncAndGenerate()">
-                            <i class="bi bi-play-circle me-2"></i>Сформувати запит
-                        </button>
-                        <!-- Hidden legacy input to keep JS working -->
-                        <select id="constructor-format" class="d-none">
-                            <option value="phone">phone</option>
-                            <option value="cid">cid</option>
-                            <option value="email">email</option>
-                            <option value="audience_id">audience_id</option>
-                        </select>
 
-                        <script>
-                            function syncAndGenerate() {
-                                const sideVal = document.getElementById('constructor-format-side').value;
-                                if (!sideVal) { alert('Будь ласка, оберіть формат'); return; }
-                                document.getElementById('constructor-format').value = sideVal;
-                                handleGeneration('constructor');
-                            }
-                        </script>
+                        <!-- Format Settings (Hidden for Preview) -->
+                        <div id="export-settings-block" style="display:none;">
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label text-muted small fw-bold text-uppercase mb-1"
+                                        style="font-size: 0.65rem;">Формат даних</label>
+                                    <select id="constructor-format-unified" class="form-select form-select-sm">
+                                        <option value="phone" selected>Телефон</option>
+                                        <option value="cid">CID</option>
+                                        <option value="email">E-mail</option>
+                                        <option value="audience_id">ID Ауд.</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label class="form-label text-muted small fw-bold text-uppercase mb-0"
+                                            style="font-size: 0.65rem;">Кількість</label>
+                                        <div
+                                            class="form-check form-switch min-h-0 mb-0 d-flex align-items-center gap-1">
+                                            <input class="form-check-input" type="checkbox" id="export-all-check"
+                                                style="width: 2em; height: 1em; margin-top: 0; cursor: pointer;"
+                                                onchange="toggleExportCountInput()">
+                                            <label class="form-check-label text-muted" for="export-all-check"
+                                                style="font-size: 0.65rem; cursor: pointer;">Всі</label>
+                                        </div>
+                                    </div>
+                                    <input type="number" id="export-count" class="form-control form-control-sm"
+                                        value="1000" min="1" placeholder="1000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Single Smart Button -->
+                        <button id="smart-execute-btn" class="btn btn-primary w-100 py-2 fw-bold shadow-sm"
+                            onclick="handleSmartExecute()">
+                            <i class="bi bi-play-circle-fill me-2"></i> <span id="smart-btn-text">Розрахувати
+                                показники</span>
+                        </button>
                     </div>
+
+                    <script>
+                        function toggleExportFields() {
+                            const action = document.getElementById('export-action-type').value;
+                            const settings = document.getElementById('export-settings-block');
+                            const btnText = document.getElementById('smart-btn-text');
+                            const btn = document.getElementById('smart-execute-btn');
+
+                            if (action === 'preview') {
+                                settings.style.display = 'none';
+                                btnText.innerText = 'Розрахувати показники';
+                                btn.classList.remove('btn-success', 'btn-dark');
+                                btn.classList.add('btn-primary');
+                            } else {
+                                settings.style.display = 'block';
+                                if (action === 'csv') {
+                                    btnText.innerText = 'Завантажити CSV';
+                                    btn.classList.remove('btn-primary', 'btn-dark');
+                                    btn.classList.add('btn-success');
+                                } else if (action === 'cdp') {
+                                    btnText.innerText = 'Відправити в CDP';
+                                    btn.classList.remove('btn-success', 'btn-primary');
+                                    btn.classList.add('btn-dark');
+                                } else {
+                                    btnText.innerText = 'Виконати API запит';
+                                    btn.classList.remove('btn-success', 'btn-dark');
+                                    btn.classList.add('btn-primary');
+                                }
+                            }
+                        }
+
+                        function toggleExportCountInput() {
+                            const isAll = document.getElementById('export-all-check').checked;
+                            const input = document.getElementById('export-count');
+                            if (isAll) {
+                                input.disabled = true;
+                                input.dataset.oldValue = input.value;
+                                input.value = '';
+                                input.placeholder = 'Всі записи';
+                            } else {
+                                input.disabled = false;
+                                input.value = input.dataset.oldValue || '1000';
+                                input.placeholder = '1000';
+                            }
+                        }
+
+                        function handleSmartExecute() {
+                            const action = document.getElementById('export-action-type').value;
+                            if (action === 'preview') {
+                                syncAndGenerate(); // Calls existing generation logic
+                            } else {
+                                // For exports, we might need value from format select
+                                const formatSide = document.getElementById('constructor-format-unified').value;
+                                const hiddenFormat = document.getElementById('constructor-format');
+                                if (hiddenFormat) hiddenFormat.value = formatSide;
+
+                                if (action === 'csv' || action === 'cdp' || action === 'api') {
+                                    handleExportAction(); // Calls existing export logic
+                                }
+                            }
+                        }
+
+                        // Legacy wrapper if needed
+                        function syncAndGenerate() {
+                            handleGeneration('constructor');
+                        }
+                    </script>
 
                 </div>
             </div>
@@ -2180,8 +2392,10 @@
             });
 
             const msg = document.getElementById('no-filters-msg');
-            if (espoConditionRegistry.length > 0) msg.style.display = 'none';
-            else msg.style.display = 'block';
+            if (msg) {
+                if (espoConditionRegistry.length > 0) msg.style.display = 'none';
+                else msg.style.display = 'block';
+            }
 
             updateFormulaView();
         }
@@ -2336,9 +2550,11 @@
             if (!formulaDisplay) return;
 
             if (espoConditionRegistry.length === 0) {
-                formulaDisplay.innerHTML = '<span class="text-muted small">Немає фільтрів</span>';
+                formulaDisplay.style.display = 'none';
+                formulaDisplay.innerHTML = '';
                 return;
             }
+            formulaDisplay.style.display = 'flex';
 
             const formatOp = (op) => {
                 const lower = op.toLowerCase();
@@ -2376,7 +2592,7 @@
                 finalHtml = `${formatOp('окрім')} ${excludeFormula}`;
             }
 
-            formulaDisplay.innerHTML = finalHtml || '<span class="text-muted small">Немає фільтрів</span>';
+            formulaDisplay.innerHTML = finalHtml;
 
             // Handle truncation button
             let expandBtn = formulaDisplay.querySelector('.formula-expand-btn');
