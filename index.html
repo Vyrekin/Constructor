@@ -234,6 +234,52 @@
             margin-bottom: 1rem;
         }
 
+        /* Additional Dark Mode Fixes */
+        [data-theme="dark"] .custom-filter-tabs,
+        [data-theme="dark"] .compact-control-card {
+            background: var(--surface);
+            border-color: var(--border) !important;
+        }
+
+        [data-theme="dark"] #filter-picker {
+            background: var(--surface);
+            border-color: var(--border);
+        }
+
+        [data-theme="dark"] .picker-header {
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom-color: var(--border);
+        }
+
+        [data-theme="dark"] .picker-item:hover {
+            background: var(--primary-soft);
+        }
+
+        [data-theme="dark"] .legend-badge {
+            background: var(--surface);
+            border-color: var(--border);
+        }
+
+        [data-theme="dark"] .counter-box {
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+            /* Less saturated in dark mode */
+        }
+
+        [data-theme="dark"] #espo-include-list:empty,
+        [data-theme="dark"] #espo-exclude-list:empty {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .toggle-icon {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] .toggle-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
         .counter-number {
             font-size: 2.5rem;
             font-weight: 700;
