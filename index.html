@@ -1288,332 +1288,704 @@
                     </div>
 
                     <div class="sticky-controls-wrapper">
-                        <div class="compact-control-card">
-                            <div class="row g-2 align-items-center">
-                                <!-- Left: Tabs (guaranteed single row) -->
-                                <div class="col-lg-9">
-                                    <div class="overflow-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
-                                        <ul class="nav nav-pills custom-filter-tabs border-0 shadow-none p-0 flex-nowrap"
-                                            id="filterTabs" role="tablist">
-                                            <li class="nav-item">
-                                                <button class="nav-link active" id="tab-c1" data-bs-toggle="pill"
-                                                    data-bs-target="#pane-c1" type="button" role="tab"><i
-                                                        class="bi bi-box-seam"></i> ЕН</button>
-                                            </li>
-                                            <li class="nav-item">
-                                                <button class="nav-link" id="tab-c2" data-bs-toggle="pill"
-                                                    data-bs-target="#pane-c2" type="button" role="tab"><i
-                                                        class="bi bi-person-badge"></i> Клієнт</button>
-                                            </li>
-                                            <li class="nav-item">
-                                                <button class="nav-link" id="tab-c3" data-bs-toggle="pill"
-                                                    data-bs-target="#pane-c3" type="button" role="tab"><i
-                                                        class="bi bi-cash-coin"></i> Фінанси</button>
-                                            </li>
-                                            <li class="nav-item">
-                                                <button class="nav-link" id="tab-c4" data-bs-toggle="pill"
-                                                    data-bs-target="#pane-c4" type="button" role="tab"><i
-                                                        class="bi bi-person-vcard"></i> Профіль</button>
-                                            </li>
-                                            <li class="nav-item">
-                                                <button class="nav-link" id="tab-c5" data-bs-toggle="pill"
-                                                    data-bs-target="#pane-c5" type="button" role="tab"><i
-                                                        class="bi bi-geo-alt"></i> Локації</button>
-                                            </li>
-                                            <li class="nav-item">
-                                                <button class="nav-link" id="tab-c6" data-bs-toggle="pill"
-                                                    data-bs-target="#pane-c6" type="button" role="tab"><i
-                                                        class="bi bi-phone"></i> Пристрої</button>
-                                            </li>
-                                            <li class="nav-item">
-                                                <button class="nav-link" id="tab-c7" data-bs-toggle="pill"
-                                                    data-bs-target="#pane-c7" type="button" role="tab"><i
-                                                        class="bi bi-check-circle"></i> Згоди</button>
-                                            </li>
-                                        </ul>
-                                    </div>
+                        <div class="compact-control-card p-1">
+                            <!-- Tabs Area (Now Wrapping, no scroll) -->
+                            <div class="px-2 pt-1">
+                                <ul class="nav nav-pills custom-filter-tabs border-0 shadow-none p-0 flex-wrap"
+                                    id="filterTabs" role="tablist">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" id="tab-c1" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c1" type="button" role="tab"><i
+                                                class="bi bi-box-seam"></i> Загальні ЕН</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c1-2" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c1-2" type="button" role="tab"><i
+                                                class="bi bi-calendar-check"></i> Дати та Статуси</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c2" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c2" type="button" role="tab"><i
+                                                class="bi bi-people-fill"></i> Відправник та Отримувач</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c3-c" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c3-c" type="button" role="tab"><i
+                                                class="bi bi-box-fill"></i> Вантаж</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c3-f" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c3-f" type="button" role="tab"><i
+                                                class="bi bi-currency-dollar"></i> Фінанси</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c4-p" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c4-p" type="button" role="tab"><i
+                                                class="bi bi-person-vcard"></i> Профіль Клієнта</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c4-v" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c4-v" type="button" role="tab"><i
+                                                class="bi bi-shield-check"></i> Верифікація</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c5-a" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c5-a" type="button" role="tab"><i
+                                                class="bi bi-activity"></i> Активність</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c5-l" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c5-l" type="button" role="tab"><i
+                                                class="bi bi-geo-alt"></i> Локації</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c6" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c6" type="button" role="tab"><i
+                                                class="bi bi-phone"></i> Додаток</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c7" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c7" type="button" role="tab"><i
+                                                class="bi bi-check-circle"></i> Згоди</button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Separate Mode Selector Block -->
+                            <div class="d-flex align-items-center px-3 py-2 border-top bg-light-subtle rounded-bottom"
+                                style="gap: 15px;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-gear-wide-connected text-primary small"></i>
+                                    <span class="fw-bold text-muted text-uppercase"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Логіка додавання:</span>
                                 </div>
+                                <div class="position-relative d-inline-flex bg-white rounded-pill p-1 border shadow-sm">
+                                    <input type="radio" class="btn-check" name="global-filter-mode" id="mode-include"
+                                        value="Include" checked onchange="window.currentFilterMode='Include'">
+                                    <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
+                                        for="mode-include">Включити</label>
 
-                                <!-- Right: Mode Toggle (Visual Switch) -->
-                                <div class="col-lg-3 ps-2 border-start">
-                                    <div class="d-flex align-items-center justify-content-center h-100 gap-2">
-                                        <span class="fw-bold text-muted text-uppercase"
-                                            style="font-size: 0.7rem;">Режим:</span>
+                                    <input type="radio" class="btn-check" name="global-filter-mode" id="mode-exclude"
+                                        value="Exclude" onchange="window.currentFilterMode='Exclude'">
+                                    <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
+                                        for="mode-exclude">Виключити</label>
 
-                                        <!-- Custom Toggle Switch -->
-                                        <div class="position-relative d-inline-flex bg-light rounded-pill p-1 border">
-                                            <input type="radio" class="btn-check" name="global-filter-mode"
-                                                id="mode-include" value="Include" checked
-                                                onchange="window.currentFilterMode='Include'">
-                                            <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
-                                                for="mode-include">Включити</label>
+                                    <style>
+                                        .mode-label {
+                                            color: #6c7a91;
+                                            font-size: 0.65rem;
+                                            padding: 4px 12px !important;
+                                            transition: all 0.2s ease-in-out;
+                                            border: none !important;
+                                            text-transform: uppercase;
+                                        }
 
-                                            <input type="radio" class="btn-check" name="global-filter-mode"
-                                                id="mode-exclude" value="Exclude"
-                                                onchange="window.currentFilterMode='Exclude'">
-                                            <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
-                                                for="mode-exclude">Виключити</label>
+                                        #mode-include:checked+label {
+                                            background-color: var(--primary);
+                                            color: white;
+                                            box-shadow: 0 2px 6px rgba(67, 97, 238, 0.3);
+                                        }
 
-                                            <style>
-                                                .mode-label {
-                                                    color: var(--text-muted);
-                                                    font-size: 0.7rem;
-                                                    transition: all 0.3s ease-in-out;
-                                                    border: 1px solid transparent;
-                                                }
-
-                                                #mode-include:checked+label {
-                                                    background-color: var(--primary);
-                                                    color: white;
-                                                    box-shadow: 0 2px 6px rgba(67, 97, 238, 0.4);
-                                                }
-
-                                                #mode-exclude:checked+label {
-                                                    background-color: #dc3545;
-                                                    color: white;
-                                                    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.4);
-                                                }
-                                            </style>
-                                        </div>
-                                    </div>
+                                        #mode-exclude:checked+label {
+                                            background-color: #ef4444;
+                                            color: white;
+                                            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+                                        }
+                                    </style>
+                                </div>
+                                <div class="ms-auto small text-muted font-monospace" style="font-size: 0.65rem;">
+                                    Конструктор v2.4
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="tab-content mt-3" id="filterTabsContent">
-                        <!-- 1. Параметри ЕН -->
+                        <!-- 1. Загальні ЕН -->
                         <div class="tab-pane fade show active" id="pane-c1" role="tabpanel">
                             <div class="tab-pane-card">
                                 <div class="row g-3">
-                                    <div class="col-md-3">
-                                        <label class="form-label">Роль</label>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Роль в ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'Role')">
-                                            <option value="">Всі</option>
-                                            <option value="Sender">Sender (Відправник)</option>
-                                            <option value="Recipient">Recipient (Отримувач)</option>
+                                            <option value="">Обери...</option>
+                                            <option value="Sender">Відправник</option>
+                                            <option value="Recipient">Отримувач</option>
+                                            <option value="ThirdPerson">Третя особа</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Сервіс</label>
-                                        <select class="form-select" onchange="addTag(this, 'Service')">
-                                            <option value="">Всі</option>
-                                            <option value="WarehouseWarehouse">Warehouse-Warehouse</option>
-                                            <option value="DoorsDoors">Doors-Doors</option>
-                                            <option value="WarehouseDoors">Warehouse-Doors</option>
-                                            <option value="DoorsWarehouse">Doors-Warehouse</option>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Тип сервісу</label>
+                                        <select class="form-select" onchange="addTag(this, 'ServiceType')">
+                                            <option value="">Обери...</option>
+                                            <option value="WarehouseWarehouse">Відділення-Відділення</option>
+                                            <option value="WarehouseDoors">Відділення-Адреса</option>
+                                            <option value="DoorsWarehouse">Адреса-Відділення</option>
+                                            <option value="DoorsDoors">Адреса-Адреса</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <label class="form-label">Платник</label>
                                         <select class="form-select" onchange="addTag(this, 'Payer')">
-                                            <option value="">Всі</option>
-                                            <option value="Sender">Sender</option>
-                                            <option value="Recipient">Recipient</option>
-                                            <option value="ThirdPerson">ThirdPerson</option>
+                                            <option value="">Обери...</option>
+                                            <option value="Sender">Відправник</option>
+                                            <option value="Recipient">Отримувач</option>
+                                            <option value="ThirdPerson">Третя особа</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <label class="form-label">Місце створення</label>
-                                        <select class="form-select" onchange="addTag(this, 'Created')">
-                                            <option value="">Всі</option>
+                                        <select class="form-select" onchange="addTag(this, 'CreatedPlace')">
+                                            <option value="">Обери...</option>
                                             <option value="App">Додаток</option>
-                                            <option value="API">Клієнтське API</option>
+                                            <option value="API">API</option>
                                             <option value="Branch">Відділення</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Дата створення</label>
-                                        <div class="input-group">
-                                            <input type="date" class="form-control" onchange="updateState()">
-                                            <span class="input-group-text bg-light text-muted">до</span>
-                                            <input type="date" class="form-control" onchange="updateState()">
-                                        </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Тип місця створення</label>
+                                        <select class="form-select" onchange="addTag(this, 'CreatedType')">
+                                            <option value="">Обери...</option>
+                                            <option value="Static">Стаціонарне</option>
+                                            <option value="Mobile">Мобільне</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Тип ост. точки обслуг.</label>
+                                        <select class="form-select" onchange="addTag(this, 'LastServicePointType')">
+                                            <option value="">Обери...</option>
+                                            <option value="Branch">Відділення</option>
+                                            <option value="Postomat">Поштомат</option>
+                                            <option value="Address">Адреса</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="tags-container mt-3" id="tags-c1"></div>
+                            </div>
+                        </div>
+
+                        <!-- 1-2. Дати та Статуси -->
+                        <div class="tab-pane fade" id="pane-c1-2" role="tabpanel">
+                            <div class="tab-pane-card">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Дата створення ЕН</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c1-date-start-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c1-date-start-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('DateCreated', 'Створення ЕН', 'c1-date-start-from', 'c1-date-start-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Дата закриття ЕН</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c1-date-end-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c1-date-end-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('DateClosed', 'Закриття ЕН', 'c1-date-end-from', 'c1-date-end-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Імпорт</label>
+                                        <select class="form-select" onchange="addTag(this, 'Import')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Експорт</label>
+                                        <select class="form-select" onchange="addTag(this, 'Export')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Вторинні ЕН</label>
+                                        <select class="form-select" onchange="addTag(this, 'SecondaryEN')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Причина повернення ЕН</label>
+                                        <select class="form-select" onchange="addTag(this, 'ReturnReason')">
+                                            <option value="">Обери...</option>
+                                            <option value="Refusal">Відмова</option>
+                                            <option value="Expired">Термін зберігання</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Вид проблеми з ЕН</label>
+                                        <select class="form-select" onchange="addTag(this, 'ENProblemType')">
+                                            <option value="">Обери...</option>
+                                            <option value="Damaged">Пошкоджено</option>
+                                            <option value="Lost">Втрачено</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- 2. Відправник та Отримувач -->
                         <div class="tab-pane fade" id="pane-c2" role="tabpanel">
                             <div class="tab-pane-card">
-                                <div class="row g-3">
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    ВІДПРАВНИК</h6>
+                                <div class="row g-3 mb-4">
                                     <div class="col-md-4">
-                                        <label class="form-label">Тип контрагента</label>
-                                        <select class="form-select" onchange="addTag(this, 'Type')">
-                                            <option value="">Всі</option>
+                                        <label class="form-label">Тип відправника</label>
+                                        <select class="form-select" onchange="addTag(this, 'SenderType')">
+                                            <option value="">Обери...</option>
                                             <option value="Private">Приватна особа</option>
-                                            <option value="Business">Компанія (Profile B)</option>
+                                            <option value="Business">Бізнес</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">ЄДРПОУ</label>
-                                        <input type="text" class="form-control" placeholder="Code..."
-                                            onchange="addTextTag(this, 'EDRPOU')">
+                                        <label class="form-label">ЄРПОУ відправника</label>
+                                        <input type="text" class="form-control" placeholder="Наприклад: 12345678"
+                                            onchange="addTextTag(this, 'SenderEDRPOU')">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">Тип відділення</label>
-                                        <select class="form-select" onchange="addTag(this, 'WhType')">
-                                            <option value="">Всі</option>
-                                            <option value="Cargo">Вантажне</option>
-                                            <option value="Post">Поштове</option>
+                                        <label class="form-label">Тип підрозділу відправника</label>
+                                        <select class="form-select" onchange="addTag(this, 'SenderUnitType')">
+                                            <option value="">Обери...</option>
+                                            <option value="Branch">Відділення</option>
+                                            <option value="Postomat">Поштомат</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Місто</label>
-                                        <select class="form-select" onchange="addTag(this, 'City')">
-                                            <option value="">Оберіть місто...</option>
-                                            <option value="Kyiv">Київ</option>
-                                            <option value="Kharkiv">Харків</option>
-                                            <option value="Lviv">Львів</option>
-                                            <option value="Odesa">Одеса</option>
-                                            <option value="Dnipro">Дніпро</option>
-                                            <option value="Zaporizhzhia">Запоріжжя</option>
-                                            <option value="Vinnytsia">Вінниця</option>
-                                        </select>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Область відправника</label>
+                                        <input type="text" class="form-control" placeholder="Обери область..."
+                                            onchange="addTextTag(this, 'SenderArea')">
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Область</label>
-                                        <select class="form-select" onchange="addTag(this, 'Area')">
-                                            <option value="">Всі області</option>
-                                            <option value="Kyiv">Київська</option>
-                                            <option value="Lviv">Львівська</option>
-                                            <option value="Odesa">Одеська</option>
-                                            <option value="Dnipro">Дніпропетровська</option>
-                                        </select>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Місто відправника</label>
+                                        <input type="text" class="form-control" placeholder="Обери місто..."
+                                            onchange="addTextTag(this, 'SenderCity')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Підрозділ відправника</label>
+                                        <input type="text" class="form-control" placeholder="Обери підрозділ..."
+                                            onchange="addTextTag(this, 'SenderUnit')">
                                     </div>
                                 </div>
-                                <div class="tags-container mt-3" id="tags-c2"></div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    ОТРИМУВАЧ</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Тип отримувача</label>
+                                        <select class="form-select" onchange="addTag(this, 'RecipientType')">
+                                            <option value="">Обери...</option>
+                                            <option value="Private">Приватна особа</option>
+                                            <option value="Business">Бізнес</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">ЄРПОУ отримувача</label>
+                                        <input type="text" class="form-control" placeholder="Наприклад: 12345678"
+                                            onchange="addTextTag(this, 'RecipientEDRPOU')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Тип підрозділу отримувача</label>
+                                        <select class="form-select" onchange="addTag(this, 'RecipientUnitType')">
+                                            <option value="">Обери...</option>
+                                            <option value="Branch">Відділення</option>
+                                            <option value="Postomat">Поштомат</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Область отримувача</label>
+                                        <input type="text" class="form-control" placeholder="Обери область..."
+                                            onchange="addTextTag(this, 'RecipientArea')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Місто отримувача</label>
+                                        <input type="text" class="form-control" placeholder="Обери місто..."
+                                            onchange="addTextTag(this, 'RecipientCity')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Підрозділ отримувача</label>
+                                        <input type="text" class="form-control" placeholder="Обери підрозділ..."
+                                            onchange="addTextTag(this, 'RecipientUnit')">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 3. Вантаж та Фінанси -->
-                        <div class="tab-pane fade" id="pane-c3" role="tabpanel">
+                        <!-- 3-C. Вантаж -->
+                        <div class="tab-pane fade" id="pane-c3-c" role="tabpanel">
                             <div class="tab-pane-card">
                                 <div class="row g-3">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <label class="form-label">Тип вантажу</label>
-                                        <select class="form-select" onchange="addTag(this, 'Cargo')">
-                                            <option value="">Всі</option>
-                                            <option value="Parcel">Parcel</option>
-                                            <option value="Documents">Documents</option>
-                                            <option value="Pallet">Pallet</option>
-                                            <option value="Cargo">Cargo</option>
+                                        <select class="form-select" onchange="addTag(this, 'CargoType')">
+                                            <option value="">Обери...</option>
+                                            <option value="Parcel">Посилки</option>
+                                            <option value="Documents">Документи</option>
+                                            <option value="Pallet">Палети</option>
+                                            <option value="Cargo">Вантаж</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Оплата</label>
-                                        <select class="form-select" onchange="addTag(this, 'PayMethod')">
-                                            <option value="">Всі</option>
+                                    <div class="col-md-8">
+                                        <label class="form-label">Опис вантажу</label>
+                                        <input type="text" class="form-control"
+                                            placeholder="Наприклад: взуття, запчастини, косметика"
+                                            onchange="addTextTag(this, 'CargoDesc')">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Вага (розрахункова)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="number" class="form-control" id="c3-weight-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="number" class="form-control" id="c3-weight-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('Weight', 'Вага', 'c3-weight-from', 'c3-weight-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Оголошена вартість</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="number" class="form-control" id="c3-val-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="number" class="form-control" id="c3-val-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('DeclaredValue', 'Огол. вартість', 'c3-val-from', 'c3-val-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Сума по ЕН за доставку</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="number" class="form-control" id="c3-deliv-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="number" class="form-control" id="c3-deliv-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('DeliverySum', 'Сума за дост.', 'c3-deliv-from', 'c3-deliv-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Сума за пакування</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="number" class="form-control" id="c3-pack-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="number" class="form-control" id="c3-pack-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('PackingSum', 'Сума за пак.', 'c3-pack-from', 'c3-pack-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3-F. Фінанси -->
+                        <div class="tab-pane fade" id="pane-c3-f" role="tabpanel">
+                            <div class="tab-pane-card">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Тип оплати</label>
+                                        <select class="form-select" onchange="addTag(this, 'PayType')">
+                                            <option value="">Обери...</option>
                                             <option value="Cash">Готівка</option>
-                                            <option value="Terminal">Термінал</option>
-                                            <option value="App">Додаток</option>
+                                            <option value="NonCash">Безготівка</option>
+                                            <option value="Card">Картка</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Наявність переказу</label>
+                                        <select class="form-select" onchange="addTag(this, 'TransferAvailability')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Сума переказу</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="number" class="form-control" id="c3-trans-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="number" class="form-control" id="c3-trans-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('TransferSum', 'Сума переказу', 'c3-trans-from', 'c3-trans-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Наявність претензій</label>
+                                        <select class="form-select" onchange="addTag(this, 'PretenseAvailability')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Наявність промокоду</label>
+                                        <select class="form-select" onchange="addTag(this, 'PromoAvailability')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
                                         <label class="form-label">Маркетплейс</label>
-                                        <select class="form-select" onchange="addTag(this, 'Market')">
-                                            <option value="">Не обрано</option>
+                                        <select class="form-select" onchange="addTag(this, 'Marketplace')">
+                                            <option value="">Обери...</option>
                                             <option value="OLX">OLX</option>
                                             <option value="Prom">Prom</option>
                                             <option value="Rozetka">Rozetka</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Претензії</label>
-                                        <select class="form-select" onchange="addTag(this, 'Pretense')">
-                                            <option value="">Всі</option>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4-P. Профіль Клієнта -->
+                        <div class="tab-pane fade" id="pane-c4-p" role="tabpanel">
+                            <div class="tab-pane-card">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Клієнт НПУ</label>
+                                        <select class="form-select" onchange="addTag(this, 'ClientNPU')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Країна клієнта</label>
+                                        <select class="form-select" onchange="addTag(this, 'ClientCountry')">
+                                            <option value="">Обери...</option>
+                                            <option value="UA">Україна</option>
+                                            <option value="PL">Польща</option>
+                                            <option value="MD">Молдова</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Стать</label>
+                                        <select class="form-select" onchange="addTag(this, 'Gender')">
+                                            <option value="">Обери...</option>
+                                            <option value="M">Чоловіча</option>
+                                            <option value="F">Жіноча</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Наявність додатк. телефону</label>
+                                        <select class="form-select" onchange="addTag(this, 'AddPhoneAvailability')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="form-label">День народження</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c4-bday-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c4-bday-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('Birthday', 'День народження', 'c4-bday-from', 'c4-bday-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4-V. Верифікація -->
+                        <div class="tab-pane fade" id="pane-c4-v" role="tabpanel">
+                            <div class="tab-pane-card">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Верифікація клієнта</label>
+                                        <select class="form-select" onchange="addTag(this, 'ClientVerification')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Статус верифікації телефону</label>
+                                        <select class="form-select" onchange="addTag(this, 'PhoneVerificationStatus')">
+                                            <option value="">Обери...</option>
+                                            <option value="Verified">Верифіковано</option>
+                                            <option value="NotVerified">Не верифіковано</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Статус верифікації Email</label>
+                                        <select class="form-select" onchange="addTag(this, 'EmailVerificationStatus')">
+                                            <option value="">Обери...</option>
+                                            <option value="Verified">Верифіковано</option>
+                                            <option value="NotVerified">Не верифіковано</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Перша вер. NovaPay</label>
+                                        <select class="form-select" onchange="addTag(this, 'FirstVerificationNovaPay')">
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Оголошена вартість (грн)</label>
+                                        <label class="form-label">Дата верифікації</label>
                                         <div class="input-group">
-                                            <span class="input-group-text">Від</span>
-                                            <input type="number" class="form-control" onchange="updateState()">
-                                            <span class="input-group-text">До</span>
-                                            <input type="number" class="form-control" onchange="updateState()">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c4-verif-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c4-verif-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('VerificationDate', 'Дата вериф.', 'c4-verif-from', 'c4-verif-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Вага (кг)</label>
-                                        <input type="number" class="form-control" placeholder="Наприклад: 30"
-                                            onchange="updateState()">
-                                    </div>
-                                </div>
-                                <div class="tags-container mt-3" id="tags-c3"></div>
-                            </div>
-                        </div>
-
-                        <!-- 4. Профіль Клієнта (Profile C) -->
-                        <div class="tab-pane fade" id="pane-c4" role="tabpanel">
-                            <div class="tab-pane-card">
-                                <div class="row g-3">
-                                    <div class="col-md-3">
-                                        <label class="form-label">Країна</label>
-                                        <select class="form-select" onchange="addTag(this, 'Country')">
-                                            <option value="">Всі</option>
-                                            <option value="UA">UA</option>
-                                            <option value="PL">PL</option>
-                                            <option value="MD">MD</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Стать</label>
-                                        <select class="form-select" onchange="addTag(this, 'Gender')">
-                                            <option value="">Всі</option>
-                                            <option value="M">Чоловіча</option>
-                                            <option value="F">Жіноча</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Верифікація</label>
-                                        <select class="form-select" onchange="addTag(this, 'Verified')">
-                                            <option value="">Всі</option>
-                                            <option value="1">Так (1)</option>
-                                            <option value="0">Ні (0)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Наявність Email</label>
-                                        <select class="form-select" onchange="addTag(this, 'HasEmail')">
-                                            <option value="">Не важливо</option>
-                                            <option value="1">Є Email</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">День народження</label>
-                                        <input type="date" class="form-control" onchange="updateState()">
-                                    </div>
-                                </div>
-                                <div class="tags-container mt-3" id="tags-c4"></div>
-                            </div>
-                        </div>
-
-                        <!-- 5. Активність та Локації -->
-                        <div class="tab-pane fade" id="pane-c5" role="tabpanel">
-                            <div class="tab-pane-card">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Улюблена точка</label>
-                                        <input type="text" class="form-control" placeholder="Назва або ID відділення..."
-                                            onchange="addTextTag(this, 'FavPoint')">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Місто ост. точки</label>
-                                        <input type="text" class="form-control" placeholder="Львів..."
-                                            onchange="addTextTag(this, 'LastCity')">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="form-label">Дати активності</label>
+                                        <label class="form-label">Остання верифікація</label>
                                         <div class="input-group">
-                                            <span class="input-group-text bg-light">Перша</span>
-                                            <input type="date" class="form-control" onchange="updateState()">
-                                            <span class="input-group-text bg-light">Остання</span>
-                                            <input type="date" class="form-control" onchange="updateState()">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c4-lastver-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c4-lastver-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('LastVerificationDate', 'Остання вериф.', 'c4-lastver-from', 'c4-lastver-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5-A. Активність -->
+                        <div class="tab-pane fade" id="pane-c5-a" role="tabpanel">
+                            <div class="tab-pane-card">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Дата першої транзакції</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c5-firsttrans-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c5-firsttrans-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('FirstTransactionDate', 'Перша транзація', 'c5-firsttrans-from', 'c5-firsttrans-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Дата остан. транзакції</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c5-lasttrans-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c5-lasttrans-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('LastTransactionDate', 'Остання транзакція', 'c5-lasttrans-from', 'c5-lasttrans-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <label class="form-label">Кількість посилок</label>
+                                        <div class="d-flex gap-2 align-items-center">
+                                            <select class="form-select" style="min-width: 140px; width: auto;"
+                                                onchange="toggleLalParcelsMode(this)">
+                                                <option value=">">Більше ніж</option>
+                                                <option value="<">Менше ніж</option>
+                                                <option value="range">Діапазон</option>
+                                            </select>
+                                            <div class="d-flex gap-1 align-items-center">
+                                                <input type="number" class="form-control input-from"
+                                                    style="width: 100px;" value="5">
+                                                <span class="range-separator d-none small text-muted">-</span>
+                                                <input type="number" class="form-control input-to d-none"
+                                                    style="width: 100px;" placeholder="До">
+                                            </div>
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addParcelsTag(this)">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="form-text small text-muted">Виберіть режим та вкажіть кількість
+                                            посилок за період</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5-L. Локації -->
+                        <div class="tab-pane fade" id="pane-c5-l" role="tabpanel">
+                            <div class="tab-pane-card">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Улюблена точка обслугов.</label>
+                                        <input type="text" class="form-control" placeholder="Обери..."
+                                            onchange="addTextTag(this, 'FavoritePoint')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Місто остан. точки обслугов.</label>
+                                        <input type="text" class="form-control" placeholder="Обери..."
+                                            onchange="addTextTag(this, 'LastPointCity')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Місто основного відділення</label>
+                                        <input type="text" class="form-control" placeholder="Обери..."
+                                            onchange="addTextTag(this, 'MainBranchCity')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Місто резервного відділення</label>
+                                        <input type="text" class="form-control" placeholder="Обери..."
+                                            onchange="addTextTag(this, 'ReserveBranchCity')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Місто основного поштомату</label>
+                                        <input type="text" class="form-control" placeholder="Обери..."
+                                            onchange="addTextTag(this, 'MainPostomatCity')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Місто резервного поштомату</label>
+                                        <input type="text" class="form-control" placeholder="Обери..."
+                                            onchange="addTextTag(this, 'ReservePostomatCity')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Осн. поштомат</label>
+                                        <input type="text" class="form-control" placeholder="Обери..."
+                                            onchange="addTextTag(this, 'MainPostomat')">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Рез. поштомат</label>
+                                        <input type="text" class="form-control" placeholder="Обери..."
+                                            onchange="addTextTag(this, 'ReservePostomat')">
                                     </div>
                                 </div>
                             </div>
@@ -1622,68 +1994,122 @@
                         <!-- 6. Додаток та Пристрої -->
                         <div class="tab-pane fade" id="pane-c6" role="tabpanel">
                             <div class="tab-pane-card">
-                                <div class="row g-3">
-                                    <div class="col-md-3">
-                                        <label class="form-label">Користувач App</label>
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    МОБІЛЬНИЙ ДОДАТОК</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Користувач мобільного додатка</label>
                                         <select class="form-select" onchange="addTag(this, 'AppUser')">
-                                            <option value="">Всі</option>
-                                            <option value="1">1 (Так)</option>
-                                            <option value="0">0 (Ні)</option>
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">ОС</label>
-                                        <select class="form-select" onchange="addTag(this, 'OS')">
-                                            <option value="">Всі</option>
+                                </div>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Девайс старого додатку</label>
+                                        <select class="form-select" onchange="addTag(this, 'OldAppDevice')">
+                                            <option value="">Обери...</option>
+                                            <option value="iPhone">iPhone</option>
+                                            <option value="Android">Android</option>
+                                            <option value="Web">Web</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">ОС Девайсу старого додатку</label>
+                                        <select class="form-select" onchange="addTag(this, 'OldAppOS')">
+                                            <option value="">Обери...</option>
                                             <option value="iOS">iOS</option>
                                             <option value="Android">Android</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Девайс</label>
-                                        <input type="text" class="form-control" placeholder="iPhone 14..."
-                                            onchange="addTextTag(this, 'Device')">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Дата входу</label>
-                                        <input type="date" class="form-control" onchange="updateState()">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Дата остан входу в стар дод</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c6-old-login-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c6-old-login-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('OldAppLoginDate', 'Вхід (стар. дод.)', 'c6-old-login-from', 'c6-old-login-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="tags-container mt-3" id="tags-c6"></div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Девайс нового додатку</label>
+                                        <select class="form-select" onchange="addTag(this, 'NewAppDevice')">
+                                            <option value="">Обери...</option>
+                                            <option value="iPhone">iPhone</option>
+                                            <option value="Android">Android</option>
+                                            <option value="Web">Web</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">ОС Девайсу нового додатку</label>
+                                        <select class="form-select" onchange="addTag(this, 'NewAppOS')">
+                                            <option value="">Обери...</option>
+                                            <option value="iOS">iOS</option>
+                                            <option value="Android">Android</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Дата остан входу в нов дод</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light small">з</span>
+                                            <input type="date" class="form-control" id="c6-new-login-from">
+                                            <span class="input-group-text bg-light small">по</span>
+                                            <input type="date" class="form-control" id="c6-new-login-to">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="addRangeTag('NewAppLoginDate', 'Вхід (нов. дод.)', 'c6-new-login-from', 'c6-new-login-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 7. Згоди -->
+                        <!-- 7. Згоди та Комунікація -->
                         <div class="tab-pane fade" id="pane-c7" role="tabpanel">
                             <div class="tab-pane-card">
-                                <div class="row">
+                                <div class="row g-3">
                                     <div class="col-md-6">
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="param_61"
-                                                onchange="updateState()">
-                                            <label class="form-check-label" for="param_61">Згода:
-                                                Промокоди</label>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="param_60"
-                                                onchange="updateState()">
-                                            <label class="form-check-label" for="param_60">Згода:
-                                                Пропозиції</label>
-                                        </div>
+                                        <label class="form-label">Згода на комун. про відкр. відд.</label>
+                                        <select class="form-select" onchange="addTag(this, 'ConsentBranchOpening')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="param_59"
-                                                onchange="updateState()">
-                                            <label class="form-check-label" for="param_59">Згода:
-                                                Опитування</label>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="param_58"
-                                                onchange="updateState()">
-                                            <label class="form-check-label" for="param_58">Згода: Робота
-                                                відділень</label>
-                                        </div>
+                                        <label class="form-label">Згода на опитування</label>
+                                        <select class="form-select" onchange="addTag(this, 'ConsentPolls')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Згода на проморозсилки</label>
+                                        <select class="form-select" onchange="addTag(this, 'ConsentPromo')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Згода на пропозиції</label>
+                                        <select class="form-select" onchange="addTag(this, 'ConsentOffers')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1715,142 +2141,151 @@
 
                 <!-- VIEW 2: LOOK-A-LIKE -->
                 <div id="view-lookalike" class="view-section d-none">
-                    <div class="card-diamond p-3">
-                        <div class="row g-3 align-items-end mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold text-danger">Формат вибірки
-                                    (Обов'язково)*</label>
-                                <!-- Custom Multi-Select Dropdown -->
-                                <div class="dropdown" id="lookalike-format-dropdown">
-                                    <button
-                                        class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center bg-white multi-select-btn"
-                                        type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                                        style="border-color: #dee2e6;">
-                                        <span class="selected-values text-muted text-truncate">Оберіть формат...</span>
-                                        <i class="bi bi-chevron-down small"></i>
-                                    </button>
-                                    <ul class="dropdown-menu w-100 shadow-sm border-0 multi-select-dropdown">
-                                        <li>
-                                            <label class="dropdown-item">
-                                                <input class="form-check-input" type="checkbox" value="phone"
-                                                    onchange="updateMultiSelect('lookalike-format')">
-                                                <span>Телефон</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item">
-                                                <input class="form-check-input" type="checkbox" value="cid"
-                                                    onchange="updateMultiSelect('lookalike-format')">
-                                                <span>CID</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item">
-                                                <input class="form-check-input" type="checkbox" value="email"
-                                                    onchange="updateMultiSelect('lookalike-format')">
-                                                <span>E-mail</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item">
-                                                <input class="form-check-input" type="checkbox" value="audience_id"
-                                                    onchange="updateMultiSelect('lookalike-format')">
-                                                <span>ID Аудиторії</span>
-                                            </label>
-                                        </li>
-                                    </ul>
+                    <div class="ai-input-card border rounded-4 bg-white overflow-hidden shadow-sm mb-4"
+                        style="border-color: var(--border) !important;">
+
+                        <!-- Top Configuration Bar (Integrated workflow) -->
+                        <div class="px-4 py-2 border-bottom d-flex align-items-center justify-content-between"
+                            style="background: #fafbfc;">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="text-muted small fw-bold text-uppercase"
+                                    style="font-size: 0.65rem;">Формувати
+                                    вибірку в форматі:</span>
+                                <div class="pill-toggle-container">
+                                    <div class="pill-toggle-item">
+                                        <input type="checkbox" class="btn-check" name="lal-format-sync"
+                                            id="lal-fmt-phone" value="phone" checked onchange="syncLalFormat()">
+                                        <label class="btn" for="lal-fmt-phone">Телефон</label>
+                                    </div>
+                                    <div class="pill-toggle-item">
+                                        <input type="checkbox" class="btn-check" name="lal-format-sync"
+                                            id="lal-fmt-email" value="email" onchange="syncLalFormat()">
+                                        <label class="btn" for="lal-fmt-email">E-mail</label>
+                                    </div>
+                                    <div class="pill-toggle-item">
+                                        <input type="checkbox" class="btn-check" name="lal-format-sync" id="lal-fmt-cid"
+                                            value="cid" onchange="syncLalFormat()">
+                                        <label class="btn" for="lal-fmt-cid">CID</label>
+                                    </div>
+                                    <div class="pill-toggle-item">
+                                        <input type="checkbox" class="btn-check" name="lal-format-sync"
+                                            id="lal-fmt-audience" value="audience_id" onchange="syncLalFormat()">
+                                        <label class="btn" for="lal-fmt-audience">ID Ауд.</label>
+                                    </div>
                                 </div>
-                                <input type="hidden" id="lookalike-format" value="">
                             </div>
-                            <div class="col-md-6 text-end">
-                                <button class="btn btn-primary w-100 shadow-sm" onclick="handleGeneration('lookalike')">
-                                    <i class="bi bi-play-circle me-2"></i>Сформувати запит
-                                </button>
+                            <div class="text-muted small" style="font-size: 0.7rem;">
+                                <i class="bi bi-people me-1"></i> Модель: <b class="text-primary">Look-a-like v2</b>
                             </div>
                         </div>
 
+                        <div class="p-4">
+                            <h5 class="fw-bold mb-3">Пошук схожих аудиторій</h5>
 
+                            <div class="row g-4">
+                                <!-- Drag & Drop -->
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Джерело даних</label>
+                                    <div class="drop-zone py-3 px-3" id="dropZone"
+                                        style="border: 2px dashed var(--border); border-radius: var(--radius-card); background-color: #fafafa; text-align: center; cursor: pointer;">
+                                        <i class="bi bi-cloud-upload fs-1 text-primary mb-2"></i>
+                                        <p class="mb-1 text-dark fw-bold">Перетягніть файл сюди</p>
+                                        <p class="text-muted small mb-2">.CSV або .XLSX (до 50MB)</p>
+                                        <button class="btn btn-sm btn-outline-primary px-3 rounded-pill">Обрати
+                                            файл</button>
+                                    </div>
+                                </div>
 
-                        <h5 class="fw-bold mb-3">Пошук схожих аудиторій</h5>
-
-                        <div class="row g-4">
-                            <!-- Drag & Drop -->
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Джерело даних</label>
-                                <div class="drop-zone py-3 px-3" id="dropZone"
-                                    style="border: 2px dashed var(--border); border-radius: var(--radius-card); background-color: #fafafa; text-align: center; cursor: pointer;">
-                                    <i class="bi bi-cloud-upload fs-1 text-primary mb-2"></i>
-                                    <p class="mb-1 text-dark fw-bold">Перетягніть файл сюди</p>
-                                    <p class="text-muted small mb-2">.CSV або .XLSX (до 50MB)</p>
-                                    <button class="btn btn-sm btn-outline-primary px-3 rounded-pill">Обрати
-                                        файл</button>
+                                <!-- Inputs -->
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">Website</label>
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" id="lal-website"
+                                                placeholder="shop.com.ua"
+                                                onkeydown="handleLookalikeInput(event, 'website')">
+                                            <button class="btn btn-outline-primary"
+                                                onclick="addLalTag('website')">Додати</button>
+                                        </div>
+                                        <div id="tags-lal-website" class="tags-container"></div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label fw-bold">ЄДРПОУ</label>
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" id="lal-edrpou" placeholder="Код..."
+                                                onkeydown="handleLookalikeInput(event, 'edrpou')">
+                                            <button class="btn btn-outline-primary"
+                                                onclick="addLalTag('edrpou')">Додати</button>
+                                        </div>
+                                        <div id="tags-lal-edrpou" class="tags-container"></div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Inputs -->
-                            <div class="col-md-6">
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">Website</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" id="lal-website"
-                                            placeholder="shop.com.ua"
-                                            onkeydown="handleLookalikeInput(event, 'website')">
-                                        <button class="btn btn-outline-primary"
-                                            onclick="addLalTag('website')">Add</button>
+                            <hr class="my-4 opacity-10">
+
+                            <div class="row align-items-end g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small d-block">Глибина аналізу</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="lal-days" value="30" min="1"
+                                            max="365" placeholder="30" onchange="updateState()">
+                                        <span class="input-group-text">днів</span>
                                     </div>
-                                    <div id="tags-lal-website" class="tags-container"></div>
+                                    <div class="form-text small text-muted" style="font-size: 0.75rem;">Вкажіть
+                                        період до
+                                        365 днів</div>
                                 </div>
-                                <div>
-                                    <label class="form-label fw-bold">ЄДРПОУ</label>
-                                    <div class="input-group mb-2">
-                                        <input type="text" class="form-control" id="lal-edrpou" placeholder="Code..."
-                                            onkeydown="handleLookalikeInput(event, 'edrpou')">
-                                        <button class="btn btn-outline-primary"
-                                            onclick="addLalTag('edrpou')">Add</button>
+                                <div class="col-md-4">
+                                    <div class="d-flex flex-column h-100">
+                                        <label class="form-label text-muted small">Кількість посилок</label>
+                                        <div class="d-flex gap-2 align-items-center mb-1">
+                                            <select class="form-select form-select-sm"
+                                                style="min-width: 125px; width: auto;"
+                                                onchange="toggleLalParcelsMode(this)">
+                                                <option value=">">Більше ніж</option>
+                                                <option value="<">Менше ніж</option>
+                                                <option value="range">Діапазон</option>
+                                            </select>
+                                            <div class="d-flex gap-1 align-items-center">
+                                                <input type="number" class="form-control form-control-sm input-from"
+                                                    style="width: 70px;" value="5">
+                                                <span class="range-separator d-none small text-muted">-</span>
+                                                <input type="number"
+                                                    class="form-control form-control-sm input-to d-none"
+                                                    style="width: 70px;" placeholder="До">
+                                            </div>
+                                        </div>
+                                        <div class="form-text small text-muted" style="font-size: 0.75rem;">Фільтр по
+                                            активності</div>
                                     </div>
-                                    <div id="tags-lal-edrpou" class="tags-container"></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex flex-column">
+                                        <label class="form-label text-muted small invisible">Spacer</label>
+                                        <div class="form-check form-switch d-flex align-items-center"
+                                            style="height: 31px;">
+                                            <input class="form-check-input ms-0 me-3" type="checkbox"
+                                                id="excludeClients" style="transform: scale(1.4);" checked
+                                                onchange="updateState()">
+                                            <label class="form-check-label text-secondary fw-bold" for="excludeClients"
+                                                style="font-size: 0.95rem; margin-top: 2px;">Виключити клієнтів
+                                                замовника</label>
+                                        </div>
+                                        <div class="form-text small text-muted opacity-0" style="font-size: 0.75rem;">
+                                            Spacer</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <hr class="my-3 opacity-10">
-
-                        <div class="row align-items-end g-3">
-                            <div class="col-md-4">
-                                <label class="form-label text-muted small d-block">Глибина аналізу</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="lal-days" value="30" min="1" max="365"
-                                        placeholder="30" onchange="updateState()">
-                                    <span class="input-group-text">днів</span>
-                                </div>
-                                <div class="form-text small text-muted" style="font-size: 0.75rem;">Вкажіть
-                                    період до
-                                    365 днів</div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="d-flex flex-column">
-                                    <label class="form-label text-muted small">Мін. кількість посилок</label>
-                                    <div class="input-group" style="max-width: 150px;">
-                                        <button class="btn btn-outline-secondary" type="button"
-                                            onclick="this.nextElementSibling.stepDown(); updateState()">-</button>
-                                        <input type="number" class="form-control text-center" value="5" min="1"
-                                            readonly>
-                                        <button class="btn btn-outline-secondary" type="button"
-                                            onclick="this.previousElementSibling.stepUp(); updateState()">+</button>
-                                    </div>
-                                    <div class="form-text small text-muted opacity-0" style="font-size: 0.75rem;">Spacer
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-check form-switch mb-3 d-flex align-items-center">
-                                    <input class="form-check-input ms-0 me-3" type="checkbox" id="excludeClients"
-                                        style="transform: scale(1.4);" checked onchange="updateState()">
-                                    <label class="form-check-label text-secondary" for="excludeClients"
-                                        style="font-size: 1.1rem;">Виключити клієнтів
-                                        замовника</label>
-                                </div>
-                            </div>
+                        <!-- Bottom Action Bar -->
+                        <div class="d-flex flex-wrap align-items-center justify-content-end p-3 border-top gap-3"
+                            style="background: #f8faff;">
+                            <button class="btn btn-primary px-4 py-2 rounded-3 fw-bold d-flex align-items-center gap-2"
+                                onclick="handleGeneration('lookalike')">
+                                <i class="bi bi-play-circle-fill"></i> Сформувати запит
+                            </button>
                         </div>
 
                     </div>
@@ -2966,12 +3401,41 @@
         window.currentFilterMode = 'Include';
         function createTag(type, value, operator) {
             const categoryMap = {
-                'Role': 'Роль', 'Service': 'Сервіс', 'Payer': 'Платник', 'Created': 'Місце створ.',
-                'Type': 'Тип', 'EDRPOU': 'ЄДРПОУ', 'WhType': 'Тип відділення', 'City': 'Місто',
-                'Area': 'Область', 'Cargo': 'Вантаж', 'PayMethod': 'Оплата', 'Market': 'Маркет',
-                'Pretense': 'Претензії', 'Country': 'Країна', 'Gender': 'Стать', 'Verified': 'Верифікація',
-                'HasEmail': 'Email', 'AppUser': 'App', 'OS': 'ОС', 'Device': 'Девайс',
-                'FavPoint': 'Улюб. точка', 'LastCity': 'Ост. місто'
+                // c1
+                'Role': 'Роль в ЕН', 'ServiceType': 'Тип сервісу', 'Payer': 'Платник',
+                'DateCreated': 'Дата створення ЕН', 'DateClosed': 'Дата закриття ЕН',
+                'CreatedPlace': 'Місце створення', 'CreatedType': 'Тип місця створ.',
+                'LastServicePointType': 'Тип ост. точки', 'Import': 'Імпорт', 'Export': 'Експорт',
+                'SecondaryEN': 'Вторинні ЕН', 'ReturnReason': 'Причина повернення', 'ENProblemType': 'Вид проблеми',
+                // c2
+                'SenderType': 'Тип відпр.', 'SenderEDRPOU': 'ЄДРПОУ відпр.', 'SenderUnitType': 'Тип підр. відпр.',
+                'SenderArea': 'Область відпр.', 'SenderCity': 'Місто відпр.', 'SenderUnit': 'Підрозділ відпр.',
+                'RecipientType': 'Тип отрим.', 'RecipientEDRPOU': 'ЄДРПОУ отрим.', 'RecipientUnitType': 'Тип підр. отрим.',
+                'RecipientArea': 'Область отрим.', 'RecipientCity': 'Місто отрим.', 'RecipientUnit': 'Підрозділ отрим.',
+                // c3
+                'CargoType': 'Тип вантажу', 'CargoDesc': 'Опис вантажу', 'Weight': 'Вага',
+                'DeclaredValue': 'Огол. вартість', 'DeliverySum': 'Сума за дост.', 'PackingSum': 'Сума за пак.',
+                'PayType': 'Тип оплати', 'TransferAvailability': 'Наявність переказу', 'TransferSum': 'Сума переказу',
+                'PretenseAvailability': 'Претензії', 'PromoAvailability': 'Промокод', 'Marketplace': 'Маркетплейс',
+                // c4
+                'ClientNPU': 'Клієнт НПУ', 'ClientCountry': 'Країна клієнта', 'Gender': 'Стать', 'AddPhoneAvailability': 'Дод. тел.',
+                'Birthday': 'День народження', 'ClientVerification': 'Верифікація клієнта',
+                'PhoneVerificationStatus': 'Вер. телефону', 'EmailVerificationStatus': 'Вер. Email',
+                'FirstVerificationNovaPay': 'Вер. NovaPay', 'VerificationDate': 'Дата вериф.', 'LastVerificationDate': 'Остання вер.',
+                // c5
+                'FirstTransactionDate': 'Дата перш. транз.', 'LastTransactionDate': 'Дата ост. транз.',
+                'FavoritePoint': 'Улюб. точка', 'LastPointCity': 'Місто ост. точки',
+                'MainBranchCity': 'Місто осн. відд.', 'ReserveBranchCity': 'Місто рез. відд.',
+                'MainPostomatCity': 'Місто осн. пошт.', 'ReservePostomatCity': 'Місто рез. пошт.',
+                'LastServicePoint': 'Ост. точка', 'MainBranch': 'Осн. відділення', 'ReserveBranch': 'Рез. відділення',
+                'MainPostomat': 'Осн. поштомат', 'ReservePostomat': 'Рез. поштомат',
+                // c6
+                'AppUser': 'Користувач моб. додатка',
+                'OldAppDevice': 'Девайс (стар. дод.)', 'OldAppOS': 'ОС (стар. дод.)', 'OldAppLoginDate': 'Вхід (стар. дод.)',
+                'NewAppDevice': 'Девайс (нов. дод.)', 'NewAppOS': 'ОС (нов. дод.)', 'NewAppLoginDate': 'Вхід (нов. дод.)',
+                // c7
+                'ConsentBranchOpening': 'Згода (відкр. відд.)', 'ConsentPolls': 'Згода на опитування',
+                'ConsentPromo': 'Згода на проморозсилки', 'ConsentOffers': 'Згода на пропозиції'
             };
 
             // Priority: Local override (Include/Exclude/NOT) > Global Toggle
@@ -3005,6 +3469,22 @@
             }
             createTag(type, value, operator);
             setTimeout(() => selectElement.value = "", 100);
+        }
+
+        function addRangeTag(type, label, fromId, toId) {
+            const from = document.getElementById(fromId).value;
+            const to = document.getElementById(toId).value;
+            if (!from && !to) return;
+
+            let val = "";
+            if (from && to) val = `${from} - ${to}`;
+            else if (from) val = `з ${from}`;
+            else if (to) val = `до ${to}`;
+
+            addEspoBlock(type, label, val, window.currentFilterMode || 'Include', 'ТА');
+            document.getElementById(fromId).value = "";
+            document.getElementById(toId).value = "";
+            updateState();
         }
 
         function removeTag(iconEl) {
@@ -3211,6 +3691,65 @@
             updateMultiSelect('constructor-format-unified');
         }
 
+        function syncLalFormat() {
+            // Collect all checked formats in Look-alike tab
+            const lalCheckedValues = Array.from(document.querySelectorAll('input[name="lal-format-sync"]:checked')).map(cb => cb.value);
+
+            // Update sidebar unified multi-select
+            const sidebarCheckboxes = document.querySelectorAll('#constructor-format-unified-dropdown .form-check-input');
+            sidebarCheckboxes.forEach(cb => {
+                cb.checked = lalCheckedValues.includes(cb.value);
+            });
+
+            // Trigger UI update for the unified selector
+            updateMultiSelect('constructor-format-unified');
+        }
+
+        function toggleLalParcelsMode(select) {
+            const container = select.closest('.d-flex');
+            const inputFrom = container.querySelector('.input-from');
+            const inputTo = container.querySelector('.input-to');
+            const separator = container.querySelector('.range-separator');
+
+            if (select.value === 'range') {
+                inputTo.classList.remove('d-none');
+                if (separator) separator.classList.remove('d-none');
+                inputFrom.placeholder = 'Від';
+            } else {
+                inputTo.classList.add('d-none');
+                if (separator) separator.classList.add('d-none');
+                inputFrom.placeholder = 'Кількість';
+            }
+            updateState();
+        }
+
+        function addParcelsTag(btn) {
+            const container = btn.closest('.d-flex');
+            const select = container.querySelector('select');
+            const inputFrom = container.querySelector('.input-from');
+            const inputTo = container.querySelector('.input-to');
+
+            const mode = select.value;
+            const valFrom = inputFrom.value;
+            const valTo = inputTo.value;
+
+            let displayVal = "";
+            let fieldOp = null;
+
+            if (mode === 'range') {
+                displayVal = `${valFrom} - ${valTo}`;
+                fieldOp = "в діапазоні";
+            } else if (mode === '>') {
+                displayVal = valFrom;
+                fieldOp = "більше ніж";
+            } else if (mode === '<') {
+                displayVal = valFrom;
+                fieldOp = "менше ніж";
+            }
+
+            addEspoBlock('ParcelsCount', 'Кількість посилок', displayVal, window.currentFilterMode, 'ТА', null, fieldOp);
+        }
+
         function handleGeneration(source) {
             // source: 'constructor', 'lookalike', 'ai'
 
@@ -3218,8 +3757,8 @@
             let resultsId = source + '-results';
             let tableBodyId = source + '-table-body';
 
-            // IF AI, we use the UNIFIED format from sidebar
-            if (source === 'ai') formatId = 'constructor-format-unified';
+            // IF AI OR Look-alike, we use the UNIFIED format from sidebar
+            if (source === 'ai' || source === 'lookalike') formatId = 'constructor-format-unified';
 
             // Only AI has SQL preview, others just table
 
