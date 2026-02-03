@@ -762,6 +762,10 @@
             opacity: 0.8;
         }
 
+        .formula-bracket.is-danger {
+            color: #dc3545;
+        }
+
         /* Sticky Formula Card & Controls Container */
         #active-filters-summary {
             position: sticky;
@@ -797,7 +801,7 @@
             padding-bottom: 0.5rem;
         }
 
-        .formula-card.is-collapsed .formula-content-wrapper {
+        .formula-card.is-collapsed .standard-view {
             display: none;
         }
 
@@ -1064,6 +1068,70 @@
                 transform: translateY(0);
             }
         }
+
+        /* Multi-Select Dropdown Styles */
+        .multi-select-btn {
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            height: auto;
+        }
+
+        .multi-select-dropdown .dropdown-item {
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .multi-select-dropdown .dropdown-item:active {
+            color: var(--text-main);
+            background-color: var(--bg-app);
+        }
+
+        .multi-select-dropdown .form-check-input {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        /* Pill Multi-Select Toggle */
+        .pill-toggle-container {
+            display: inline-flex;
+            background: #eeeef2;
+            padding: 3px;
+            border-radius: 50px;
+            gap: 2px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .pill-toggle-item {
+            cursor: pointer;
+        }
+
+        .pill-toggle-item .btn-check+label {
+            border-radius: 50px;
+            padding: 4px 14px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #6c7a91;
+            border: none;
+            background: transparent;
+            transition: all 0.25s ease;
+            text-transform: none;
+            line-height: 1.2;
+        }
+
+        .pill-toggle-item .btn-check:checked+label {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.4);
+        }
+
+        .pill-toggle-item:hover .btn-check:not(:checked)+label {
+            background-color: rgba(255, 255, 255, 0.5);
+            color: var(--primary);
+        }
     </style>
 </head>
 
@@ -1080,7 +1148,28 @@
                     <h4 class="mb-0 fw-bold" style="color: var(--text-main);">Конструктор вибірок</h4>
                 </div>
 
-                <div class="header-main-row flex-grow-1">
+                <div class="header-main-row flex-grow-1 d-flex justify-content-center">
+                    <ul class="nav nav-pills d-inline-flex border p-1 rounded-3 gap-1" id="app-views-nav"
+                        style="background: var(--surface); border-color: var(--border) !important;">
+                        <li class="nav-item">
+                            <button class="nav-link active px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
+                                id="nav-btn-constructor" onclick="switchView('constructor')">
+                                <i class="bi bi-sliders"></i> Конструктор
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
+                                id="nav-btn-lookalike" onclick="switchView('lookalike')">
+                                <i class="bi bi-people"></i> Look-a-like
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
+                                id="nav-btn-ai" onclick="switchView('ai')">
+                                <i class="bi bi-stars"></i> AI Помічник
+                            </button>
+                        </li>
+                    </ul>
                 </div>
 
 
@@ -1159,7 +1248,7 @@
 
                     <!-- Improved Active Filters Area (Legacy + Formula Support) -->
                     <div id="active-filters-summary" class="mb-3">
-                        <div class="formula-card" id="main-formula-card">
+                        <div class="formula-card is-collapsed" id="main-formula-card">
                             <div class="d-flex align-items-center justify-content-between mb-2" style="cursor: pointer;"
                                 onclick="toggleFormulaCard()">
                                 <div class="d-flex align-items-center gap-2">
@@ -1170,10 +1259,8 @@
                             </div>
 
                             <div class="formula-content-wrapper">
-                                <div class="mb-3">
-                                    <div id="formula-filters-view">
-                                        <div class="formula-box" id="formula-display" style="display:none;"></div>
-                                    </div>
+                                <div id="formula-filters-view" class="mb-2">
+                                    <div class="formula-box" id="formula-display" style="display:none;"></div>
                                 </div>
 
                                 <!-- Espo-style Hierarchical View -->
@@ -1633,13 +1720,47 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-danger">Формат вибірки
                                     (Обов'язково)*</label>
-                                <select id="lookalike-format" class="form-select">
-                                    <option value="" selected disabled>Оберіть формат...</option>
-                                    <option value="phone">Телефон</option>
-                                    <option value="cid">CID</option>
-                                    <option value="email">E-mail</option>
-                                    <option value="audience_id">ID Аудиторії</option>
-                                </select>
+                                <!-- Custom Multi-Select Dropdown -->
+                                <div class="dropdown" id="lookalike-format-dropdown">
+                                    <button
+                                        class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center bg-white multi-select-btn"
+                                        type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                        style="border-color: #dee2e6;">
+                                        <span class="selected-values text-muted text-truncate">Оберіть формат...</span>
+                                        <i class="bi bi-chevron-down small"></i>
+                                    </button>
+                                    <ul class="dropdown-menu w-100 shadow-sm border-0 multi-select-dropdown">
+                                        <li>
+                                            <label class="dropdown-item">
+                                                <input class="form-check-input" type="checkbox" value="phone"
+                                                    onchange="updateMultiSelect('lookalike-format')">
+                                                <span>Телефон</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item">
+                                                <input class="form-check-input" type="checkbox" value="cid"
+                                                    onchange="updateMultiSelect('lookalike-format')">
+                                                <span>CID</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item">
+                                                <input class="form-check-input" type="checkbox" value="email"
+                                                    onchange="updateMultiSelect('lookalike-format')">
+                                                <span>E-mail</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item">
+                                                <input class="form-check-input" type="checkbox" value="audience_id"
+                                                    onchange="updateMultiSelect('lookalike-format')">
+                                                <span>ID Аудиторії</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <input type="hidden" id="lookalike-format" value="">
                             </div>
                             <div class="col-md-6 text-end">
                                 <button class="btn btn-primary w-100 shadow-sm" onclick="handleGeneration('lookalike')">
@@ -1757,55 +1878,91 @@
                 <!-- VIEW 3: AI ASSISTANT -->
                 <div id="view-ai" class="view-section d-none">
                     <div class="card-diamond p-3">
-                        <div class="d-flex align-items-center mb-3">
+
+
+                        <div class="d-flex align-items-center mb-4">
                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
-                                style="width:56px; height:56px; box-shadow: 0 5px 15px rgba(67,97,238,0.3);">
-                                <i class="bi bi-magic fs-4"></i>
+                                style="width:64px; height:64px; box-shadow: 0 8px 25px rgba(67,97,238,0.25);">
+                                <i class="bi bi-magic fs-3"></i>
                             </div>
                             <div>
                                 <h4 class="fw-bold mb-1">AI Помічник (Text-to-SQL)</h4>
-                                <span class="text-muted">Опишіть аудиторію природною мовою, і AI згенерує
-                                    SQL-запит
-                                    до
-                                    бази даних.</span>
+                                <span class="text-muted">Просто опишіть вашу цільову аудиторію природною мовою.</span>
                             </div>
                         </div>
 
-                        <div class="row g-3 align-items-end mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold text-danger">Формат вибірки
-                                    (Обов'язково)*</label>
-                                <select id="ai-format" class="form-select">
-                                    <option value="" selected disabled>Оберіть формат...</option>
-                                    <option value="phone">Телефон</option>
-                                    <option value="cid">CID</option>
-                                    <option value="email">E-mail</option>
-                                    <option value="audience_id">ID Аудиторії</option>
-                                </select>
+                        <!-- Redesigned AI Input Box with integrated format selection -->
+                        <div class="ai-input-card border rounded-4 bg-white overflow-hidden shadow-sm mb-4"
+                            style="transition: all 0.3s ease-in-out; border-color: var(--border) !important;">
+
+                            <!-- Top Configuration Bar (Integrated workflow) -->
+                            <div class="px-4 py-2 border-bottom d-flex align-items-center justify-content-between"
+                                style="background: #fafbfc;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="text-muted small fw-bold text-uppercase"
+                                        style="font-size: 0.65rem;">Формувати вибірку в форматі:</span>
+                                    <div class="pill-toggle-container">
+                                        <div class="pill-toggle-item">
+                                            <input type="checkbox" class="btn-check" name="ai-format-sync"
+                                                id="ai-fmt-phone" value="phone" checked onchange="syncAiFormat()">
+                                            <label class="btn" for="ai-fmt-phone">Телефон</label>
+                                        </div>
+                                        <div class="pill-toggle-item">
+                                            <input type="checkbox" class="btn-check" name="ai-format-sync"
+                                                id="ai-fmt-email" value="email" onchange="syncAiFormat()">
+                                            <label class="btn" for="ai-fmt-email">E-mail</label>
+                                        </div>
+                                        <div class="pill-toggle-item">
+                                            <input type="checkbox" class="btn-check" name="ai-format-sync"
+                                                id="ai-fmt-cid" value="cid" onchange="syncAiFormat()">
+                                            <label class="btn" for="ai-fmt-cid">CID</label>
+                                        </div>
+                                        <div class="pill-toggle-item">
+                                            <input type="checkbox" class="btn-check" name="ai-format-sync"
+                                                id="ai-fmt-audience" value="audience_id" onchange="syncAiFormat()">
+                                            <label class="btn" for="ai-fmt-audience">ID Ауд.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-muted small" style="font-size: 0.7rem;">
+                                    <i class="bi bi-cpu me-1"></i> Mode: <b class="text-primary">Direct-SQL-Select</b>
+                                </div>
                             </div>
-                            <div class="col-md-6 text-end">
-                                <button class="btn btn-primary w-100 shadow-sm" onclick="handleAiRequest()">
-                                    <i class="bi bi-stars me-2"></i>Сформувати запит
+                            <div class="p-1">
+                                <textarea id="ai-prompt" class="form-control border-0 shadow-none p-4" rows="4"
+                                    placeholder="Наприклад: Знайди клієнтів з Києва, які відправляли посилки більше 3 разів за останній місяць..."
+                                    style="resize: none; font-size: 1.1rem; line-height: 1.6;"></textarea>
+                            </div>
+
+                            <div class="d-flex flex-wrap align-items-center justify-content-between p-3 border-top gap-3"
+                                style="background: #f8faff;">
+                                <div class="d-flex gap-2 overflow-auto no-scrollbar py-1" style="max-width: 65%;">
+                                    <button
+                                        class="btn btn-sm btn-outline-primary border rounded-pill px-3 bg-white text-nowrap"
+                                        onclick="fillAiPrompt('Телефони отримувачів з Києва з чеком > 2000')">💰 Високий
+                                        чек</button>
+                                    <button
+                                        class="btn btn-sm btn-outline-primary border rounded-pill px-3 bg-white text-nowrap"
+                                        onclick="fillAiPrompt('Жінки 25-35 років, iPhone, є email')">📱 iPhone</button>
+                                    <button
+                                        class="btn btn-sm btn-outline-primary border rounded-pill px-3 bg-white text-nowrap"
+                                        onclick="fillAiPrompt('Відправники з Одеси, вантаж > 30кг')">🚛 Вантажні
+                                        Одеса</button>
+                                </div>
+
+                                <button
+                                    class="btn btn-primary px-4 py-2 rounded-3 fw-bold d-flex align-items-center gap-2"
+                                    onclick="handleAiRequest()">
+                                    <i class="bi bi-stars"></i> Сформувати запит
                                 </button>
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <div class="d-flex gap-2 mb-3 overflow-auto pb-2">
-                                <button class="btn btn-sm btn-light border rounded-pill px-3"
-                                    onclick="fillAiPrompt('Телефони отримувачів з Києва з чеком > 2000')">💰
-                                    Високий
-                                    чек
-                                    Київ</button>
-                                <button class="btn btn-sm btn-light border rounded-pill px-3"
-                                    onclick="fillAiPrompt('Жінки 25-35 років, iPhone, є email')">📱 iPhone
-                                    Користувачі</button>
-                                <button class="btn btn-sm btn-light border rounded-pill px-3"
-                                    onclick="fillAiPrompt('Відправники з Одеси, вантаж > 30кг')">🚛 Вантажні
-                                    Одеса</button>
-                            </div>
-                            <textarea id="ai-prompt" class="form-control form-control-lg" rows="4"
-                                placeholder="Наприклад: Знайди всіх клієнтів, які отримали посилку у відділенні 'Cargo' за останній місяць..."></textarea>
+                        <!-- Info helper -->
+                        <div class="d-flex align-items-center gap-2 mb-4 px-2">
+                            <i class="bi bi-info-circle text-primary"></i>
+                            <span class="text-muted small">Після генерації ви зможете завантажити результат одним кліком
+                                або відправити в CDP.</span>
                         </div>
 
 
@@ -1911,12 +2068,48 @@
                                 <div class="col-6">
                                     <label class="form-label text-muted small fw-bold text-uppercase mb-1"
                                         style="font-size: 0.65rem;">Формат даних</label>
-                                    <select id="constructor-format-unified" class="form-select form-select-sm">
-                                        <option value="phone" selected>Телефон</option>
-                                        <option value="cid">CID</option>
-                                        <option value="email">E-mail</option>
-                                        <option value="audience_id">ID Ауд.</option>
-                                    </select>
+                                    <!-- Custom Multi-Select Dropdown -->
+                                    <div class="dropdown" id="constructor-format-unified-dropdown">
+                                        <button
+                                            class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center bg-white multi-select-btn"
+                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                            style="border-color: #dee2e6;">
+                                            <span class="selected-values text-muted text-truncate">Телефон</span>
+                                            <i class="bi bi-chevron-down small"></i>
+                                        </button>
+                                        <ul class="dropdown-menu w-100 shadow-sm border-0 multi-select-dropdown">
+                                            <li>
+                                                <label class="dropdown-item">
+                                                    <input class="form-check-input" type="checkbox" value="phone"
+                                                        checked
+                                                        onchange="updateMultiSelect('constructor-format-unified')">
+                                                    <span>Телефон</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="dropdown-item">
+                                                    <input class="form-check-input" type="checkbox" value="cid"
+                                                        onchange="updateMultiSelect('constructor-format-unified')">
+                                                    <span>CID</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="dropdown-item">
+                                                    <input class="form-check-input" type="checkbox" value="email"
+                                                        onchange="updateMultiSelect('constructor-format-unified')">
+                                                    <span>E-mail</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="dropdown-item">
+                                                    <input class="form-check-input" type="checkbox" value="audience_id"
+                                                        onchange="updateMultiSelect('constructor-format-unified')">
+                                                    <span>ID Ауд.</span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <input type="hidden" id="constructor-format-unified" value="phone">
                                 </div>
                                 <div class="col-6">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -2384,10 +2577,6 @@
             if (siblings.length > 1) {
                 const prevSibling = siblings[siblings.length - 2];
                 prevSibling.interOp = item.op;
-            } else if (siblings.length === 1 && parentId !== null) {
-                // If it's the first child, update the parent's connection op
-                const parent = espoConditionRegistry.find(p => p.id === parentId);
-                if (parent) parent.interOp = item.op;
             }
 
             renderEspoUI();
@@ -2525,12 +2714,23 @@
             const newRegistry = [];
             const scan = (container, zone, parentId) => {
                 const blocks = container.querySelectorAll(':scope > .condition-block');
-                blocks.forEach(block => {
+                blocks.forEach((block, index) => {
                     const id = parseInt(block.dataset.id);
                     const originalItem = espoConditionRegistry.find(i => i.id === id);
                     if (originalItem) {
                         originalItem.zone = zone;
                         originalItem.parentId = parentId;
+
+                        // If it's the first child, it shouldn't have an operator that conflicts with its position
+                        if (index === 0) {
+                            if (parentId === null) {
+                                originalItem.op = (zone === 'Exclude' ? 'ОКРІМ' : 'ТА');
+                            } else {
+                                // Nested first items are almost always 'ТА' in terms of logical join with parent
+                                // But we'll respect the item's existing op unless it's obviously wrong
+                            }
+                        }
+
                         newRegistry.push(originalItem);
                         const subContainer = block.querySelector('.sub-conditions-container');
                         if (subContainer) scan(subContainer, zone, id);
@@ -2631,11 +2831,13 @@
                 }
             }
 
+            const wrapDanger = (html) => `<span class="formula-bracket is-danger">(</span> ${html} <span class="formula-bracket is-danger">)</span>`;
+
             let finalHtml = includeFormula;
             if (includeFormula && excludeFormula) {
-                finalHtml += ` ${formatOp('окрім')} ${excludeFormula}`;
+                finalHtml += ` ${formatOp('окрім')} ${wrapDanger(excludeFormula)}`;
             } else if (excludeFormula) {
-                finalHtml = `${formatOp('окрім')} ${excludeFormula}`;
+                finalHtml = `${formatOp('окрім')} ${wrapDanger(excludeFormula)}`;
             }
 
             formulaDisplay.innerHTML = finalHtml;
@@ -2687,7 +2889,10 @@
                 return `<span class="formula-operator mx-1 fw-bold ${cls}">${lower}</span>`;
             };
 
-            const wrapGroup = (html) => `<span class="formula-group"><span class="formula-bracket">(</span> ${html} <span class="formula-bracket">)</span></span>`;
+            const wrapGroup = (html) => {
+                const bCls = zone === 'Exclude' ? 'formula-bracket is-danger' : 'formula-bracket';
+                return `<span class="formula-group"><span class="${bCls}">(</span> ${html} <span class="${bCls}">)</span></span>`;
+            };
 
             // Group items by operator precedence: AND (TA) binds tighter than OR (ABO)
             // We split items into groups separated by 'ABO'
@@ -2696,17 +2901,23 @@
 
             items.forEach((item, index) => {
                 const oppositeZone = zone === 'Include' ? 'Exclude' : 'Include';
-                const mySig = getBranchSignature(item.id);
-                const hasConflict = espoConditionRegistry.some(i => i.zone === oppositeZone && getBranchSignature(i.id) === mySig);
+                const hasConflict = espoConditionRegistry.some(i =>
+                    i.zone === oppositeZone &&
+                    i.label === item.label &&
+                    i.value === item.value &&
+                    i.fieldOp === item.fieldOp
+                );
 
                 const displayValue = item.fieldOp ? `${item.fieldOp} ${item.value || ''}` : (item.value || item.op);
                 let bit = `<span class="formula-item ${hasConflict ? 'is-conflict' : ''}" ${hasConflict ? 'title="Конфлікт: це значення присутнє в обох зонах"' : ''}><b>${item.label}:</b> ${displayValue}</span>`;
                 const childrenFormula = buildRecursiveFormula(item.id, zone);
                 if (childrenFormula) {
-                    // Manual nesting always gets brackets
-                    // Show the logic used for the first level of nesting
-                    const nestOp = item.interOp || 'ТА';
-                    bit = `<span class="formula-bracket">(</span> ${bit} ${formatOp(nestOp)} ${childrenFormula} <span class="formula-bracket">)</span>`;
+                    // Use the operator of the first child to join parent with its sub-group.
+                    // This matches the visual tag shown in the UI.
+                    const children = espoConditionRegistry.filter(i => i.parentId === item.id && i.zone === zone);
+                    const nestOp = children.length > 0 ? children[0].op : 'ТА';
+                    const bCls = zone === 'Exclude' ? 'formula-bracket is-danger' : 'formula-bracket';
+                    bit = `<span class="${bCls}">(</span> ${bit} ${formatOp(nestOp)} ${childrenFormula} <span class="${bCls}">)</span>`;
                 }
 
                 currentGroup.push(bit);
@@ -2878,12 +3089,137 @@
             handleGeneration('ai');
         }
 
+        // --- NEW VIEW SWITCHING ---
+        function switchView(viewId) {
+            // Updated Nav Pias
+            document.querySelectorAll('#app-views-nav .nav-link').forEach(btn => btn.classList.remove('active'));
+            const navBtn = document.getElementById('nav-btn-' + viewId);
+            if (navBtn) navBtn.classList.add('active');
+
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(view => view.classList.add('d-none'));
+
+            // Show selected view
+            const target = document.getElementById('view-' + viewId);
+            if (target) {
+                target.classList.remove('d-none');
+                target.classList.add('animate-fade-in');
+            }
+
+            // Mock Counter Updates
+            const counter = document.getElementById('counter-display');
+            if (counter) {
+                if (viewId === 'constructor') counter.innerText = '10.5M';
+                else if (viewId === 'lookalike') counter.innerText = '4.1M';
+                else if (viewId === 'ai') counter.innerText = '16M';
+            }
+        }
+
+        function handleAiRequest() {
+            handleGeneration('ai');
+        }
+
+        // Simple mock for input handling in lookalike
+        function handleLookalikeInput(event, type) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const val = event.target.value.trim();
+                if (val) {
+                    addLalTag(type, val);
+                    event.target.value = '';
+                }
+            }
+        }
+
+        function addLalTag(type, value = null) {
+            // If called from button, get val from input
+            if (!value) {
+                const input = document.getElementById('lal-' + type);
+                if (input) {
+                    value = input.value.trim();
+                    input.value = '';
+                }
+            }
+            if (!value) return;
+
+            const container = document.getElementById('tags-lal-' + type);
+            const pill = document.createElement('div');
+            pill.className = 'tag-pill';
+            pill.innerHTML = `${value} <i class="bi bi-x" onclick="this.parentElement.remove()"></i>`;
+            container.appendChild(pill);
+        }
+
+        function fillAiPrompt(text) {
+            const area = document.getElementById('ai-prompt');
+            if (area) {
+                area.value = text;
+                area.focus();
+            }
+        }
+
+        // Multi-select Logic
+        function updateMultiSelect(baseId) {
+            const dropdown = document.getElementById(baseId + '-dropdown');
+            if (!dropdown) return;
+
+            const checkboxes = dropdown.querySelectorAll('.form-check-input:checked');
+            const values = Array.from(checkboxes).map(cb => cb.value);
+            const hiddenInput = document.getElementById(baseId);
+            const buttonText = dropdown.querySelector('.selected-values');
+
+            // Map values to labels for display
+            const labelsMap = {
+                'phone': 'Телефон',
+                'cid': 'CID',
+                'email': 'E-mail',
+                'audience_id': 'ID Аудиторії'
+            };
+
+            if (values.length === 0) {
+                buttonText.innerText = 'Оберіть формат...';
+                buttonText.classList.add('text-muted');
+                buttonText.classList.remove('text-dark');
+                hiddenInput.value = '';
+            } else {
+                const labels = values.map(v => labelsMap[v] || v);
+                buttonText.innerText = labels.join(', ');
+                buttonText.classList.remove('text-muted');
+                buttonText.classList.add('text-dark');
+                hiddenInput.value = values.join(','); // Store as CSV
+            }
+
+            // Sync AI Assistants buttons if needed
+            if (baseId === 'constructor-format-unified') {
+                const aiCheckboxes = document.querySelectorAll('input[name="ai-format-sync"]');
+                aiCheckboxes.forEach(cb => {
+                    cb.checked = values.includes(cb.value);
+                });
+            }
+        }
+
+        function syncAiFormat() {
+            // Collect all checked formats in AI tab
+            const aiCheckedValues = Array.from(document.querySelectorAll('input[name="ai-format-sync"]:checked')).map(cb => cb.value);
+
+            // Update sidebar unified multi-select
+            const sidebarCheckboxes = document.querySelectorAll('#constructor-format-unified-dropdown .form-check-input');
+            sidebarCheckboxes.forEach(cb => {
+                cb.checked = aiCheckedValues.includes(cb.value);
+            });
+
+            // Trigger UI update for the unified selector
+            updateMultiSelect('constructor-format-unified');
+        }
+
         function handleGeneration(source) {
             // source: 'constructor', 'lookalike', 'ai'
 
             let formatId = source + '-format';
             let resultsId = source + '-results';
             let tableBodyId = source + '-table-body';
+
+            // IF AI, we use the UNIFIED format from sidebar
+            if (source === 'ai') formatId = 'constructor-format-unified';
 
             // Only AI has SQL preview, others just table
 
