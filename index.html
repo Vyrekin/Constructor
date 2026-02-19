@@ -7,7 +7,10 @@
     <title>Конструктор вибірок | Diamond Edition</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -97,6 +100,23 @@
             color: var(--text-main);
         }
 
+        /* Global Design Variables Overrides */
+        #filterTabs .nav-link {
+            font-size: var(--tab-font-size, 0.85rem) !important;
+        }
+
+        .form-label {
+            font-size: var(--label-font-size, 11px) !important;
+        }
+
+        /* High specificity to override utility classes */
+        .tab-pane-card h6.fw-bold.text-primary,
+        .tab-pane-card .subsection-title {
+            font-size: var(--subsection-font-size, 15px) !important;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
         [data-theme="dark"] .form-control::placeholder {
             color: #475569;
         }
@@ -112,7 +132,7 @@
         }
 
         .form-label {
-            font-size: 0.82rem;
+            font-size: 11px;
             margin-bottom: 0.1rem;
             font-weight: 600;
             color: var(--text-muted);
@@ -138,7 +158,7 @@
         }
 
         h6.text-primary.text-uppercase {
-            font-size: 0.75rem !important;
+            font-size: 1.1rem !important;
             margin-bottom: 0.4rem !important;
             margin-top: 0.2rem !important;
             opacity: 0.8;
@@ -1625,6 +1645,44 @@
         .design-mode-active .nav-item:active {
             cursor: grabbing;
         }
+
+        #map-container {
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        /* Search Bar Theme Tweaks */
+        [data-theme="dark"] #field-search-input {
+            background: rgba(30, 41, 59, 0.7) !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        [data-theme="dark"] #field-search-input::placeholder {
+            color: #64748b !important;
+        }
+
+        /* Combined Search View */
+        .is-searching .tab-pane {
+            display: block;
+            opacity: 1 !important;
+        }
+
+        .is-searching .tab-content>.tab-pane.fade {
+            transition: none;
+        }
+
+        /* Keep tabs clickable during search, but slightly dimmed */
+        .is-searching #filterTabs {
+            opacity: 0.8;
+            pointer-events: auto;
+        }
+
+        .is-searching #filterTabs .nav-link:not(.active) {
+            opacity: 0.5;
+        }
     </style>
 </head>
 
@@ -1706,12 +1764,23 @@
                                 <!-- Dynamic List -->
                                 <div class="text-center text-muted small py-3">Немає збережених сегментів</div>
                             </div>
-                            <li>
-                                <hr class="dropdown-divider mt-3">
+                            <li class="mt-2 text-center">
+                                <button class="btn btn-sm btn-primary w-100 rounded-pill"
+                                    onclick="saveCurrentSegment()">
+                                    <i class="bi bi-plus-lg me-1"></i>Зберегти поточний
+                                </button>
                             </li>
-                            <li><button class="btn btn-sm btn-primary w-100 rounded-pill"
-                                    onclick="saveCurrentSegment()"><i class="bi bi-plus-lg me-1"></i>Зберегти
-                                    поточний</button></li>
+                            <li>
+                                <hr class="dropdown-divider mt-2">
+                            </li>
+                            <li>
+                                <h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Мої
+                                    автоматизації</h6>
+                            </li>
+                            <div id="header-saved-automations-list" class="vstack gap-2">
+                                <!-- Dynamic List -->
+                                <div class="text-center text-muted small py-3">Немає активних автоматизацій</div>
+                            </div>
                         </ul>
                     </div>
 
@@ -1820,6 +1889,11 @@
                                                 class="bi bi-people-fill"></i> Відправник та Отримувач</button>
                                     </li>
                                     <li class="nav-item">
+                                        <button class="nav-link" id="tab-c11" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c11" type="button" role="tab"><i
+                                                class="bi bi-building"></i> Контрагенти</button>
+                                    </li>
+                                    <li class="nav-item">
                                         <button class="nav-link" id="tab-c3" data-bs-toggle="pill"
                                             data-bs-target="#pane-c3" type="button" role="tab"><i
                                                 class="bi bi-cash-stack"></i> Фінанси</button>
@@ -1853,6 +1927,11 @@
                                         <button class="nav-link" id="tab-c7" data-bs-toggle="pill"
                                             data-bs-target="#pane-c7" type="button" role="tab"><i
                                                 class="bi bi-check-circle"></i> Згоди та Комунікація</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="tab-c10" data-bs-toggle="pill"
+                                            data-bs-target="#pane-c10" type="button" role="tab"><i
+                                                class="bi bi-geo-alt"></i> Гео-мапа</button>
                                     </li>
                                 </ul>
                             </div>
@@ -1899,6 +1978,15 @@
                                         }
                                     </style>
                                 </div>
+                                <div class="ms-3 flex-grow-1 position-relative" style="max-width: 250px;">
+                                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                                        style="font-size: 0.75rem;"></i>
+                                    <input type="text"
+                                        class="form-control form-control-sm rounded-pill ps-5 border-0 shadow-sm"
+                                        id="field-search-input" placeholder="Пошук поля за назвою..."
+                                        style="font-size: 0.75rem; height: 32px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);"
+                                        oninput="filterFieldsBySearch(this.value)">
+                                </div>
                                 <div class="ms-auto small text-muted font-monospace" style="font-size: 0.65rem;">
                                     Конструктор v2.4
                                 </div>
@@ -1914,7 +2002,7 @@
                                     <div class="col-md-4" data-field-id="Role">
                                         <label class="form-label">Роль в ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'Role')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Sender">Відправник</option>
                                             <option value="Recipient">Отримувач</option>
                                             <option value="ThirdPerson">Третя особа</option>
@@ -1923,7 +2011,7 @@
                                     <div class="col-md-4" data-field-id="ServiceType">
                                         <label class="form-label">Тип сервісу</label>
                                         <select class="form-select" onchange="addTag(this, 'ServiceType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="WarehouseWarehouse">Відділення-Відділення</option>
                                             <option value="WarehouseDoors">Відділення-Адреса</option>
                                             <option value="DoorsWarehouse">Адреса-Відділення</option>
@@ -1933,7 +2021,7 @@
                                     <div class="col-md-4" data-field-id="Payer">
                                         <label class="form-label">Платник</label>
                                         <select class="form-select" onchange="addTag(this, 'Payer')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Sender">Відправник</option>
                                             <option value="Recipient">Отримувач</option>
                                             <option value="ThirdPerson">Третя особа</option>
@@ -1942,13 +2030,13 @@
                                     <div class="col-md-6" data-field-id="Category1">
                                         <label class="form-label">Категорія 1 рівень</label>
                                         <select class="form-select" onchange="addTag(this, 'Category1')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6" data-field-id="Category2">
                                         <label class="form-label">Категорія 2 рівень</label>
                                         <select class="form-select" onchange="addTag(this, 'Category2')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                         </select>
                                     </div>
 
@@ -2001,7 +2089,7 @@
                                     <div class="col-md-4" data-field-id="CreatedPlace">
                                         <label class="form-label">Місце створення</label>
                                         <select class="form-select" onchange="addTag(this, 'CreatedPlace')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="App">Додаток</option>
                                             <option value="API">API</option>
                                             <option value="Branch">Відділення</option>
@@ -2010,7 +2098,7 @@
                                     <div class="col-md-4" data-field-id="CreatedType">
                                         <label class="form-label">Тип місця створення</label>
                                         <select class="form-select" onchange="addTag(this, 'CreatedType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Static">Стаціонарне</option>
                                             <option value="Mobile">Мобільне</option>
                                         </select>
@@ -2018,7 +2106,7 @@
                                     <div class="col-md-4" data-field-id="LastServicePointType">
                                         <label class="form-label">Тип ост. точки обслуг.</label>
                                         <select class="form-select" onchange="addTag(this, 'LastServicePointType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Branch">Відділення</option>
                                             <option value="Postomat">Поштомат</option>
                                             <option value="Address">Адреса</option>
@@ -2027,7 +2115,7 @@
                                     <div class="col-md-4" data-field-id="Import">
                                         <label class="form-label">Імпорт</label>
                                         <select class="form-select" onchange="addTag(this, 'Import')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2035,7 +2123,7 @@
                                     <div class="col-md-4" data-field-id="Export">
                                         <label class="form-label">Експорт</label>
                                         <select class="form-select" onchange="addTag(this, 'Export')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2043,7 +2131,7 @@
                                     <div class="col-md-4" data-field-id="SecondaryEN">
                                         <label class="form-label">Вторинні ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'SecondaryEN')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2052,7 +2140,7 @@
                                     <div class="col-md-4" data-field-id="CargoType">
                                         <label class="form-label">Тип вантажу</label>
                                         <select class="form-select" onchange="addTag(this, 'CargoType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Parcel">Посилки</option>
                                             <option value="Documents">Документи</option>
                                             <option value="Pallet">Палети</option>
@@ -2060,10 +2148,31 @@
                                         </select>
                                     </div>
                                     <div class="col-md-8" data-field-id="CargoDesc">
-                                        <label class="form-label">Опис вантажу</label>
-                                        <input type="text" class="form-control"
-                                            placeholder="Наприклад: взуття, запчастини, косметика"
-                                            onchange="addTextTag(this, 'CargoDesc')">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <label class="form-label mb-0">Опис вантажу</label>
+                                            <div class="position-relative d-flex align-items-center">
+                                                <select
+                                                    class="form-select form-select-sm w-auto py-0 border-0 bg-transparent text-primary fw-bold shadow-none pe-4"
+                                                    id="cargo-search-mode"
+                                                    style="font-size: 0.65rem; height: 18px; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; background: none !important;">
+                                                    <option value="EXACT">ТОЧНЕ</option>
+                                                    <option value="LIKE" selected>МІСТИТЬ</option>
+                                                    <option value="STARTS_WITH">ПОЧИНАЄТЬСЯ З</option>
+                                                    <option value="ENDS_WITH">ЗАКІНЧУЄТЬСЯ НА</option>
+                                                </select>
+                                                <i class="bi bi-chevron-down text-primary position-absolute end-0"
+                                                    style="font-size: 0.6rem; pointer-events: none;"></i>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="cargo-desc-input"
+                                                placeholder="Наприклад: взуття, запчастини, косметика"
+                                                onkeydown="if(event.key==='Enter') addTextTag(this, 'CargoDesc')">
+                                            <button class="btn btn-outline-primary px-2" type="button"
+                                                onclick="addTextTag(document.getElementById('cargo-desc-input'), 'CargoDesc')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="col-md-6" data-field-id="Weight">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
@@ -2125,7 +2234,7 @@
                                     <div class="col-md-4" data-field-id="SenderType">
                                         <label class="form-label">Тип відправника</label>
                                         <select class="form-select" onchange="addTag(this, 'SenderType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Private">Приватна особа</option>
                                             <option value="Business">Бізнес</option>
                                         </select>
@@ -2138,7 +2247,7 @@
                                     <div class="col-md-4" data-field-id="SenderUnitType">
                                         <label class="form-label">Тип підрозділу відправника</label>
                                         <select class="form-select" onchange="addTag(this, 'SenderUnitType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Branch">Відділення</option>
                                             <option value="Postomat">Поштомат</option>
                                         </select>
@@ -2166,7 +2275,7 @@
                                     <div class="col-md-4" data-field-id="RecipientType">
                                         <label class="form-label">Тип отримувача</label>
                                         <select class="form-select" onchange="addTag(this, 'RecipientType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Private">Приватна особа</option>
                                             <option value="Business">Бізнес</option>
                                         </select>
@@ -2179,7 +2288,7 @@
                                     <div class="col-md-4" data-field-id="RecipientUnitType">
                                         <label class="form-label">Тип підрозділу отримувача</label>
                                         <select class="form-select" onchange="addTag(this, 'RecipientUnitType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Branch">Відділення</option>
                                             <option value="Postomat">Поштомат</option>
                                         </select>
@@ -2203,6 +2312,169 @@
                             </div>
                         </div>
 
+                        <!-- 11. Контрагенти -->
+                        <div class="tab-pane fade" id="pane-c11" role="tabpanel">
+                            <div class="tab-pane-card">
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    ДЕТАЛІЗАЦІЯ ТА СТАТУСИ КОНТРАГЕНТА</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3" data-field-id="CounterpartyCode">
+                                        <label class="form-label">Код контрагента</label>
+                                        <input type="text" class="form-control" placeholder="123456"
+                                            onchange="addTextTag(this, 'CounterpartyCode')">
+                                    </div>
+                                    <div class="col-md-3" data-field-id="CounterpartyEDRPOU">
+                                        <label class="form-label">Код ЄДРПОУ/ІПН</label>
+                                        <input type="text" class="form-control" placeholder="12345678"
+                                            onchange="addTextTag(this, 'CounterpartyEDRPOU')">
+                                    </div>
+                                    <div class="col-md-6" data-field-id="CounterpartyName">
+                                        <label class="form-label">Назва контрагента</label>
+                                        <input type="text" class="form-control" placeholder="ТОВ 'Приклад'"
+                                            onchange="addTextTag(this, 'CounterpartyName')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CounterpartyType">
+                                        <label class="form-label">Тип контрагента</label>
+                                        <select class="form-select" onchange="addTag(this, 'CounterpartyType')">
+                                            <option value="">...</option>
+                                            <option value="Legal">Юридична особа</option>
+                                            <option value="Individual">Фізична особа</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CounterpartyCategory">
+                                        <label class="form-label">Категорія контрагента</label>
+                                        <select class="form-select" onchange="addTag(this, 'CounterpartyCategory')">
+                                            <option value="">...</option>
+                                            <option value="Strategic">Strategic</option>
+                                            <option value="Regional">Regional</option>
+                                            <option value="National">National</option>
+                                            <option value="Small">Small Business</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CounterpartyBusinessSector">
+                                        <label class="form-label">Сфера діяльності</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'CounterpartyBusinessSector')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CounterpartyBusinessType">
+                                        <label class="form-label">Бізнес тип діяльності</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'CounterpartyBusinessType')">
+                                    </div>
+                                    <div class="col-md-8" data-field-id="CounterpartyWebsite">
+                                        <label class="form-label">Веб-сайт контрагента</label>
+                                        <input type="text" class="form-control" placeholder="www.example.com"
+                                            onchange="addTextTag(this, 'CounterpartyWebsite')">
+                                    </div>
+                                </div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    МЕНЕДЖМЕНТ ТА АНАЛІТИКА КЛІЄНТА</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-4" data-field-id="AssignedManager">
+                                        <label class="form-label">Закріплений менеджер</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'AssignedManager')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="ManagerDept">
+                                        <label class="form-label">Відділ менеджера</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'ManagerDept')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="ManagerDir">
+                                        <label class="form-label">Дирекція менеджера</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'ManagerDir')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CP_ActivitySegment">
+                                        <label class="form-label">Сегмент активності контрагента</label>
+                                        <select class="form-select" onchange="addTag(this, 'CP_ActivitySegment')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CP_ActivitySent">
+                                        <label class="form-label">Сегмент активності (Відправка)</label>
+                                        <select class="form-select" onchange="addTag(this, 'CP_ActivitySent')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CP_ActivityRecv">
+                                        <label class="form-label">Сегмент активності (Отримання)</label>
+                                        <select class="form-select" onchange="addTag(this, 'CP_ActivityRecv')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" data-field-id="CounterpartyDates">
+                                        <label class="form-label small fw-bold">Дати ЕН по контрагенту
+                                            (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'FirstEN_Counterparty')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'LastEN_Counterparty')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" data-field-id="CounterpartyENCnt">
+                                        <label class="form-label">К-сть ЕН по контрагенту</label>
+                                        <input type="number" class="form-control"
+                                            onchange="addTextTag(this, 'CounterpartyENCnt')">
+                                    </div>
+                                </div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    ОСНОВНИЙ КОНТРАГЕНТ (ГОЛОВНИЙ ПІДРОЗДІЛ)</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-4" data-field-id="MainCP_Type">
+                                        <label class="form-label">Тип основного контрагента</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_Type')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="MainCP_Code">
+                                        <label class="form-label">Код основного контрагента</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_Code')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="MainCP_EDRPOU">
+                                        <label class="form-label">Код ЄДРПОУ/ІПН основного</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_EDRPOU')">
+                                    </div>
+                                    <div class="col-md-12" data-field-id="MainCP_Name">
+                                        <label class="form-label">Назва основного контрагента</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_Name')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="MainCP_Sector">
+                                        <label class="form-label">Сфера діяльності основного</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_Sector')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="MainCP_Category">
+                                        <label class="form-label">Категорія основного</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_Category')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="MainCP_Manager">
+                                        <label class="form-label">Закріплений менеджер</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_Manager')">
+                                    </div>
+                                    <div class="col-md-6" data-field-id="MainCP_Dept">
+                                        <label class="form-label">Відділ основного менеджера</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_Dept')">
+                                    </div>
+                                    <div class="col-md-6" data-field-id="MainCP_Dir">
+                                        <label class="form-label">Дирекція основного менеджера</label>
+                                        <input type="text" class="form-control"
+                                            onchange="addTextTag(this, 'MainCP_Dir')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- 3. Фінанси -->
                         <div class="tab-pane fade" id="pane-c3" role="tabpanel">
                             <div class="tab-pane-card">
@@ -2212,7 +2484,7 @@
                                     <div class="col-md-4" data-field-id="PayType">
                                         <label class="form-label">Тип оплати</label>
                                         <select class="form-select" onchange="addTag(this, 'PayType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Cash">Готівка</option>
                                             <option value="NonCash">Безготівка</option>
                                             <option value="Card">Картка</option>
@@ -2267,7 +2539,7 @@
                                     <div class="col-md-4" data-field-id="TransferAvailability">
                                         <label class="form-label">Наявність переказу</label>
                                         <select class="form-select" onchange="addTag(this, 'TransferAvailability')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2308,7 +2580,7 @@
                                     <div class="col-md-4" data-field-id="ClientNPU">
                                         <label class="form-label">Клієнт НПУ</label>
                                         <select class="form-select" onchange="addTag(this, 'ClientNPU')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2316,23 +2588,23 @@
                                     <div class="col-md-4" data-field-id="ClientCountry">
                                         <label class="form-label">Країна клієнта</label>
                                         <select class="form-select" onchange="addTag(this, 'ClientCountry')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="UA">Україна</option>
                                             <option value="PL">Польща</option>
                                             <option value="MD">Молдова</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4" data-field-id="Gender">
-                                        <label class="form-label">Стать</label>
+                                    <div class="col-md-3" data-field-id="Gender">
+                                        <label class="form-label">Стать (розрахункова)</label>
                                         <select class="form-select" onchange="addTag(this, 'Gender')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="M">Чоловіча</option>
                                             <option value="F">Жіноча</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-8" data-field-id="Birthday">
+                                    <div class="col-md-5" data-field-id="Birthday">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <label class="form-label mb-0">День народження</label>
+                                            <label class="form-label mb-0">Дата народження</label>
                                             <div
                                                 class="form-check form-switch min-h-0 mb-0 d-flex align-items-center gap-1">
                                                 <input class="form-check-input" type="checkbox" id="c4-bday-all"
@@ -2348,28 +2620,47 @@
                                                 style="font-size: 0.7rem;">по</span>
                                             <input type="date" class="form-control px-2" id="c4-bday-to">
                                             <button class="btn btn-outline-primary px-2" type="button"
-                                                onclick="addRangeTag('Birthday', 'День народження', 'c4-bday-from', 'c4-bday-to')">
+                                                onclick="addRangeTag('Birthday', 'Дата народження', 'c4-bday-from', 'c4-bday-to')">
                                                 <i class="bi bi-plus"></i>
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-md-4" data-field-id="AddPhoneAvailability">
-                                        <label class="form-label">Наявність додатк. телефону</label>
-                                        <select class="form-select" onchange="addTag(this, 'AddPhoneAvailability')">
-                                            <option value="">Обери...</option>
-                                            <option value="Yes">Так</option>
-                                            <option value="No">Ні</option>
-                                        </select>
+                                    <div class="col-md-4" data-field-id="Email">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" placeholder="example@mail.com"
+                                            onchange="addTextTag(this, 'Email')">
                                     </div>
                                 </div>
 
                                 <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
-                                    МАРКЕТИНГОВИЙ ПРОФІЛЬ</h6>
-                                <div class="row g-3">
+                                    МАРКЕТИНГОВИЙ ПРОФІЛЬ ТА РОЗШИРЕНА СЕГМЕНТАЦІЯ</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3" data-field-id="ActivitySegment">
+                                        <label class="form-label">Сегмент активності</label>
+                                        <select class="form-select" onchange="addTag(this, 'ActivitySegment')">
+                                            <option value="">...</option>
+                                            <option value="VIP">VIP</option>
+                                            <option value="Active">Активний</option>
+                                            <option value="Sleep">Сплячий</option>
+                                            <option value="Churn">Відтік</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3" data-field-id="ClientMonthSegment">
+                                        <label class="form-label">Сегмент клієнта, місяць</label>
+                                        <select class="form-select" onchange="addTag(this, 'ClientMonthSegment')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3" data-field-id="ClientQuarterSegment">
+                                        <label class="form-label">Сегмент клієнта, квартал</label>
+                                        <select class="form-select" onchange="addTag(this, 'ClientQuarterSegment')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
                                     <div class="col-md-3" data-field-id="AgeGroup">
                                         <label class="form-label">Вікова група</label>
                                         <select class="form-select" onchange="addTag(this, 'AgeGroup')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="18-25">18-25</option>
                                             <option value="26-35">26-35</option>
                                             <option value="36-45">36-45</option>
@@ -2377,118 +2668,122 @@
                                             <option value="55+">55+</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" data-field-id="Lead">
-                                        <label class="form-label">Лід</label>
-                                        <select class="form-select" onchange="addTag(this, 'Lead')">
-                                            <option value="">Обери...</option>
+                                    <div class="col-md-3" data-field-id="MedianENCount">
+                                        <label class="form-label">Медіанна к-сть ЕН</label>
+                                        <input type="number" class="form-control" placeholder="0"
+                                            onchange="addTextTag(this, 'MedianENCount')">
+                                    </div>
+                                    <div class="col-md-3" data-field-id="EmployeeFlag">
+                                        <label class="form-label">Ознака співробітника</label>
+                                        <select class="form-select" onchange="addTag(this, 'EmployeeFlag')">
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" data-field-id="ActivitySegment">
-                                        <label class="form-label">Сегмент активності</label>
-                                        <select class="form-select" onchange="addTag(this, 'ActivitySegment')">
-                                            <option value="">Обери...</option>
-                                            <option value="VIP">VIP</option>
-                                            <option value="Active">Активний</option>
-                                            <option value="Sleep">Сплячий</option>
-                                            <option value="Churn">Відтік</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3" data-field-id="POB">
-                                        <label class="form-label">ПОБ</label>
-                                        <select class="form-select" onchange="addTag(this, 'POB')">
-                                            <option value="">Обери...</option>
+                                    <div class="col-md-3" data-field-id="POB_Flag">
+                                        <label class="form-label">Ознака ПОБа</label>
+                                        <select class="form-select" onchange="addTag(this, 'POB_Flag')">
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" data-field-id="Blacklist">
-                                        <label class="form-label">Чорний список (ЧС)</label>
-                                        <select class="form-select" onchange="addTag(this, 'Blacklist')">
-                                            <option value="">Обери...</option>
+                                    <div class="col-md-3" data-field-id="Lead_Flag">
+                                        <label class="form-label">Ознака ЛІДа</label>
+                                        <select class="form-select" onchange="addTag(this, 'Lead_Flag')">
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" data-field-id="RegionalCenter">
-                                        <label class="form-label">Регіональний центр</label>
-                                        <select class="form-select" onchange="addTag(this, 'RegionalCenter')">
-                                            <option value="">Обери...</option>
-                                            <option value="Kyiv">Київ</option>
-                                            <option value="Lviv">Львів</option>
-                                            <option value="Odesa">Одеса</option>
-                                            <option value="Dnipro">Дніпро</option>
-                                            <option value="Kharkiv">Харків</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3" data-field-id="ActivitySphere">
+                                </div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    АНАЛІТИКА ТА ЙМОВІРНІСТЬ ПОСФЕРНО</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6" data-field-id="ActivitySphere_Detailed">
                                         <label class="form-label">Сфера діяльності</label>
-                                        <select class="form-select" onchange="addTag(this, 'ActivitySphere')">
-                                            <option value="">Обери...</option>
-                                            <option value="Retail">Retail</option>
-                                            <option value="IT">IT</option>
-                                            <option value="FMCG">FMCG</option>
-                                            <option value="Logistics">Logistics</option>
-                                            <option value="Auto">Auto</option>
+                                        <select class="form-select" onchange="addTag(this, 'ActivitySphere_Detailed')">
+                                            <option value="">...</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" data-field-id="SettlementType">
-                                        <label class="form-label">Тип нас. пункту</label>
-                                        <select class="form-select" onchange="addTag(this, 'SettlementType')">
-                                            <option value="">Обери...</option>
-                                            <option value="City">Місто</option>
-                                            <option value="Village">Село</option>
-                                            <option value="Town">СМТ</option>
+                                    <div class="col-md-3" data-field-id="SphereENCount">
+                                        <label class="form-label">К-сть ЕН по сфері</label>
+                                        <input type="number" class="form-control"
+                                            onchange="addTextTag(this, 'SphereENCount')">
+                                    </div>
+                                    <div class="col-md-3" data-field-id="SpherePurchaseProb">
+                                        <label class="form-label">Ймовірність покупки (%)</label>
+                                        <input type="number" class="form-control"
+                                            onchange="addTextTag(this, 'SpherePurchaseProb')">
+                                    </div>
+                                    <div class="col-md-12" data-field-id="SphereDates">
+                                        <label class="form-label small fw-bold">Дати ЕН по сфері (Перша/Остання)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'FirstEN_Sphere')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'LastEN_Sphere')">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    ДОДАТКОВІ ПОСЛУГИ</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6" data-field-id="IntlNPU">
+                                        <label class="form-label">Міжнародна доставка НПУ</label>
+                                        <select class="form-select" onchange="addTag(this, 'IntlNPU')">
+                                            <option value="">...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-6" data-field-id="LastENSphereDate">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <label class="form-label mb-0">Дата останьої ЕН по сфері</label>
-                                            <div
-                                                class="form-check form-switch min-h-0 mb-0 d-flex align-items-center gap-1">
-                                                <input class="form-check-input" type="checkbox" id="c4-ensphere-all"
-                                                    style="transform: scale(0.8);"
-                                                    onchange="toggleRangeAll('c4-ensphere', this.checked)">
-                                                <label class="form-check-label text-muted small"
-                                                    for="c4-ensphere-all">&infin;</label>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="date" class="form-control px-2" id="c4-ensphere-from">
-                                            <span class="input-group-text bg-light px-1"
-                                                style="font-size: 0.7rem;">по</span>
-                                            <input type="date" class="form-control px-2" id="c4-ensphere-to">
-                                            <button class="btn btn-outline-primary px-2" type="button"
-                                                onclick="addRangeTag('LastENSphereDate', 'Ост. ЕН по сфері', 'c4-ensphere-from', 'c4-ensphere-to')">
-                                                <i class="bi bi-plus"></i>
-                                            </button>
-                                        </div>
+                                    <div class="col-md-6" data-field-id="Fulfillment">
+                                        <label class="form-label">Фулфілмент</label>
+                                        <select class="form-select" onchange="addTag(this, 'Fulfillment')">
+                                            <option value="">...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
                                     </div>
-                                    <div class="col-md-6" data-field-id="NextPurchaseProb">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <label class="form-label mb-0">Ймовірність покупки (%)</label>
-                                            <div
-                                                class="form-check form-switch min-h-0 mb-0 d-flex align-items-center gap-1">
-                                                <input class="form-check-input" type="checkbox" id="c4-prob-all"
-                                                    style="transform: scale(0.8);"
-                                                    onchange="toggleRangeAll('c4-prob', this.checked)">
-                                                <label class="form-check-label text-muted small"
-                                                    for="c4-prob-all">&infin;</label>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control px-2" id="c4-prob-from"
-                                                placeholder="0">
-                                            <span class="input-group-text bg-light px-1"
-                                                style="font-size: 0.7rem;">по</span>
-                                            <input type="number" class="form-control px-2" id="c4-prob-to"
-                                                placeholder="100">
-                                            <button class="btn btn-outline-primary px-2" type="button"
-                                                onclick="addRangeTag('NextPurchaseProb', 'Ймовірність покупки', 'c4-prob-from', 'c4-prob-to')">
-                                                <i class="bi bi-plus"></i>
-                                            </button>
-                                        </div>
+                                </div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    RFM / CLC / CVO АНАЛІТИКА (ЗАГАЛЬНА)</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-4" data-field-id="RFM_Segment">
+                                        <label class="form-label">RFM сегмент</label>
+                                        <select class="form-select" onchange="addTag(this, 'RFM_Segment')">
+                                            <option value="">...</option>
+                                            <option value="Champions">Champions</option>
+                                            <option value="Loyal">Loyal Customers</option>
+                                            <option value="Potential">Potential Loyalist</option>
+                                            <option value="New">New Customers</option>
+                                            <option value="AtRisk">At Risk</option>
+                                            <option value="Hibernating">Hibernating</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CLC_Segment">
+                                        <label class="form-label">CLC сегмент</label>
+                                        <select class="form-select" onchange="addTag(this, 'CLC_Segment')">
+                                            <option value="">...</option>
+                                            <option value="High">High Value</option>
+                                            <option value="Medium">Medium Value</option>
+                                            <option value="Low">Low Value</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CVO_Segment">
+                                        <label class="form-label">CVO сегмент</label>
+                                        <select class="form-select" onchange="addTag(this, 'CVO_Segment')">
+                                            <option value="">...</option>
+                                            <option value="Optimized">Optimized</option>
+                                            <option value="Growing">Growing</option>
+                                            <option value="Declining">Declining</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -2497,6 +2792,78 @@
                         <!-- 5. Активність та Локації -->
                         <div class="tab-pane fade" id="pane-c5" role="tabpanel">
                             <div class="tab-pane-card">
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    RFM / CLC / CVO (ВІДПРАВКА ТА ОТРИМАННЯ)</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-4" data-field-id="RFM_Sender">
+                                        <label class="form-label">RFM сегмент відправка</label>
+                                        <select class="form-select" onchange="addTag(this, 'RFM_Sender')">
+                                            <option value="">...</option>
+                                            <option value="111">111 (Hibernating)</option>
+                                            <option value="555">555 (Champions)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CLC_Sender">
+                                        <label class="form-label">CLC сегмент відправка</label>
+                                        <select class="form-select" onchange="addTag(this, 'CLC_Sender')">
+                                            <option value="">...</option>
+                                            <option value="Core">Core</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CVO_Sender">
+                                        <label class="form-label">CVO сегмент відправка</label>
+                                        <select class="form-select" onchange="addTag(this, 'CVO_Sender')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="RFM_Recipient">
+                                        <label class="form-label">RFM сегмент отримання</label>
+                                        <select class="form-select" onchange="addTag(this, 'RFM_Recipient')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CLC_Recipient">
+                                        <label class="form-label">CLC сегмент отримання</label>
+                                        <select class="form-select" onchange="addTag(this, 'CLC_Recipient')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="CVO_Recipient">
+                                        <label class="form-label">CVO сегмент отримання</label>
+                                        <select class="form-select" onchange="addTag(this, 'CVO_Recipient')">
+                                            <option value="">...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    ОСТАННЯ КОМУНІКАЦІЯ</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-12" data-field-id="LastPromoMessageDate">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <label class="form-label mb-0">Дата останнього промо повідомлення</label>
+                                            <div
+                                                class="form-check form-switch min-h-0 mb-0 d-flex align-items-center gap-1">
+                                                <input class="form-check-input" type="checkbox" id="c4-promo-date-all"
+                                                    style="transform: scale(0.8);"
+                                                    onchange="toggleRangeAll('c4-promo-date', this.checked)">
+                                                <label class="form-check-label text-muted small"
+                                                    for="c4-promo-date-all">&infin;</label>
+                                            </div>
+                                        </div>
+                                        <div class="input-group">
+                                            <input type="date" class="form-control px-2" id="c4-promo-date-from">
+                                            <span class="input-group-text bg-light px-1"
+                                                style="font-size: 0.7rem;">по</span>
+                                            <input type="date" class="form-control px-2" id="c4-promo-date-to">
+                                            <button class="btn btn-outline-primary px-2" type="button"
+                                                onclick="addRangeTag('LastPromoMessageDate', 'Ост. промо', 'c4-promo-date-from', 'c4-promo-date-to')">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
                                     ТРАНЗАКЦІЙНА АКТИВНІСТЬ</h6>
                                 <div class="row g-3 mb-4">
@@ -2594,37 +2961,164 @@
                                 </div>
 
                                 <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
-                                    ЛОКАЦІЇ ТА ТОЧКИ ОБСЛУГОВУВАННЯ</h6>
+                                    ДЕТАЛІЗАЦІЯ ЕН ЗА КАНАЛАМИ ТА ТИПАМИ</h6>
                                 <div class="row g-3 mb-4">
-                                    <div class="col-md-4" data-field-id="LastServicePoint">
-                                        <label class="form-label">Остан. точка обслуг.</label>
-                                        <input type="text" class="form-control" placeholder="Пошук точки..."
-                                            onchange="addTextTag(this, 'LastServicePoint')">
+                                    <!-- Відділення -->
+                                    <div class="col-md-6" data-field-id="EN_Branch_Range">
+                                        <label class="form-label small fw-bold">ЕН Відділення (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm mb-2">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'First_EN_Branch')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'Last_EN_Branch')">
+                                        </div>
                                     </div>
-                                    <div class="col-md-4" data-field-id="MainBranch">
-                                        <label class="form-label">Основне відділення</label>
-                                        <input type="text" class="form-control" placeholder="Пошук відділення..."
-                                            onchange="addTextTag(this, 'MainBranch')">
+                                    <!-- Поштомат -->
+                                    <div class="col-md-6" data-field-id="EN_Postomat_Range">
+                                        <label class="form-label small fw-bold">ЕН Поштомат (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm mb-2">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'First_EN_Postomat')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'Last_EN_Postomat')">
+                                        </div>
                                     </div>
-                                    <div class="col-md-4" data-field-id="MainPostomat">
-                                        <label class="form-label">Основний поштомат</label>
-                                        <input type="text" class="form-control" placeholder="Пошук поштомату..."
-                                            onchange="addTextTag(this, 'MainPostomat')">
+                                    <!-- Адресне Обслуговування -->
+                                    <div class="col-md-6" data-field-id="EN_AO_Range">
+                                        <label class="form-label small fw-bold">ЕН АО (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm mb-2">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'First_EN_AO')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'Last_EN_AO')">
+                                        </div>
                                     </div>
-                                    <div class="col-md-4" data-field-id="FavoritePoint">
-                                        <label class="form-label">Улюблена точка обслугов.</label>
-                                        <input type="text" class="form-control" placeholder="Пошук точки..."
-                                            onchange="addTextTag(this, 'FavoritePoint')">
+                                    <!-- Міжнародний напрямок -->
+                                    <div class="col-md-6" data-field-id="EN_Intl_Range">
+                                        <label class="form-label small fw-bold">ЕН Міжнародний (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm mb-2">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'First_EN_Intl')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'Last_EN_Intl')">
+                                        </div>
                                     </div>
-                                    <div class="col-md-4" data-field-id="ReserveBranch">
-                                        <label class="form-label">Резервне відділення</label>
-                                        <input type="text" class="form-control" placeholder="Пошук відділення..."
-                                            onchange="addTextTag(this, 'ReserveBranch')">
+                                    <!-- Цифровий помічник -->
+                                    <div class="col-md-12" data-field-id="EN_Digital_Range">
+                                        <label class="form-label small fw-bold">ЕН Цифровий помічник
+                                            (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'First_EN_Digital')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'Last_EN_Digital')">
+                                        </div>
                                     </div>
-                                    <div class="col-md-4" data-field-id="ReservePostomat">
-                                        <label class="form-label">Резервний поштомат</label>
-                                        <input type="text" class="form-control" placeholder="Пошук поштомату..."
-                                            onchange="addTextTag(this, 'ReservePostomat')">
+                                </div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    УЛЮБЛЕНІ ТА ОСТАННІ ТОЧКИ КОНТАКТУ</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6" data-field-id="FavPoint_Detailed">
+                                        <label class="form-label small fw-bold">Улюблена точка (Тип / Назва)</label>
+                                        <div class="input-group input-group-sm mb-2">
+                                            <input type="text" class="form-control" placeholder="Тип"
+                                                onchange="addTextTag(this, 'FavPointType')">
+                                            <input type="text" class="form-control" placeholder="Назва"
+                                                onchange="addTextTag(this, 'FavPointName')">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" placeholder="Регіон"
+                                                onchange="addTextTag(this, 'FavPointReg')">
+                                            <input type="text" class="form-control" placeholder="Місто"
+                                                onchange="addTextTag(this, 'FavPointCity')">
+                                            <select class="form-select" style="max-width: 80px;"
+                                                onchange="addTag(this, 'FavPointIsCent')">
+                                                <option value="">Ц?</option>
+                                                <option value="1">1</option>
+                                                <option value="0">0</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" data-field-id="LastPoint_Detailed">
+                                        <label class="form-label small fw-bold">Остання точка (Тип / Назва)</label>
+                                        <div class="input-group input-group-sm mb-2">
+                                            <input type="text" class="form-control" placeholder="Тип"
+                                                onchange="addTextTag(this, 'LastPointType')">
+                                            <input type="text" class="form-control" placeholder="Назва"
+                                                onchange="addTextTag(this, 'LastPointName')">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" placeholder="Місто"
+                                                onchange="addTextTag(this, 'LastPointCity_D')">
+                                            <input type="text" class="form-control" placeholder="Регіон"
+                                                onchange="addTextTag(this, 'LastPointReg_D')">
+                                            <select class="form-select" style="max-width: 80px;"
+                                                onchange="addTag(this, 'LastPointIsCent')">
+                                                <option value="">Ц?</option>
+                                                <option value="1">1</option>
+                                                <option value="0">0</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
+                                    РОЗШИРЕНА ТРАНЗАКЦІЙНА АКТИВНІСТЬ</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6" data-field-id="ShipRecvDates">
+                                        <label class="form-label small fw-bold">Дати відпр./отрим.
+                                            (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'FirstTrans_Date')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'LastTrans_Date')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" data-field-id="DaysWithoutEN">
+                                        <label class="form-label">Днів без ЕН</label>
+                                        <input type="number" class="form-control"
+                                            onchange="addTextTag(this, 'DaysWithoutEN')">
+                                    </div>
+                                    <div class="col-md-3" data-field-id="TotalEN_All">
+                                        <label class="form-label">К-сть ЕН (Загальна)</label>
+                                        <input type="number" class="form-control"
+                                            onchange="addTextTag(this, 'TotalEN_All')">
+                                    </div>
+                                    <div class="col-md-6" data-field-id="SentDates">
+                                        <label class="form-label small fw-bold">Відправлена ЕН (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'FirstSentEN')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'LastSentEN')">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" data-field-id="RecvDates">
+                                        <label class="form-label small fw-bold">Отримана ЕН (Перша/Остання)</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text px-1">Перша</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'FirstRecvEN')">
+                                            <span class="input-group-text px-1">Остання</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'LastRecvEN')">
+                                        </div>
                                     </div>
                                 </div>
 
@@ -2669,7 +3163,7 @@
                                     <div class="col-md-6" data-field-id="OSVersion">
                                         <label class="form-label">Версія ОС</label>
                                         <select class="form-select" onchange="addTag(this, 'OSVersion')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="iOS">iOS</option>
                                             <option value="Android">Android</option>
                                         </select>
@@ -2677,7 +3171,7 @@
                                     <div class="col-md-6" data-field-id="AppStore">
                                         <label class="form-label">Магазин додатку</label>
                                         <select class="form-select" onchange="addTag(this, 'AppStore')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="AppStore">App Store</option>
                                             <option value="GooglePlay">Google Play</option>
                                             <option value="AppGallery">AppGallery</option>
@@ -2686,33 +3180,53 @@
                                 </div>
 
                                 <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
-                                    ХАРАКТЕРИСТИКИ ПРИСТРОЮ</h6>
+                                    АКТИВНІСТЬ ТА АВТОРИЗАЦІЯ В МД</h6>
                                 <div class="row g-3">
-                                    <div class="col-md-4" data-field-id="DeviceStatus">
-                                        <label class="form-label">Статус девайсу</label>
-                                        <select class="form-select" onchange="addTag(this, 'DeviceStatus')">
-                                            <option value="">Обери...</option>
-                                            <option value="Active">Активний</option>
-                                            <option value="Inactive">Неактивний</option>
-                                        </select>
+                                    <div class="col-md-4" data-field-id="App_Availability_Group">
+                                        <label class="form-label small fw-bold">Наявність додатку</label>
+                                        <div class="d-flex flex-column gap-1">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    onchange="addTag(this, 'HasApp')">
+                                                <label class="form-label mb-0">Загальна</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    onchange="addTag(this, 'HasOldApp')">
+                                                <label class="form-label mb-0">Старий МД</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    onchange="addTag(this, 'HasNewApp')">
+                                                <label class="form-label mb-0">Новий МД</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4" data-field-id="DeviceManufacturer">
-                                        <label class="form-label">Виробник девайсу</label>
-                                        <input type="text" class="form-control" placeholder="Напр: Apple"
-                                            onchange="addTextTag(this, 'DeviceManufacturer')">
-                                    </div>
-                                    <div class="col-md-4" data-field-id="DeviceModel">
-                                        <label class="form-label">Модель девайсу</label>
-                                        <input type="text" class="form-control" placeholder="Напр: iPhone 13"
-                                            onchange="addTextTag(this, 'DeviceModel')">
-                                    </div>
-                                    <div class="col-md-12" data-field-id="DeviceProvider">
-                                        <label class="form-label">Постачальник девайсу</label>
-                                        <select class="form-select" onchange="addTag(this, 'DeviceProvider')">
-                                            <option value="">Обери...</option>
-                                            <option value="Provider1">Постачальник 1</option>
-                                            <option value="Provider2">Постачальник 2</option>
-                                        </select>
+                                    <div class="col-md-8">
+                                        <label class="form-label small fw-bold">Дати активності (Перша /
+                                            Остання)</label>
+                                        <div class="input-group input-group-sm mb-1" data-field-id="AppActivity_Dates">
+                                            <span class="input-group-text w-25">МД Заг.</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'FirstAppAct')">
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'LastAppAct')">
+                                        </div>
+                                        <div class="input-group input-group-sm mb-1"
+                                            data-field-id="OldAppActivity_Dates">
+                                            <span class="input-group-text w-25">Старий</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'FirstOldAppAct')">
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'LastOldAppAct')">
+                                        </div>
+                                        <div class="input-group input-group-sm" data-field-id="NewAppActivity_Dates">
+                                            <span class="input-group-text w-25">Новий</span>
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'FirstNewAppAct')">
+                                            <input type="date" class="form-control"
+                                                onchange="addTextTag(this, 'LastNewAppAct')">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2727,7 +3241,7 @@
                                     <div class="col-md-4" data-field-id="ConsentType">
                                         <label class="form-label">Вид згоди</label>
                                         <select class="form-select" onchange="addTag(this, 'ConsentType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Marketing">Маркетинг</option>
                                             <option value="DataProcess">Обробка даних</option>
                                         </select>
@@ -2735,7 +3249,7 @@
                                     <div class="col-md-4" data-field-id="ConsentStatus">
                                         <label class="form-label">Статус згоди</label>
                                         <select class="form-select" onchange="addTag(this, 'ConsentStatus')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Given">Надано</option>
                                             <option value="Revoked">Відкликано</option>
                                         </select>
@@ -2743,7 +3257,7 @@
                                     <div class="col-md-4" data-field-id="MarketingConsent">
                                         <label class="form-label">Згода маркетингу</label>
                                         <select class="form-select" onchange="addTag(this, 'MarketingConsent')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2756,7 +3270,7 @@
                                     <div class="col-md-6" data-field-id="CommsStatus">
                                         <label class="form-label">Статус комунікації</label>
                                         <select class="form-select" onchange="addTag(this, 'CommsStatus')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Subscribed">Підписаний</option>
                                             <option value="Unsubscribed">Відписаний</option>
                                         </select>
@@ -2764,7 +3278,7 @@
                                     <div class="col-md-6" data-field-id="NewsFeed">
                                         <label class="form-label">Стрічка новин</label>
                                         <select class="form-select" onchange="addTag(this, 'NewsFeed')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Subscribed">Підписаний</option>
                                             <option value="Unsubscribed">Відписаний</option>
                                         </select>
@@ -2782,7 +3296,7 @@
                                     <div class="col-md-4" data-field-id="ClientVerification">
                                         <label class="form-label">Верифікація клієнта</label>
                                         <select class="form-select" onchange="addTag(this, 'ClientVerification')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2790,7 +3304,7 @@
                                     <div class="col-md-4" data-field-id="PhoneVerificationStatus">
                                         <label class="form-label">Статус вер. телефону</label>
                                         <select class="form-select" onchange="addTag(this, 'PhoneVerificationStatus')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Verified">Верифіковано</option>
                                             <option value="NotVerified">Не верифіковано</option>
                                         </select>
@@ -2798,7 +3312,7 @@
                                     <div class="col-md-4" data-field-id="EmailVerificationStatus">
                                         <label class="form-label">Статус вер. Email</label>
                                         <select class="form-select" onchange="addTag(this, 'EmailVerificationStatus')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Verified">Верифіковано</option>
                                             <option value="NotVerified">Не верифіковано</option>
                                         </select>
@@ -2806,7 +3320,7 @@
                                     <div class="col-md-12" data-field-id="FirstVerificationNovaPay">
                                         <label class="form-label">Наяв. першої вериф. клієнта NovaPay</label>
                                         <select class="form-select" onchange="addTag(this, 'FirstVerificationNovaPay')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2870,7 +3384,7 @@
                                     <div class="col-md-6" data-field-id="ReturnReason">
                                         <label class="form-label">Причина повернення ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'ReturnReason')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Refusal">Відмова</option>
                                             <option value="Expired">Термін зберігання</option>
                                         </select>
@@ -2878,7 +3392,7 @@
                                     <div class="col-md-6" data-field-id="ENProblemType">
                                         <label class="form-label">Вид проблеми з ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'ENProblemType')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Damaged">Пошкоджено</option>
                                             <option value="Lost">Втрачено</option>
                                         </select>
@@ -2891,7 +3405,7 @@
                                     <div class="col-md-4" data-field-id="PretenseAvailability">
                                         <label class="form-label">Наявність претензій</label>
                                         <select class="form-select" onchange="addTag(this, 'PretenseAvailability')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2899,7 +3413,7 @@
                                     <div class="col-md-4" data-field-id="PromoAvailability">
                                         <label class="form-label">Наявність промокоду</label>
                                         <select class="form-select" onchange="addTag(this, 'PromoAvailability')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2907,13 +3421,168 @@
                                     <div class="col-md-4" data-field-id="Marketplace">
                                         <label class="form-label">Маркетплейс</label>
                                         <select class="form-select" onchange="addTag(this, 'Marketplace')">
-                                            <option value="">Обери...</option>
+                                            <option value="">...</option>
                                             <option value="OLX">OLX</option>
                                             <option value="Prom">Prom</option>
                                             <option value="Rozetka">Rozetka</option>
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- 10. Гео-мапа -->
+                        <div class="tab-pane fade" id="pane-c10" role="tabpanel">
+                            <div class="tab-pane-card p-0"
+                                style="overflow: hidden; display: flex; flex-direction: column;">
+                                <!-- Formula-style Summary Bar -->
+                                <div class="bg-white border-bottom p-2 d-flex align-items-center gap-3"
+                                    style="min-height: 55px; background: linear-gradient(to right, #f8f9fa, #fff);">
+                                    <div class="d-flex align-items-center gap-2 border-end pe-3">
+                                        <div class="bg-primary text-white rounded px-2 py-1 small fw-bold shadow-sm"
+                                            style="font-size: 10px; white-space: nowrap;">
+                                            ГЕО-ФОРМУЛА
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill" id="geo-points-count"
+                                            style="font-size: 10px;">0</span>
+                                    </div>
+                                    <div id="geo-chips-container"
+                                        class="d-flex flex-wrap gap-1 align-items-center overflow-auto flex-grow-1"
+                                        style="max-height: 50px;">
+                                        <span class="text-muted small italic">Локації не вибрані...</span>
+                                    </div>
+                                    <input type="file" id="geo-excel-file" hidden accept=".csv, .txt"
+                                        onchange="handleExcelUpload(event)">
+                                    <button class="btn btn-success btn-sm px-2 py-1"
+                                        onclick="document.getElementById('geo-excel-file').click()"
+                                        data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top"
+                                        data-bs-html="true" data-bs-title="Інструкція імпорту"
+                                        data-bs-content="<b>Формат стовпців:</b><br>1. Локація (Координати/Адреса)<br>2. Радіус (км)<br>3. Ціль (Відправлення/Отримання)<br><br><span class='text-primary'>Приклад: Київ, Хрещатик 1; 5; Отримання</span>"
+                                        style="font-size: 11px;">
+                                        <i class="bi bi-file-earmark-spreadsheet me-1"></i> Імпорт
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm px-2 py-1"
+                                        onclick="clearGeoSelection()" title="Очистити все" style="font-size: 11px;">
+                                        <i class="bi bi-trash3 me-1"></i> Скинути
+                                    </button>
+                                </div>
+                                <div class="row g-0 flex-grow-1">
+                                    <div class="col-md-4 border-end p-3 bg-light bg-opacity-50"
+                                        style="max-height: 500px; overflow-y: auto;">
+                                        <h6 class="fw-bold text-primary mb-3 text-uppercase"
+                                            style="letter-spacing: 1px; font-size: 0.85rem;">
+                                            ПАРАМЕТРИ ТА ІМПОРТ</h6>
+
+                                        <div class="mb-3">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="geoMode"
+                                                    id="geoModeCoords" value="coords" checked
+                                                    onchange="toggleGeoMode()">
+                                                <label class="form-check-label small" for="geoModeCoords">Точка</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="geoMode"
+                                                    id="geoModeBranches" value="branches" onchange="toggleGeoMode()">
+                                                <label class="form-check-label small"
+                                                    for="geoModeBranches">Відділення</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="geoMode"
+                                                    id="geoModeAddress" value="address" onchange="toggleGeoMode()">
+                                                <label class="form-check-label small"
+                                                    for="geoModeAddress">Адреса</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- 1. Координати -->
+                                        <div class="geo-coords-inputs mb-3" id="geo-block-coords">
+                                            <div class="row g-2 align-items-end">
+                                                <div class="col-5">
+                                                    <label class="form-label mb-1"
+                                                        style="font-size: 10px;">Широта</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        id="input-geo-lat" placeholder="Lat">
+                                                </div>
+                                                <div class="col-5">
+                                                    <label class="form-label mb-1"
+                                                        style="font-size: 10px;">Довгота</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                        id="input-geo-lng" placeholder="Lng">
+                                                </div>
+                                                <div class="col-2">
+                                                    <button class="btn btn-primary btn-sm w-100"
+                                                        onclick="addManualPoint()">
+                                                        <i class="bi bi-plus-lg"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 2. Відділення -->
+                                        <div class="geo-branch-inputs mb-3" id="geo-block-branches"
+                                            style="display:none;">
+                                            <label class="form-label mb-1" style="font-size: 10px;">Пошук
+                                                міста/відділення</label>
+                                            <input class="form-control form-control-sm mb-2" list="datalist-cities"
+                                                id="GeoCity" placeholder="Місто..."
+                                                onchange="handleMapSelection('city', this.value)">
+                                            <div class="input-group input-group-sm">
+                                                <input class="form-control" list="datalist-branches"
+                                                    id="geo-branch-search" placeholder="Відділення..."
+                                                    onchange="handleMapSelection('branch', this.value)">
+                                            </div>
+                                        </div>
+
+                                        <!-- 3. Адреса -->
+                                        <div class="geo-address-inputs mb-3" id="geo-block-address"
+                                            style="display:none;">
+                                            <label class="form-label mb-1" style="font-size: 10px;">Впишіть
+                                                адресу</label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control" id="geo-custom-address"
+                                                    placeholder="Місто, вулиця, буд...">
+                                                <button class="btn btn-outline-primary" onclick="addAddressPoint()">
+                                                    <i class="bi bi-geo-alt"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 border-top pt-2">
+                                            <label class="form-label mb-1"
+                                                style="font-size: 11px; font-weight: 600;">РАДІУС (КМ)</label>
+                                            <input type="number" class="form-control form-control-sm" id="GeoRadius"
+                                                value="5" oninput="updateLastPointRadius()">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label mb-1"
+                                                style="font-size: 11px; font-weight: 600;">ЦІЛЬ (ОПЕРАТОР)</label>
+                                            <select class="form-select form-select-sm" id="geo-target-type"
+                                                onchange="updateLastPointTarget()">
+                                                <option value="Sender">Відправлення</option>
+                                                <option value="Recipient">Отримання</option>
+                                                <option value="AppLocation_New">Локація (Новий додаток)</option>
+                                                <option value="AppLocation_Old">Локація (Старий додаток)</option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-primary w-100 btn-sm fw-bold mt-2 py-2 shadow-sm"
+                                            onclick="addGeoFilter()">
+                                            <i class="bi bi-check-circle me-1"></i> ЗАСТОСУВАТИ ГЕО-ФІЛЬТР
+                                        </button>
+                                    </div>
+                                    <div class="col-md-8 position-relative">
+                                        <div id="map-container" style="height: 500px; width: 100%;"></div>
+                                        <div class="position-absolute top-0 end-0 p-2" style="z-index: 1000;">
+                                            <span class="badge bg-white text-dark border shadow-sm small">Клікніть на
+                                                мапу, щоб додати точку</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="geo-lat">
+                                <input type="hidden" id="geo-lng">
+                                <datalist id="datalist-cities"></datalist>
+                                <datalist id="datalist-branches"></datalist>
                             </div>
                         </div>
 
@@ -2943,6 +3612,8 @@
 
 
                 </div>
+
+
 
                 <!-- VIEW 2: LOOK-A-LIKE -->
                 <div id="view-lookalike" class="view-section d-none">
@@ -2990,7 +3661,7 @@
                             <div class="row g-4">
                                 <!-- Drag & Drop -->
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Джерело даних</label>
+                                    <label class="form-label fw-bold" style="font-size: 0.8rem;">Джерело даних</label>
                                     <div class="drop-zone py-3 px-3" id="dropZone"
                                         style="border: 2px dashed var(--border); border-radius: var(--radius-card); background-color: #fafafa; text-align: center; cursor: pointer;">
                                         <i class="bi bi-cloud-upload fs-1 text-primary mb-2"></i>
@@ -3004,7 +3675,7 @@
                                 <!-- Inputs -->
                                 <div class="col-md-6">
                                     <div class="mb-4">
-                                        <label class="form-label fw-bold">Website</label>
+                                        <label class="form-label fw-bold" style="font-size: 0.8rem;">Website</label>
                                         <div class="input-group mb-2">
                                             <input type="text" class="form-control" id="lal-website"
                                                 placeholder="shop.com.ua"
@@ -3015,7 +3686,7 @@
                                         <div id="tags-lal-website" class="tags-container"></div>
                                     </div>
                                     <div>
-                                        <label class="form-label fw-bold">ЄДРПОУ</label>
+                                        <label class="form-label fw-bold" style="font-size: 0.8rem;">ЄДРПОУ</label>
                                         <div class="input-group mb-2">
                                             <input type="text" class="form-control" id="lal-edrpou" placeholder="Код..."
                                                 onkeydown="handleLookalikeInput(event, 'edrpou')">
@@ -3031,7 +3702,8 @@
 
                             <div class="row align-items-end g-3">
                                 <div class="col-md-4">
-                                    <label class="form-label text-muted small d-block">Глибина аналізу</label>
+                                    <label class="form-label text-muted small d-block"
+                                        style="font-size: 0.8rem;">Глибина аналізу</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" id="lal-days" value="30" min="1"
                                             max="365" placeholder="30" onchange="updateState()">
@@ -3043,7 +3715,8 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="d-flex flex-column h-100">
-                                        <label class="form-label text-muted small">Кількість посилок</label>
+                                        <label class="form-label text-muted small" style="font-size: 0.8rem;">Кількість
+                                            посилок</label>
                                         <div class="d-flex gap-2 align-items-center mb-1">
                                             <select class="form-select form-select-sm"
                                                 style="min-width: 125px; width: auto;"
@@ -3298,6 +3971,7 @@
                                 <option value="preview">Попередній перегляд (Тільки графіки)</option>
                                 <option value="csv">Завантажити CSV файл</option>
                                 <option value="cdp">Відправити в CDP</option>
+                                <option value="automation">Автоматизація (Розсилка звіту)</option>
                                 <option value="api">API Запит (JSON)</option>
                             </select>
                         </div>
@@ -3369,6 +4043,72 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Automation Settings (Specific UI) -->
+                        <div id="automation-settings-block" style="display:none;"
+                            class="border-top pt-3 mt-3 animate-fade-in">
+                            <div class="mb-3">
+                                <label class="form-label text-muted small fw-bold text-uppercase mb-1"
+                                    style="font-size: 0.65rem;">Періодичність вивантаження</label>
+                                <div class="row g-2">
+                                    <div class="col-12 mb-2">
+                                        <select id="automation-period" class="form-select form-select-sm"
+                                            onchange="toggleAutomationPeriodFields()">
+                                            <option value="daily">Щодня</option>
+                                            <option value="weekly">Щотижня</option>
+                                            <option value="monthly">Щомісяця</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6" id="automation-day-weekly-container" style="display:none;">
+                                        <select id="automation-day-weekly" class="form-select form-select-sm">
+                                            <option value="1">Понеділок</option>
+                                            <option value="2">Вівторок</option>
+                                            <option value="3">Середа</option>
+                                            <option value="4">Четвер</option>
+                                            <option value="5">П'ятниця</option>
+                                            <option value="6">Субота</option>
+                                            <option value="0">Неділя</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6" id="automation-day-monthly-container" style="display:none;">
+                                        <select id="automation-day-monthly" class="form-select form-select-sm">
+                                            <!-- Generated 1-31 -->
+                                            <option value="1">1-ше число</option>
+                                            <option value="15">15-те число</option>
+                                            <option value="28">28-те число</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6" id="automation-time-container">
+                                        <input type="time" id="automation-time" class="form-control form-control-sm"
+                                            value="09:00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-2 d-flex justify-content-between align-items-center">
+                                <label class="form-label text-muted small fw-bold text-uppercase mb-1"
+                                    style="font-size: 0.65rem;">Емейли для розсилки</label>
+                                <button class="btn btn-sm btn-link p-0 text-success" title="Імпорт з Excel"
+                                    onclick="document.getElementById('automation-email-excel').click()">
+                                    <i class="bi bi-file-earmark-spreadsheet-fill fs-5"></i>
+                                </button>
+                                <input type="file" id="automation-email-excel" hidden accept=".csv, .txt, .xlsx"
+                                    onchange="handleAutomationEmailImport(event)">
+                            </div>
+
+                            <div class="input-group input-group-sm mb-2 shadow-sm">
+                                <input type="email" id="automation-email-input" class="form-control"
+                                    placeholder="example@mail.com">
+                                <button class="btn btn-primary" onclick="addAutomationEmail()">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                            </div>
+
+                            <div id="automation-emails-list" class="d-flex flex-wrap gap-1 mb-3"
+                                style="max-height: 80px; overflow-y: auto;">
+                                <!-- Tags for emails go here -->
+                                <span class="text-muted italic small opacity-50">Список пустий...</span>
+                            </div>
+                        </div>
 
                         <!-- Single Smart Button -->
                         <button id="smart-execute-btn" class="btn btn-primary w-100 py-2 fw-bold shadow-sm"
@@ -3382,27 +4122,36 @@
                         function toggleExportFields() {
                             const action = document.getElementById('export-action-type').value;
                             const settings = document.getElementById('export-settings-block');
+                            const automationSettings = document.getElementById('automation-settings-block');
                             const btnText = document.getElementById('smart-btn-text');
                             const btn = document.getElementById('smart-execute-btn');
 
                             if (action === 'preview') {
                                 settings.style.display = 'none';
+                                automationSettings.style.display = 'none';
                                 btnText.innerText = 'Розрахувати показники';
-                                btn.classList.remove('btn-success', 'btn-dark');
+                                btn.classList.remove('btn-success', 'btn-dark', 'btn-info');
                                 btn.classList.add('btn-primary');
+                            } else if (action === 'automation') {
+                                settings.style.display = 'block';
+                                automationSettings.style.display = 'block';
+                                btnText.innerText = 'Створити автоматизацію';
+                                btn.classList.remove('btn-success', 'btn-primary', 'btn-dark');
+                                btn.classList.add('btn-info', 'text-white');
                             } else {
                                 settings.style.display = 'block';
+                                automationSettings.style.display = 'none';
                                 if (action === 'csv') {
                                     btnText.innerText = 'Завантажити CSV';
-                                    btn.classList.remove('btn-primary', 'btn-dark');
+                                    btn.classList.remove('btn-primary', 'btn-dark', 'btn-info');
                                     btn.classList.add('btn-success');
                                 } else if (action === 'cdp') {
                                     btnText.innerText = 'Відправити в CDP';
-                                    btn.classList.remove('btn-success', 'btn-primary');
+                                    btn.classList.remove('btn-success', 'btn-primary', 'btn-info');
                                     btn.classList.add('btn-dark');
                                 } else {
                                     btnText.innerText = 'Виконати API запит';
-                                    btn.classList.remove('btn-success', 'btn-dark');
+                                    btn.classList.remove('btn-success', 'btn-dark', 'btn-info');
                                     btn.classList.add('btn-primary');
                                 }
                             }
@@ -3435,6 +4184,8 @@
 
                                 if (action === 'csv' || action === 'cdp' || action === 'api') {
                                     handleExportAction(); // Calls existing export logic
+                                } else if (action === 'automation') {
+                                    saveCurrentAutomation();
                                 }
                             }
                         }
@@ -3526,8 +4277,376 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Modal for Saving Automation -->
+    <div class="modal fade" id="saveAutomationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content overflow-hidden border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header bg-info text-white border-0 py-3">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-robot me-2"></i>Створити автоматизацію</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Назва автоматизації</label>
+                        <input type="text" id="automationNameInput" class="form-control form-control-lg shadow-sm"
+                            placeholder="Напр: Щоденний звіт по новим клієнтам"
+                            style="border-radius: 12px; border: 2px solid #eef2ff;">
+                    </div>
+                    <div class="alert alert-info border-0 bg-info bg-opacity-10 text-info small mb-0">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Цей сегмент буде автоматично вивантажуватись з обраною періодичністю на вказані емейли.
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 py-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4"
+                        data-bs-dismiss="modal">Скасувати</button>
+                    <button type="button" class="btn btn-info text-white rounded-pill px-4 fw-bold"
+                        onclick="confirmSaveAutomation()">Створити</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
+        let map;
+        let selectedPoints = []; // Array of objs: {lat, lng, marker, circle, label}
+        let mapLayer;
+        let branchLayerGroup;
+
+        function initMap() {
+            if (map) return;
+            map = L.map('map-container', { zoomControl: false }).setView([48.3794, 31.1656], 6);
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+            mapLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OSM'
+            }).addTo(map);
+
+            branchLayerGroup = L.layerGroup().addTo(map);
+
+            map.on('click', function (e) {
+                const mode = document.querySelector('input[name="geoMode"]:checked').value;
+
+                // 1. Поміщаємо координати в поля при кліку
+                document.getElementById('input-geo-lat').value = e.latlng.lat.toFixed(6);
+                document.getElementById('input-geo-lng').value = e.latlng.lng.toFixed(6);
+
+                if (mode === 'coords') {
+                    addSelectionPoint(e.latlng, 'Точка');
+                }
+            });
+            showMockBranchesDetailed();
+        }
+
+        function toggleGeoMode() {
+            const mode = document.querySelector('input[name="geoMode"]:checked').value;
+            document.getElementById('geo-block-coords').style.display = (mode === 'coords' ? 'block' : 'none');
+            document.getElementById('geo-block-branches').style.display = (mode === 'branches' ? 'block' : 'none');
+            document.getElementById('geo-block-address').style.display = (mode === 'address' ? 'block' : 'none');
+        }
+
+        function showMockBranchesDetailed() {
+            // Simulated visualization of many branches
+            branchLayerGroup.clearLayers();
+            Object.values(cityCoords).forEach(base => {
+                for (let i = 0; i < 20; i++) {
+                    const lat = base[0] + (Math.random() * 0.1 - 0.05);
+                    const lng = base[1] + (Math.random() * 0.1 - 0.05);
+                    L.circleMarker([lat, lng], {
+                        radius: 2,
+                        fillColor: "#ff0000",
+                        color: "#fff",
+                        weight: 1,
+                        opacity: 0.5,
+                        fillOpacity: 0.8
+                    }).addTo(branchLayerGroup);
+                }
+            });
+        }
+
+        function addSelectionPoint(latlng, label, customRadius = null, customTarget = null) {
+            const defaultRadius = parseFloat(document.getElementById('GeoRadius').value) || 5;
+            const radiusKm = customRadius !== null ? customRadius : defaultRadius;
+
+            let targetLabel;
+            if (customTarget) {
+                // Ukrainian target detection from CSV
+                const tl = customTarget.toLowerCase();
+                if (tl.includes('відпр')) targetLabel = 'Відправлення';
+                else if (tl.includes('отрим')) targetLabel = 'Отримання';
+                else if (tl.includes('новий')) targetLabel = 'Локація (Новий додаток)';
+                else if (tl.includes('старий')) targetLabel = 'Локація (Старий додаток)';
+                else targetLabel = customTarget;
+            } else {
+                const select = document.getElementById('geo-target-type');
+                targetLabel = select.options[select.selectedIndex].text;
+            }
+
+            // Marker
+            const marker = L.marker(latlng).addTo(map).bindPopup(`[${targetLabel}] ${label} (${radiusKm}км)`);
+
+            // Radius circle
+            const circle = L.circle(latlng, {
+                color: '#4361ee',
+                fillColor: '#4361ee',
+                fillOpacity: 0.15,
+                weight: 2,
+                radius: radiusKm * 1000
+            }).addTo(map);
+
+            const point = {
+                lat: latlng.lat,
+                lng: latlng.lng,
+                radius: radiusKm,
+                label: label,
+                target: targetLabel,
+                marker: marker,
+                circle: circle,
+                id: Date.now() + Math.random()
+            };
+
+            selectedPoints.push(point);
+            updateGeoSelectionUI();
+        }
+
+        function toggleUnitType() {
+            const type = document.querySelector('input[name="geoUnitType"]:checked').value;
+            const addressBlock = document.getElementById('geo-unit-address-block');
+            const branchBlock = document.querySelector('.geo-branch-inputs');
+
+            if (type === 'address') {
+                addressBlock.style.display = 'block';
+                branchBlock.style.display = 'none';
+            } else {
+                addressBlock.style.display = 'none';
+                branchBlock.style.display = 'block';
+            }
+        }
+
+        function addAddressPoint() {
+            const addr = document.getElementById('geo-custom-address').value;
+            if (!addr) return;
+            // Simulated geocoding near center or current view
+            const center = map.getCenter();
+            const jittered = [center.lat + (Math.random() - 0.5) * 0.01, center.lng + (Math.random() - 0.5) * 0.01];
+            addSelectionPoint(L.latLng(jittered), `Адреса: ${addr}`);
+            document.getElementById('geo-custom-address').value = '';
+        }
+
+        function handleExcelUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const content = e.target.result;
+                const lines = content.split('\n');
+                let addedCount = 0;
+
+                lines.forEach(line => {
+                    const parts = line.split(/[,;\t]/);
+                    if (parts.length >= 2) {
+                        const target = parts[0].trim();
+                        const radius = parseFloat(parts[1].trim());
+                        const excelTarget = parts.length >= 3 ? parts[2].trim() : null;
+
+                        if (target && !isNaN(radius)) {
+                            // Logic: check coords (2 numbers), then branch (mock NP), then address
+                            const coordsParts = target.split(/\s+/);
+                            if (coordsParts.length === 2 && !isNaN(parseFloat(coordsParts[0]))) {
+                                addSelectionPoint(L.latLng(parseFloat(coordsParts[0]), parseFloat(coordsParts[1])), target, radius, excelTarget);
+                                addedCount++;
+                            } else if (target.includes('Відділення') || cityCoords[target]) {
+                                // Simple branch/city heuristic
+                                if (cityCoords[target]) {
+                                    addSelectionPoint(L.latLng(cityCoords[target]), target, radius, excelTarget);
+                                } else {
+                                    // Mock branch jitter
+                                    const cityMatch = target.match(/\((.*?)\)/);
+                                    const city = cityMatch ? cityMatch[1] : 'Київ';
+                                    const base = cityCoords[city] || [50, 30];
+                                    addSelectionPoint(L.latLng([base[0] + Math.random() * 0.01, base[1] + Math.random() * 0.01]), target, radius, excelTarget);
+                                }
+                                addedCount++;
+                            } else {
+                                // Assume it's an address
+                                const center = map.getCenter();
+                                addSelectionPoint(L.latLng([center.lat + (Math.random() - 0.5) * 0.02, center.lng + (Math.random() - 0.5) * 0.02]), target, radius, excelTarget);
+                                addedCount++;
+                            }
+                        }
+                    }
+                });
+                if (addedCount > 0) {
+                    map.fitBounds(L.featureGroup(selectedPoints.map(p => p.circle)).getBounds());
+                    alert(`Додано ${addedCount} точок з файлу.`);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function updateGeoSelectionUI() {
+            const chips = document.getElementById('geo-chips-container');
+            const count = document.getElementById('geo-points-count');
+
+            chips.innerHTML = '';
+            count.innerText = selectedPoints.length;
+
+            if (selectedPoints.length === 0) {
+                chips.innerHTML = '<span class="text-muted small italic" style="font-size: 11px;">Локації не вибрані... Додайте точку на мапі або завантажте Excel.</span>';
+                return;
+            }
+
+            selectedPoints.forEach((p, index) => {
+                // Formula Bar Chip
+                const chip = document.createElement('div');
+                chip.className = 'badge bg-white text-dark border d-flex align-items-center gap-2 px-2 py-1 fw-normal shadow-sm';
+                chip.style.fontSize = '11px';
+                chip.style.borderRadius = '6px';
+                chip.style.borderLeft = '3px solid #4361ee !important';
+                chip.innerHTML = `
+                    <span class="text-primary fw-bold" style="font-size: 9px;">[${p.target}]</span>
+                    <span>${p.label} <small class="text-primary fw-bold">(${p.radius}км)</small></span>
+                    <i class="bi bi-x-lg text-danger pointer ms-1" style="font-size: 10px;" onclick="removePoint(${p.id})"></i>
+                `;
+                chips.appendChild(chip);
+            });
+        }
+
+        function addManualPoint() {
+            const lat = parseFloat(document.getElementById('input-geo-lat').value);
+            const lng = parseFloat(document.getElementById('input-geo-lng').value);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                addSelectionPoint(L.latLng(lat, lng), 'Точка (вручну)');
+            } else {
+                alert('Введіть коректні координати!');
+            }
+        }
+
+        function removePoint(id) {
+            const idx = selectedPoints.findIndex(p => p.id === id);
+            if (idx !== -1) {
+                const p = selectedPoints[idx];
+                map.removeLayer(p.marker);
+                map.removeLayer(p.circle);
+                selectedPoints.splice(idx, 1);
+                updateGeoSelectionUI();
+            }
+        }
+
+        function clearGeoSelection() {
+            selectedPoints.forEach(p => {
+                map.removeLayer(p.marker);
+                map.removeLayer(p.circle);
+            });
+            selectedPoints = [];
+            updateGeoSelectionUI();
+        }
+
+        function updateMapFromInputs() {
+            const lat = parseFloat(document.getElementById('input-geo-lat').value);
+            const lng = parseFloat(document.getElementById('input-geo-lng').value);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                map.setView([lat, lng], 13);
+                // Highlight point preview logic could go here
+            }
+        }
+
+        function updateLastPointRadius() {
+            const radiusKm = parseFloat(document.getElementById('GeoRadius').value) || 0;
+            if (selectedPoints.length > 0) {
+                const p = selectedPoints[selectedPoints.length - 1];
+                p.radius = radiusKm;
+                p.circle.setRadius(radiusKm * 1000);
+                p.marker.getPopup().setContent(`[${p.target}] ${p.label} (${radiusKm}км)`);
+                updateGeoSelectionUI();
+            }
+        }
+
+        function updateLastPointTarget() {
+            const select = document.getElementById('geo-target-type');
+            const targetLabel = select.options[select.selectedIndex].text;
+            if (selectedPoints.length > 0) {
+                const p = selectedPoints[selectedPoints.length - 1];
+                p.target = targetLabel;
+                p.marker.getPopup().setContent(`[${targetLabel}] ${p.label} (${p.radius}км)`);
+                updateGeoSelectionUI();
+            }
+        }
+
+        const cityCoords = {
+            'Київ': [50.4501, 30.5234], 'Харків': [49.9935, 36.2304], 'Одеса': [46.4825, 30.7233],
+            'Дніпро': [48.4647, 35.0462], 'Львів': [49.8397, 24.0297], 'Запоріжжя': [47.8388, 35.1396],
+            'Миколаїв': [46.9750, 31.9946], 'Вінниця': [49.2331, 28.4682], 'Полтава': [49.5883, 34.5514],
+            'Чернігів': [51.4982, 31.2893], 'Черкаси': [49.4444, 32.0597], 'Житомир': [50.2547, 28.6587],
+            'Суми': [50.9077, 34.7981], 'Хмельницький': [49.4230, 26.9871], 'Рівне': [50.6199, 26.2516],
+            'Чернівці': [48.2917, 25.9352], 'Івано-Франківськ': [48.9226, 24.7111], 'Тернопіль': [49.5535, 25.5948],
+            'Луцьк': [50.7472, 25.3254], 'Біла Церква': [49.7989, 30.1153], 'Кременчук': [49.0707, 33.4224], 'Ужгород': [48.6208, 22.2879]
+        };
+
+        function populateGeoDatalists(selectedCity = null) {
+            const cityList = document.getElementById('datalist-cities');
+            const branchList = document.getElementById('datalist-branches');
+            if (cityList && cityList.options.length === 0) {
+                Object.keys(cityCoords).forEach(c => cityList.innerHTML += `<option value="${c}">`);
+            }
+            if (branchList) {
+                branchList.innerHTML = '';
+                const citiesToUse = selectedCity ? [selectedCity] : Object.keys(cityCoords);
+                citiesToUse.forEach(city => {
+                    for (let i = 1; i <= 5; i++) branchList.innerHTML += `<option value="Відділення №${i} (${city})">`;
+                });
+            }
+        }
+
+        function handleMapSelection(type, value) {
+            if (!value) return;
+            if (type === 'city') {
+                const coords = cityCoords[value];
+                if (coords) {
+                    map.setView(coords, 12);
+                    populateGeoDatalists(value);
+                    // Оновлюємо поля координат, але НЕ додаємо точку автоматично
+                    document.getElementById('input-geo-lat').value = coords[0].toFixed(6);
+                    document.getElementById('input-geo-lng').value = coords[1].toFixed(6);
+                }
+            } else if (type === 'branch') {
+                const cityMatch = value.match(/\((.*?)\)/);
+                const city = cityMatch ? cityMatch[1] : null;
+                const base = cityCoords[city] || [48, 31];
+                const jittered = [base[0] + (Math.random() - 0.5) * 0.01, base[1] + (Math.random() - 0.5) * 0.01];
+                const latlng = L.latLng(jittered);
+
+                // Оновлюємо поля
+                document.getElementById('input-geo-lat').value = latlng.lat.toFixed(6);
+                document.getElementById('input-geo-lng').value = latlng.lng.toFixed(6);
+
+                addSelectionPoint(latlng, value);
+                map.setView(latlng, 14);
+            }
+        }
+
+        document.getElementById('tab-c10').addEventListener('shown.bs.tab', function () {
+            initMap();
+            populateGeoDatalists();
+            setTimeout(() => map.invalidateSize(), 200);
+        });
+
+        function addGeoFilter() {
+            if (selectedPoints.length === 0) {
+                alert('Спочатку виберіть хоча б одну точку на мапі!');
+                return;
+            }
+            const desc = selectedPoints.map(p => `${p.label} (${p.radius}км)`).join('; ');
+            const val = selectedPoints.map(p => `${p.lat.toFixed(4)},${p.lng.toFixed(4)},${p.radius}`).join('|');
+            addEspoBlock('GeoLocation', 'Географія', desc, window.currentFilterMode || 'Include', null);
+            clearGeoSelection();
+        }
 
 
         // --- DATA & STATE ---
@@ -4264,10 +5383,29 @@
 
             // Priority: Local override (Include/Exclude/NOT) > Global Toggle
             let zone = window.currentFilterMode || 'Include';
-            if (operator === 'NOT' || operator === 'Exclude') zone = 'Exclude';
-            else if (operator === 'Include') zone = 'Include';
+            let fieldOp = null;
 
-            addEspoBlock(type, categoryMap[type] || type, value, zone, 'ТА');
+            if (operator === 'NOT' || operator === 'Exclude') {
+                zone = 'Exclude';
+                operator = null;
+            } else if (operator === 'Include') {
+                zone = 'Include';
+                operator = null;
+            }
+
+            if (operator === 'LIKE') {
+                fieldOp = 'містить';
+            } else if (operator === 'EXACT') {
+                fieldOp = 'точне';
+            } else if (operator === 'STARTS_WITH') {
+                fieldOp = 'починається з';
+            } else if (operator === 'ENDS_WITH') {
+                fieldOp = 'закінчується на';
+            } else if (operator) {
+                fieldOp = operator;
+            }
+
+            addEspoBlock(type, categoryMap[type] || type, value, zone, 'ТА', null, fieldOp);
         }
 
         function addTextTag(inputElement, type) {
@@ -4275,9 +5413,17 @@
             if (!value) return;
 
             let operator = "LIKE";
-            if (inputElement.previousElementSibling && inputElement.previousElementSibling.tagName === 'SELECT') {
+
+            // Check for search mode selector (like in CargoDesc)
+            const fieldContainer = inputElement.closest('[data-field-id]');
+            const modeSelect = fieldContainer ? fieldContainer.querySelector('#cargo-search-mode') : null;
+
+            if (modeSelect) {
+                operator = modeSelect.value;
+            } else if (inputElement.previousElementSibling && inputElement.previousElementSibling.tagName === 'SELECT') {
                 operator = inputElement.previousElementSibling.value;
             }
+
             createTag(type, value, operator);
             inputElement.value = '';
             updateState();
@@ -4333,6 +5479,138 @@
             updateFiltersCount();
         }
 
+        function filterFieldsBySearch(query) {
+            const term = query.toLowerCase().trim();
+            const container = document.getElementById('filterTabsContent');
+            const tabCounts = {};
+
+            if (term !== '') {
+                container.classList.add('is-searching');
+            } else {
+                container.classList.remove('is-searching');
+                // Restore native Bootstrap behavior by clearing all inline styles
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.style.display = '';
+                    pane.style.opacity = '';
+                    // Force re-sync of active class if needed, though Bootstrap usually handles it
+                });
+
+                // If we have an active tab, make sure it's actually visible in case of CSS conflicts
+                const activeTabLink = document.querySelector('#filterTabs .nav-link.active');
+                if (activeTabLink) {
+                    const targetId = activeTabLink.getAttribute('data-bs-target')?.replace('#', '');
+                    const activePane = document.getElementById(targetId);
+                    if (activePane) {
+                        activePane.classList.add('show', 'active');
+                    }
+                }
+            }
+
+            // Initialize counts for tabs
+            document.querySelectorAll('#filterTabs .nav-link').forEach(link => {
+                const id = link.getAttribute('data-bs-target')?.replace('#', '');
+                if (id) tabCounts[id] = 0;
+            });
+
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                const paneId = pane.id;
+                const card = pane.querySelector('.tab-pane-card');
+                if (!card) return;
+
+                let currentHeaderMatches = false;
+
+                // 1. Process Fields and their direct Containers (Rows / Subsections)
+                Array.from(card.children).forEach(child => {
+                    const isHeader = child.tagName === 'H6';
+                    const isContainer = child.classList.contains('row') || child.classList.contains('designer-subsection-wrapper');
+
+                    if (isHeader) {
+                        currentHeaderMatches = term !== '' && child.innerText.toLowerCase().includes(term);
+                    } else if (isContainer) {
+                        const fields = child.querySelectorAll('[data-field-id]');
+                        let visibleInThisContainer = 0;
+
+                        fields.forEach(field => {
+                            const label = field.querySelector('.form-label');
+                            const labelText = label ? label.innerText.toLowerCase() : '';
+                            const matches = (term === '') || currentHeaderMatches || labelText.includes(term);
+
+                            if (matches) {
+                                field.classList.remove('d-none');
+                                if (term !== '') {
+                                    visibleInThisContainer++;
+                                    tabCounts[paneId]++;
+                                }
+                            } else {
+                                field.classList.add('d-none');
+                            }
+                        });
+
+                        // Show/Hide the row/wrapper itself
+                        child.style.display = (term === '' || visibleInThisContainer > 0) ? '' : 'none';
+                    }
+                });
+
+                // 2. Update Header Visibility (they stay if they match OR if any of their following containers have visible fields)
+                card.querySelectorAll('h6').forEach(header => {
+                    const headerMatches = term !== '' && header.innerText.toLowerCase().includes(term);
+
+                    let next = header.nextElementSibling;
+                    let hasVisibleField = false;
+                    while (next && (next.classList.contains('row') || next.classList.contains('designer-subsection-wrapper'))) {
+                        if (next.style.display !== 'none') {
+                            hasVisibleField = true;
+                            break;
+                        }
+                        next = next.nextElementSibling;
+                    }
+
+                    header.style.display = (term === '' || headerMatches || hasVisibleField) ? '' : 'none';
+
+                    // Reset or Apply Highlight
+                    if (headerMatches && term !== '') {
+                        header.style.background = 'rgba(67, 97, 238, 0.15)';
+                        header.style.padding = '4px 8px';
+                        header.style.borderRadius = '8px';
+                        header.style.borderLeft = '3px solid var(--primary)';
+                    } else {
+                        header.style.background = '';
+                        header.style.padding = '';
+                        header.style.borderRadius = '';
+                        header.style.borderLeft = '';
+                    }
+                });
+
+                // 3. Tab Pane visibility during search: show if it has matches
+                if (term !== '') {
+                    const hasMatches = tabCounts[paneId] > 0;
+                    pane.style.display = hasMatches ? 'block' : 'none';
+                }
+            });
+
+            // 4. Update Tab Badges and Dimming
+            document.querySelectorAll('#filterTabs .nav-link').forEach(link => {
+                const targetId = link.getAttribute('data-bs-target')?.replace('#', '');
+                const count = tabCounts[targetId] || 0;
+                let badge = link.querySelector('.search-match-badge');
+
+                if (term === '') {
+                    if (badge) badge.remove();
+                    link.style.opacity = '1';
+                } else {
+                    if (!badge) {
+                        badge = document.createElement('span');
+                        badge.className = 'badge rounded-pill bg-primary ms-2 search-match-badge animate-fade-in';
+                        badge.style.fontSize = '0.6rem';
+                        link.appendChild(badge);
+                    }
+                    badge.innerText = count;
+                    badge.style.display = count > 0 ? '' : 'none';
+                    link.style.opacity = count > 0 ? '1' : '0.4';
+                }
+            });
+        }
+
 
         function clearFilters() {
             espoConditionRegistry = [];
@@ -4350,6 +5628,21 @@
         }
 
         // --- 3. COUNTER ANIMATION ---
+        // Initial setup for search interaction
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('field-search-input');
+            const tabs = document.querySelectorAll('#filterTabs .nav-link');
+            if (tabs) {
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        if (searchInput && searchInput.value !== '') {
+                            searchInput.value = '';
+                            filterFieldsBySearch('');
+                        }
+                    });
+                });
+            }
+        });
         function updateState() {
             const display = document.getElementById('counter-display');
             const mobileDisplay = document.getElementById('mobile-counter-display');
@@ -4725,7 +6018,7 @@
         // --- 6. PRESETS LOGIC ---
         function applyPersona(type) {
             // Need to switch to Constructor tab if not active
-            switchTab('constructor');
+            switchView('constructor');
 
             // Clear first
             clearFilters();
@@ -4971,7 +6264,7 @@
 
             // Restore visual state
             clearFilters();
-            switchTab('constructor'); // Ensure we are on constructor
+            switchView('constructor'); // Ensure we are on constructor
 
             setTimeout(() => {
                 // Check tags text and restore (mocking)
@@ -4988,8 +6281,314 @@
             }, 100);
         }
 
-        // Init Saved List
+        // 7.4 AUTOMATIONS
+        let automationEmails = [];
+        let editingAutomationId = null;
+
+        function toggleAutomationPeriodFields() {
+            const period = document.getElementById('automation-period').value;
+            const weeklyContainer = document.getElementById('automation-day-weekly-container');
+            const monthlyContainer = document.getElementById('automation-day-monthly-container');
+            if (weeklyContainer) weeklyContainer.style.display = (period === 'weekly') ? 'block' : 'none';
+            if (monthlyContainer) monthlyContainer.style.display = (period === 'monthly') ? 'block' : 'none';
+        }
+
+        function populateMonthlyDays() {
+            const select = document.getElementById('automation-day-monthly');
+            if (!select) return;
+            select.innerHTML = '';
+            for (let i = 1; i <= 31; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = i + '-те число';
+                select.appendChild(opt);
+            }
+        }
+
+        function addAutomationEmail() {
+            const input = document.getElementById('automation-email-input');
+            const email = input.value.trim();
+            if (email && email.includes('@')) {
+                if (!automationEmails.includes(email)) {
+                    automationEmails.push(email);
+                    renderAutomationEmails();
+                    input.value = '';
+                }
+            } else {
+                alert('Введіть коректний емейл');
+            }
+        }
+
+        function removeAutomationEmail(email) {
+            automationEmails = automationEmails.filter(e => e !== email);
+            renderAutomationEmails();
+        }
+
+        function renderAutomationEmails() {
+            const list = document.getElementById('automation-emails-list');
+            if (automationEmails.length === 0) {
+                list.innerHTML = '<span class="text-muted italic small opacity-50">Список пустий...</span>';
+                return;
+            }
+            list.innerHTML = automationEmails.map(url => `
+                <span class="badge bg-soft-primary text-primary border border-primary border-opacity-25 d-flex align-items-center gap-1" style="font-size: 10px; padding: 4px 8px; border-radius: 8px;">
+                    ${url} <i class="bi bi-x-circle-fill text-danger opacity-50" style="cursor:pointer" onclick="removeAutomationEmail('${url}')"></i>
+                </span>
+            `).join('');
+        }
+
+        function handleAutomationEmailImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+                const found = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g);
+                if (found) {
+                    found.forEach(email => {
+                        if (!automationEmails.includes(email)) automationEmails.push(email);
+                    });
+                    renderAutomationEmails();
+                    alert(`Імпортовано ${found.length} емейлів`);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function saveCurrentAutomation() {
+            if (automationEmails.length === 0) {
+                alert('Будь ласка, додайте хоча б один емейл для розсилки.');
+                return;
+            }
+            const modalEl = document.getElementById('saveAutomationModal');
+            const modal = new bootstrap.Modal(modalEl);
+            document.getElementById('automationNameInput').value = "Звіт " + new Date().toLocaleDateString();
+            modal.show();
+        }
+
+        function confirmSaveAutomation() {
+            const nameInput = document.getElementById('automationNameInput');
+            const name = nameInput.value.trim() || 'Без назви';
+
+            const period = document.getElementById('automation-period').value;
+            const time = document.getElementById('automation-time').value;
+
+            let frequencyLabel = '';
+            let freqData = { period, time };
+
+            if (period === 'daily') {
+                frequencyLabel = `Щодня о ${time}`;
+            } else if (period === 'weekly') {
+                const daySelect = document.getElementById('automation-day-weekly');
+                const dayName = daySelect.options[daySelect.selectedIndex].text;
+                frequencyLabel = `Що${dayName.toLowerCase()} о ${time}`;
+                freqData.day = daySelect.value;
+            } else if (period === 'monthly') {
+                const daySelect = document.getElementById('automation-day-monthly');
+                frequencyLabel = `${daySelect.value}-го числа о ${time}`;
+                freqData.day = daySelect.value;
+            }
+
+            // Collect active tags/filters
+            const tags = [];
+            document.querySelectorAll('.tag-pill').forEach(pill => {
+                tags.push(pill.innerText.replace('x', '').trim());
+            });
+
+            const automation = {
+                id: Date.now(),
+                name: name,
+                frequency: frequencyLabel,
+                freqData: freqData,
+                emails: [...automationEmails],
+                tags: tags,
+                resultsCount: document.getElementById('counter-display').innerText,
+                exportCount: document.getElementById('export-count').value,
+                exportAll: document.getElementById('export-all-check').checked,
+                format: document.getElementById('constructor-format-unified').value,
+                espoConditions: JSON.parse(JSON.stringify(espoConditionRegistry))
+            };
+
+            const saved = JSON.parse(localStorage.getItem('myAutomations') || '[]');
+            if (editingAutomationId) {
+                const idx = saved.findIndex(x => x.id === editingAutomationId);
+                if (idx !== -1) {
+                    automation.id = editingAutomationId;
+                    saved[idx] = automation;
+                } else {
+                    saved.push(automation);
+                }
+            } else {
+                saved.push(automation);
+            }
+            localStorage.setItem('myAutomations', JSON.stringify(saved));
+
+            const modalEl = document.getElementById('saveAutomationModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+
+            editingAutomationId = null;
+            automationEmails = [];
+            renderAutomationEmails();
+            renderSavedAutomations();
+        }
+
+        function renderSavedAutomations() {
+            const list = document.getElementById('header-saved-automations-list');
+            if (!list) return;
+            const saved = JSON.parse(localStorage.getItem('myAutomations') || '[]');
+
+            if (saved.length === 0) {
+                list.innerHTML = '<div class="text-center text-muted small py-3">Немає активних автоматизацій</div>';
+                return;
+            }
+
+            list.innerHTML = saved.map(a => `
+                <div class="bg-light p-2 rounded border dropdown-item-text shadow-sm mb-1" style="transition: all 0.2s;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div style="cursor:pointer" onclick="restoreAutomation(${a.id})" class="flex-grow-1 overflow-hidden">
+                            <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                <span class="fw-bold small text-info text-truncate" style="max-width: 140px;" title="${a.name}">${a.name}</span>
+                                <span class="badge bg-info bg-opacity-10 text-info fw-bold border border-info border-opacity-25" style="font-size: 0.75rem; white-space: nowrap;">
+                                    <i class="bi bi-calendar-event me-1"></i>${a.frequency}
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 text-muted" style="font-size: 0.7rem;">
+                                <span class="opacity-75"><i class="bi bi-envelope-fill me-1"></i>${a.emails.length} отримувачів</span>
+                                <span class="opacity-75"><i class="bi bi-funnel-fill me-1"></i>${(a.espoConditions ? a.espoConditions.length : 0) + a.tags.length} фільтрів</span>
+                            </div>
+                        </div>
+                        <div class="ms-2">
+                            <i class="bi bi-trash text-danger" style="cursor:pointer; font-size: 14px;" onclick="deleteAutomation(${a.id})"></i>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteAutomation(id) {
+            let saved = JSON.parse(localStorage.getItem('myAutomations') || '[]');
+            saved = saved.filter(a => a.id !== id);
+            localStorage.setItem('myAutomations', JSON.stringify(saved));
+            renderSavedAutomations();
+        }
+
+        function restoreAutomation(id) {
+            const saved = JSON.parse(localStorage.getItem('myAutomations') || '[]');
+            const a = saved.find(x => x.id == id);
+            if (!a) return;
+
+            // Restore filters
+            clearFilters();
+            switchView('constructor');
+
+            // Close the dropdown menu
+            const dropdownEl = document.querySelector('[data-bs-toggle="dropdown"][title="Мої сегменти"]');
+            if (dropdownEl) {
+                const dropdown = bootstrap.Dropdown.getOrCreateInstance(dropdownEl);
+                if (dropdown) dropdown.hide();
+            }
+
+            // Set automation UI state
+            document.getElementById('export-action-type').value = 'automation';
+            toggleExportFields();
+
+            // Scroll to the settings area
+            setTimeout(() => {
+                const settingsBlock = document.getElementById('automation-settings-block');
+                if (settingsBlock) {
+                    settingsBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Visual feedback: highlight the block
+                    settingsBlock.style.transition = 'background-color 0.5s';
+                    settingsBlock.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+                    setTimeout(() => settingsBlock.style.backgroundColor = 'transparent', 1500);
+                }
+            }, 300);
+
+            // Restore emails
+            automationEmails = [...a.emails];
+            renderAutomationEmails();
+
+            // Restore frequency UI
+            if (a.freqData) {
+                document.getElementById('automation-period').value = a.freqData.period;
+                toggleAutomationPeriodFields();
+                document.getElementById('automation-time').value = a.freqData.time;
+                if (a.freqData.period === 'weekly') document.getElementById('automation-day-weekly').value = a.freqData.day;
+                if (a.freqData.period === 'monthly') document.getElementById('automation-day-monthly').value = a.freqData.day;
+            }
+
+            // Restore Export Settings
+            if (a.format) {
+                document.getElementById('constructor-format-unified').value = a.format;
+                updateMultiSelect('constructor-format-unified');
+            }
+            if (a.exportCount !== undefined) {
+                document.getElementById('export-count').value = a.exportCount;
+            }
+            if (a.exportAll !== undefined) {
+                document.getElementById('export-all-check').checked = a.exportAll;
+                toggleExportCountInput();
+            }
+
+            // Restore Espo Filters
+            if (a.espoConditions) {
+                espoConditionRegistry = JSON.parse(JSON.stringify(a.espoConditions));
+                renderEspoUI();
+                updateFiltersCount();
+
+                // Ensure the filters summary is visible
+                const summaryBlock = document.getElementById('active-filters-summary');
+                if (summaryBlock) summaryBlock.classList.remove('d-none');
+
+                // Expand the formula card to show the restored filters
+                const formulaCard = document.getElementById('main-formula-card');
+                if (formulaCard) formulaCard.classList.remove('is-collapsed');
+            }
+
+            setTimeout(() => {
+                // Restore any legacy tags (pills)
+                if (a.tags && a.tags.length > 0) {
+                    const summaryBlock = document.getElementById('active-filters-summary');
+                    if (summaryBlock) summaryBlock.classList.remove('d-none');
+
+                    a.tags.forEach(tagText => {
+                        const parts = tagText.split(':');
+                        if (parts.length > 1) {
+                            addMockTag('c4', parts[0].trim(), parts[1].trim());
+                        }
+                    });
+                }
+                updateState();
+            }, 100);
+
+            // Highlight name in modal if they decide to re-save
+            document.getElementById('automationNameInput').value = a.name;
+            editingAutomationId = a.id;
+
+            // Optional: Close the dropdown menu again just in case (double check)
+            const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"][title="Мої сегменти"]');
+            if (dropdownToggle) {
+                const instance = bootstrap.Dropdown.getInstance(dropdownToggle);
+                if (instance) instance.hide();
+            }
+
+            // Visual feedback - simple toast-like message
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-4 bg-dark text-white p-3 rounded shadow-lg animate-fade-in';
+            toast.style.zIndex = '9999';
+            toast.innerHTML = `<i class="bi bi-check-circle-fill text-success me-2"></i> Параметри автоматизації <b>"${a.name}"</b> завантажено в конструктор`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('animate-fade-out');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // Init Saved Lists
         renderSavedSegments();
+        populateMonthlyDays();
+        renderSavedAutomations();
 
         // 7.4 EXPORT MOCK CSV
         function handleExportAction() {
@@ -5071,8 +6670,9 @@
 
     // Global Styles Config
     let designConfig = {
-        tabFontSize: 16,
-        labelFontSize: 14,
+        tabFontSize: 13,
+        labelFontSize: 11,
+        subsectionFontSize: 15,
         fieldSizeDefault: 4
     };
 
@@ -5289,6 +6889,7 @@
                 controls.style = 'position: absolute; right: 0; top: -18px; z-index: 1000; display: flex; align-items: center;';
                 controls.innerHTML = `
                 <div class="resize-handler-container d-flex align-items-center" style="background: rgba(15,23,42,0.9); padding: 4px 10px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);">
+                    <button class="btn btn-link text-white p-0 me-2" title="Редагувати поле" style="text-decoration:none;" onclick="editDesignerField('${field.dataset.fieldId}')"><i class="bi bi-pencil-square text-info"></i></button>
                     <button class="btn btn-link text-white p-0 me-2" style="text-decoration:none;" onclick="stepFieldSize('${field.dataset.fieldId}', -1)"><i class="bi bi-dash-circle"></i></button>
                     <span class="size-label fw-bold text-info small" style="min-width:14px;">${size}</span>
                     <button class="btn btn-link text-white p-0 ms-2" style="text-decoration:none;" onclick="stepFieldSize('${field.dataset.fieldId}', 1)"><i class="bi bi-plus-circle"></i></button>
@@ -5389,13 +6990,181 @@
         destroyDesignMode(); initDesignMode(); saveToLocalSilent();
     }
 
+    function getFieldHTML(type, name) {
+        let input = '';
+        if (type === 'date' || type === 'time') {
+            const inputType = type;
+            const randId = Math.floor(Math.random() * 10000);
+            input = `
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label mb-0">${name}</label>
+                    <div class="form-check form-switch min-h-0 mb-0 d-flex align-items-center gap-1">
+                        <input class="form-check-input" type="checkbox" id="dsgn-${randId}-all" style="transform: scale(0.8);">
+                        <label class="form-check-label text-muted small" for="dsgn-${randId}-all">&infin;</label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="${inputType}" class="form-control px-2">
+                    <span class="input-group-text bg-light px-1" style="font-size: 0.7rem;">по</span>
+                    <input type="${inputType}" class="form-control px-2">
+                    <button class="btn btn-outline-primary px-2" type="button">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>`;
+            return input;
+        } else if (type === 'select') {
+            input = `<select class="form-select">
+                        <option selected disabled>Оберіть варіант...</option>
+                        <option>Варіант 1</option>
+                        <option>Варіант 2</option>
+                        <option>Варіант 3</option>
+                    </select>`;
+        } else if (type === 'number') {
+            input = `<input type="number" class="form-control" placeholder="0">`;
+        } else if (type === 'textarea') {
+            input = `<textarea class="form-control" rows="2" placeholder="..."></textarea>`;
+        } else {
+            input = `<input type="text" class="form-control" placeholder="...">`;
+        }
+        return `<label class="form-label">${name}</label>${input}`;
+    }
+
     function addDesignerField(btn) {
-        const name = prompt('Назва:', 'Нове поле'); if (!name) return;
-        const c = btn.closest('.row.g-3'); const fid = 'field-' + Date.now();
-        const div = document.createElement('div'); div.className = 'col-md-4'; div.dataset.fieldId = fid;
-        div.innerHTML = `<label class="form-label">${name}</label><input type="text" class="form-control" placeholder="...">`;
+        const name = prompt('Назва поля:', 'Нове поле'); if (!name) return;
+
+        // Show selection modal instead of prompt
+        const modalId = 'fieldTypeModal';
+        let modalEl = document.getElementById(modalId);
+        if (modalEl) modalEl.remove();
+
+        const types = [
+            { id: 'text', label: 'Текстове поле', icon: 'bi-fonts' },
+            { id: 'date', label: 'Дата', icon: 'bi-calendar-event' },
+            { id: 'time', label: 'Час', icon: 'bi-clock' },
+            { id: 'select', label: 'Випадаючий список', icon: 'bi-list-check' },
+            { id: 'number', label: 'Число', icon: 'bi-hash' },
+            { id: 'textarea', label: 'Великий текст', icon: 'bi-textarea-t' }
+        ];
+
+        const div = document.createElement('div');
+        div.innerHTML = `
+        <div class="modal fade" id="${modalId}" tabindex="-1" style="z-index: 11000;">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
+                    <div class="modal-header border-0 pb-0">
+                        <h6 class="modal-title text-white small opacity-75">Оберіть тип поля для "${name}"</h6>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-3">
+                        <div class="list-group list-group-flush bg-transparent">
+                            ${types.map(t => `
+                                <button type="button" class="list-group-item list-group-item-action bg-transparent text-white border-secondary border-opacity-25 d-flex align-items-center py-2 px-1" 
+                                    onclick="confirmAddField('${t.id}', '${name}', '${btn.closest('.row.g-3').parentElement.id || ''}', this)">
+                                    <i class="bi ${t.icon} text-primary me-2 fs-5"></i>
+                                    <span class="small">${t.label}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        document.body.appendChild(div);
+
+        // Save button reference context for later
+        window._currentAddFieldBtn = btn;
+
+        const modal = new bootstrap.Modal(document.getElementById(modalId));
+        modal.show();
+    }
+
+    function confirmAddField(type, name, parentId, itemBtn) {
+        const btn = window._currentAddFieldBtn;
+        if (!btn) return;
+
+        const c = btn.closest('.row.g-3');
+        const fid = 'field-' + Date.now();
+        const div = document.createElement('div');
+        div.className = 'col-md-4';
+        div.dataset.fieldId = fid;
+        div.dataset.fieldType = type;
+        div.innerHTML = getFieldHTML(type, name);
+
         c.insertBefore(div, btn.closest('.col-md-4'));
-        destroyDesignMode(); initDesignMode(); saveToLocalSilent();
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('fieldTypeModal'));
+        modal.hide();
+
+        destroyDesignMode();
+        initDesignMode();
+        saveToLocalSilent();
+
+        delete window._currentAddFieldBtn;
+    }
+
+    function editDesignerField(id) {
+        const fieldEl = document.querySelector(`[data-field-id="${id}"]`);
+        if (!fieldEl) return;
+
+        const currentName = fieldEl.querySelector('.form-label')?.innerText || '';
+        const currentType = fieldEl.dataset.fieldType || 'text';
+
+        const newName = prompt('Нова назва поля:', currentName);
+        if (newName === null) return;
+
+        const modalId = 'editFieldTypeModal';
+        let modalEl = document.getElementById(modalId);
+        if (modalEl) modalEl.remove();
+
+        const types = [
+            { id: 'text', label: 'Текстове поле', icon: 'bi-fonts' },
+            { id: 'date', label: 'Дата', icon: 'bi-calendar-event' },
+            { id: 'time', label: 'Час', icon: 'bi-clock' },
+            { id: 'select', label: 'Випадаючий список', icon: 'bi-list-check' },
+            { id: 'number', label: 'Число', icon: 'bi-hash' },
+            { id: 'textarea', label: 'Великий текст', icon: 'bi-textarea-t' }
+        ];
+
+        const div = document.createElement('div');
+        div.innerHTML = `
+        <div class="modal fade" id="${modalId}" tabindex="-1" style="z-index: 11000;">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
+                    <div class="modal-header border-0 pb-0">
+                        <h6 class="modal-title text-white small opacity-75">Змінити тип для "${newName}"</h6>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-3">
+                        <div class="list-group list-group-flush bg-transparent">
+                            ${types.map(t => `
+                                <button type="button" class="list-group-item list-group-item-action ${t.id === currentType ? 'border-primary border-opacity-50' : ''} bg-transparent text-white border-secondary border-opacity-25 d-flex align-items-center py-2 px-1" 
+                                    onclick="confirmEditField('${id}', '${t.id}', '${newName}')">
+                                    <i class="bi ${t.icon} ${t.id === currentType ? 'text-info' : 'text-primary'} me-2 fs-5"></i>
+                                    <span class="small ${t.id === currentType ? 'fw-bold text-info' : ''}">${t.label}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        document.body.appendChild(div);
+        new bootstrap.Modal(document.getElementById(modalId)).show();
+    }
+
+    function confirmEditField(id, type, name) {
+        const fieldEl = document.querySelector(`[data-field-id="${id}"]`);
+        if (!fieldEl) return;
+
+        fieldEl.dataset.fieldType = type;
+        fieldEl.innerHTML = getFieldHTML(type, name);
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editFieldTypeModal'));
+        if (modal) modal.hide();
+
+        destroyDesignMode();
+        initDesignMode();
+        saveToLocalSilent();
     }
 
     function removeDesignerField(id) {
@@ -5433,6 +7202,15 @@
             </div>
         </div>
 
+        <div class="design-control-item mt-3">
+            <label class="small text-white-50 d-block mb-1">Розмір заголовків підрозділів (px)</label>
+            <div class="d-flex align-items-center gap-2">
+                <input type="range" class="form-range flex-grow-1" min="8" max="24" value="${designConfig.subsectionFontSize || 11}" 
+                    oninput="updateGlobalFontSize('subsection', this.value)">
+                <span id="label-subsection-size" class="badge bg-primary">${designConfig.subsectionFontSize || 11}px</span>
+            </div>
+        </div>
+
         <div class="design-control-item mt-4 border-top border-secondary pt-3 d-flex gap-2">
             <button class="btn btn-sm btn-outline-info flex-grow-1" onclick="saveDesignChanges()">
                 <i class="bi bi-code-slash me-1"></i>Експорт
@@ -5464,8 +7242,13 @@
                 animation: slideUp 0.3s ease-out;
             }
             @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-            #filterTabs .nav-link { font-size: var(--tab-font-size) !important; transition: font-size 0.2s; position: relative; z-index: 5; }
-            .form-label { font-size: var(--label-font-size) !important; transition: font-size 0.2s; }
+            #filterTabs .nav-link { font-size: var(--tab-font-size, 0.85rem) !important; transition: font-size 0.2s; position: relative; z-index: 5; }
+            .form-label { font-size: var(--label-font-size, 12px) !important; transition: font-size 0.2s; }
+            /* Extra specific design-mode overrides */
+            .design-mode-active .tab-pane-card h6, .design-mode-active .subsection-title { 
+                border-bottom: 1px dashed var(--primary-soft);
+                padding-bottom: 5px;
+            }
             .sortable-ghost { opacity: 0.1 !important; pointer-events: none !important; }
             .sortable-fallback { pointer-events: none !important; opacity: 0.9 !important; z-index: 10005 !important; transform: rotate(0deg) !important; filter: brightness(1.1); }
             .sortable-drag { pointer-events: none !important; transform: rotate(0deg) !important; }
@@ -5520,8 +7303,9 @@
         }
 
         // Set custom properties only if they differ from defaults
-        if (designConfig.tabFontSize !== 16) document.documentElement.style.setProperty('--tab-font-size', designConfig.tabFontSize + 'px');
-        if (designConfig.labelFontSize !== 14) document.documentElement.style.setProperty('--label-font-size', designConfig.labelFontSize + 'px');
+        document.documentElement.style.setProperty('--tab-font-size', designConfig.tabFontSize + 'px');
+        document.documentElement.style.setProperty('--label-font-size', designConfig.labelFontSize + 'px');
+        document.documentElement.style.setProperty('--subsection-font-size', designConfig.subsectionFontSize + 'px');
     }
 
     function updateGlobalFontSize(type, value) {
@@ -5529,18 +7313,33 @@
             designConfig.tabFontSize = value;
             document.documentElement.style.setProperty('--tab-font-size', value + 'px');
             document.getElementById('label-tab-size').innerText = value + 'px';
-        } else {
+        } else if (type === 'label') {
             designConfig.labelFontSize = value;
             document.documentElement.style.setProperty('--label-font-size', value + 'px');
             document.getElementById('label-field-size').innerText = value + 'px';
+        } else if (type === 'subsection') {
+            designConfig.subsectionFontSize = value;
+            document.documentElement.style.setProperty('--subsection-font-size', value + 'px');
+            document.getElementById('label-subsection-size').innerText = value + 'px';
         }
         saveToLocalSilent();
     }
 
     function showDesignToast(msg) {
-        const t = document.createElement('div'); t.className = 'position-fixed bottom-0 start-50 translate-middle-x p-4'; t.style.zIndex = '12000';
-        t.innerHTML = `<div class="toast show bg-dark text-white border-0 shadow-lg" style="border-radius:12px; border-left: 4px solid #4361ee !important;"><div class="toast-body d-flex align-items-center"><i class="bi bi-info-circle-fill text-primary me-2"></i>${msg}</div></div>`;
-        document.body.appendChild(t); setTimeout(() => t.remove(), 4000);
+        const t = document.createElement('div');
+        t.className = 'position-fixed top-0 start-50 translate-middle-x p-4 mt-5';
+        t.style.zIndex = '12000';
+        t.innerHTML = `
+            <div class="toast show bg-dark text-white border-0 shadow-lg animate-fade-in" style="border-radius:12px; border-left: 4px solid #4361ee !important;">
+                <div class="toast-body d-flex align-items-center">
+                    <i class="bi bi-info-circle-fill text-primary me-2"></i>${msg}
+                </div>
+            </div>`;
+        document.body.appendChild(t);
+        setTimeout(() => {
+            t.classList.add('animate-fade-out'); // Add fade out if exists
+            setTimeout(() => t.remove(), 500);
+        }, 3000);
     }
 
     function collectCurrentDesign() {
@@ -5564,6 +7363,7 @@
                             fields.push({
                                 id: f.dataset.fieldId,
                                 label: l.innerText.trim(),
+                                type: f.dataset.fieldType || 'text',
                                 col: Array.from(f.classList).filter(c => c.startsWith('col-')).join(' '),
                                 fontFamily: l.style.fontFamily || 'inherit'
                             });
@@ -5575,7 +7375,13 @@
                     const fields = [];
                     card.querySelectorAll('[data-field-id]').forEach(f => {
                         const l = f.querySelector('.form-label');
-                        fields.push({ id: f.dataset.fieldId, label: l.innerText.trim(), col: Array.from(f.classList).filter(c => c.startsWith('col-')).join(' '), fontFamily: l.style.fontFamily || 'inherit' });
+                        fields.push({
+                            id: f.dataset.fieldId,
+                            label: l.innerText.trim(),
+                            type: f.dataset.fieldType || 'text',
+                            col: Array.from(f.classList).filter(c => c.startsWith('col-')).join(' '),
+                            fontFamily: l.style.fontFamily || 'inherit'
+                        });
                     });
                     info.subSections.push({ title: '', fields });
                 }
@@ -5619,7 +7425,7 @@
                     <div class="modal-body p-4">
                         <div class="alert alert-info border-0 bg-info bg-opacity-10 text-info small mb-3">
                             <i class="bi bi-info-circle-fill me-2"></i>Цей JSON містить вашу структуру вкладок, розміри полів та глобальні налаштування. 
-                            Відправте його <strong>Творцю</strong>, щоб він вніс зміни до коду цього всесвіту.
+                            Відправте його <strong>Творцю</strong>, щоб він вніс зміни до коду.
                         </div>
                         <div class="position-relative">
                             <textarea class="form-control bg-black text-info font-monospace border-secondary shadow-none" 
@@ -5656,7 +7462,6 @@
     function resetDesign() {
         if (confirm('Скинути всі налаштування?')) {
             localStorage.removeItem('ui_design_config');
-            sessionStorage.setItem('reenter_design_mode', 'true');
             location.reload();
         }
     }
@@ -5670,6 +7475,7 @@
                 designConfig = data.config;
                 document.documentElement.style.setProperty('--tab-font-size', designConfig.tabFontSize + 'px');
                 document.documentElement.style.setProperty('--label-font-size', designConfig.labelFontSize + 'px');
+                document.documentElement.style.setProperty('--subsection-font-size', (designConfig.subsectionFontSize || 11) + 'px');
             }
 
             structure.forEach(tabInfo => {
@@ -5693,15 +7499,36 @@
                         const row = document.createElement('div');
                         row.className = 'row g-3 mb-4';
                         sub.fields.forEach(f => {
+                            // Important fix: find field by ID in the entire document first
                             let fieldEl = document.querySelector(`[data-field-id="${f.id}"]`);
+
                             if (!fieldEl) {
+                                // Only create new if it really doesn't exist
                                 fieldEl = document.createElement('div');
                                 fieldEl.dataset.fieldId = f.id;
-                                fieldEl.innerHTML = `<label class="form-label">${f.label}</label><input type="text" class="form-control" placeholder="...">`;
+                                fieldEl.innerHTML = getFieldHTML(f.type || 'text', f.label);
+                            } else {
+                                // If it exists, check if we need to update its type/HTML
+                                // But don't overwrite if it's a standard complex select
+                                const currentTagType = fieldEl.dataset.fieldType;
+                                if (currentTagType && currentTagType !== f.type) {
+                                    fieldEl.innerHTML = getFieldHTML(f.type || 'text', f.label);
+                                }
                             }
+
+                            fieldEl.dataset.fieldType = f.type || 'text';
                             const label = fieldEl.querySelector('.form-label');
-                            if (label) { label.innerText = f.label; label.style.fontFamily = f.fontFamily; }
-                            fieldEl.className = f.col;
+                            if (label) {
+                                label.innerText = f.label;
+                                if (f.fontFamily) label.style.fontFamily = f.fontFamily;
+                            }
+
+                            // Re-apply col class from JSON
+                            if (f.col) {
+                                const classes = Array.from(fieldEl.classList).filter(c => !c.startsWith('col-'));
+                                fieldEl.className = classes.join(' ') + ' ' + f.col;
+                            }
+
                             row.appendChild(fieldEl);
                         });
                         card.appendChild(row);
@@ -5717,6 +7544,12 @@
             sessionStorage.removeItem('reenter_design_mode');
             setTimeout(() => { if (!designModeActive) toggleDesignMode(); }, 500);
         }
+
+        // Initialize Bootstrap Popovers
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        });
     });
 </script>
 
