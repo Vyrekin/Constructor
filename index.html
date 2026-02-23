@@ -7,10 +7,9 @@
     <title>Конструктор вибірок | Diamond Edition</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -32,6 +31,10 @@
             --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05);
             --radius-btn: 12px;
             --radius-card: 20px;
+            --motion-fast: 180ms;
+            --motion-base: 320ms;
+            --motion-slow: 700ms;
+            --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         [data-theme="dark"] {
@@ -106,13 +109,13 @@
         }
 
         .form-label {
-            font-size: var(--label-font-size, 11px) !important;
+            font-size: var(--label-font-size, 0.85rem) !important;
         }
 
         /* High specificity to override utility classes */
         .tab-pane-card h6.fw-bold.text-primary,
         .tab-pane-card .subsection-title {
-            font-size: var(--subsection-font-size, 15px) !important;
+            font-size: var(--subsection-font-size, 11px) !important;
             transition: all 0.2s ease;
             display: block;
         }
@@ -132,7 +135,7 @@
         }
 
         .form-label {
-            font-size: 11px;
+            font-size: 0.82rem;
             margin-bottom: 0.1rem;
             font-weight: 600;
             color: var(--text-muted);
@@ -158,7 +161,7 @@
         }
 
         h6.text-primary.text-uppercase {
-            font-size: 1.1rem !important;
+            font-size: var(--subsection-font-size, 0.75rem) !important;
             margin-bottom: 0.4rem !important;
             margin-top: 0.2rem !important;
             opacity: 0.8;
@@ -231,9 +234,211 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-app);
+            background-color: transparent;
             color: var(--text-main);
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: linear-gradient(125deg,
+                    #f4f8ff 0%,
+                    #e7f1ff 20%,
+                    #f2f8ff 42%,
+                    #e8fbf5 68%,
+                    #eef4ff 100%);
+            background-size: 320% 320%;
+            animation: appGradientShift 10s ease-in-out infinite;
+        }
+
+        [data-theme="dark"] body::before,
+        body[data-theme="dark"]::before {
+            background: linear-gradient(125deg,
+                    #0b1220 0%,
+                    #101a2b 25%,
+                    #0f1b2f 50%,
+                    #10242a 75%,
+                    #0c1728 100%);
+            opacity: 0.92;
+        }
+
+        @keyframes appGradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -20%;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 15% 18%, rgba(67, 97, 238, 0.24) 0%, rgba(67, 97, 238, 0) 38%),
+                radial-gradient(circle at 82% 22%, rgba(76, 201, 240, 0.28) 0%, rgba(76, 201, 240, 0) 36%),
+                radial-gradient(circle at 70% 82%, rgba(63, 55, 201, 0.2) 0%, rgba(63, 55, 201, 0) 42%),
+                radial-gradient(circle at 22% 74%, rgba(20, 184, 166, 0.2) 0%, rgba(20, 184, 166, 0) 44%);
+            filter: blur(14px) saturate(125%);
+            transform-origin: center;
+            animation: appOrbsDrift 14s ease-in-out infinite alternate;
+            opacity: 0.9;
+        }
+
+        [data-theme="dark"] body::after,
+        body[data-theme="dark"]::after {
+            background:
+                radial-gradient(circle at 15% 18%, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0) 38%),
+                radial-gradient(circle at 82% 22%, rgba(56, 189, 248, 0.14) 0%, rgba(56, 189, 248, 0) 36%),
+                radial-gradient(circle at 70% 82%, rgba(129, 140, 248, 0.16) 0%, rgba(129, 140, 248, 0) 44%),
+                radial-gradient(circle at 22% 74%, rgba(45, 212, 191, 0.12) 0%, rgba(45, 212, 191, 0) 42%);
+            opacity: 0.78;
+        }
+
+        @keyframes appOrbsDrift {
+            0% {
+                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: translate3d(-1.8%, 1.3%, 0) scale(1.06) rotate(2deg);
+            }
+
+            100% {
+                transform: translate3d(1.6%, -1.4%, 0) scale(1.03) rotate(-2deg);
+            }
+        }
+
+        body>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-header,
+        .card-diamond,
+        .tab-pane-card,
+        .formula-card,
+        .condition-block,
+        .btn,
+        .nav-link,
+        .form-control,
+        .form-select,
+        .dropdown-menu,
+        .formula-item,
+        .picker-item,
+        .modal-content {
+            transition:
+                transform var(--motion-base) var(--motion-ease),
+                box-shadow var(--motion-base) var(--motion-ease),
+                background-color var(--motion-fast) ease,
+                border-color var(--motion-fast) ease,
+                color var(--motion-fast) ease,
+                opacity var(--motion-fast) ease;
+        }
+
+        .card-diamond:hover,
+        .tab-pane-card:hover,
+        .formula-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 35px rgba(67, 97, 238, 0.16);
+        }
+
+        .formula-card,
+        .compact-control-card,
+        .tab-pane-card,
+        .custom-filter-tabs {
+            overflow: hidden;
+        }
+
+        .btn:hover,
+        .custom-filter-tabs .nav-link:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:active,
+        .custom-filter-tabs .nav-link:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 0 0 0.18rem rgba(67, 97, 238, 0.18), 0 10px 24px rgba(67, 97, 238, 0.11);
+        }
+
+        #filterTabsContent .tab-pane.show .tab-pane-card {
+            animation: paneCardReveal var(--motion-base) var(--motion-ease);
+        }
+
+        @keyframes paneCardReveal {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.995);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .motion-reveal {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        .motion-reveal.motion-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .motion-pop {
+            animation: motionPop 520ms var(--motion-ease);
+        }
+
+        @keyframes motionPop {
+            0% {
+                opacity: 0.72;
+                transform: scale(0.985) translateY(8px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal.fade .modal-dialog {
+            transition: transform var(--motion-base) var(--motion-ease), opacity var(--motion-base) var(--motion-ease);
+            transform: translateY(16px) scale(0.985);
+        }
+
+        .modal.show .modal-dialog {
+            transform: translateY(0) scale(1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
         }
 
         /* Sticky Glass Header */
@@ -599,6 +804,201 @@
             padding-left: 0.5rem;
             border-left: 2px solid #eee;
             margin-top: 0.2rem;
+        }
+
+        /* Inputs & Form Elements */
+        .form-control,
+        .form-select {
+            border-radius: var(--radius-btn);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-soft);
+        }
+
+        label.form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        /* Tag Pills */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 0;
+            transition: all 0.3s;
+        }
+
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tag-pill i {
+            margin-left: 8px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .tag-pill i:hover {
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            border-radius: var(--radius-btn);
+            padding: 0.5rem 1.25rem;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Drag & Drop Zone */
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-card);
+            padding: 1.5rem;
+            text-align: center;
+            background-color: #fafafa;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary);
+            background-color: var(--primary-soft);
+        }
+
+        /* AI Code Block */
+        .sql-preview {
+            background-color: #1e1e2e;
+            color: #a5b0c5;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--accent);
+            line-height: 1.5;
+        }
+
+        .sql-keyword {
+            color: #ff79c6;
+        }
+
+        .sql-field {
+            color: #8be9fd;
+        }
+
+        .sql-table {
+            color: #f1fa8c;
+        }
+
+        .sql-string {
+            color: #f2c67d;
+        }
+
+        /* Animation for Counter */
+        .counter-animate {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Formula View Styles */
+        .formula-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            position: relative;
+        }
+
+        /* Espo-style Condition Blocks (Compact) */
+        .condition-block {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            position: relative;
+            transition: all 0.2s;
+            cursor: grab;
+            display: inline-flex;
+            flex-direction: column;
+            min-width: 151px;
+            max-width: 300px;
+        }
+
+        .condition-block:active {
+            cursor: grabbing;
+        }
+
+        .condition-block.dragging {
+            opacity: 0.4;
+            border: 2px dashed var(--primary);
+        }
+
+        /* Nested Blocks Styling */
+        .sub-conditions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-left: 0.5rem;
+            padding-left: 0.5rem;
+            border-left: 2px solid #eee;
+            margin-top: 0.2rem;
             position: relative;
         }
 
@@ -606,7 +1006,7 @@
             padding: 4px 10px;
             background: #fcfcfc;
             border-bottom: 1px solid var(--border);
-            border-radius: 8px 8px 0 0;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -638,8 +1038,8 @@
         .op-tag {
             font-weight: 700;
             font-size: 0.65rem;
-            padding: 1px 4px;
-            border-radius: 4px;
+            padding: 2px 6px;
+            border-radius: 20px;
             text-transform: uppercase;
         }
 
@@ -670,8 +1070,8 @@
         .inter-op-select {
             background: white;
             border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 1px 5px;
+            border-radius: 20px;
+            padding: 1px 6px;
             font-weight: 700;
             font-size: 0.65rem;
             cursor: pointer;
@@ -842,8 +1242,8 @@
         .formula-item {
             background: white;
             border: 1px solid #dee2e6;
-            padding: 2px 8px;
-            border-radius: 6px;
+            padding: 3px 10px;
+            border-radius: 20px;
             font-size: 0.9rem;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             display: inline-flex;
@@ -891,7 +1291,7 @@
             position: sticky;
             top: 70px;
             z-index: 900;
-            background: var(--bg-app);
+            background: transparent;
             padding-top: 5px;
             margin-top: -5px;
         }
@@ -901,7 +1301,7 @@
             top: 132px;
             /* Adjusted to sit below the formula card */
             z-index: 890;
-            background: var(--bg-app);
+            background: transparent;
             padding-bottom: 10px;
             margin-bottom: 5px;
         }
@@ -992,6 +1392,10 @@
             background: var(--surface);
             border-radius: 16px;
             border: 1px solid var(--border);
+        }
+
+        #pane-c1 {
+            color: rgba(27, 38, 59, 0);
         }
 
         @media (max-width: 576px) {
@@ -1197,9 +1601,14 @@
         }
 
         .custom-filter-tabs .nav-link:hover:not(.active) {
-            background: var(--bg-app);
+            background: rgba(0, 0, 0, 0.04);
             color: var(--text-main);
-            border-color: var(--border);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] .custom-filter-tabs .nav-link:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         .tab-pane-card {
@@ -1653,6 +2062,274 @@
             margin-bottom: 1rem;
         }
 
+        .bg-soft-primary {
+            background-color: rgba(67, 97, 238, 0.12) !important;
+        }
+
+        .field-search-wrap {
+            min-width: 250px;
+            max-width: 360px;
+            width: 100%;
+        }
+
+        .field-search-input {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 0.35rem 0.9rem;
+            font-size: 0.82rem;
+            background: #fff;
+        }
+
+        .scope-pill {
+            border-radius: 999px !important;
+            border: 1px solid rgba(148, 163, 184, 0.35) !important;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3px !important;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            gap: 3px;
+        }
+
+        .scope-pill .btn {
+            font-size: 0.62rem;
+            padding: 4px 10px;
+            border-radius: 999px !important;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            border: none !important;
+            color: #5f6b7a;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .scope-pill .btn:hover {
+            color: #334155;
+            background: rgba(148, 163, 184, 0.14);
+        }
+
+        #scope-all:checked+label {
+            background: linear-gradient(135deg, #2f6bff, #4361ee);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.35);
+        }
+
+        #scope-b2c:checked+label {
+            background: linear-gradient(135deg, #0d6efd, #3b82f6);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(13, 110, 253, 0.35);
+        }
+
+        #scope-b2b:checked+label {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(217, 119, 6, 0.35);
+        }
+
+        .formula-legend {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+            color: var(--text-muted);
+        }
+
+        .formula-legend .legend-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            display: inline-block;
+        }
+
+        .formula-legend .legend-dot.b2c {
+            background: rgba(13, 110, 253, 0.9);
+        }
+
+        .formula-legend .legend-dot.universal {
+            background: rgba(20, 184, 166, 0.9);
+        }
+
+        .formula-legend .legend-dot.b2b {
+            background: rgba(217, 119, 6, 0.9);
+        }
+
+        .tab-count-badge {
+            font-size: 0.62rem;
+            margin-left: 0.35rem;
+            padding: 0.08rem 0.38rem;
+            border-radius: 999px;
+            background: rgba(67, 97, 238, 0.14);
+            color: var(--primary);
+            border: 1px solid rgba(67, 97, 238, 0.28);
+            vertical-align: middle;
+        }
+
+        .range-end-disabled {
+            background-color: #e9ecef !important;
+            color: #8a939d !important;
+            border-color: #d5dbe2 !important;
+            cursor: not-allowed;
+        }
+
+        [data-theme="dark"] .range-end-disabled {
+            background-color: #39414a !important;
+            color: #8f99a4 !important;
+            border-color: #4a5561 !important;
+        }
+
+        #filterTabsContent.is-searching>.tab-pane {
+            opacity: 1 !important;
+            transition: none !important;
+            margin-bottom: 0.75rem;
+        }
+
+        #filterTabsContent.is-searching>.tab-pane:last-child {
+            margin-bottom: 0;
+        }
+
+        body[data-scope-mode="all"] {
+            --scope-accent: var(--primary);
+            --scope-soft: rgba(67, 97, 238, 0.12);
+            --scope-border: rgba(67, 97, 238, 0.25);
+            --scope-title: #4361ee;
+            --scope-title-soft: #5c6f8a;
+        }
+
+        body[data-scope-mode="b2c"] {
+            --scope-accent: #0d6efd;
+            --scope-soft: rgba(13, 110, 253, 0.12);
+            --scope-border: rgba(13, 110, 253, 0.28);
+            --scope-title: #0d6efd;
+            --scope-title-soft: #3f77c9;
+        }
+
+        body[data-scope-mode="universal"] {
+            --scope-accent: #0f766e;
+            --scope-soft: rgba(20, 184, 166, 0.14);
+            --scope-border: rgba(20, 184, 166, 0.28);
+            --scope-title: #0f766e;
+            --scope-title-soft: #27847d;
+        }
+
+        body[data-scope-mode="b2b"] {
+            --scope-accent: #d97706;
+            --scope-soft: rgba(217, 119, 6, 0.12);
+            --scope-border: rgba(217, 119, 6, 0.28);
+            --scope-title: #d97706;
+            --scope-title-soft: #b45309;
+        }
+
+        /* Field visibility color indicators (left border) */
+        [data-field-visibility="b2c"] {
+            border-left: 3px solid rgba(13, 110, 253, 0.5);
+            padding-left: 8px;
+            transition: border-color 0.2s ease;
+        }
+
+        [data-field-visibility="b2b"] {
+            border-left: 3px solid rgba(217, 119, 6, 0.5);
+            padding-left: 8px;
+            transition: border-color 0.2s ease;
+        }
+
+        [data-field-visibility="universal"] {
+            border-left: 3px solid rgba(20, 184, 166, 0.4);
+            padding-left: 8px;
+            transition: border-color 0.2s ease;
+        }
+
+        body[data-scope-mode] #filterTabs .nav-link {
+            color: var(--scope-title-soft) !important;
+        }
+
+        body[data-scope-mode] .custom-filter-tabs .nav-link.active {
+            background: var(--scope-soft) !important;
+            color: var(--scope-accent) !important;
+            border-color: var(--scope-border) !important;
+            box-shadow: 0 4px 12px var(--scope-soft) !important;
+        }
+
+        body[data-scope-mode] .tab-pane-card {
+            border-color: var(--scope-border);
+            box-shadow: 0 0 0 1px var(--scope-soft), var(--shadow-card);
+        }
+
+        body[data-scope-mode] .tab-pane-card h6.fw-bold.text-primary {
+            color: var(--scope-title) !important;
+        }
+
+        .condition-vis-badge {
+            font-size: 9px;
+            padding: 0.08rem 0.35rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            margin-left: 0.35rem;
+            line-height: 1;
+        }
+
+        .condition-vis-badge.b2c {
+            background: #4361ee;
+            color: #fff;
+        }
+
+        .condition-vis-badge.b2b {
+            background: #f59e0b;
+            color: #fff;
+        }
+
+        .condition-vis-badge.universal {
+            background: #14b8a6;
+            color: #fff;
+        }
+
+        .formula-item.vis-b2c {
+            background: rgba(67, 97, 238, 0.1);
+            border-color: rgba(67, 97, 238, 0.25);
+            color: #084298;
+        }
+
+        .formula-item.vis-b2b {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.25);
+            color: #b45309;
+        }
+
+        .formula-item.vis-universal {
+            background: rgba(20, 184, 166, 0.1);
+            border-color: rgba(20, 184, 166, 0.25);
+            color: #115e59;
+        }
+
+        .compact-control-card {
+            background: rgba(255, 255, 255, 0.76);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+        }
+
+        /* Ensure design-mode modals & backdrop sit above everything */
+        .modal-backdrop {
+            z-index: 10999 !important;
+        }
+
+        .modal[style*="z-index: 11000"] {
+            z-index: 11000 !important;
+        }
+
+        .reset-all-btn {
+            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #000;
+            border-radius: 8px;
+        }
+
+        .reset-all-btn:hover,
+        .reset-all-btn:focus {
+            background-color: rgba(220, 53, 69, 0.08) !important;
+            color: #dc3545 !important;
+            border-color: transparent !important;
+            box-shadow: inset 0 0 0 1px rgba(220, 53, 69, 0.2);
+        }
+
         /* Search Bar Theme Tweaks */
         [data-theme="dark"] #field-search-input {
             background: rgba(30, 41, 59, 0.7) !important;
@@ -1778,7 +2455,6 @@
                                     автоматизації</h6>
                             </li>
                             <div id="header-saved-automations-list" class="vstack gap-2">
-                                <!-- Dynamic List -->
                                 <div class="text-center text-muted small py-3">Немає активних автоматизацій</div>
                             </div>
                         </ul>
@@ -1825,7 +2501,7 @@
                 <div id="view-constructor" class="view-section">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="fw-bold mb-0">Фільтри сегментації</h5>
-                        <button class="btn btn-sm btn-outline-danger btn-light border-0 text-danger"
+                        <button class="btn btn-sm btn-outline-danger btn-light border-0 text-danger reset-all-btn"
                             onclick="clearFilters()">
                             <i class="bi bi-trash3 me-1"></i>Скинути все
                         </button>
@@ -1839,6 +2515,11 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-funnel text-primary fs-5"></i>
                                     <h6 class="fw-bold mb-0">ПОТОЧНА ФОРМУЛА:</h6>
+                                    <div class="formula-legend ms-2">
+                                        <span class="legend-dot b2c"></span><span>B2C</span>
+                                        <span class="legend-dot b2b ms-1"></span><span>B2B</span>
+                                        <span class="legend-dot universal ms-1"></span><span>Універсальні</span>
+                                    </div>
                                 </div>
                                 <i class="bi bi-chevron-up toggle-icon" id="formula-toggle-icon"></i>
                             </div>
@@ -1937,8 +2618,8 @@
                             </div>
 
                             <!-- Separate Mode Selector Block -->
-                            <div class="d-flex align-items-center px-3 py-2 border-top bg-light-subtle rounded-bottom"
-                                style="gap: 15px;">
+                            <div class="d-flex align-items-center px-3 py-2 bg-light-subtle"
+                                style="gap: 15px; border-radius: 12px; margin: 4px;">
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-gear-wide-connected text-primary small"></i>
                                     <span class="fw-bold text-muted text-uppercase"
@@ -1978,6 +2659,20 @@
                                         }
                                     </style>
                                 </div>
+                                <div
+                                    class="position-relative d-inline-flex bg-white rounded-pill p-1 border shadow-sm scope-pill">
+                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-all"
+                                        value="all" checked>
+                                    <label class="btn btn-sm btn-outline-secondary" for="scope-all">Усі</label>
+
+                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2b"
+                                        value="b2b">
+                                    <label class="btn btn-sm btn-outline-secondary" for="scope-b2b">В-клієнти</label>
+
+                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2c"
+                                        value="b2c">
+                                    <label class="btn btn-sm btn-outline-secondary" for="scope-b2c">С-клієнти</label>
+                                </div>
                                 <div class="ms-3 flex-grow-1 position-relative" style="max-width: 250px;">
                                     <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
                                         style="font-size: 0.75rem;"></i>
@@ -1986,9 +2681,6 @@
                                         id="field-search-input" placeholder="Пошук поля за назвою..."
                                         style="font-size: 0.75rem; height: 32px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);"
                                         oninput="filterFieldsBySearch(this.value)">
-                                </div>
-                                <div class="ms-auto small text-muted font-monospace" style="font-size: 0.65rem;">
-                                    Конструктор v2.4
                                 </div>
                             </div>
                         </div>
@@ -2002,7 +2694,7 @@
                                     <div class="col-md-4" data-field-id="Role">
                                         <label class="form-label">Роль в ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'Role')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Sender">Відправник</option>
                                             <option value="Recipient">Отримувач</option>
                                             <option value="ThirdPerson">Третя особа</option>
@@ -2011,7 +2703,7 @@
                                     <div class="col-md-4" data-field-id="ServiceType">
                                         <label class="form-label">Тип сервісу</label>
                                         <select class="form-select" onchange="addTag(this, 'ServiceType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="WarehouseWarehouse">Відділення-Відділення</option>
                                             <option value="WarehouseDoors">Відділення-Адреса</option>
                                             <option value="DoorsWarehouse">Адреса-Відділення</option>
@@ -2021,7 +2713,7 @@
                                     <div class="col-md-4" data-field-id="Payer">
                                         <label class="form-label">Платник</label>
                                         <select class="form-select" onchange="addTag(this, 'Payer')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Sender">Відправник</option>
                                             <option value="Recipient">Отримувач</option>
                                             <option value="ThirdPerson">Третя особа</option>
@@ -2030,13 +2722,13 @@
                                     <div class="col-md-6" data-field-id="Category1">
                                         <label class="form-label">Категорія 1 рівень</label>
                                         <select class="form-select" onchange="addTag(this, 'Category1')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6" data-field-id="Category2">
                                         <label class="form-label">Категорія 2 рівень</label>
                                         <select class="form-select" onchange="addTag(this, 'Category2')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                         </select>
                                     </div>
 
@@ -2089,7 +2781,7 @@
                                     <div class="col-md-4" data-field-id="CreatedPlace">
                                         <label class="form-label">Місце створення</label>
                                         <select class="form-select" onchange="addTag(this, 'CreatedPlace')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="App">Додаток</option>
                                             <option value="API">API</option>
                                             <option value="Branch">Відділення</option>
@@ -2098,7 +2790,7 @@
                                     <div class="col-md-4" data-field-id="CreatedType">
                                         <label class="form-label">Тип місця створення</label>
                                         <select class="form-select" onchange="addTag(this, 'CreatedType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Static">Стаціонарне</option>
                                             <option value="Mobile">Мобільне</option>
                                         </select>
@@ -2106,7 +2798,7 @@
                                     <div class="col-md-4" data-field-id="LastServicePointType">
                                         <label class="form-label">Тип ост. точки обслуг.</label>
                                         <select class="form-select" onchange="addTag(this, 'LastServicePointType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Branch">Відділення</option>
                                             <option value="Postomat">Поштомат</option>
                                             <option value="Address">Адреса</option>
@@ -2115,7 +2807,7 @@
                                     <div class="col-md-4" data-field-id="Import">
                                         <label class="form-label">Імпорт</label>
                                         <select class="form-select" onchange="addTag(this, 'Import')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2123,7 +2815,7 @@
                                     <div class="col-md-4" data-field-id="Export">
                                         <label class="form-label">Експорт</label>
                                         <select class="form-select" onchange="addTag(this, 'Export')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2131,7 +2823,7 @@
                                     <div class="col-md-4" data-field-id="SecondaryEN">
                                         <label class="form-label">Вторинні ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'SecondaryEN')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2140,7 +2832,7 @@
                                     <div class="col-md-4" data-field-id="CargoType">
                                         <label class="form-label">Тип вантажу</label>
                                         <select class="form-select" onchange="addTag(this, 'CargoType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Parcel">Посилки</option>
                                             <option value="Documents">Документи</option>
                                             <option value="Pallet">Палети</option>
@@ -2157,8 +2849,6 @@
                                                     style="font-size: 0.65rem; height: 18px; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; background: none !important;">
                                                     <option value="EXACT">ТОЧНЕ</option>
                                                     <option value="LIKE" selected>МІСТИТЬ</option>
-                                                    <option value="STARTS_WITH">ПОЧИНАЄТЬСЯ З</option>
-                                                    <option value="ENDS_WITH">ЗАКІНЧУЄТЬСЯ НА</option>
                                                 </select>
                                                 <i class="bi bi-chevron-down text-primary position-absolute end-0"
                                                     style="font-size: 0.6rem; pointer-events: none;"></i>
@@ -2234,7 +2924,7 @@
                                     <div class="col-md-4" data-field-id="SenderType">
                                         <label class="form-label">Тип відправника</label>
                                         <select class="form-select" onchange="addTag(this, 'SenderType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Private">Приватна особа</option>
                                             <option value="Business">Бізнес</option>
                                         </select>
@@ -2247,7 +2937,7 @@
                                     <div class="col-md-4" data-field-id="SenderUnitType">
                                         <label class="form-label">Тип підрозділу відправника</label>
                                         <select class="form-select" onchange="addTag(this, 'SenderUnitType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Branch">Відділення</option>
                                             <option value="Postomat">Поштомат</option>
                                         </select>
@@ -2275,7 +2965,7 @@
                                     <div class="col-md-4" data-field-id="RecipientType">
                                         <label class="form-label">Тип отримувача</label>
                                         <select class="form-select" onchange="addTag(this, 'RecipientType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Private">Приватна особа</option>
                                             <option value="Business">Бізнес</option>
                                         </select>
@@ -2288,7 +2978,7 @@
                                     <div class="col-md-4" data-field-id="RecipientUnitType">
                                         <label class="form-label">Тип підрозділу отримувача</label>
                                         <select class="form-select" onchange="addTag(this, 'RecipientUnitType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Branch">Відділення</option>
                                             <option value="Postomat">Поштомат</option>
                                         </select>
@@ -2484,7 +3174,7 @@
                                     <div class="col-md-4" data-field-id="PayType">
                                         <label class="form-label">Тип оплати</label>
                                         <select class="form-select" onchange="addTag(this, 'PayType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Cash">Готівка</option>
                                             <option value="NonCash">Безготівка</option>
                                             <option value="Card">Картка</option>
@@ -2539,7 +3229,7 @@
                                     <div class="col-md-4" data-field-id="TransferAvailability">
                                         <label class="form-label">Наявність переказу</label>
                                         <select class="form-select" onchange="addTag(this, 'TransferAvailability')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2580,7 +3270,7 @@
                                     <div class="col-md-4" data-field-id="ClientNPU">
                                         <label class="form-label">Клієнт НПУ</label>
                                         <select class="form-select" onchange="addTag(this, 'ClientNPU')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2588,7 +3278,7 @@
                                     <div class="col-md-4" data-field-id="ClientCountry">
                                         <label class="form-label">Країна клієнта</label>
                                         <select class="form-select" onchange="addTag(this, 'ClientCountry')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="UA">Україна</option>
                                             <option value="PL">Польща</option>
                                             <option value="MD">Молдова</option>
@@ -2597,7 +3287,7 @@
                                     <div class="col-md-3" data-field-id="Gender">
                                         <label class="form-label">Стать (розрахункова)</label>
                                         <select class="form-select" onchange="addTag(this, 'Gender')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="M">Чоловіча</option>
                                             <option value="F">Жіноча</option>
                                         </select>
@@ -2624,6 +3314,14 @@
                                                 <i class="bi bi-plus"></i>
                                             </button>
                                         </div>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="AddPhoneAvailability">
+                                        <label class="form-label">Наявність додатк. телефону</label>
+                                        <select class="form-select" onchange="addTag(this, 'AddPhoneAvailability')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-4" data-field-id="Email">
                                         <label class="form-label">Email</label>
@@ -2660,7 +3358,7 @@
                                     <div class="col-md-3" data-field-id="AgeGroup">
                                         <label class="form-label">Вікова група</label>
                                         <select class="form-select" onchange="addTag(this, 'AgeGroup')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="18-25">18-25</option>
                                             <option value="26-35">26-35</option>
                                             <option value="36-45">36-45</option>
@@ -2668,15 +3366,10 @@
                                             <option value="55+">55+</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3" data-field-id="MedianENCount">
-                                        <label class="form-label">Медіанна к-сть ЕН</label>
-                                        <input type="number" class="form-control" placeholder="0"
-                                            onchange="addTextTag(this, 'MedianENCount')">
-                                    </div>
-                                    <div class="col-md-3" data-field-id="EmployeeFlag">
-                                        <label class="form-label">Ознака співробітника</label>
-                                        <select class="form-select" onchange="addTag(this, 'EmployeeFlag')">
-                                            <option value="">...</option>
+                                    <div class="col-md-3" data-field-id="Lead">
+                                        <label class="form-label">Лід</label>
+                                        <select class="form-select" onchange="addTag(this, 'Lead')">
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -2689,12 +3382,51 @@
                                             <option value="No">Ні</option>
                                         </select>
                                     </div>
+                                    <div class="col-md-3" data-field-id="Blacklist">
+                                        <label class="form-label">Чорний список (ЧС)</label>
+                                        <select class="form-select" onchange="addTag(this, 'Blacklist')">
+                                            <option value="">Обери...</option>
+                                            <option value="Yes">Так</option>
+                                            <option value="No">Ні</option>
+                                        </select>
+                                    </div>
                                     <div class="col-md-3" data-field-id="Lead_Flag">
                                         <label class="form-label">Ознака ЛІДа</label>
                                         <select class="form-select" onchange="addTag(this, 'Lead_Flag')">
                                             <option value="">...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3" data-field-id="RegionalCenter">
+                                        <label class="form-label">Регіональний центр</label>
+                                        <select class="form-select" onchange="addTag(this, 'RegionalCenter')">
+                                            <option value="">Обери...</option>
+                                            <option value="Kyiv">Київ</option>
+                                            <option value="Lviv">Львів</option>
+                                            <option value="Odesa">Одеса</option>
+                                            <option value="Dnipro">Дніпро</option>
+                                            <option value="Kharkiv">Харків</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3" data-field-id="ActivitySphere">
+                                        <label class="form-label">Сфера діяльності</label>
+                                        <select class="form-select" onchange="addTag(this, 'ActivitySphere')">
+                                            <option value="">Обери...</option>
+                                            <option value="Retail">Retail</option>
+                                            <option value="IT">IT</option>
+                                            <option value="FMCG">FMCG</option>
+                                            <option value="Logistics">Logistics</option>
+                                            <option value="Auto">Auto</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3" data-field-id="SettlementType">
+                                        <label class="form-label">Тип нас. пункту</label>
+                                        <select class="form-select" onchange="addTag(this, 'SettlementType')">
+                                            <option value="">Обери...</option>
+                                            <option value="City">Місто</option>
+                                            <option value="Village">Село</option>
+                                            <option value="Town">СМТ</option>
                                         </select>
                                     </div>
                                 </div>
@@ -3163,7 +3895,7 @@
                                     <div class="col-md-6" data-field-id="OSVersion">
                                         <label class="form-label">Версія ОС</label>
                                         <select class="form-select" onchange="addTag(this, 'OSVersion')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="iOS">iOS</option>
                                             <option value="Android">Android</option>
                                         </select>
@@ -3171,7 +3903,7 @@
                                     <div class="col-md-6" data-field-id="AppStore">
                                         <label class="form-label">Магазин додатку</label>
                                         <select class="form-select" onchange="addTag(this, 'AppStore')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="AppStore">App Store</option>
                                             <option value="GooglePlay">Google Play</option>
                                             <option value="AppGallery">AppGallery</option>
@@ -3182,6 +3914,32 @@
                                 <h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">
                                     АКТИВНІСТЬ ТА АВТОРИЗАЦІЯ В МД</h6>
                                 <div class="row g-3">
+                                    <div class="col-md-4" data-field-id="DeviceStatus">
+                                        <label class="form-label">Статус девайсу</label>
+                                        <select class="form-select" onchange="addTag(this, 'DeviceStatus')">
+                                            <option value="">Обери...</option>
+                                            <option value="Active">Активний</option>
+                                            <option value="Inactive">Неактивний</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4" data-field-id="DeviceManufacturer">
+                                        <label class="form-label">Виробник девайсу</label>
+                                        <input type="text" class="form-control" placeholder="Напр: Apple"
+                                            onchange="addTextTag(this, 'DeviceManufacturer')">
+                                    </div>
+                                    <div class="col-md-4" data-field-id="DeviceModel">
+                                        <label class="form-label">Модель девайсу</label>
+                                        <input type="text" class="form-control" placeholder="Напр: iPhone 13"
+                                            onchange="addTextTag(this, 'DeviceModel')">
+                                    </div>
+                                    <div class="col-md-12" data-field-id="DeviceProvider">
+                                        <label class="form-label">Постачальник девайсу</label>
+                                        <select class="form-select" onchange="addTag(this, 'DeviceProvider')">
+                                            <option value="">Обери...</option>
+                                            <option value="Provider1">Постачальник 1</option>
+                                            <option value="Provider2">Постачальник 2</option>
+                                        </select>
+                                    </div>
                                     <div class="col-md-4" data-field-id="App_Availability_Group">
                                         <label class="form-label small fw-bold">Наявність додатку</label>
                                         <div class="d-flex flex-column gap-1">
@@ -3241,7 +3999,7 @@
                                     <div class="col-md-4" data-field-id="ConsentType">
                                         <label class="form-label">Вид згоди</label>
                                         <select class="form-select" onchange="addTag(this, 'ConsentType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Marketing">Маркетинг</option>
                                             <option value="DataProcess">Обробка даних</option>
                                         </select>
@@ -3249,7 +4007,7 @@
                                     <div class="col-md-4" data-field-id="ConsentStatus">
                                         <label class="form-label">Статус згоди</label>
                                         <select class="form-select" onchange="addTag(this, 'ConsentStatus')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Given">Надано</option>
                                             <option value="Revoked">Відкликано</option>
                                         </select>
@@ -3257,7 +4015,7 @@
                                     <div class="col-md-4" data-field-id="MarketingConsent">
                                         <label class="form-label">Згода маркетингу</label>
                                         <select class="form-select" onchange="addTag(this, 'MarketingConsent')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -3270,7 +4028,7 @@
                                     <div class="col-md-6" data-field-id="CommsStatus">
                                         <label class="form-label">Статус комунікації</label>
                                         <select class="form-select" onchange="addTag(this, 'CommsStatus')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Subscribed">Підписаний</option>
                                             <option value="Unsubscribed">Відписаний</option>
                                         </select>
@@ -3278,7 +4036,7 @@
                                     <div class="col-md-6" data-field-id="NewsFeed">
                                         <label class="form-label">Стрічка новин</label>
                                         <select class="form-select" onchange="addTag(this, 'NewsFeed')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Subscribed">Підписаний</option>
                                             <option value="Unsubscribed">Відписаний</option>
                                         </select>
@@ -3296,7 +4054,7 @@
                                     <div class="col-md-4" data-field-id="ClientVerification">
                                         <label class="form-label">Верифікація клієнта</label>
                                         <select class="form-select" onchange="addTag(this, 'ClientVerification')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -3304,7 +4062,7 @@
                                     <div class="col-md-4" data-field-id="PhoneVerificationStatus">
                                         <label class="form-label">Статус вер. телефону</label>
                                         <select class="form-select" onchange="addTag(this, 'PhoneVerificationStatus')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Verified">Верифіковано</option>
                                             <option value="NotVerified">Не верифіковано</option>
                                         </select>
@@ -3312,7 +4070,7 @@
                                     <div class="col-md-4" data-field-id="EmailVerificationStatus">
                                         <label class="form-label">Статус вер. Email</label>
                                         <select class="form-select" onchange="addTag(this, 'EmailVerificationStatus')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Verified">Верифіковано</option>
                                             <option value="NotVerified">Не верифіковано</option>
                                         </select>
@@ -3320,7 +4078,7 @@
                                     <div class="col-md-12" data-field-id="FirstVerificationNovaPay">
                                         <label class="form-label">Наяв. першої вериф. клієнта NovaPay</label>
                                         <select class="form-select" onchange="addTag(this, 'FirstVerificationNovaPay')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -3384,7 +4142,7 @@
                                     <div class="col-md-6" data-field-id="ReturnReason">
                                         <label class="form-label">Причина повернення ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'ReturnReason')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Refusal">Відмова</option>
                                             <option value="Expired">Термін зберігання</option>
                                         </select>
@@ -3392,7 +4150,7 @@
                                     <div class="col-md-6" data-field-id="ENProblemType">
                                         <label class="form-label">Вид проблеми з ЕН</label>
                                         <select class="form-select" onchange="addTag(this, 'ENProblemType')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Damaged">Пошкоджено</option>
                                             <option value="Lost">Втрачено</option>
                                         </select>
@@ -3405,7 +4163,7 @@
                                     <div class="col-md-4" data-field-id="PretenseAvailability">
                                         <label class="form-label">Наявність претензій</label>
                                         <select class="form-select" onchange="addTag(this, 'PretenseAvailability')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -3413,7 +4171,7 @@
                                     <div class="col-md-4" data-field-id="PromoAvailability">
                                         <label class="form-label">Наявність промокоду</label>
                                         <select class="form-select" onchange="addTag(this, 'PromoAvailability')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="Yes">Так</option>
                                             <option value="No">Ні</option>
                                         </select>
@@ -3421,7 +4179,7 @@
                                     <div class="col-md-4" data-field-id="Marketplace">
                                         <label class="form-label">Маркетплейс</label>
                                         <select class="form-select" onchange="addTag(this, 'Marketplace')">
-                                            <option value="">...</option>
+                                            <option value="">Обери...</option>
                                             <option value="OLX">OLX</option>
                                             <option value="Prom">Prom</option>
                                             <option value="Rozetka">Rozetka</option>
@@ -3435,7 +4193,6 @@
                         <div class="tab-pane fade" id="pane-c10" role="tabpanel">
                             <div class="tab-pane-card p-0"
                                 style="overflow: hidden; display: flex; flex-direction: column;">
-                                <!-- Formula-style Summary Bar -->
                                 <div class="bg-white border-bottom p-2 d-flex align-items-center gap-3"
                                     style="min-height: 55px; background: linear-gradient(to right, #f8f9fa, #fff);">
                                     <div class="d-flex align-items-center gap-2 border-end pe-3">
@@ -3494,7 +4251,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- 1. Координати -->
                                         <div class="geo-coords-inputs mb-3" id="geo-block-coords">
                                             <div class="row g-2 align-items-end">
                                                 <div class="col-5">
@@ -3518,7 +4274,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- 2. Відділення -->
                                         <div class="geo-branch-inputs mb-3" id="geo-block-branches"
                                             style="display:none;">
                                             <label class="form-label mb-1" style="font-size: 10px;">Пошук
@@ -3533,7 +4288,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- 3. Адреса -->
                                         <div class="geo-address-inputs mb-3" id="geo-block-address"
                                             style="display:none;">
                                             <label class="form-label mb-1" style="font-size: 10px;">Впишіть
@@ -3549,14 +4303,16 @@
 
                                         <div class="mb-3 border-top pt-2">
                                             <label class="form-label mb-1"
-                                                style="font-size: 11px; font-weight: 600;">РАДІУС (КМ)</label>
+                                                style="font-size: 11px; font-weight: 600;">РАДІУС
+                                                (КМ)</label>
                                             <input type="number" class="form-control form-control-sm" id="GeoRadius"
                                                 value="5" oninput="updateLastPointRadius()">
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label mb-1"
-                                                style="font-size: 11px; font-weight: 600;">ЦІЛЬ (ОПЕРАТОР)</label>
+                                                style="font-size: 11px; font-weight: 600;">ЦІЛЬ
+                                                (ОПЕРАТОР)</label>
                                             <select class="form-select form-select-sm" id="geo-target-type"
                                                 onchange="updateLastPointTarget()">
                                                 <option value="Sender">Відправлення</option>
@@ -3613,8 +4369,6 @@
 
                 </div>
 
-
-
                 <!-- VIEW 2: LOOK-A-LIKE -->
                 <div id="view-lookalike" class="view-section d-none">
                     <div class="ai-input-card border rounded-4 bg-white overflow-hidden shadow-sm mb-4"
@@ -3661,7 +4415,7 @@
                             <div class="row g-4">
                                 <!-- Drag & Drop -->
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold" style="font-size: 0.8rem;">Джерело даних</label>
+                                    <label class="form-label fw-bold">Джерело даних</label>
                                     <div class="drop-zone py-3 px-3" id="dropZone"
                                         style="border: 2px dashed var(--border); border-radius: var(--radius-card); background-color: #fafafa; text-align: center; cursor: pointer;">
                                         <i class="bi bi-cloud-upload fs-1 text-primary mb-2"></i>
@@ -3675,7 +4429,7 @@
                                 <!-- Inputs -->
                                 <div class="col-md-6">
                                     <div class="mb-4">
-                                        <label class="form-label fw-bold" style="font-size: 0.8rem;">Website</label>
+                                        <label class="form-label fw-bold">Website</label>
                                         <div class="input-group mb-2">
                                             <input type="text" class="form-control" id="lal-website"
                                                 placeholder="shop.com.ua"
@@ -3686,7 +4440,7 @@
                                         <div id="tags-lal-website" class="tags-container"></div>
                                     </div>
                                     <div>
-                                        <label class="form-label fw-bold" style="font-size: 0.8rem;">ЄДРПОУ</label>
+                                        <label class="form-label fw-bold">ЄДРПОУ</label>
                                         <div class="input-group mb-2">
                                             <input type="text" class="form-control" id="lal-edrpou" placeholder="Код..."
                                                 onkeydown="handleLookalikeInput(event, 'edrpou')">
@@ -3702,8 +4456,7 @@
 
                             <div class="row align-items-end g-3">
                                 <div class="col-md-4">
-                                    <label class="form-label text-muted small d-block"
-                                        style="font-size: 0.8rem;">Глибина аналізу</label>
+                                    <label class="form-label text-muted small d-block">Глибина аналізу</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" id="lal-days" value="30" min="1"
                                             max="365" placeholder="30" onchange="updateState()">
@@ -3715,8 +4468,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="d-flex flex-column h-100">
-                                        <label class="form-label text-muted small" style="font-size: 0.8rem;">Кількість
-                                            посилок</label>
+                                        <label class="form-label text-muted small">Кількість посилок</label>
                                         <div class="d-flex gap-2 align-items-center mb-1">
                                             <select class="form-select form-select-sm"
                                                 style="min-width: 125px; width: auto;"
@@ -4043,7 +4795,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Automation Settings (Specific UI) -->
+
                         <div id="automation-settings-block" style="display:none;"
                             class="border-top pt-3 mt-3 animate-fade-in">
                             <div class="mb-3">
@@ -4071,7 +4823,6 @@
                                     </div>
                                     <div class="col-6" id="automation-day-monthly-container" style="display:none;">
                                         <select id="automation-day-monthly" class="form-select form-select-sm">
-                                            <!-- Generated 1-31 -->
                                             <option value="1">1-ше число</option>
                                             <option value="15">15-те число</option>
                                             <option value="28">28-те число</option>
@@ -4105,7 +4856,6 @@
 
                             <div id="automation-emails-list" class="d-flex flex-wrap gap-1 mb-3"
                                 style="max-height: 80px; overflow-y: auto;">
-                                <!-- Tags for emails go here -->
                                 <span class="text-muted italic small opacity-50">Список пустий...</span>
                             </div>
                         </div>
@@ -4277,7 +5027,6 @@
         </div>
     </div>
 
-    <!-- Modal for Saving Automation -->
     <div class="modal fade" id="saveAutomationModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content overflow-hidden border-0 shadow-lg" style="border-radius: 20px;">
@@ -4308,18 +5057,17 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let map;
-        let selectedPoints = []; // Array of objs: {lat, lng, marker, circle, label}
+        let selectedPoints = [];
         let mapLayer;
         let branchLayerGroup;
 
         function initMap() {
-            if (map) return;
+            if (map || typeof L === 'undefined') return;
             map = L.map('map-container', { zoomControl: false }).setView([48.3794, 31.1656], 6);
             L.control.zoom({ position: 'bottomright' }).addTo(map);
 
@@ -4330,28 +5078,25 @@
             branchLayerGroup = L.layerGroup().addTo(map);
 
             map.on('click', function (e) {
-                const mode = document.querySelector('input[name="geoMode"]:checked').value;
+                const mode = document.querySelector('input[name="geoMode"]:checked')?.value;
 
-                // 1. Поміщаємо координати в поля при кліку
                 document.getElementById('input-geo-lat').value = e.latlng.lat.toFixed(6);
                 document.getElementById('input-geo-lng').value = e.latlng.lng.toFixed(6);
 
-                if (mode === 'coords') {
-                    addSelectionPoint(e.latlng, 'Точка');
-                }
+                if (mode === 'coords') addSelectionPoint(e.latlng, 'Точка');
             });
             showMockBranchesDetailed();
         }
 
         function toggleGeoMode() {
-            const mode = document.querySelector('input[name="geoMode"]:checked').value;
+            const mode = document.querySelector('input[name="geoMode"]:checked')?.value || 'coords';
             document.getElementById('geo-block-coords').style.display = (mode === 'coords' ? 'block' : 'none');
             document.getElementById('geo-block-branches').style.display = (mode === 'branches' ? 'block' : 'none');
             document.getElementById('geo-block-address').style.display = (mode === 'address' ? 'block' : 'none');
         }
 
         function showMockBranchesDetailed() {
-            // Simulated visualization of many branches
+            if (!branchLayerGroup) return;
             branchLayerGroup.clearLayers();
             Object.values(cityCoords).forEach(base => {
                 for (let i = 0; i < 20; i++) {
@@ -4370,12 +5115,12 @@
         }
 
         function addSelectionPoint(latlng, label, customRadius = null, customTarget = null) {
+            if (!map || typeof L === 'undefined') return;
             const defaultRadius = parseFloat(document.getElementById('GeoRadius').value) || 5;
             const radiusKm = customRadius !== null ? customRadius : defaultRadius;
 
             let targetLabel;
             if (customTarget) {
-                // Ukrainian target detection from CSV
                 const tl = customTarget.toLowerCase();
                 if (tl.includes('відпр')) targetLabel = 'Відправлення';
                 else if (tl.includes('отрим')) targetLabel = 'Отримання';
@@ -4387,10 +5132,7 @@
                 targetLabel = select.options[select.selectedIndex].text;
             }
 
-            // Marker
             const marker = L.marker(latlng).addTo(map).bindPopup(`[${targetLabel}] ${label} (${radiusKm}км)`);
-
-            // Radius circle
             const circle = L.circle(latlng, {
                 color: '#4361ee',
                 fillColor: '#4361ee',
@@ -4399,7 +5141,7 @@
                 radius: radiusKm * 1000
             }).addTo(map);
 
-            const point = {
+            selectedPoints.push({
                 lat: latlng.lat,
                 lng: latlng.lng,
                 radius: radiusKm,
@@ -4408,30 +5150,14 @@
                 marker: marker,
                 circle: circle,
                 id: Date.now() + Math.random()
-            };
+            });
 
-            selectedPoints.push(point);
             updateGeoSelectionUI();
-        }
-
-        function toggleUnitType() {
-            const type = document.querySelector('input[name="geoUnitType"]:checked').value;
-            const addressBlock = document.getElementById('geo-unit-address-block');
-            const branchBlock = document.querySelector('.geo-branch-inputs');
-
-            if (type === 'address') {
-                addressBlock.style.display = 'block';
-                branchBlock.style.display = 'none';
-            } else {
-                addressBlock.style.display = 'none';
-                branchBlock.style.display = 'block';
-            }
         }
 
         function addAddressPoint() {
             const addr = document.getElementById('geo-custom-address').value;
-            if (!addr) return;
-            // Simulated geocoding near center or current view
+            if (!addr || !map) return;
             const center = map.getCenter();
             const jittered = [center.lat + (Math.random() - 0.5) * 0.01, center.lng + (Math.random() - 0.5) * 0.01];
             addSelectionPoint(L.latLng(jittered), `Адреса: ${addr}`);
@@ -4440,7 +5166,7 @@
 
         function handleExcelUpload(event) {
             const file = event.target.files[0];
-            if (!file) return;
+            if (!file || !map) return;
 
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -4450,39 +5176,35 @@
 
                 lines.forEach(line => {
                     const parts = line.split(/[,;\t]/);
-                    if (parts.length >= 2) {
-                        const target = parts[0].trim();
-                        const radius = parseFloat(parts[1].trim());
-                        const excelTarget = parts.length >= 3 ? parts[2].trim() : null;
+                    if (parts.length < 2) return;
 
-                        if (target && !isNaN(radius)) {
-                            // Logic: check coords (2 numbers), then branch (mock NP), then address
-                            const coordsParts = target.split(/\s+/);
-                            if (coordsParts.length === 2 && !isNaN(parseFloat(coordsParts[0]))) {
-                                addSelectionPoint(L.latLng(parseFloat(coordsParts[0]), parseFloat(coordsParts[1])), target, radius, excelTarget);
-                                addedCount++;
-                            } else if (target.includes('Відділення') || cityCoords[target]) {
-                                // Simple branch/city heuristic
-                                if (cityCoords[target]) {
-                                    addSelectionPoint(L.latLng(cityCoords[target]), target, radius, excelTarget);
-                                } else {
-                                    // Mock branch jitter
-                                    const cityMatch = target.match(/\((.*?)\)/);
-                                    const city = cityMatch ? cityMatch[1] : 'Київ';
-                                    const base = cityCoords[city] || [50, 30];
-                                    addSelectionPoint(L.latLng([base[0] + Math.random() * 0.01, base[1] + Math.random() * 0.01]), target, radius, excelTarget);
-                                }
-                                addedCount++;
-                            } else {
-                                // Assume it's an address
-                                const center = map.getCenter();
-                                addSelectionPoint(L.latLng([center.lat + (Math.random() - 0.5) * 0.02, center.lng + (Math.random() - 0.5) * 0.02]), target, radius, excelTarget);
-                                addedCount++;
-                            }
+                    const target = parts[0].trim();
+                    const radius = parseFloat(parts[1].trim());
+                    const excelTarget = parts.length >= 3 ? parts[2].trim() : null;
+                    if (!target || Number.isNaN(radius)) return;
+
+                    const coordsParts = target.split(/\s+/);
+                    if (coordsParts.length === 2 && !Number.isNaN(parseFloat(coordsParts[0]))) {
+                        addSelectionPoint(L.latLng(parseFloat(coordsParts[0]), parseFloat(coordsParts[1])), target, radius, excelTarget);
+                        addedCount++;
+                    } else if (target.includes('Відділення') || cityCoords[target]) {
+                        if (cityCoords[target]) {
+                            addSelectionPoint(L.latLng(cityCoords[target]), target, radius, excelTarget);
+                        } else {
+                            const cityMatch = target.match(/\((.*?)\)/);
+                            const city = cityMatch ? cityMatch[1] : 'Київ';
+                            const base = cityCoords[city] || [50, 30];
+                            addSelectionPoint(L.latLng([base[0] + Math.random() * 0.01, base[1] + Math.random() * 0.01]), target, radius, excelTarget);
                         }
+                        addedCount++;
+                    } else {
+                        const center = map.getCenter();
+                        addSelectionPoint(L.latLng([center.lat + (Math.random() - 0.5) * 0.02, center.lng + (Math.random() - 0.5) * 0.02]), target, radius, excelTarget);
+                        addedCount++;
                     }
                 });
-                if (addedCount > 0) {
+
+                if (addedCount > 0 && selectedPoints.length > 0) {
                     map.fitBounds(L.featureGroup(selectedPoints.map(p => p.circle)).getBounds());
                     alert(`Додано ${addedCount} точок з файлу.`);
                 }
@@ -4493,6 +5215,7 @@
         function updateGeoSelectionUI() {
             const chips = document.getElementById('geo-chips-container');
             const count = document.getElementById('geo-points-count');
+            if (!chips || !count) return;
 
             chips.innerHTML = '';
             count.innerText = selectedPoints.length;
@@ -4502,17 +5225,16 @@
                 return;
             }
 
-            selectedPoints.forEach((p, index) => {
-                // Formula Bar Chip
+            selectedPoints.forEach((p) => {
                 const chip = document.createElement('div');
                 chip.className = 'badge bg-white text-dark border d-flex align-items-center gap-2 px-2 py-1 fw-normal shadow-sm';
                 chip.style.fontSize = '11px';
                 chip.style.borderRadius = '6px';
-                chip.style.borderLeft = '3px solid #4361ee !important';
+                chip.style.borderLeft = '3px solid #4361ee';
                 chip.innerHTML = `
                     <span class="text-primary fw-bold" style="font-size: 9px;">[${p.target}]</span>
                     <span>${p.label} <small class="text-primary fw-bold">(${p.radius}км)</small></span>
-                    <i class="bi bi-x-lg text-danger pointer ms-1" style="font-size: 10px;" onclick="removePoint(${p.id})"></i>
+                    <i class="bi bi-x-lg text-danger ms-1" style="font-size: 10px; cursor:pointer;" onclick="removePoint(${p.id})"></i>
                 `;
                 chips.appendChild(chip);
             });
@@ -4521,25 +5243,22 @@
         function addManualPoint() {
             const lat = parseFloat(document.getElementById('input-geo-lat').value);
             const lng = parseFloat(document.getElementById('input-geo-lng').value);
-            if (!isNaN(lat) && !isNaN(lng)) {
-                addSelectionPoint(L.latLng(lat, lng), 'Точка (вручну)');
-            } else {
-                alert('Введіть коректні координати!');
-            }
+            if (!Number.isNaN(lat) && !Number.isNaN(lng)) addSelectionPoint(L.latLng(lat, lng), 'Точка (вручну)');
+            else alert('Введіть коректні координати!');
         }
 
         function removePoint(id) {
             const idx = selectedPoints.findIndex(p => p.id === id);
-            if (idx !== -1) {
-                const p = selectedPoints[idx];
-                map.removeLayer(p.marker);
-                map.removeLayer(p.circle);
-                selectedPoints.splice(idx, 1);
-                updateGeoSelectionUI();
-            }
+            if (idx === -1 || !map) return;
+            const p = selectedPoints[idx];
+            map.removeLayer(p.marker);
+            map.removeLayer(p.circle);
+            selectedPoints.splice(idx, 1);
+            updateGeoSelectionUI();
         }
 
         function clearGeoSelection() {
+            if (!map) return;
             selectedPoints.forEach(p => {
                 map.removeLayer(p.marker);
                 map.removeLayer(p.circle);
@@ -4548,35 +5267,24 @@
             updateGeoSelectionUI();
         }
 
-        function updateMapFromInputs() {
-            const lat = parseFloat(document.getElementById('input-geo-lat').value);
-            const lng = parseFloat(document.getElementById('input-geo-lng').value);
-            if (!isNaN(lat) && !isNaN(lng)) {
-                map.setView([lat, lng], 13);
-                // Highlight point preview logic could go here
-            }
-        }
-
         function updateLastPointRadius() {
             const radiusKm = parseFloat(document.getElementById('GeoRadius').value) || 0;
-            if (selectedPoints.length > 0) {
-                const p = selectedPoints[selectedPoints.length - 1];
-                p.radius = radiusKm;
-                p.circle.setRadius(radiusKm * 1000);
-                p.marker.getPopup().setContent(`[${p.target}] ${p.label} (${radiusKm}км)`);
-                updateGeoSelectionUI();
-            }
+            if (selectedPoints.length === 0) return;
+            const p = selectedPoints[selectedPoints.length - 1];
+            p.radius = radiusKm;
+            p.circle.setRadius(radiusKm * 1000);
+            p.marker.getPopup().setContent(`[${p.target}] ${p.label} (${radiusKm}км)`);
+            updateGeoSelectionUI();
         }
 
         function updateLastPointTarget() {
             const select = document.getElementById('geo-target-type');
             const targetLabel = select.options[select.selectedIndex].text;
-            if (selectedPoints.length > 0) {
-                const p = selectedPoints[selectedPoints.length - 1];
-                p.target = targetLabel;
-                p.marker.getPopup().setContent(`[${targetLabel}] ${p.label} (${p.radius}км)`);
-                updateGeoSelectionUI();
-            }
+            if (selectedPoints.length === 0) return;
+            const p = selectedPoints[selectedPoints.length - 1];
+            p.target = targetLabel;
+            p.marker.getPopup().setContent(`[${targetLabel}] ${p.label} (${p.radius}км)`);
+            updateGeoSelectionUI();
         }
 
         const cityCoords = {
@@ -4605,13 +5313,12 @@
         }
 
         function handleMapSelection(type, value) {
-            if (!value) return;
+            if (!value || !map) return;
             if (type === 'city') {
                 const coords = cityCoords[value];
                 if (coords) {
                     map.setView(coords, 12);
                     populateGeoDatalists(value);
-                    // Оновлюємо поля координат, але НЕ додаємо точку автоматично
                     document.getElementById('input-geo-lat').value = coords[0].toFixed(6);
                     document.getElementById('input-geo-lng').value = coords[1].toFixed(6);
                 }
@@ -4621,21 +5328,12 @@
                 const base = cityCoords[city] || [48, 31];
                 const jittered = [base[0] + (Math.random() - 0.5) * 0.01, base[1] + (Math.random() - 0.5) * 0.01];
                 const latlng = L.latLng(jittered);
-
-                // Оновлюємо поля
                 document.getElementById('input-geo-lat').value = latlng.lat.toFixed(6);
                 document.getElementById('input-geo-lng').value = latlng.lng.toFixed(6);
-
                 addSelectionPoint(latlng, value);
                 map.setView(latlng, 14);
             }
         }
-
-        document.getElementById('tab-c10').addEventListener('shown.bs.tab', function () {
-            initMap();
-            populateGeoDatalists();
-            setTimeout(() => map.invalidateSize(), 200);
-        });
 
         function addGeoFilter() {
             if (selectedPoints.length === 0) {
@@ -4643,9 +5341,17 @@
                 return;
             }
             const desc = selectedPoints.map(p => `${p.label} (${p.radius}км)`).join('; ');
-            const val = selectedPoints.map(p => `${p.lat.toFixed(4)},${p.lng.toFixed(4)},${p.radius}`).join('|');
             addEspoBlock('GeoLocation', 'Географія', desc, window.currentFilterMode || 'Include', null);
             clearGeoSelection();
+        }
+
+        const geoTabBtn = document.getElementById('tab-c10');
+        if (geoTabBtn) {
+            geoTabBtn.addEventListener('shown.bs.tab', function () {
+                initMap();
+                populateGeoDatalists();
+                if (map) setTimeout(() => map.invalidateSize(), 200);
+            });
         }
 
 
@@ -4730,6 +5436,8 @@
         function renderPicker() {
             const picker = document.getElementById('filter-picker');
             picker.innerHTML = '';
+            const runtimeFilterRegistry = buildFilterRegistryFromDOM();
+            const registry = runtimeFilterRegistry.length ? runtimeFilterRegistry : filterRegistry;
 
             if (pickerState.step === 0) {
                 // Step 0: Fields
@@ -4738,14 +5446,14 @@
                 step.className = 'picker-step';
 
                 // Grouping by category
-                const categories = [...new Set(filterRegistry.map(f => f.category))];
+                const categories = [...new Set(registry.map(f => f.category))];
                 categories.forEach(cat => {
                     const groupTitle = document.createElement('div');
                     groupTitle.className = 'px-3 py-2 bg-light small fw-bold text-muted text-uppercase';
                     groupTitle.innerText = cat;
                     step.appendChild(groupTitle);
 
-                    filterRegistry.filter(f => f.category === cat).forEach(f => {
+                    registry.filter(f => f.category === cat).forEach(f => {
                         const item = document.createElement('div');
                         item.className = 'picker-item';
                         item.innerHTML = `<i class="bi ${f.icon} text-primary"></i><span>${f.label}</span>`;
@@ -4825,13 +5533,21 @@
 
                 if (pickerState.field.type === 'select') {
                     let optionsHtml = '';
-                    Object.entries(pickerState.field.options).forEach(([val, label]) => {
+                    Object.entries(pickerState.field.options || {}).forEach(([val, label]) => {
                         optionsHtml += `<option value="${val}">${label}</option>`;
                     });
-                    step.innerHTML = `
-                        <select class="form-select mb-3" id="picker-val-select">${optionsHtml}</select>
-                        <button class="btn btn-primary w-100" onclick="completePickerSelection()">Додати</button>
-                    `;
+
+                    if (optionsHtml) {
+                        step.innerHTML = `
+                            <select class="form-select mb-3" id="picker-val-select">${optionsHtml}</select>
+                            <button class="btn btn-primary w-100" onclick="completePickerSelection()">Додати</button>
+                        `;
+                    } else {
+                        step.innerHTML = `
+                            <input type="text" class="form-control mb-3" id="picker-val-input" placeholder="Введіть значення...">
+                            <button class="btn btn-primary w-100" onclick="completePickerSelection()">Додати</button>
+                        `;
+                    }
                 } else if (pickerState.field.type === 'date') {
                     if (['сьогодні', 'вчора', 'цього тижня', 'цього місяця'].includes(pickerState.fieldOp)) {
                         step.innerHTML = `
@@ -4858,6 +5574,80 @@
                 }
                 picker.appendChild(step);
             }
+        }
+
+        function buildFilterRegistryFromDOM() {
+            const result = [];
+            const seen = new Set();
+            const panes = document.querySelectorAll('#filterTabsContent .tab-pane');
+
+            const cleanLabel = (text) => (text || '').replace(/\s+\[(Тільки B2C|Тільки B2B|Універсальний)\]\s*$/i, '').trim();
+            const iconByType = (type) => {
+                if (type === 'date') return 'bi-calendar-event';
+                if (type === 'number') return 'bi-hash';
+                if (type === 'select') return 'bi-list-check';
+                return 'bi-fonts';
+            };
+
+            panes.forEach((pane) => {
+                const paneId = pane.id;
+                if (!paneId) return;
+                const tabBtn = document.querySelector(`#filterTabs [data-bs-target="#${paneId}"]`);
+                const tabTitle = (tabBtn?.childNodes?.[tabBtn.childNodes.length - 1]?.textContent || tabBtn?.textContent || paneId).trim();
+                const card = pane.querySelector('.tab-pane-card');
+                if (!card) return;
+
+                let subsection = tabTitle;
+                Array.from(card.children).forEach((child) => {
+                    if (child.tagName === 'H6') {
+                        subsection = cleanLabel(child.textContent);
+                        return;
+                    }
+                    if (!child.classList || !child.classList.contains('row')) return;
+
+                    child.querySelectorAll('[data-field-id]').forEach((field) => {
+                        const id = field.dataset.fieldId;
+                        if (!id || seen.has(id)) return;
+                        seen.add(id);
+
+                        const label = cleanLabel(field.dataset.fieldLabel || field.querySelector('.form-label')?.textContent || id);
+                        const rawType = (field.dataset.fieldType || '').toLowerCase();
+                        const selectEl = field.querySelector('select');
+                        const firstInput = field.querySelector('input');
+                        let type = 'text';
+                        if (rawType) type = rawType;
+                        else if (selectEl) type = 'select';
+                        else if (firstInput?.type === 'date') type = 'date';
+                        else if (firstInput?.type === 'number') type = 'number';
+
+                        const item = {
+                            id,
+                            label,
+                            type: (type === 'time' ? 'text' : type),
+                            category: subsection || tabTitle,
+                            icon: iconByType(type)
+                        };
+
+                        if (item.type === 'select' && selectEl) {
+                            const opts = {};
+                            Array.from(selectEl.options).forEach((o) => {
+                                if (o.disabled) return;
+                                const key = (o.value || o.textContent || '').trim();
+                                const val = (o.textContent || '').trim();
+                                if (!key || !val || val === 'Обери...' || val === 'Оберіть варіант...') return;
+                                opts[key] = val;
+                            });
+                            if (Object.keys(opts).length > 0) item.options = opts;
+                            else item.type = 'text';
+                        }
+
+                        if (item.type === 'date' && paneId === 'pane-c10') item.type = 'text';
+                        result.push(item);
+                    });
+                });
+            });
+
+            return result;
         }
 
         function completePickerSelection() {
@@ -4904,14 +5694,15 @@
 
         let espoConditionRegistry = [];
 
-        function addEspoBlock(id, label, value, zone, op, parentId = null, fieldOp = null) {
+        function addEspoBlock(id, label, value, zone, op, parentId = null, fieldOp = null, visibility = null) {
             // Normalize parentId
             parentId = parentId === undefined ? null : parentId;
+            const resolvedVisibility = visibility || getFieldVisibilityById(id, label);
 
             // Advanced conflict check: compare branch signatures
             // We temporarily add the item to generate its signature
             const tempId = Date.now();
-            const tempItem = { label, value, zone, parentId: parentId, id: tempId };
+            const tempItem = { label, value, zone, parentId: parentId, id: tempId, visibility: resolvedVisibility };
             espoConditionRegistry.push(tempItem);
             const newSig = getBranchSignature(tempId);
             espoConditionRegistry.pop(); // Remove it back
@@ -4938,7 +5729,8 @@
                 interOp: 'ТА',
                 bracketOpen: false,
                 bracketClose: false,
-                parentId: parentId
+                parentId: parentId,
+                visibility: resolvedVisibility
             };
             espoConditionRegistry.push(item);
 
@@ -5012,6 +5804,8 @@
             levelItems.forEach((item, index) => {
                 const isEx = item.zone === 'Exclude';
                 const opClass = isEx ? 'op-okrim' : (item.op === 'ТА' ? 'op-ta' : 'op-abo');
+                const visClass = item.visibility === 'b2c' ? 'b2c' : (item.visibility === 'b2b' ? 'b2b' : 'universal');
+                const visText = item.visibility === 'b2c' ? 'ТІЛЬКИ B2C' : (item.visibility === 'b2b' ? 'ТІЛЬКИ B2B' : 'УНІВЕРСАЛЬНІ');
 
                 // Show operator if it's not the first item, OR if it's a nested filter
                 const displayOp = (index === 0 && !item.parentId) ? '' : item.op;
@@ -5024,6 +5818,7 @@
                     <div class="condition-header">
                         ${displayOp ? `<span class="op-tag ${opClass}">${isEx ? 'ОКРІМ' : displayOp}</span>` : ''}
                         <span class="fw-bold ms-1 text-truncate" style="color: #444; font-size: 0.75rem; max-width: 120px;" title="${item.label}">${item.label}</span>
+                        <span class="condition-vis-badge ${visClass}">${visText}</span>
                         <div class="add-sub-btn ms-1" style="width:18px; height:18px;" title="Додати вкладену умову" onclick="openFilterPicker('${zone}', event, ${item.id})">
                             <i class="bi bi-plus"></i>
                         </div>
@@ -5280,7 +6075,8 @@
                 );
 
                 const displayValue = item.fieldOp ? `${item.fieldOp} ${item.value || ''}` : (item.value || item.op);
-                let bit = `<span class="formula-item ${hasConflict ? 'is-conflict' : ''}" ${hasConflict ? 'title="Конфлікт: це значення присутнє в обох зонах"' : ''}><b>${item.label}:</b> ${displayValue}</span>`;
+                const visClass = item.visibility === 'b2c' ? 'vis-b2c' : (item.visibility === 'b2b' ? 'vis-b2b' : 'vis-universal');
+                let bit = `<span class="formula-item ${visClass} ${hasConflict ? 'is-conflict' : ''}" ${hasConflict ? 'title="Конфлікт: це значення присутнє в обох зонах"' : ''}><b>${item.label}:</b> ${displayValue}</span>`;
                 const childrenFormula = buildRecursiveFormula(item.id, zone);
                 if (childrenFormula) {
                     // Use the operator of the first child to join parent with its sub-group.
@@ -5327,10 +6123,222 @@
             document.getElementById(`view-${tabId}`).classList.remove('d-none');
 
             // Update Nav
-            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.querySelectorAll('#app-views-nav .nav-link').forEach(el => el.classList.remove('active'));
+            const navBtn = document.getElementById(`nav-btn-${tabId}`) || document.getElementById(`tab-${tabId}`);
+            if (navBtn) navBtn.classList.add('active');
 
             updateState();
+        }
+
+        function getCurrentFieldScope() {
+            return document.querySelector('input[name="field-scope-mode"]:checked')?.value || 'all';
+        }
+
+        function parseVisibilityFromLabel(label) {
+            if (!label) return null;
+            const m = String(label).match(/\[(Тільки B2C|Тільки B2B|Універсальний)\]\s*$/);
+            if (!m) return null;
+            if (m[1] === 'Тільки B2C') return 'b2c';
+            if (m[1] === 'Універсальний') return 'universal';
+            if (m[1] === 'Тільки B2B') return 'b2b';
+            return null;
+        }
+
+        function getFieldVisibilityType(field) {
+            const raw = (field.dataset.fieldVisibility || '').toLowerCase();
+            if (raw === 'b2c' || raw === 'universal' || raw === 'b2b') return raw;
+            const fromLabel = parseVisibilityFromLabel(field.dataset.fieldLabel || field.querySelector('.form-label')?.innerText || '');
+            if (fromLabel) return fromLabel;
+
+            // Check context from nearest tab-pane if missing dataset
+            const tabPane = field.closest('.tab-pane');
+            if (tabPane) {
+                const tabId = tabPane.id.replace('pane-', 'tab-');
+                const tabBtn = document.getElementById(tabId);
+                if (tabBtn) {
+                    const txt = tabBtn.innerText.toUpperCase();
+                    if (txt.includes('B2C') || txt.includes('В2С')) return 'b2c';
+                    if (txt.includes('B2B') || txt.includes('В2В')) return 'b2b';
+                }
+            }
+            return 'all';
+        }
+
+        function matchesFieldScope(field, scope) {
+            if (scope === 'all') return true;
+            const t = getFieldVisibilityType(field);
+            if (t === 'all' || t === 'universal') return true; // universal fields visible in ALL modes
+            return t === scope; // b2c fields only in b2c mode, b2b only in b2b
+        }
+
+        function updateTabCount(btn, count, show) {
+            if (!btn) return;
+            let badge = btn.querySelector('.tab-count-badge');
+            if (!show) {
+                if (badge) badge.remove();
+                return;
+            }
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'tab-count-badge';
+                btn.appendChild(badge);
+            }
+            badge.innerText = String(count);
+        }
+
+        function getFieldVisibilityById(fieldId, label = '') {
+            // 1. Check CSV category map first (most reliable after CSV rebuild)
+            if (window._csvCategoryMap && window._csvCategoryMap[fieldId]) {
+                return window._csvCategoryMap[fieldId].visibility || 'universal';
+            }
+            // 2. Try DOM lookup
+            const safeId = (window.CSS && CSS.escape) ? CSS.escape(fieldId) : String(fieldId).replace(/"/g, '\\"');
+            const fieldEl = document.querySelector(`[data-field-id="${safeId}"]`);
+            if (fieldEl) return getFieldVisibilityType(fieldEl);
+            // 3. Parse from label text
+            return parseVisibilityFromLabel(label) || 'universal';
+        }
+
+        function applyScopeTheme(scope) {
+            document.body.setAttribute('data-scope-mode', scope || 'all');
+        }
+
+        function applyFieldSearch(query) {
+            const q = (query || '').trim().toLowerCase();
+            const scope = getCurrentFieldScope();
+            const tabItems = document.querySelectorAll('#filterTabs .nav-item');
+            const tabsContent = document.getElementById('filterTabsContent');
+            let firstVisibleBtn = null;
+
+            if (tabsContent) {
+                if (q) tabsContent.classList.add('is-searching');
+                else tabsContent.classList.remove('is-searching');
+            }
+
+            tabItems.forEach(item => {
+                const btn = item.querySelector('.nav-link');
+                const target = btn?.getAttribute('data-bs-target');
+                if (!btn || !target) return;
+                const pane = document.querySelector(target);
+                if (!pane) return;
+
+                const fields = pane.querySelectorAll('[data-field-id]');
+                const blockVis = pane.dataset.blockVisibility || item.dataset.blockVisibility || '';
+                const isAlwaysVisible = blockVis === 'always' || pane.id === 'pane-c10';
+                let paneHasVisible = isAlwaysVisible && !q;
+                let paneMatchCount = 0;
+
+                // Skip entire block if its block-level visibility doesn't match scope
+                if (!isAlwaysVisible && scope !== 'all' && blockVis && blockVis !== 'mixed') {
+                    // Block has single visibility: check if it matches scope or is universal
+                    if (blockVis !== scope && blockVis !== 'universal') {
+                        fields.forEach(f => f.style.display = 'none');
+                        item.style.display = 'none';
+                        pane.style.display = q ? 'none' : '';
+                        updateTabCount(btn, 0, false);
+                        return;
+                    }
+                }
+
+                fields.forEach(field => {
+                    const label = field.dataset.fieldLabel || field.querySelector('.form-label')?.innerText || '';
+                    const scopeMatch = matchesFieldScope(field, scope);
+                    const textMatch = !q || label.toLowerCase().includes(q);
+                    const match = scopeMatch && textMatch;
+                    field.style.display = match ? '' : 'none';
+                    if (match) {
+                        paneHasVisible = true;
+                        paneMatchCount++;
+                    }
+                });
+
+                const card = pane.querySelector('.tab-pane-card');
+                if (card) {
+                    const syncRowsAndHeaders = (container) => {
+                        let pendingHeaders = [];
+                        Array.from(container.children).forEach((child) => {
+                            if (child.tagName === 'H6') {
+                                pendingHeaders.push(child);
+                                return;
+                            }
+                            if (child.classList && child.classList.contains('row')) {
+                                const fieldsInRow = Array.from(child.querySelectorAll('[data-field-id]'));
+                                const rowHasVisible = fieldsInRow.length > 0
+                                    ? fieldsInRow.some(f => f.style.display !== 'none')
+                                    : (!q && scope === 'all');
+                                child.style.display = rowHasVisible ? '' : 'none';
+                                if (pendingHeaders.length) {
+                                    pendingHeaders.forEach((h) => { h.style.display = rowHasVisible ? '' : 'none'; });
+                                    pendingHeaders = [];
+                                }
+                            } else if (child.classList && child.classList.contains('designer-subsection-wrapper')) {
+                                syncRowsAndHeaders(child);
+                                const wrapperHasVisible = Array.from(child.querySelectorAll('[data-field-id]'))
+                                    .some(f => f.style.display !== 'none');
+                                child.style.display = wrapperHasVisible ? '' : 'none';
+                                if (pendingHeaders.length) {
+                                    pendingHeaders.forEach((h) => { h.style.display = wrapperHasVisible ? '' : 'none'; });
+                                    pendingHeaders = [];
+                                }
+                            } else if (child.classList && child.classList.contains('divider')) {
+                                child.style.display = q ? 'none' : '';
+                            } else if (child.querySelector) {
+                                if (!q) {
+                                    child.style.display = '';
+                                    return;
+                                }
+                                const hasVisibleFields = Array.from(child.querySelectorAll('[data-field-id]'))
+                                    .some(f => f.style.display !== 'none');
+                                if (!hasVisibleFields && !child.querySelector('.row, .designer-subsection-wrapper')) {
+                                    child.style.display = 'none';
+                                }
+                            }
+                        });
+                        if (pendingHeaders.length) {
+                            pendingHeaders.forEach((h) => { h.style.display = 'none'; });
+                        }
+                    };
+                    syncRowsAndHeaders(card);
+                }
+
+                item.style.display = paneHasVisible ? '' : 'none';
+                pane.style.display = q ? (paneHasVisible ? 'block' : 'none') : '';
+                updateTabCount(btn, paneMatchCount, q.length > 0);
+                if (paneHasVisible && !firstVisibleBtn) firstVisibleBtn = btn;
+            });
+
+            if (q) return;
+
+            const activeBtn = document.querySelector('#filterTabs .nav-link.active');
+            const activeHidden = activeBtn?.closest('.nav-item')?.style.display === 'none';
+            if ((activeHidden || !activeBtn) && firstVisibleBtn) {
+                bootstrap.Tab.getOrCreateInstance(firstVisibleBtn).show();
+            }
+        }
+
+        function initFieldSearch() {
+            const input = document.getElementById('field-search-input');
+            if (!input) return;
+
+            applyScopeTheme(getCurrentFieldScope());
+
+            input.addEventListener('input', (e) => {
+                applyFieldSearch(e.target.value);
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    input.value = '';
+                    applyFieldSearch('');
+                }
+            });
+
+            document.querySelectorAll('input[name="field-scope-mode"]').forEach(el => {
+                el.addEventListener('change', () => {
+                    applyScopeTheme(getCurrentFieldScope());
+                    applyFieldSearch(input.value);
+                });
+            });
         }
 
         // Helper to create tag
@@ -5395,6 +6403,7 @@
 
             if (operator === 'LIKE') {
                 fieldOp = 'містить';
+                if (type === 'CargoDesc' && !value.includes('%')) value = `%${value}%`;
             } else if (operator === 'EXACT') {
                 fieldOp = 'точне';
             } else if (operator === 'STARTS_WITH') {
@@ -5445,6 +6454,7 @@
             const toInput = document.getElementById(baseId + '-to');
             if (toInput) {
                 toInput.disabled = isAll;
+                toInput.classList.toggle('range-end-disabled', !!isAll);
                 if (isAll) toInput.value = '';
             }
         }
@@ -5463,6 +6473,84 @@
             document.getElementById(fromId).value = "";
             document.getElementById(toId).value = "";
             updateState();
+        }
+
+        function renderGeneratedLabel(labelEl, fullLabel) {
+            if (!labelEl) return;
+            const match = fullLabel.match(/^(.*)\s\[(Тільки B2C|Тільки B2B|Універсальний)\]\s*$/);
+            if (!match) {
+                labelEl.textContent = fullLabel;
+                return;
+            }
+            labelEl.textContent = match[1].trim();
+        }
+
+        function initGeneratedFieldHandlers() {
+            if (window._generatedFieldHandlersBound) return;
+            window._generatedFieldHandlersBound = true;
+
+            document.addEventListener('change', (event) => {
+                const target = event.target;
+                const field = target.closest('[data-field-id][data-auto-generated="1"]');
+                if (!field) return;
+
+                const fieldId = field.dataset.fieldId;
+                const label = field.dataset.fieldLabel || field.querySelector('.form-label')?.innerText?.trim() || fieldId;
+                const zone = window.currentFilterMode || 'Include';
+
+                if (target.matches('select.js-generated-select')) {
+                    if (!target.value) return;
+                    const value = target.options[target.selectedIndex]?.text || target.value;
+                    addEspoBlock(fieldId, label, value, zone, 'ТА');
+                    target.value = '';
+                    updateState();
+                    return;
+                }
+
+                if (target.matches('input.js-generated-input, textarea.js-generated-input')) {
+                    const value = target.value.trim();
+                    if (!value) return;
+                    addEspoBlock(fieldId, label, value, zone, 'ТА');
+                    target.value = '';
+                    updateState();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key !== 'Enter') return;
+                const target = event.target;
+                if (!target.matches('input.js-generated-input, textarea.js-generated-input')) return;
+
+                const field = target.closest('[data-field-id][data-auto-generated="1"]');
+                if (!field) return;
+                event.preventDefault();
+                target.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+
+            document.addEventListener('click', (event) => {
+                const btn = event.target.closest('.js-generated-range-add');
+                if (!btn) return;
+
+                const field = btn.closest('[data-field-id][data-auto-generated="1"]');
+                if (!field) return;
+
+                const inputs = field.querySelectorAll('.input-group input');
+                const from = inputs[0]?.value || '';
+                const to = inputs[1]?.value || '';
+                if (!from && !to) return;
+
+                let value = '';
+                if (from && to) value = `${from} - ${to}`;
+                else if (from) value = `з ${from}`;
+                else value = `до ${to}`;
+
+                const fieldId = field.dataset.fieldId;
+                const label = field.dataset.fieldLabel || field.querySelector('.form-label')?.innerText?.trim() || fieldId;
+                addEspoBlock(fieldId, label, value, window.currentFilterMode || 'Include', 'ТА');
+
+                inputs.forEach((input) => input.value = '');
+                updateState();
+            });
         }
 
         function removeTag(iconEl) {
@@ -5673,40 +6761,7 @@
             }, 300);
         }
 
-        // --- 4. LOOK-A-LIKE LOGIC ---
-        function handleLookalikeInput(event, type) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                addLalTag(type);
-            }
-        }
-
-        function addLalTag(type) {
-            const input = document.getElementById(`lal-${type}`);
-            const val = input.value.trim();
-            if (!val) return;
-
-            const container = document.getElementById(`tags-lal-${type}`);
-            const pill = document.createElement('div');
-            pill.className = 'tag-pill';
-            pill.innerHTML = `${val} <i class="bi bi-x" onclick="this.parentElement.remove(); updateState()"></i>`;
-            container.appendChild(pill);
-
-            input.value = '';
-            updateState();
-        }
-
-        // --- 5. AI ASSISTANT LOGIC ---
-        // --- 5. GENERATION Logic (Unified) ---
-        function fillAiPrompt(text) {
-            document.getElementById('ai-prompt').value = text;
-        }
-
-        // Wrapper for AI specific (backward compatibility or specific logic)
-        function handleAiRequest() {
-            handleGeneration('ai');
-        }
-
+        // --- 4. LOOK-A-LIKE / AI LOGIC ---
         // --- NEW VIEW SWITCHING ---
         function switchView(viewId) {
             // Updated Nav Pias
@@ -5739,7 +6794,6 @@
             handleGeneration('ai');
         }
 
-        // Simple mock for input handling in lookalike
         function handleLookalikeInput(event, type) {
             if (event.key === 'Enter') {
                 event.preventDefault();
@@ -5765,8 +6819,9 @@
             const container = document.getElementById('tags-lal-' + type);
             const pill = document.createElement('div');
             pill.className = 'tag-pill';
-            pill.innerHTML = `${value} <i class="bi bi-x" onclick="this.parentElement.remove()"></i>`;
+            pill.innerHTML = `${value} <i class="bi bi-x" onclick="this.parentElement.remove(); updateState()"></i>`;
             container.appendChild(pill);
+            updateState();
         }
 
         function fillAiPrompt(text) {
@@ -6018,7 +7073,7 @@
         // --- 6. PRESETS LOGIC ---
         function applyPersona(type) {
             // Need to switch to Constructor tab if not active
-            switchView('constructor');
+            switchTab('constructor');
 
             // Clear first
             clearFilters();
@@ -6264,7 +7319,7 @@
 
             // Restore visual state
             clearFilters();
-            switchView('constructor'); // Ensure we are on constructor
+            switchTab('constructor'); // Ensure we are on constructor
 
             setTimeout(() => {
                 // Check tags text and restore (mocking)
@@ -6326,6 +7381,7 @@
 
         function renderAutomationEmails() {
             const list = document.getElementById('automation-emails-list');
+            if (!list) return;
             if (automationEmails.length === 0) {
                 list.innerHTML = '<span class="text-muted italic small opacity-50">Список пустий...</span>';
                 return;
@@ -6389,7 +7445,6 @@
                 freqData.day = daySelect.value;
             }
 
-            // Collect active tags/filters
             const tags = [];
             document.querySelectorAll('.tag-pill').forEach(pill => {
                 tags.push(pill.innerText.replace('x', '').trim());
@@ -6478,38 +7533,31 @@
             const a = saved.find(x => x.id == id);
             if (!a) return;
 
-            // Restore filters
             clearFilters();
             switchView('constructor');
 
-            // Close the dropdown menu
             const dropdownEl = document.querySelector('[data-bs-toggle="dropdown"][title="Мої сегменти"]');
             if (dropdownEl) {
                 const dropdown = bootstrap.Dropdown.getOrCreateInstance(dropdownEl);
                 if (dropdown) dropdown.hide();
             }
 
-            // Set automation UI state
             document.getElementById('export-action-type').value = 'automation';
             toggleExportFields();
 
-            // Scroll to the settings area
             setTimeout(() => {
                 const settingsBlock = document.getElementById('automation-settings-block');
                 if (settingsBlock) {
                     settingsBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // Visual feedback: highlight the block
                     settingsBlock.style.transition = 'background-color 0.5s';
                     settingsBlock.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
                     setTimeout(() => settingsBlock.style.backgroundColor = 'transparent', 1500);
                 }
             }, 300);
 
-            // Restore emails
             automationEmails = [...a.emails];
             renderAutomationEmails();
 
-            // Restore frequency UI
             if (a.freqData) {
                 document.getElementById('automation-period').value = a.freqData.period;
                 toggleAutomationPeriodFields();
@@ -6518,7 +7566,6 @@
                 if (a.freqData.period === 'monthly') document.getElementById('automation-day-monthly').value = a.freqData.day;
             }
 
-            // Restore Export Settings
             if (a.format) {
                 document.getElementById('constructor-format-unified').value = a.format;
                 updateMultiSelect('constructor-format-unified');
@@ -6531,49 +7578,40 @@
                 toggleExportCountInput();
             }
 
-            // Restore Espo Filters
             if (a.espoConditions) {
                 espoConditionRegistry = JSON.parse(JSON.stringify(a.espoConditions));
                 renderEspoUI();
                 updateFiltersCount();
 
-                // Ensure the filters summary is visible
                 const summaryBlock = document.getElementById('active-filters-summary');
                 if (summaryBlock) summaryBlock.classList.remove('d-none');
 
-                // Expand the formula card to show the restored filters
                 const formulaCard = document.getElementById('main-formula-card');
                 if (formulaCard) formulaCard.classList.remove('is-collapsed');
             }
 
             setTimeout(() => {
-                // Restore any legacy tags (pills)
                 if (a.tags && a.tags.length > 0) {
                     const summaryBlock = document.getElementById('active-filters-summary');
                     if (summaryBlock) summaryBlock.classList.remove('d-none');
 
                     a.tags.forEach(tagText => {
                         const parts = tagText.split(':');
-                        if (parts.length > 1) {
-                            addMockTag('c4', parts[0].trim(), parts[1].trim());
-                        }
+                        if (parts.length > 1) addMockTag('c4', parts[0].trim(), parts[1].trim());
                     });
                 }
                 updateState();
             }, 100);
 
-            // Highlight name in modal if they decide to re-save
             document.getElementById('automationNameInput').value = a.name;
             editingAutomationId = a.id;
 
-            // Optional: Close the dropdown menu again just in case (double check)
             const dropdownToggle = document.querySelector('[data-bs-toggle="dropdown"][title="Мої сегменти"]');
             if (dropdownToggle) {
                 const instance = bootstrap.Dropdown.getInstance(dropdownToggle);
                 if (instance) instance.hide();
             }
 
-            // Visual feedback - simple toast-like message
             const toast = document.createElement('div');
             toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-4 bg-dark text-white p-3 rounded shadow-lg animate-fade-in';
             toast.style.zIndex = '9999';
@@ -6589,10 +7627,11 @@
         renderSavedSegments();
         populateMonthlyDays();
         renderSavedAutomations();
+        renderAutomationEmails();
 
         // 7.4 EXPORT MOCK CSV
         function handleExportAction() {
-            const select = document.querySelector('.sidebar-sticky select');
+            const select = document.getElementById('export-action-type');
             const action = select ? select.value : 'csv';
 
             if (action === 'csv') {
@@ -6636,6 +7675,11 @@
             card.classList.toggle('is-collapsed');
         }
 
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl);
+        });
+
         // --- UNIVERSAL DESIGN MODE PRO (Consolidated) ---
     </script>
     <div id="filter-picker" class="filter-picker-overlay"></div>
@@ -6663,6 +7707,7 @@
     </div>
 </body>
 
+<script src="./csv-layout.js"></script>
 <script>
     // --- CONSOLIDATED DESIGN MODE PRO LOGIC ---
     let designModeActive = false;
@@ -6671,8 +7716,8 @@
     // Global Styles Config
     let designConfig = {
         tabFontSize: 13,
-        labelFontSize: 11,
-        subsectionFontSize: 15,
+        labelFontSize: 12,
+        subsectionFontSize: 12,
         fieldSizeDefault: 4
     };
 
@@ -6969,16 +8014,66 @@
     }
 
     function addDesignerSection() {
-        const name = prompt('Назва:', 'Новий розділ'); if (!name) return;
+        const modalId = 'addSectionModal';
+        let old = document.getElementById(modalId);
+        if (old) old.remove();
+
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+        <div class="modal fade" id="${modalId}" tabindex="-1" style="z-index: 11000;">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
+                    <div class="modal-header border-0 pb-0">
+                        <h6 class="modal-title text-white small opacity-75"><i class="bi bi-plus-circle me-1 text-primary"></i>Новий розділ</h6>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-3">
+                        <div class="mb-3">
+                            <label class="small text-white-50 d-block mb-1">Назва розділу:</label>
+                            <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary" id="new-section-name" placeholder="Новий розділ" value="Новий розділ">
+                        </div>
+                        <div class="mb-3">
+                            <label class="small text-white-50 d-block mb-2"><i class="bi bi-eye me-1"></i>Видимість:</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="new-section-vis" id="nsv-b2c" value="b2c">
+                                <label class="btn btn-sm btn-outline-primary" for="nsv-b2c">Тільки B2C</label>
+                                <input type="radio" class="btn-check" name="new-section-vis" id="nsv-b2b" value="b2b">
+                                <label class="btn btn-sm btn-outline-warning" for="nsv-b2b">Тільки B2B</label>
+                                <input type="radio" class="btn-check" name="new-section-vis" id="nsv-universal" value="universal" checked>
+                                <label class="btn btn-sm btn-outline-success" for="nsv-universal">Універсальні</label>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-sm w-100 rounded-pill" onclick="confirmAddSection()">
+                            <i class="bi bi-check-lg me-1"></i>Створити
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        document.body.appendChild(wrapper);
+        new bootstrap.Modal(document.getElementById(modalId)).show();
+    }
+
+    function confirmAddSection() {
+        const name = document.getElementById('new-section-name')?.value?.trim() || 'Новий розділ';
+        const visRadio = document.querySelector('input[name="new-section-vis"]:checked');
+        const vis = visRadio ? visRadio.value : 'universal';
+
         const id = 'pane-custom-' + Date.now();
         const tabsList = document.getElementById('filterTabs');
         const addBtnItem = document.querySelector('.add-tab-item');
         const newTab = document.createElement('li'); newTab.className = 'nav-item';
-        newTab.innerHTML = `<button class="nav-link w-100 text-start" data-bs-toggle="tab" data-bs-target="#${id}" type="button"><i class="bi bi-collection me-1"></i> ${name}</button>`;
+        newTab.dataset.blockVisibility = vis;
+        newTab.innerHTML = `<button class="nav-link w-100 text-start" data-bs-toggle="tab" data-bs-target="#${id}" type="button" data-block-visibility="${vis}"><i class="bi bi-collection me-1"></i> ${name}</button>`;
         tabsList.insertBefore(newTab, addBtnItem);
         const newPane = document.createElement('div'); newPane.className = 'tab-pane fade'; newPane.id = id;
+        newPane.dataset.blockVisibility = vis;
         newPane.innerHTML = `<div class="tab-pane-card"><div class="row g-3"></div></div>`;
         document.querySelector('.tab-content').appendChild(newPane);
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addSectionModal'));
+        if (modal) modal.hide();
+
         destroyDesignMode(); new bootstrap.Tab(newTab.querySelector('button')).show();
         setTimeout(initDesignMode, 100); saveToLocalSilent();
     }
@@ -6990,7 +8085,7 @@
         destroyDesignMode(); initDesignMode(); saveToLocalSilent();
     }
 
-    function getFieldHTML(type, name) {
+    function getFieldHTML(type, name, selectOptions) {
         let input = '';
         if (type === 'date' || type === 'time') {
             const inputType = type;
@@ -7007,24 +8102,23 @@
                     <input type="${inputType}" class="form-control px-2">
                     <span class="input-group-text bg-light px-1" style="font-size: 0.7rem;">по</span>
                     <input type="${inputType}" class="form-control px-2">
-                    <button class="btn btn-outline-primary px-2" type="button">
+                    <button class="btn btn-outline-primary px-2 js-generated-range-add" type="button">
                         <i class="bi bi-plus"></i>
                     </button>
                 </div>`;
             return input;
         } else if (type === 'select') {
-            input = `<select class="form-select">
+            const opts = selectOptions || '<option>Варіант 1</option><option>Варіант 2</option><option>Варіант 3</option>';
+            input = `<select class="form-select js-generated-select">
                         <option selected disabled>Оберіть варіант...</option>
-                        <option>Варіант 1</option>
-                        <option>Варіант 2</option>
-                        <option>Варіант 3</option>
+                        ${opts}
                     </select>`;
         } else if (type === 'number') {
-            input = `<input type="number" class="form-control" placeholder="0">`;
+            input = `<input type="number" class="form-control js-generated-input" placeholder="0">`;
         } else if (type === 'textarea') {
-            input = `<textarea class="form-control" rows="2" placeholder="..."></textarea>`;
+            input = `<textarea class="form-control js-generated-input" rows="2" placeholder="..."></textarea>`;
         } else {
-            input = `<input type="text" class="form-control" placeholder="...">`;
+            input = `<input type="text" class="form-control js-generated-input" placeholder="...">`;
         }
         return `<label class="form-label">${name}</label>${input}`;
     }
@@ -7032,7 +8126,6 @@
     function addDesignerField(btn) {
         const name = prompt('Назва поля:', 'Нове поле'); if (!name) return;
 
-        // Show selection modal instead of prompt
         const modalId = 'fieldTypeModal';
         let modalEl = document.getElementById(modalId);
         if (modalEl) modalEl.remove();
@@ -7048,39 +8141,93 @@
 
         const div = document.createElement('div');
         div.innerHTML = `
-        <div class="modal fade" id="${modalId}" tabindex="-1" style="z-index: 11000;">
+        <div class="modal fade" id="${modalId}" tabindex="-1" style="z-index: 11000;" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
                     <div class="modal-header border-0 pb-0">
-                        <h6 class="modal-title text-white small opacity-75">Оберіть тип поля для "${name}"</h6>
+                        <h6 class="modal-title text-white small opacity-75">Нове поле: "${name}"</h6>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body p-3">
-                        <div class="list-group list-group-flush bg-transparent">
+                        <!-- Visibility selector -->
+                        <div class="mb-3">
+                            <label class="small text-white-50 d-block mb-2"><i class="bi bi-eye me-1"></i>Видимість (обов'язково):</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="new-field-vis" id="nfv-b2c" value="b2c">
+                                <label class="btn btn-sm btn-outline-primary" for="nfv-b2c">Тільки B2C</label>
+                                <input type="radio" class="btn-check" name="new-field-vis" id="nfv-b2b" value="b2b">
+                                <label class="btn btn-sm btn-outline-warning" for="nfv-b2b">Тільки B2B</label>
+                                <input type="radio" class="btn-check" name="new-field-vis" id="nfv-universal" value="universal" checked>
+                                <label class="btn btn-sm btn-outline-success" for="nfv-universal">Універсальні</label>
+                            </div>
+                        </div>
+                        <!-- Type selector -->
+                        <label class="small text-white-50 d-block mb-2"><i class="bi bi-ui-checks me-1"></i>Тип поля:</label>
+                        <div class="list-group list-group-flush bg-transparent" id="field-type-list">
                             ${types.map(t => `
-                                <button type="button" class="list-group-item list-group-item-action bg-transparent text-white border-secondary border-opacity-25 d-flex align-items-center py-2 px-1" 
-                                    onclick="confirmAddField('${t.id}', '${name}', '${btn.closest('.row.g-3').parentElement.id || ''}', this)">
+                                <button type="button" class="list-group-item list-group-item-action bg-transparent text-white border-secondary border-opacity-25 d-flex align-items-center py-2 px-1"
+                                    data-field-type="${t.id}"
+                                    onclick="selectDesignerFieldType(this, '${t.id}')">
                                     <i class="bi ${t.icon} text-primary me-2 fs-5"></i>
                                     <span class="small">${t.label}</span>
                                 </button>
                             `).join('')}
                         </div>
+                        <!-- Dropdown values (hidden by default) -->
+                        <div id="dropdown-values-container" style="display:none;" class="mt-3">
+                            <label class="small text-white-50 d-block mb-1"><i class="bi bi-list-ol me-1"></i>Значення для списку (через кому):</label>
+                            <textarea class="form-control form-control-sm bg-dark text-white border-secondary" id="dropdown-values-input" rows="3" placeholder="Варіант 1, Варіант 2, Варіант 3..."></textarea>
+                        </div>
+                        <!-- Confirm -->
+                        <button class="btn btn-primary btn-sm w-100 mt-3 rounded-pill" id="confirm-add-field-btn" disabled onclick="confirmAddFieldFinal('${name.replace(/'/g, "\\'")}')">
+                            <i class="bi bi-check-lg me-1"></i>Додати поле
+                        </button>
                     </div>
                 </div>
             </div>
         </div>`;
         document.body.appendChild(div);
 
-        // Save button reference context for later
         window._currentAddFieldBtn = btn;
+        window._selectedFieldType = null;
 
         const modal = new bootstrap.Modal(document.getElementById(modalId));
         modal.show();
     }
 
-    function confirmAddField(type, name, parentId, itemBtn) {
+    function selectDesignerFieldType(btnEl, type) {
+        // Highlight selected
+        document.querySelectorAll('#field-type-list .list-group-item').forEach(el => {
+            el.classList.remove('border-primary', 'border-opacity-100');
+            el.style.background = '';
+        });
+        btnEl.classList.add('border-primary', 'border-opacity-100');
+        btnEl.style.background = 'rgba(67,97,238,0.15)';
+
+        window._selectedFieldType = type;
+        document.getElementById('confirm-add-field-btn').disabled = false;
+
+        // Show/hide dropdown values input
+        const dvc = document.getElementById('dropdown-values-container');
+        if (dvc) dvc.style.display = (type === 'select') ? 'block' : 'none';
+    }
+
+    function confirmAddFieldFinal(name) {
         const btn = window._currentAddFieldBtn;
-        if (!btn) return;
+        const type = window._selectedFieldType;
+        if (!btn || !type) return;
+
+        const visRadio = document.querySelector('input[name="new-field-vis"]:checked');
+        const visibility = visRadio ? visRadio.value : 'universal';
+
+        // Get dropdown values if select
+        let selectOptions = '';
+        if (type === 'select') {
+            const raw = (document.getElementById('dropdown-values-input')?.value || '').trim();
+            if (raw) {
+                selectOptions = raw.split(',').map(v => v.trim()).filter(Boolean).map(v => `<option>${v}</option>`).join('');
+            }
+        }
 
         const c = btn.closest('.row.g-3');
         const fid = 'field-' + Date.now();
@@ -7088,9 +8235,17 @@
         div.className = 'col-md-4';
         div.dataset.fieldId = fid;
         div.dataset.fieldType = type;
-        div.innerHTML = getFieldHTML(type, name);
+        div.dataset.fieldVisibility = visibility;
+        div.dataset.fieldLabel = name;
+
+        // Build HTML with visibility awareness
+        let fieldHTML = getFieldHTML(type, name, selectOptions);
+        div.innerHTML = fieldHTML;
 
         c.insertBefore(div, btn.closest('.col-md-4'));
+
+        // Register in categoryMap for formula support
+        window._csvCategoryMap[fid] = { label: name, visibility: visibility };
 
         const modal = bootstrap.Modal.getInstance(document.getElementById('fieldTypeModal'));
         modal.hide();
@@ -7100,6 +8255,7 @@
         saveToLocalSilent();
 
         delete window._currentAddFieldBtn;
+        delete window._selectedFieldType;
     }
 
     function editDesignerField(id) {
@@ -7243,7 +8399,7 @@
             }
             @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
             #filterTabs .nav-link { font-size: var(--tab-font-size, 0.85rem) !important; transition: font-size 0.2s; position: relative; z-index: 5; }
-            .form-label { font-size: var(--label-font-size, 12px) !important; transition: font-size 0.2s; }
+            .form-label { font-size: var(--label-font-size, 0.85rem) !important; transition: font-size 0.2s; }
             /* Extra specific design-mode overrides */
             .design-mode-active .tab-pane-card h6, .design-mode-active .subsection-title { 
                 border-bottom: 1px dashed var(--primary-soft);
@@ -7305,7 +8461,7 @@
         // Set custom properties only if they differ from defaults
         document.documentElement.style.setProperty('--tab-font-size', designConfig.tabFontSize + 'px');
         document.documentElement.style.setProperty('--label-font-size', designConfig.labelFontSize + 'px');
-        document.documentElement.style.setProperty('--subsection-font-size', designConfig.subsectionFontSize + 'px');
+        document.documentElement.style.setProperty('--subsection-font-size', (designConfig.subsectionFontSize || 11) + 'px');
     }
 
     function updateGlobalFontSize(type, value) {
@@ -7462,8 +8618,32 @@
     function resetDesign() {
         if (confirm('Скинути всі налаштування?')) {
             localStorage.removeItem('ui_design_config');
+            localStorage.removeItem('ui_design_config_version');
             location.reload();
         }
+    }
+
+    function ensureCsvBaselineLayout() {
+        if (!window.CSV_BASELINE_LAYOUT || !window.CSV_LAYOUT_VERSION) return;
+
+        const currentVersion = localStorage.getItem('ui_design_config_version');
+        if (currentVersion === window.CSV_LAYOUT_VERSION) return;
+
+        let previousConfig = null;
+        const existingRaw = localStorage.getItem('ui_design_config');
+        if (existingRaw) {
+            try {
+                previousConfig = JSON.parse(existingRaw)?.config || null;
+            } catch (e) {
+                previousConfig = null;
+            }
+        }
+
+        localStorage.setItem('ui_design_config', JSON.stringify({
+            layout: window.CSV_BASELINE_LAYOUT.layout,
+            config: previousConfig || designConfig
+        }));
+        localStorage.setItem('ui_design_config_version', window.CSV_LAYOUT_VERSION);
     }
 
     function applySavedDesign() {
@@ -7517,9 +8697,15 @@
                             }
 
                             fieldEl.dataset.fieldType = f.type || 'text';
+                            fieldEl.dataset.autoGenerated = '1';
+                            fieldEl.dataset.fieldLabel = f.label || '';
+                            const visMatch = (f.label || '').match(/\[(Тільки B2C|Тільки B2B|Універсальний)\]\s*$/);
+                            fieldEl.dataset.fieldVisibility = visMatch
+                                ? (visMatch[1] === 'Тільки B2C' ? 'b2c' : visMatch[1] === 'Тільки B2B' ? 'b2b' : 'universal')
+                                : 'all';
                             const label = fieldEl.querySelector('.form-label');
                             if (label) {
-                                label.innerText = f.label;
+                                renderGeneratedLabel(label, f.label || '');
                                 if (f.fontFamily) label.style.fontFamily = f.fontFamily;
                             }
 
@@ -7535,22 +8721,419 @@
                     });
                 }
             });
+            const searchInput = document.getElementById('field-search-input');
+            if (searchInput && searchInput.value.trim()) applyFieldSearch(searchInput.value);
         } catch (e) { console.error("Apply Design Error:", e); }
     }
 
+    function initMotionEnhancements() {
+        const revealTargets = document.querySelectorAll('.card-diamond, .tab-pane-card, .formula-card, .condition-block');
+        revealTargets.forEach((el) => el.classList.add('motion-reveal'));
+
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('motion-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+            revealTargets.forEach((el) => observer.observe(el));
+        } else {
+            revealTargets.forEach((el) => el.classList.add('motion-visible'));
+        }
+
+        document.querySelectorAll('#filterTabs [data-bs-toggle="pill"]').forEach((tabBtn) => {
+            tabBtn.addEventListener('shown.bs.tab', (event) => {
+                const targetSelector = event.target.getAttribute('data-bs-target');
+                const pane = targetSelector ? document.querySelector(targetSelector) : null;
+                const card = pane?.querySelector('.tab-pane-card');
+                if (!card) return;
+                card.classList.remove('motion-pop');
+                void card.offsetWidth;
+                card.classList.add('motion-pop');
+            });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+        ensureCsvBaselineLayout();
+        initGeneratedFieldHandlers();
+        initFieldSearch();
         applySavedDesign();
+        initMotionEnhancements();
         if (sessionStorage.getItem('reenter_design_mode') === 'true') {
             sessionStorage.removeItem('reenter_design_mode');
             setTimeout(() => { if (!designModeActive) toggleDesignMode(); }, 500);
         }
 
-        // Initialize Bootstrap Popovers
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-            return new bootstrap.Popover(popoverTriggerEl)
-        });
+        // --- CONSTRUCTOR ENGINE: Dynamic CSV rendering ---
+        initConstructorEngine();
     });
+
+    // =========================================================================
+    //  CONSTRUCTOR ENGINE — inline (dynamic CSV → UI)
+    // =========================================================================
+
+    const CSV_PATH = 'Розподілення полів.csv';
+    const BLOCK_ICONS = {
+        '1': 'bi-person-vcard', '2': 'bi-building', '3': 'bi-box-seam',
+        '4': 'bi-cash-stack', '5': 'bi-geo-alt-fill', '6': 'bi-activity',
+        '7': 'bi-phone', '8': 'bi-shop', '9': 'bi-check-circle',
+    };
+    const MODE_COLORS = {
+        all: { gradient: 'linear-gradient(135deg,#2f6bff,#4361ee)', solid: '#4361ee', shadow: 'rgba(67,97,238,0.35)', light: 'rgba(67,97,238,0.08)' },
+        b2c: { gradient: 'linear-gradient(135deg,#0d6efd,#3b82f6)', solid: '#0d6efd', shadow: 'rgba(13,110,253,0.35)', light: 'rgba(13,110,253,0.08)' },
+        b2b: { gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', solid: '#d97706', shadow: 'rgba(217,119,6,0.35)', light: 'rgba(217,119,6,0.08)' },
+        universal: { gradient: 'linear-gradient(135deg,#0f766e,#14b8a6)', solid: '#14b8a6', shadow: 'rgba(20,184,166,0.35)', light: 'rgba(20,184,166,0.08)' },
+    };
+
+    window._csvCategoryMap = {};
+    let _csvTree = null;
+
+    function normVis(raw) {
+        const v = (raw || '').trim();
+        if (v === 'Тільки B2C') return 'b2c';
+        if (v === 'Тільки B2B') return 'b2b';
+        return 'universal';
+    }
+
+    function csvParse(text) {
+        const lines = text.split(/\r?\n/);
+        const result = [];
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+            const row = []; let cur = ''; let inQ = false;
+            for (let j = 0; j < trimmed.length; j++) {
+                const ch = trimmed[j];
+                if (ch === '"') {
+                    if (inQ && j + 1 < trimmed.length && trimmed[j + 1] === '"') { cur += '"'; j++; }
+                    else inQ = !inQ;
+                } else if (ch === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
+                else cur += ch;
+            }
+            row.push(cur.trim());
+            result.push(row);
+        }
+        return result;
+    }
+
+    function csvBuildTree(rows) {
+        const data = rows.slice(1);
+        const blockMap = new Map();
+        let seq = 0;
+        for (const row of data) {
+            if (row.length < 4) continue;
+            const [blockRaw, subBlock, param, vis] = row;
+            if (!blockRaw || !param) continue;
+            if (!blockMap.has(blockRaw)) {
+                const nm = blockRaw.match(/^(\d+)\./);
+                blockMap.set(blockRaw, {
+                    block: blockRaw, blockNum: nm ? nm[1] : String(blockMap.size + 1),
+                    blockLabel: blockRaw.replace(/^\d+\.\s*/, ''), subs: new Map()
+                });
+            }
+            const bo = blockMap.get(blockRaw);
+            const sn = (subBlock || '').trim() || 'Основні';
+            if (!bo.subs.has(sn)) bo.subs.set(sn, { subBlock: sn, fields: [] });
+            const fid = csvFieldId(param, seq++);
+            bo.subs.get(sn).fields.push({ name: param.trim(), visibility: normVis(vis), fieldId: fid });
+        }
+        return Array.from(blockMap.values()).map(b => ({ ...b, subs: Array.from(b.subs.values()) }));
+    }
+
+    function csvFieldId(name, seq) {
+        const tr = { 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'h', 'ґ': 'g', 'д': 'd', 'е': 'e', 'є': 'ye', 'ж': 'zh', 'з': 'z', 'и': 'y', 'і': 'i', 'ї': 'yi', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ь': '', 'ю': 'yu', 'я': 'ya', "'": '' };
+        let r = '', cap = false;
+        for (const ch of name.toLowerCase()) {
+            if (tr[ch] !== undefined) {
+                const m = tr[ch];
+                r += cap && m ? m[0].toUpperCase() + m.slice(1) : m;
+                cap = false;
+            } else if (/[a-z0-9]/i.test(ch)) { r += cap ? ch.toUpperCase() : ch; cap = false; }
+            else cap = true;
+        }
+        return r || `field_${seq}`;
+    }
+
+    function csvDetectType(name) {
+        const n = name.toLowerCase();
+        if (/дат[аи]|період|перша|останн|днів без/.test(n)) return 'date-range';
+        if (/наявність|ознака|чи є|так\/ні|0\/1/.test(n)) return 'checkbox';
+        if (/к-сть|кількість|сума|вага|вартість|ймовірність/.test(n)) return 'number';
+        if (/стать|сегмент|країна|статус|група|тип |категорія|роль|платник|магазин|сфера|модель|девайс|рівень|центр|місто|область|район|дирекція|відділ|ос\b|згода|бізнес тип|вид проблеми|причина|вторинні|місце|підрозділ|точка|фулфілмент|маркетплейс|промокод|претенз|переказ|опис/.test(n)) return 'select';
+        return 'text';
+    }
+
+    function escH(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function escA(s) { return String(s).replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+    function csvRenderField(field, colSize) {
+        const type = csvDetectType(field.name);
+        const fid = field.fieldId;
+        const fromId = `csv-${fid}-from`, toId = `csv-${fid}-to`, allId = `csv-${fid}-all`;
+        let inner = '';
+        switch (type) {
+            case 'date-range':
+                inner = `<div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label mb-0">${escH(field.name)}</label>
+                    <div class="form-check form-switch min-h-0 mb-0 d-flex align-items-center gap-1">
+                        <input class="form-check-input" type="checkbox" id="${allId}" style="transform:scale(0.8);" onchange="toggleRangeAll('csv-${fid}',this.checked)">
+                        <label class="form-check-label text-muted small" for="${allId}">&infin;</label>
+                    </div></div>
+                    <div class="input-group"><input type="date" class="form-control px-2" id="${fromId}">
+                    <span class="input-group-text bg-light px-1" style="font-size:0.7rem;">по</span>
+                    <input type="date" class="form-control px-2" id="${toId}">
+                    <button class="btn btn-outline-primary px-2" type="button" onclick="addRangeTag('${fid}','${escA(field.name)}','${fromId}','${toId}')"><i class="bi bi-plus"></i></button></div>`;
+                colSize = Math.max(colSize, 6);
+                break;
+            case 'checkbox':
+                inner = `<label class="form-label">${escH(field.name)}</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="chk-${fid}" onchange="addTag(this,'${fid}')">
+                        <label class="form-check-label small text-muted" for="chk-${fid}">Так / Ні</label>
+                    </div>`;
+                colSize = Math.min(colSize, 4);
+                break;
+            case 'select':
+                inner = `<label class="form-label">${escH(field.name)}</label>
+                    <select class="form-select" onchange="addTag(this,'${fid}')"><option value="">Обери...</option></select>`;
+                break;
+            case 'number':
+                inner = `<div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label mb-0">${escH(field.name)}</label>
+                    <div class="form-check form-switch min-h-0 mb-0 d-flex align-items-center gap-1">
+                        <input class="form-check-input" type="checkbox" id="${allId}" style="transform:scale(0.8);" onchange="toggleRangeAll('csv-${fid}',this.checked)">
+                        <label class="form-check-label text-muted small" for="${allId}">&infin;</label>
+                    </div></div>
+                    <div class="input-group"><input type="number" class="form-control px-2" id="${fromId}" placeholder="від">
+                    <span class="input-group-text bg-light px-1" style="font-size:0.7rem;">—</span>
+                    <input type="number" class="form-control px-2" id="${toId}" placeholder="до">
+                    <button class="btn btn-outline-primary px-2" type="button" onclick="addRangeTag('${fid}','${escA(field.name)}','${fromId}','${toId}')"><i class="bi bi-plus"></i></button></div>`;
+                colSize = Math.max(colSize, 6);
+                break;
+            default:
+                inner = `<label class="form-label">${escH(field.name)}</label>
+                    <input type="text" class="form-control" placeholder="${escA(field.name)}" onchange="addTextTag(this,'${fid}')">`;
+                break;
+        }
+        return `<div class="col-md-${colSize}" data-field-id="${fid}" data-field-visibility="${field.visibility}" data-field-label="${escA(field.name)}" data-auto-generated="1">${inner}</div>`;
+    }
+
+    function csvBlockVis(block) {
+        const s = new Set();
+        block.subs.forEach(sub => sub.fields.forEach(f => s.add(f.visibility)));
+        if (s.size === 1) return Array.from(s)[0];
+        if (s.has('b2c') && !s.has('b2b') && !s.has('universal')) return 'b2c';
+        if (s.has('b2b') && !s.has('b2c') && !s.has('universal')) return 'b2b';
+        return 'mixed';
+    }
+
+    function csvRenderTree(tree) {
+        _csvTree = tree;
+        const tabsList = document.getElementById('filterTabs');
+        const tabsContent = document.getElementById('filterTabsContent');
+        if (!tabsList || !tabsContent) return;
+
+        // Save Geo-map
+        const geoPane = document.getElementById('pane-c10');
+        const geoPaneHTML = geoPane ? geoPane.outerHTML : '';
+
+        tabsList.innerHTML = '';
+        tabsContent.innerHTML = '';
+
+        let isFirst = true;
+        tree.forEach(block => {
+            const tabId = `tab-csv-${block.blockNum}`;
+            const paneId = `pane-csv-${block.blockNum}`;
+            const icon = BLOCK_ICONS[block.blockNum] || 'bi-folder';
+            const bVis = csvBlockVis(block);
+
+            const li = document.createElement('li');
+            li.className = 'nav-item';
+            li.dataset.blockVisibility = bVis;
+            li.innerHTML = `<button class="nav-link${isFirst ? ' active' : ''}" id="${tabId}" data-bs-toggle="pill" data-bs-target="#${paneId}" type="button" role="tab" data-block-visibility="${bVis}"><i class="bi ${icon}"></i> ${escH(block.blockLabel)}</button>`;
+            tabsList.appendChild(li);
+
+            const pane = document.createElement('div');
+            pane.className = `tab-pane fade${isFirst ? ' show active' : ''}`;
+            pane.id = paneId;
+            pane.setAttribute('role', 'tabpanel');
+            pane.dataset.blockVisibility = bVis;
+
+            let html = '<div class="tab-pane-card">';
+            block.subs.forEach(sub => {
+                html += `<h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing:1px;">${escH(sub.subBlock)}</h6><div class="row g-3 mb-4">`;
+                const fpr = sub.fields.length <= 2 ? 6 : 4;
+                sub.fields.forEach(f => {
+                    const t = csvDetectType(f.name);
+                    const cs = (t === 'date-range' || t === 'number') ? 6 : (t === 'checkbox' ? 4 : fpr);
+                    html += csvRenderField(f, cs);
+                });
+                html += '</div>';
+            });
+            html += '</div>';
+            pane.innerHTML = html;
+            tabsContent.appendChild(pane);
+            isFirst = false;
+        });
+
+        // Restore Geo-map
+        if (geoPaneHTML) {
+            const geoLi = document.createElement('li');
+            geoLi.className = 'nav-item';
+            geoLi.dataset.blockVisibility = 'always';
+            geoLi.innerHTML = `<button class="nav-link" id="tab-c10" data-bs-toggle="pill" data-bs-target="#pane-c10" type="button" role="tab" data-block-visibility="always"><i class="bi bi-geo-alt"></i> Гео-мапа</button>`;
+            tabsList.appendChild(geoLi);
+            const geoDiv = document.createElement('div');
+            geoDiv.innerHTML = geoPaneHTML;
+            tabsContent.appendChild(geoDiv.firstElementChild);
+        }
+
+        // Register fields in categoryMap
+        tree.forEach(block => block.subs.forEach(sub => sub.fields.forEach(f => {
+            window._csvCategoryMap[f.fieldId] = { label: f.name, visibility: f.visibility };
+        })));
+
+        // Patch createTag for CSV fields
+        csvPatchCreateTag();
+        csvPatchAddTag();
+
+        // Apply scope colors
+        csvApplyScopeColors(getCurrentFieldScope());
+
+        // Re-init search/scope (DOM was rebuilt)
+        initFieldSearch();
+
+        // Re-bind tab animation
+        document.querySelectorAll('#filterTabs [data-bs-toggle="pill"]').forEach(tabBtn => {
+            tabBtn.addEventListener('shown.bs.tab', event => {
+                const t = event.target.getAttribute('data-bs-target');
+                const p = t ? document.querySelector(t) : null;
+                const c = p?.querySelector('.tab-pane-card');
+                if (!c) return;
+                c.classList.remove('motion-pop');
+                void c.offsetWidth;
+                c.classList.add('motion-pop');
+            });
+        });
+
+        // Formula colorizer
+        csvInitFormulaSyncObserver();
+
+        console.log('[Constructor Engine] Rendered', tree.length, 'blocks from CSV');
+    }
+
+    function csvPatchCreateTag() {
+        const orig = window.createTag;
+        if (!orig || orig.__csvPatched) return;
+        window.createTag = function (type, value, operator) {
+            const csvInfo = window._csvCategoryMap?.[type];
+            if (csvInfo) {
+                const vis = csvInfo.visibility || 'universal';
+                let zone = window.currentFilterMode || 'Include';
+                let fieldOp = null;
+                if (operator === 'NOT' || operator === 'Exclude') { zone = 'Exclude'; operator = null; }
+                else if (operator === 'Include') { zone = 'Include'; operator = null; }
+                if (operator === 'LIKE') fieldOp = 'містить';
+                else if (operator === 'EXACT') fieldOp = 'точне';
+                else if (operator) fieldOp = operator;
+                addEspoBlock(type, csvInfo.label, value, zone, 'ТА', null, fieldOp, vis);
+                return;
+            }
+            orig.call(window, type, value, operator);
+        };
+        window.createTag.__csvPatched = true;
+    }
+
+    function csvPatchAddTag() {
+        const orig = window.addTag;
+        if (!orig || orig.__csvPatched) return;
+        window.addTag = function (element, type) {
+            if (element.type === 'checkbox') {
+                const value = element.checked ? 'Так' : 'Ні';
+                createTag(type, value);
+                return;
+            }
+            orig.call(window, element, type);
+        };
+        window.addTag.__csvPatched = true;
+    }
+
+    function csvApplyScopeColors(scope) {
+        const colors = MODE_COLORS[scope] || MODE_COLORS.all;
+        document.body.setAttribute('data-scope-mode', scope);
+
+        let styleEl = document.getElementById('scope-dynamic-styles');
+        if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'scope-dynamic-styles'; document.head.appendChild(styleEl); }
+        styleEl.textContent = `
+            #filterTabs .nav-link.active {
+                background: ${colors.gradient} !important;
+                color: #fff !important;
+                box-shadow: 0 4px 12px ${colors.shadow} !important;
+            }
+            #filterTabs .nav-link:hover:not(.active) {
+                background: rgba(0,0,0,0.04) !important;
+                color: ${colors.solid} !important;
+            }
+            #filterTabsContent .tab-pane.active .tab-pane-card h6.text-primary { color: ${colors.solid} !important; }
+        `;
+    }
+
+    function csvInitFormulaSyncObserver() {
+        const colorize = (container) => {
+            if (!container) return;
+            container.querySelectorAll('.condition-block').forEach(item => {
+                const fieldId = item.dataset?.id;
+                if (!fieldId) return;
+                // Find the matching registry item
+                const regItem = typeof espoConditionRegistry !== 'undefined'
+                    ? espoConditionRegistry.find(i => String(i.id) === String(fieldId))
+                    : null;
+                if (!regItem) return;
+                const vis = regItem.visibility || 'universal';
+                const c = MODE_COLORS[vis] || MODE_COLORS.universal;
+                const ci = item.querySelector('.condition-item');
+                if (ci) {
+                    ci.style.borderLeftColor = c.solid;
+                    ci.style.borderLeftWidth = '3px';
+                    ci.style.borderLeftStyle = 'solid';
+                    ci.style.backgroundColor = c.light;
+                }
+            });
+        };
+        const incl = document.getElementById('espo-include-list');
+        const excl = document.getElementById('espo-exclude-list');
+        const obs = new MutationObserver(() => { colorize(incl); colorize(excl); });
+        if (incl) obs.observe(incl, { childList: true, subtree: true });
+        if (excl) obs.observe(excl, { childList: true, subtree: true });
+        colorize(incl); colorize(excl);
+    }
+
+    async function initConstructorEngine() {
+        try {
+            const resp = await fetch(CSV_PATH);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const text = await resp.text();
+            const rows = csvParse(text);
+            if (rows.length < 2) { console.warn('[Engine] Empty CSV'); return; }
+            const tree = csvBuildTree(rows);
+            csvRenderTree(tree);
+        } catch (err) {
+            console.error('[Constructor Engine] CSV load error:', err);
+        }
+    }
+
+    // Scope color listener (must work even before CSV loads)
+    document.addEventListener('change', (e) => {
+        if (e.target.name === 'field-scope-mode') {
+            csvApplyScopeColors(e.target.value);
+        }
+    });
+
 </script>
 
 </html>
