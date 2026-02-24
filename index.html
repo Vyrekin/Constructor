@@ -8,8 +8,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -118,6 +117,9 @@
             font-size: var(--subsection-font-size, 11px) !important;
             transition: all 0.2s ease;
             display: block;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
         }
 
         [data-theme="dark"] .form-control::placeholder {
@@ -141,6 +143,9 @@
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
         }
 
         .form-control,
@@ -158,6 +163,21 @@
 
         .btn-outline-primary {
             padding: 0.2rem 0.6rem;
+        }
+
+        /* Softer hover for outline buttons in light theme */
+        .btn-outline-primary:hover,
+        .btn-outline-primary:focus-visible {
+            color: #0d6efd;
+            background-color: rgba(13, 110, 253, 0.08);
+            border-color: #0d6efd;
+        }
+
+        .btn-outline-secondary:hover,
+        .btn-outline-secondary:focus-visible {
+            color: #0f172a;
+            background-color: rgba(148, 163, 184, 0.15);
+            border-color: #94a3b8;
         }
 
         h6.text-primary.text-uppercase {
@@ -363,6 +383,43 @@
             overflow: hidden;
         }
 
+        /* CSV inner subtabs (Chrome-like) */
+        .csv-subtabs {
+            border-bottom: 1px solid var(--border);
+            gap: 4px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .csv-subtabs .nav-link {
+            border-radius: 10px 10px 0 0;
+            padding: 0.4rem 0.9rem;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            border: 1px solid transparent;
+            border-bottom: none;
+            background: transparent;
+            transform: skewX(-10deg);
+            font-weight: 600;
+        }
+
+        .csv-subtab-label {
+            display: inline-block;
+            transform: skewX(10deg);
+        }
+
+        .csv-subtabs .nav-link.active {
+            background: var(--surface);
+            color: var(--text-main);
+            border-color: var(--border);
+            border-bottom-color: transparent;
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.15);
+        }
+
+        [data-theme="dark"] .csv-subtabs .nav-link.active {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
         .btn:hover,
         .custom-filter-tabs .nav-link:hover {
             transform: translateY(-1px);
@@ -485,6 +542,19 @@
             background-color: var(--primary);
             color: white;
             box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Softer highlighting for filter tabs (section names) */
+        .custom-filter-tabs .nav-link.active {
+            background-color: rgba(67, 97, 238, 0.08);
+            color: var(--primary);
+            box-shadow: none;
+        }
+
+        [data-theme="dark"] .custom-filter-tabs .nav-link.active {
+            background-color: rgba(67, 97, 238, 0.25);
+            color: #e2e8f0;
+            box-shadow: none;
         }
 
         /* Cards & Surfaces */
@@ -689,7 +759,7 @@
         }
 
         .btn-primary:hover {
-            background-color: var(--secondary);
+            background-color: rgba(67, 97, 238, 0.15);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
         }
@@ -1145,14 +1215,14 @@
 
         .section-title-espo.text-primary:hover {
             border-color: #0d6efd;
-            background: #0d6efd;
-            color: white !important;
+            background: rgba(13, 110, 253, 0.15);
+            color: #0d6efd !important;
         }
 
         .section-title-espo.text-danger:hover {
             border-color: #dc3545;
-            background: #dc3545;
-            color: white !important;
+            background: rgba(220, 53, 69, 0.15);
+            color: #dc3545 !important;
         }
 
         .add-sub-btn {
@@ -1567,12 +1637,13 @@
             gap: 6px;
             padding: 8px 16px;
             border-radius: 12px;
-            color: var(--text-muted);
+            color: var(--text-main);
             font-weight: 600;
             border: 1px solid transparent;
             transition: all 0.2s ease;
             background: transparent;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
         }
 
         .compact-control-card {
@@ -1593,11 +1664,11 @@
         }
 
         .custom-filter-tabs .nav-link.active {
-            background: var(--primary-soft) !important;
+            background: transparent !important;
             color: var(--primary) !important;
-            border-color: var(--primary-soft) !important;
-            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.1) !important;
-            transform: translateY(-2px);
+            border-color: transparent !important;
+            box-shadow: inset 0 -2px 0 var(--primary) !important;
+            transform: translateY(-1px);
         }
 
         .custom-filter-tabs .nav-link:hover:not(.active) {
@@ -1972,24 +2043,25 @@
 
         .section-delete-btn {
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 2px;
+            right: 2px;
             display: none;
-            background: #ef4444;
+            background: rgba(239, 68, 68, 0.9);
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            font-size: 14px;
-            z-index: 60;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
         }
 
-        .design-mode-active .tab-pane-card:hover .section-delete-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .section-delete-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
         }
 
         .design-mode-active .form-label {
@@ -2190,53 +2262,42 @@
 
         body[data-scope-mode="all"] {
             --scope-accent: var(--primary);
-            --scope-soft: rgba(67, 97, 238, 0.12);
-            --scope-border: rgba(67, 97, 238, 0.25);
+            --scope-soft: rgba(67, 97, 238, 0.04);
+            --scope-border: rgba(67, 97, 238, 0.14);
             --scope-title: #4361ee;
             --scope-title-soft: #5c6f8a;
         }
 
         body[data-scope-mode="b2c"] {
             --scope-accent: #0d6efd;
-            --scope-soft: rgba(13, 110, 253, 0.12);
-            --scope-border: rgba(13, 110, 253, 0.28);
+            --scope-soft: rgba(13, 110, 253, 0.04);
+            --scope-border: rgba(13, 110, 253, 0.16);
             --scope-title: #0d6efd;
             --scope-title-soft: #3f77c9;
         }
 
         body[data-scope-mode="universal"] {
             --scope-accent: #0f766e;
-            --scope-soft: rgba(20, 184, 166, 0.14);
-            --scope-border: rgba(20, 184, 166, 0.28);
+            --scope-soft: rgba(20, 184, 166, 0.05);
+            --scope-border: rgba(20, 184, 166, 0.18);
             --scope-title: #0f766e;
             --scope-title-soft: #27847d;
         }
 
         body[data-scope-mode="b2b"] {
             --scope-accent: #d97706;
-            --scope-soft: rgba(217, 119, 6, 0.12);
-            --scope-border: rgba(217, 119, 6, 0.28);
+            --scope-soft: rgba(217, 119, 6, 0.04);
+            --scope-border: rgba(217, 119, 6, 0.18);
             --scope-title: #d97706;
             --scope-title-soft: #b45309;
         }
 
-        /* Field visibility color indicators (left border) */
-        [data-field-visibility="b2c"] {
-            border-left: 3px solid rgba(13, 110, 253, 0.5);
-            padding-left: 8px;
-            transition: border-color 0.2s ease;
-        }
-
-        [data-field-visibility="b2b"] {
-            border-left: 3px solid rgba(217, 119, 6, 0.5);
-            padding-left: 8px;
-            transition: border-color 0.2s ease;
-        }
-
+        /* Field visibility indicators: remove heavy side lines, keep subtle badge only */
+        [data-field-visibility="b2c"],
+        [data-field-visibility="b2b"],
         [data-field-visibility="universal"] {
-            border-left: 3px solid rgba(20, 184, 166, 0.4);
-            padding-left: 8px;
-            transition: border-color 0.2s ease;
+            border-left: none;
+            padding-left: 0;
         }
 
         body[data-scope-mode] #filterTabs .nav-link {
@@ -2244,10 +2305,10 @@
         }
 
         body[data-scope-mode] .custom-filter-tabs .nav-link.active {
-            background: var(--scope-soft) !important;
+            background: transparent !important;
             color: var(--scope-accent) !important;
-            border-color: var(--scope-border) !important;
-            box-shadow: 0 4px 12px var(--scope-soft) !important;
+            border-color: transparent !important;
+            box-shadow: inset 0 -2px 0 var(--scope-accent) !important;
         }
 
         body[data-scope-mode] .tab-pane-card {
@@ -2307,13 +2368,17 @@
             border: 1px solid rgba(255, 255, 255, 0.45);
         }
 
-        /* Ensure design-mode modals & backdrop sit above everything */
-        .modal-backdrop {
-            z-index: 10999 !important;
+        /* Aggressive fix for design-mode modals interactivity */
+        .design-mode-active .modal {
+            z-index: 20000 !important;
         }
 
-        .modal[style*="z-index: 11000"] {
-            z-index: 11000 !important;
+        .design-mode-active .modal-backdrop {
+            z-index: 15000 !important;
+        }
+
+        .design-mode-active .design-toolbar {
+            z-index: 10000 !important;
         }
 
         .reset-all-btn {
@@ -5057,8 +5122,7 @@
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let map;
@@ -7744,14 +7808,41 @@
                 li.style.position = 'relative';
                 const link = li.querySelector('.nav-link');
                 if (link) {
-                    link.style.paddingLeft = '28px';
                     link.style.position = 'relative';
+                    link.style.paddingLeft = '28px';
+                    link.style.paddingRight = '32px';
+
+                    // Sort handle (зліва)
                     if (!li.querySelector('.tab-sort-handle')) {
                         const handle = document.createElement('span');
                         handle.className = 'tab-sort-handle';
                         handle.innerHTML = '<i class="bi bi-grip-vertical"></i>';
                         handle.style = 'cursor:grab; color:#64748b; font-size:16px; position:absolute; left:8px; top:50%; transform:translateY(-50%); z-index:10; padding: 4px; display: flex; align-items: center; justify-content: center;';
                         li.appendChild(handle);
+                    }
+
+                    // Delete section button (справа, біля назви табу)
+                    if (!link.querySelector('.design-tab-delete')) {
+                        const targetId = (link.getAttribute('data-bs-target') || '').replace('#', '');
+                        if (targetId && targetId !== 'pane-c10') { // не чіпати Гео-мапу
+                            const delBtn = document.createElement('button');
+                            delBtn.type = 'button';
+                            delBtn.className = 'btn-design-action delete design-tab-delete';
+                            delBtn.innerHTML = '<i class="bi bi-trash3"></i>';
+                            delBtn.style.position = 'absolute';
+                            delBtn.style.right = '6px';
+                            delBtn.style.top = '50%';
+                            delBtn.style.transform = 'translateY(-50%)';
+                            delBtn.title = 'Видалити розділ';
+                            delBtn.onclick = (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (confirm('Видалити цей РОЗДІЛ з усіма підрозділами та полями?')) {
+                                    removeDesignerSection(targetId);
+                                }
+                            };
+                            link.appendChild(delBtn);
+                        }
                     }
                 }
             });
@@ -7826,17 +7917,20 @@
                     const handle = document.createElement('div');
                     handle.className = 'subsection-handle position-absolute';
                     handle.innerHTML = '<i class="bi bi-grip-vertical"></i>';
-                    handle.style = 'left:-10px; top:10px; cursor:grab; color:#4361ee;';
+                    handle.style = 'left:-10px; top:10px; cursor:grab; color:#4361ee; background:white; border-radius:4px; padding:2px;';
 
-                    const delSub = document.createElement('button');
-                    delSub.className = 'btn-design-action delete position-absolute';
-                    delSub.style = 'right:0; top:0; z-index:10;';
-                    delSub.innerHTML = '<i class="bi bi-x-lg"></i>';
-                    delSub.title = 'Видалити розділення (поля залишаться)';
-                    delSub.onclick = (e) => {
+                    const actions = document.createElement('div');
+                    actions.className = 'position-absolute d-flex gap-1';
+                    actions.style = 'right:0; top:-12px; z-index:10;';
+
+                    // Un-wrap button (removes header only)
+                    const delSubHeader = document.createElement('button');
+                    delSubHeader.className = 'btn btn-xs btn-warning rounded-pill px-2';
+                    delSubHeader.style = 'font-size: 9px; padding: 1px 6px;';
+                    delSubHeader.innerHTML = '<i class="bi bi-layout-text-sidebar me-1"></i>Прибрати розділення';
+                    delSubHeader.onclick = (e) => {
                         e.preventDefault();
                         if (confirm('Видалити тільки заголовок підрозділу? Поля залишаться.')) {
-                            // Unwrap: move title and rows back to card
                             const rows = Array.from(wrapper.querySelectorAll('.row.g-3'));
                             rows.forEach(r => wrapper.parentElement.insertBefore(r, wrapper));
                             wrapper.remove();
@@ -7846,8 +7940,25 @@
                         }
                     };
 
+                    // Full delete button
+                    const delSubFull = document.createElement('button');
+                    delSubFull.className = 'btn btn-xs btn-danger rounded-pill px-2';
+                    delSubFull.style = 'font-size: 9px; padding: 1px 6px;';
+                    delSubFull.innerHTML = '<i class="bi bi-trash3 me-1"></i>Видалити ПОВНІСТЮ';
+                    delSubFull.onclick = (e) => {
+                        e.preventDefault();
+                        if (confirm('УВАГА! Це видалить підрозділ РАЗОМ З УСІМА ПОЛЯМИ. Продовжити?')) {
+                            wrapper.remove();
+                            saveToLocalSilent();
+                            showDesignToast('Підрозділ видалено');
+                        }
+                    };
+
+                    actions.appendChild(delSubHeader);
+                    actions.appendChild(delSubFull);
+
                     wrapper.appendChild(handle);
-                    wrapper.appendChild(delSub);
+                    wrapper.appendChild(actions);
                     wrapper.appendChild(currentHeader);
                 }
                 currentGroup.forEach(g => wrapper.appendChild(g));
@@ -7898,15 +8009,7 @@
                 }
             });
 
-            // Delete Tab Button
-            if (!card.querySelector('.section-delete-btn')) {
-                const delBtn = document.createElement('button');
-                delBtn.className = 'section-delete-btn';
-                delBtn.innerHTML = '<i class="bi bi-trash3"></i>';
-                delBtn.title = 'Видалити весь розділ';
-                delBtn.onclick = (e) => { e.stopPropagation(); removeDesignerSection(card.closest('.tab-pane').id); };
-                card.appendChild(delBtn);
-            }
+            // Delete Tab Button now живёт біля назви вкладки (додається вище в initDesignMode)
         });
 
         // 4. Fields Controls
@@ -7970,6 +8073,42 @@
     function addDesignerSubSection(card) {
         const titleText = prompt('Назва підрозділу:', 'НОВИЙ ПІДРОЗДІЛ');
         if (!titleText) return;
+
+        const pane = card.closest('.tab-pane');
+        const subTabs = card.querySelector('.csv-subtabs');
+        const subContent = card.querySelector('.csv-subtabs-content');
+
+        // Якщо вже є вкладки-підрозділи (csv-subtabs) — додаємо нову саме як вкладку
+        if (pane && subTabs && subContent) {
+            const existing = subTabs.querySelectorAll('.nav-link').length;
+            const baseId = pane.id || ('pane-' + Date.now());
+            const subPaneId = `${baseId}-sub-${existing + 1}`;
+
+            // Прибрати активність зі старих вкладок
+            subTabs.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+            subContent.querySelectorAll('.tab-pane').forEach(p => {
+                p.classList.remove('show', 'active');
+            });
+
+            const li = document.createElement('li');
+            li.className = 'nav-item';
+            li.innerHTML = `<button class="nav-link active" id="${subPaneId}-tab" data-bs-toggle="tab" data-bs-target="#${subPaneId}" type="button" role="tab" aria-selected="true">
+                                <span class="csv-subtab-label">${escH(titleText)}</span>
+                            </button>`;
+            subTabs.appendChild(li);
+
+            const paneDiv = document.createElement('div');
+            paneDiv.className = 'tab-pane fade show active';
+            paneDiv.id = subPaneId;
+            paneDiv.setAttribute('role', 'tabpanel');
+            paneDiv.innerHTML = `<div class="row g-3 mb-4"></div>`;
+            subContent.appendChild(paneDiv);
+
+            saveToLocalSilent();
+            return;
+        }
+
+        // Fallback для старої розмітки без вкладок
         const h6 = document.createElement('h6');
         h6.className = 'fw-bold text-primary mb-3 text-uppercase small';
         h6.style.letterSpacing = '1px';
@@ -8015,12 +8154,12 @@
 
     function addDesignerSection() {
         const modalId = 'addSectionModal';
-        let old = document.getElementById(modalId);
-        if (old) old.remove();
-
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = `
-        <div class="modal fade" id="${modalId}" tabindex="-1" style="z-index: 11000;">
+        const modalEl = document.createElement('div');
+        modalEl.id = modalId;
+        modalEl.className = 'modal fade';
+        modalEl.tabIndex = -1;
+        modalEl.setAttribute('data-bs-backdrop', 'static');
+        modalEl.innerHTML = `
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
                     <div class="modal-header border-0 pb-0">
@@ -8033,25 +8172,36 @@
                             <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary" id="new-section-name" placeholder="Новий розділ" value="Новий розділ">
                         </div>
                         <div class="mb-3">
-                            <label class="small text-white-50 d-block mb-2"><i class="bi bi-eye me-1"></i>Видимість:</label>
+                            <label class="small text-white-50 d-block mb-2">Видимість:</label>
                             <div class="btn-group w-100" role="group">
                                 <input type="radio" class="btn-check" name="new-section-vis" id="nsv-b2c" value="b2c">
-                                <label class="btn btn-sm btn-outline-primary" for="nsv-b2c">Тільки B2C</label>
+                                <label class="btn btn-sm btn-outline-primary" for="nsv-b2c">B2C</label>
                                 <input type="radio" class="btn-check" name="new-section-vis" id="nsv-b2b" value="b2b">
-                                <label class="btn btn-sm btn-outline-warning" for="nsv-b2b">Тільки B2B</label>
+                                <label class="btn btn-sm btn-outline-warning" for="nsv-b2b">B2B</label>
                                 <input type="radio" class="btn-check" name="new-section-vis" id="nsv-universal" value="universal" checked>
-                                <label class="btn btn-sm btn-outline-success" for="nsv-universal">Універсальні</label>
+                                <label class="btn btn-sm btn-outline-success" for="nsv-universal">All</label>
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-sm w-100 rounded-pill" onclick="confirmAddSection()">
+                        <button class="btn btn-primary btn-sm w-100 rounded-pill" id="confirm-add-section-btn">
                             <i class="bi bi-check-lg me-1"></i>Створити
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>`;
-        document.body.appendChild(wrapper);
-        new bootstrap.Modal(document.getElementById(modalId)).show();
+            </div>`;
+
+        // Final cleanup of any stuck backdrops
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+
+        document.body.appendChild(modalEl);
+        modalEl.querySelector('#confirm-add-section-btn').onclick = () => {
+            confirmAddSection();
+        };
+
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+        modalEl.addEventListener('hidden.bs.modal', () => { modal.dispose(); modalEl.remove(); });
     }
 
     function confirmAddSection() {
@@ -8125,10 +8275,14 @@
 
     function addDesignerField(btn) {
         const name = prompt('Назва поля:', 'Нове поле'); if (!name) return;
+        const safeName = name.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
         const modalId = 'fieldTypeModal';
-        let modalEl = document.getElementById(modalId);
-        if (modalEl) modalEl.remove();
+        const modalElNode = document.createElement('div');
+        modalElNode.id = modalId;
+        modalElNode.className = 'modal fade';
+        modalElNode.tabIndex = -1;
+        modalElNode.setAttribute('data-bs-backdrop', 'static');
 
         const types = [
             { id: 'text', label: 'Текстове поле', icon: 'bi-fonts' },
@@ -8139,60 +8293,69 @@
             { id: 'textarea', label: 'Великий текст', icon: 'bi-textarea-t' }
         ];
 
-        const div = document.createElement('div');
-        div.innerHTML = `
-        <div class="modal fade" id="${modalId}" tabindex="-1" style="z-index: 11000;" data-bs-backdrop="static">
+        modalElNode.innerHTML = `
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
                     <div class="modal-header border-0 pb-0">
-                        <h6 class="modal-title text-white small opacity-75">Нове поле: "${name}"</h6>
+                        <h6 class="modal-title text-white small opacity-75">Нове поле: "${safeName}"</h6>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body p-3">
-                        <!-- Visibility selector -->
                         <div class="mb-3">
-                            <label class="small text-white-50 d-block mb-2"><i class="bi bi-eye me-1"></i>Видимість (обов'язково):</label>
+                            <label class="small text-white-50 d-block mb-2">Видимість:</label>
                             <div class="btn-group w-100" role="group">
                                 <input type="radio" class="btn-check" name="new-field-vis" id="nfv-b2c" value="b2c">
-                                <label class="btn btn-sm btn-outline-primary" for="nfv-b2c">Тільки B2C</label>
+                                <label class="btn btn-sm btn-outline-primary" for="nfv-b2c">B2C</label>
                                 <input type="radio" class="btn-check" name="new-field-vis" id="nfv-b2b" value="b2b">
-                                <label class="btn btn-sm btn-outline-warning" for="nfv-b2b">Тільки B2B</label>
+                                <label class="btn btn-sm btn-outline-warning" for="nfv-b2b">B2B</label>
                                 <input type="radio" class="btn-check" name="new-field-vis" id="nfv-universal" value="universal" checked>
-                                <label class="btn btn-sm btn-outline-success" for="nfv-universal">Універсальні</label>
+                                <label class="btn btn-sm btn-outline-success" for="nfv-universal">All</label>
                             </div>
                         </div>
-                        <!-- Type selector -->
-                        <label class="small text-white-50 d-block mb-2"><i class="bi bi-ui-checks me-1"></i>Тип поля:</label>
+                        <label class="small text-white-50 d-block mb-2">Тип поля:</label>
                         <div class="list-group list-group-flush bg-transparent" id="field-type-list">
                             ${types.map(t => `
                                 <button type="button" class="list-group-item list-group-item-action bg-transparent text-white border-secondary border-opacity-25 d-flex align-items-center py-2 px-1"
-                                    data-field-type="${t.id}"
-                                    onclick="selectDesignerFieldType(this, '${t.id}')">
+                                    data-field-type="${t.id}">
                                     <i class="bi ${t.icon} text-primary me-2 fs-5"></i>
                                     <span class="small">${t.label}</span>
                                 </button>
                             `).join('')}
                         </div>
-                        <!-- Dropdown values (hidden by default) -->
                         <div id="dropdown-values-container" style="display:none;" class="mt-3">
-                            <label class="small text-white-50 d-block mb-1"><i class="bi bi-list-ol me-1"></i>Значення для списку (через кому):</label>
-                            <textarea class="form-control form-control-sm bg-dark text-white border-secondary" id="dropdown-values-input" rows="3" placeholder="Варіант 1, Варіант 2, Варіант 3..."></textarea>
+                            <label class="small text-white-50 d-block mb-1">Значення (через кому):</label>
+                            <textarea class="form-control form-control-sm bg-dark text-white border-secondary" id="dropdown-values-input" rows="3" placeholder="Варіант 1, Варіант 2..."></textarea>
                         </div>
-                        <!-- Confirm -->
-                        <button class="btn btn-primary btn-sm w-100 mt-3 rounded-pill" id="confirm-add-field-btn" disabled onclick="confirmAddFieldFinal('${name.replace(/'/g, "\\'")}')">
-                            <i class="bi bi-check-lg me-1"></i>Додати поле
+                        <button class="btn btn-primary btn-sm w-100 mt-3 rounded-pill" id="confirm-add-field-btn" disabled>
+                            <i class="bi bi-check-lg me-1"></i>Готово
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>`;
-        document.body.appendChild(div);
+            </div>`;
+
+        // Final cleanup of any stuck backdrops before showing
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+
+        document.body.appendChild(modalElNode);
 
         window._currentAddFieldBtn = btn;
         window._selectedFieldType = null;
 
-        const modal = new bootstrap.Modal(document.getElementById(modalId));
+        // Manual bind for types
+        modalElNode.querySelectorAll('#field-type-list button').forEach(b => {
+            b.onclick = () => selectDesignerFieldType(b, b.dataset.fieldType);
+        });
+
+        // Manual bind for confirm
+        modalElNode.querySelector('#confirm-add-field-btn').onclick = () => {
+            confirmAddFieldFinal(name);
+        };
+
+        const modal = new bootstrap.Modal(modalElNode);
         modal.show();
+        modalElNode.addEventListener('hidden.bs.modal', () => { modal.dispose(); modalElNode.remove(); });
     }
 
     function selectDesignerFieldType(btnEl, type) {
@@ -8267,10 +8430,7 @@
 
         const newName = prompt('Нова назва поля:', currentName);
         if (newName === null) return;
-
-        const modalId = 'editFieldTypeModal';
-        let modalEl = document.getElementById(modalId);
-        if (modalEl) modalEl.remove();
+        const safeNewName = newName.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
         const types = [
             { id: 'text', label: 'Текстове поле', icon: 'bi-fonts' },
@@ -8281,20 +8441,24 @@
             { id: 'textarea', label: 'Великий текст', icon: 'bi-textarea-t' }
         ];
 
-        const div = document.createElement('div');
-        div.innerHTML = `
-        <div class="modal fade" id="${modalId}" tabindex="-1" style="z-index: 11000;">
+        const modalId = 'editFieldTypeModal';
+        const modalEl = document.createElement('div');
+        modalEl.id = modalId;
+        modalEl.className = 'modal fade';
+        modalEl.tabIndex = -1;
+        modalEl.setAttribute('data-bs-backdrop', 'static');
+        modalEl.innerHTML = `
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
                     <div class="modal-header border-0 pb-0">
-                        <h6 class="modal-title text-white small opacity-75">Змінити тип для "${newName}"</h6>
+                        <h6 class="modal-title text-white small opacity-75">Змінити тип: "${safeNewName}"</h6>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body p-3">
-                        <div class="list-group list-group-flush bg-transparent">
+                        <div class="list-group list-group-flush bg-transparent" id="edit-field-type-list">
                             ${types.map(t => `
                                 <button type="button" class="list-group-item list-group-item-action ${t.id === currentType ? 'border-primary border-opacity-50' : ''} bg-transparent text-white border-secondary border-opacity-25 d-flex align-items-center py-2 px-1" 
-                                    onclick="confirmEditField('${id}', '${t.id}', '${newName}')">
+                                    data-field-type="${t.id}">
                                     <i class="bi ${t.icon} ${t.id === currentType ? 'text-info' : 'text-primary'} me-2 fs-5"></i>
                                     <span class="small ${t.id === currentType ? 'fw-bold text-info' : ''}">${t.label}</span>
                                 </button>
@@ -8302,10 +8466,24 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>`;
-        document.body.appendChild(div);
-        new bootstrap.Modal(document.getElementById(modalId)).show();
+            </div>`;
+
+        // Cleanup stuck backdrops
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+
+        document.body.appendChild(modalEl);
+        modalEl.querySelectorAll('.list-group-item').forEach(item => {
+            item.onclick = () => {
+                confirmEditField(id, item.dataset.fieldType, newName);
+                // hide() handled in confirmEditField or below if missing
+                bootstrap.Modal.getInstance(modalEl).hide();
+            };
+        });
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+        modalEl.addEventListener('hidden.bs.modal', () => { modal.dispose(); modalEl.remove(); });
     }
 
     function confirmEditField(id, type, name) {
@@ -8777,7 +8955,168 @@
     //  CONSTRUCTOR ENGINE — inline (dynamic CSV → UI)
     // =========================================================================
 
-    const CSV_PATH = 'Розподілення полів.csv';
+    const EMBEDDED_CSV_DATA = `Блок,Підблок,Параметр,Видимість (Toggle)
+1. Профіль Клієнта (B2C),Ідентифікація,СІД,Тільки B2C
+1. Профіль Клієнта (B2C),Ідентифікація,Клієнт НПУ,Тільки B2C
+1. Профіль Клієнта (B2C),Ідентифікація,ПІБ (КА),Тільки B2C
+1. Профіль Клієнта (B2C),Ідентифікація,Email,Тільки B2C
+1. Профіль Клієнта (B2C),Ідентифікація,Мобільний телефон,Тільки B2C
+1. Профіль Клієнта (B2C),Ідентифікація,Наявність додаткового телефону,Тільки B2C
+1. Профіль Клієнта (B2C),Демографія,Стать (розрахункова),Тільки B2C
+1. Профіль Клієнта (B2C),Демографія,Дата народження,Тільки B2C
+1. Профіль Клієнта (B2C),Демографія,Вікова група,Тільки B2C
+1. Профіль Клієнта (B2C),Демографія,Країна клієнта,Тільки B2C
+1. Профіль Клієнта (B2C),Статус клієнта,Ознака співробітника,Тільки B2C
+1. Профіль Клієнта (B2C),Статус клієнта,Ознака ПОБа,Тільки B2C
+1. Профіль Клієнта (B2C),Статус клієнта,Ознака ЛІДа,Тільки B2C
+1. Профіль Клієнта (B2C),Верифікація,Верифікація клієнта (статус),Тільки B2C
+1. Профіль Клієнта (B2C),Верифікація,Статус верифікації телефону,Тільки B2C
+1. Профіль Клієнта (B2C),Верифікація,Статус верифікації Email,Тільки B2C
+1. Профіль Клієнта (B2C),Верифікація,Наявність першої верифікації клієнта NovaPay,Тільки B2C
+1. Профіль Клієнта (B2C),Верифікація,Дата верифікації клієнта,Тільки B2C
+1. Профіль Клієнта (B2C),Верифікація,Остання дата верифікації,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація,Сегмент активності,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація,RFM сегмент (загальний),Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація,CLC сегмент,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація,CVO сегмент,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація,Сегмент клієнта (місяць),Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація,Сегмент клієнта (квартал),Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація за роллю,RFM сегмент відправка,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація за роллю,CLC сегмент відправка,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація за роллю,CVO сегмент відправка,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація за роллю,RFM сегмент отримання,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація за роллю,CLC сегмент отримання,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація за роллю,CVO сегмент отримання,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація за роллю,Сегмент активності за відправками,Тільки B2C
+1. Профіль Клієнта (B2C),Сегментація за роллю,Сегмент активності за отриманням,Тільки B2C
+2. B2B та Менеджмент,Профіль бізнес-клієнта,Тип контрагента,Тільки B2B
+2. B2B та Менеджмент,Профіль бізнес-клієнта,"Категорія контрагента (Strategic, Regional...)",Тільки B2B
+2. B2B та Менеджмент,Профіль бізнес-клієнта,Бізнес тип діяльності контрагента,Тільки B2B
+2. B2B та Менеджмент,Профіль бізнес-клієнта,Сегмент активності контрагента,Тільки B2B
+2. B2B та Менеджмент,Управління (Менеджер),Закріплений менеджер по контрагенту,Тільки B2B
+2. B2B та Менеджмент,Управління (Менеджер),Відділ менеджера,Тільки B2B
+2. B2B та Менеджмент,Управління (Менеджер),Дирекція менеджера,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Тип основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Код основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Код ЄДРПОУ/ІПН основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Назва основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Сфера діяльності основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Категорія основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Бізнес тип діяльності основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Веб-сайт основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Закріплений менеджер по основному контрагенту,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Відділ менеджера основного контрагента,Тільки B2B
+2. B2B та Менеджмент,Материнська компанія,Дирекція менеджера основного контрагента,Тільки B2B
+3. Параметри ЕН,Загальні дані,Роль в ЕН (Відправник/Отримувач),Універсальний
+3. Параметри ЕН,Загальні дані,Тип сервісу,Універсальний
+3. Параметри ЕН,Загальні дані,Платник,Універсальний
+3. Параметри ЕН,Загальні дані,Дата створення ЕН,Універсальний
+3. Параметри ЕН,Загальні дані,Дата закриття ЕН,Універсальний
+3. Параметри ЕН,Загальні дані,Місце створення,Універсальний
+3. Параметри ЕН,Загальні дані,Тип місця створення,Універсальний
+3. Параметри ЕН,Загальні дані,Тип останньої точки обслуговування,Універсальний
+3. Параметри ЕН,Тип та Категорія,Вторинні ЕН,Універсальний
+3. Параметри ЕН,Тип та Категорія,Причина повернення ЕН,Універсальний
+3. Параметри ЕН,Тип та Категорія,Вид проблеми з ЕН,Універсальний
+3. Параметри ЕН,Тип та Категорія,Категорія 1 рівень,Універсальний
+3. Параметри ЕН,Тип та Категорія,Категорія 2 рівень,Універсальний
+3. Параметри ЕН,Тип та Категорія,Категорія 3 рівень,Універсальний
+3. Параметри ЕН,Тип та Категорія,Категорія 4 рівень,Універсальний
+3. Параметри ЕН,Логістика,Імпорт (країна),Універсальний
+3. Параметри ЕН,Логістика,Експорт (країна),Універсальний
+3. Параметри ЕН,Логістика,Міжнародна доставка НПУ,Універсальний
+3. Параметри ЕН,Відправник/Отримувач,Тип (відправника/отримувача),Універсальний
+3. Параметри ЕН,Відправник/Отримувач,ЄДРПОУ / ІПН,Універсальний
+3. Параметри ЕН,Відправник/Отримувач,Назва контрагента,Універсальний
+3. Параметри ЕН,Відправник/Отримувач,Тип підрозділу,Універсальний
+3. Параметри ЕН,Відправник/Отримувач,Область,Універсальний
+3. Параметри ЕН,Відправник/Отримувач,Місто,Універсальний
+3. Параметри ЕН,Відправник/Отримувач,Підрозділ (Відділення/Поштомат),Універсальний
+4. Фінанси та Вантаж,Характеристики вантажу,Тип вантажу,Універсальний
+4. Фінанси та Вантаж,Характеристики вантажу,Опис вантажу,Універсальний
+4. Фінанси та Вантаж,Характеристики вантажу,Вага (розрахункова),Універсальний
+4. Фінанси та Вантаж,Характеристики вантажу,Оголошена вартість,Універсальний
+4. Фінанси та Вантаж,Вартість та Оплата,Сума по ЕН за доставку,Універсальний
+4. Фінанси та Вантаж,Вартість та Оплата,Сума за пакування,Універсальний
+4. Фінанси та Вантаж,Вартість та Оплата,Тип оплати,Універсальний
+4. Фінанси та Вантаж,Вартість та Оплата,Наявність промокоду,Універсальний
+4. Фінанси та Вантаж,Вартість та Оплата,Наявність претензій,Універсальний
+4. Фінанси та Вантаж,Грошовий переказ,Наявність переказу,Універсальний
+4. Фінанси та Вантаж,Грошовий переказ,Сума переказу,Універсальний
+4. Фінанси та Вантаж,Додатково,Ознака Маркетплейсу,Універсальний
+5. Географія та Локації,Загальна географія,Тип населеного пункту,Універсальний
+5. Географія та Локації,Загальна географія,Регіональний центр,Універсальний
+5. Географія та Локації,Загальна географія,Місто обл.центр (0/1),Універсальний
+5. Географія та Локації,Улюблена точка (Fav),Улюблена точка обслуговування (назва/номер),Універсальний
+5. Географія та Локації,Улюблена точка (Fav),Тип улюбленої точки контакту,Універсальний
+5. Географія та Локації,Улюблена точка (Fav),Назва міста по улюбленій точці,Універсальний
+5. Географія та Локації,Улюблена точка (Fav),Назва регіону по улюбленій точці,Універсальний
+5. Географія та Локації,Остання точка,Місто останньої точки обслуговування,Універсальний
+5. Географія та Локації,Остання точка,Остання точка обслуговування (назва),Універсальний
+5. Географія та Локації,Остання точка,Тип останньої точки контакту,Універсальний
+5. Географія та Локації,Остання точка,Назва міста по останній точці контакту,Універсальний
+5. Географія та Локації,Остання точка,Назва регіону по останній точці контакту,Універсальний
+5. Географія та Локації,Основні локації,Місто основного відділення,Універсальний
+5. Географія та Локації,Основні локації,Назва основного відділення,Універсальний
+5. Географія та Локації,Основні локації,Місто основного поштомату,Універсальний
+5. Географія та Локації,Основні локації,Назва основного поштомату,Універсальний
+5. Географія та Локації,Резервні локації,Місто резервного відділення,Універсальний
+5. Географія та Локації,Резервні локації,Назва резервного відділення,Універсальний
+5. Географія та Локації,Резервні локації,Місто резервного поштомату,Універсальний
+5. Географія та Локації,Резервні локації,Назва резервного поштомату,Універсальний
+6. Активність за Каналами,Транзакції (дати),Дата першої транзакції,Універсальний
+6. Активність за Каналами,Транзакції (дати),Дата останньої транзакції,Універсальний
+6. Активність за Каналами,Транзакції (дати),Днів без відправки/отримання,Універсальний
+6. Активність за Каналами,Транзакції (дати),К-сть ЕН (загальна),Універсальний
+6. Активність за Каналами,Відділення та Поштомати,Дата першої ЕН відділення,Універсальний
+6. Активність за Каналами,Відділення та Поштомати,Дата останньої ЕН відділення,Універсальний
+6. Активність за Каналами,Відділення та Поштомати,Дата першої ЕН поштомат,Універсальний
+6. Активність за Каналами,Відділення та Поштомати,Дата останньої ЕН поштомат,Універсальний
+6. Активність за Каналами,Відділення та Поштомати,Дата першої ЕН АО,Універсальний
+6. Активність за Каналами,Відділення та Поштомати,Дата останньої ЕН АО,Універсальний
+6. Активність за Каналами,Інші канали,Дата першої ЕН міжнародний напрямок,Універсальний
+6. Активність за Каналами,Інші канали,Дата останньої ЕН міжнародний напрямок,Універсальний
+6. Активність за Каналами,Інші канали,Дата першої ЕН Цифровий помічник,Універсальний
+6. Активність за Каналами,Інші канали,Дата останньої ЕН Цифровий помічник,Універсальний
+6. Активність за Каналами,Інші канали,Фулфілмент,Універсальний
+6. Активність за Каналами,Специфіка B2B,Дата першої відправленої ЕН,Тільки B2B
+6. Активність за Каналами,Специфіка B2B,Дата останньої відправленої ЕН,Тільки B2B
+6. Активність за Каналами,Специфіка B2B,Дата першої отриманої ЕН,Тільки B2B
+6. Активність за Каналами,Специфіка B2B,Дата останньої отриманої ЕН,Тільки B2B
+7. Додаток та Пристрої,Статус додатка,Користувач мобільного додатка (Так/Ні),Універсальний
+7. Додаток та Пристрої,Статус додатка,Наявність додатка (загальна),Універсальний
+7. Додаток та Пристрої,Статус додатка,Наявність старого додатка,Універсальний
+7. Додаток та Пристрої,Статус додатка,Наявність нового додатка,Універсальний
+7. Додаток та Пристрої,Технічні дані,Модель телефону,Універсальний
+7. Додаток та Пристрої,Технічні дані,Девайс старого додатка,Універсальний
+7. Додаток та Пристрої,Технічні дані,ОС девайсу старого додатка,Універсальний
+7. Додаток та Пристрої,Технічні дані,Девайс нового додатка,Універсальний
+7. Додаток та Пристрої,Технічні дані,ОС девайсу нового додатка,Універсальний
+7. Додаток та Пристрої,Технічні дані,Магазин додатку,Універсальний
+7. Додаток та Пристрої,Активність в МД,Дата останнього входу в старий дод.,Універсальний
+7. Додаток та Пристрої,Активність в МД,Дата останнього входу в новий дод.,Універсальний
+7. Додаток та Пристрої,Активність в МД,Дата першої активності в МД,Універсальний
+7. Додаток та Пристрої,Активність в МД,Дата останньої активності в МД,Універсальний
+7. Додаток та Пристрої,Активність в МД,Дати активності в старому МД (перша/остання),Універсальний
+7. Додаток та Пристрої,Активність в МД,Дати активності в нового МД (перша/остання),Універсальний
+8. Сфери та Мерчанти,Сфера діяльності,Сфера діяльності (категорія),Універсальний
+8. Сфери та Мерчанти,Сфера діяльності,Дата першої ЕН по сфері,Універсальний
+8. Сфери та Мерчанти,Сфера діяльності,Дата останньої ЕН по сфері,Універсальний
+8. Сфери та Мерчанти,Сфера діяльності,К-сть ЕН по сфері,Універсальний
+8. Сфери та Мерчанти,Сфера діяльності,Ймовірність наступної покупки в сфері,Універсальний
+8. Сфери та Мерчанти,Дані Мерчанта,Код контрагента,Універсальний
+8. Сфери та Мерчанти,Дані Мерчанта,ЄДРПОУ контрагента,Універсальний
+8. Сфери та Мерчанти,Дані Мерчанта,Назва контрагента,Універсальний
+8. Сфери та Мерчанти,Дані Мерчанта,Веб-сайт контрагента,Універсальний
+8. Сфери та Мерчанти,Дані Мерчанта,Дата першої ЕН по контрагенту,Універсальний
+8. Сфери та Мерчанти,Дані Мерчанта,Дата останньої ЕН по контрагенту,Універсальний
+8. Сфери та Мерчанти,Дані Мерчанта,К-сть ЕН по контрагенту,Універсальний
+9. Згоди та Комунікація,Маркетингові дозволи,Згода на комун. про відкр. відд.,Універсальний
+9. Згоди та Комунікація,Маркетингові дозволи,Згода на опитування,Універсальний
+9. Згоди та Комунікація,Маркетингові дозволи,Згода на проморозсилки,Універсальний
+9. Згоди та Комунікація,Маркетингові дозволи,Згода на пропозиції,Універсальний
+9. Згоди та Комунікація,Історія комунікацій,Дата останнього промо повідомлення,Універсальний`;
+
     const BLOCK_ICONS = {
         '1': 'bi-person-vcard', '2': 'bi-building', '3': 'bi-box-seam',
         '4': 'bi-cash-stack', '5': 'bi-geo-alt-fill', '6': 'bi-activity',
@@ -8876,6 +9215,31 @@
         const fid = field.fieldId;
         const fromId = `csv-${fid}-from`, toId = `csv-${fid}-to`, allId = `csv-${fid}-all`;
         let inner = '';
+
+        // #region agent log
+        fetch('http://127.0.0.1:7922/ingest/65c82af4-f73f-44e5-bcb6-1a88fb41c1ed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Debug-Session-Id': '298fe3'
+            },
+            body: JSON.stringify({
+                sessionId: '298fe3',
+                runId: 'initial',
+                hypothesisId: 'H2',
+                location: 'index.html:csvRenderField',
+                message: 'Render CSV field',
+                data: {
+                    fieldId: fid,
+                    name: field.name,
+                    visibility: field.visibility,
+                    detectedType: type,
+                    colSize: colSize
+                },
+                timestamp: Date.now()
+            })
+        }).catch(() => { });
+        // #endregion agent log
         switch (type) {
             case 'date-range':
                 inner = `<div class="d-flex justify-content-between align-items-center mb-1">
@@ -8892,15 +9256,21 @@
                 break;
             case 'checkbox':
                 inner = `<label class="form-label">${escH(field.name)}</label>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="chk-${fid}" onchange="addTag(this,'${fid}')">
-                        <label class="form-check-label small text-muted" for="chk-${fid}">Так / Ні</label>
-                    </div>`;
+                    <select class="form-select" onchange="addTag(this,'${fid}')">
+                        <option value="">Обери...</option>
+                        <option value="1">Так</option>
+                        <option value="0">Ні</option>
+                    </select>`;
                 colSize = Math.min(colSize, 4);
                 break;
             case 'select':
                 inner = `<label class="form-label">${escH(field.name)}</label>
-                    <select class="form-select" onchange="addTag(this,'${fid}')"><option value="">Обери...</option></select>`;
+                    <select class="form-select" onchange="addTag(this,'${fid}')">
+                        <option value="">Обери...</option>
+                        <option value="opt1">Варіант 1</option>
+                        <option value="opt2">Варіант 2</option>
+                        <option value="opt3">Варіант 3</option>
+                    </select>`;
                 break;
             case 'number':
                 inner = `<div class="d-flex justify-content-between align-items-center mb-1">
@@ -8952,6 +9322,30 @@
             const icon = BLOCK_ICONS[block.blockNum] || 'bi-folder';
             const bVis = csvBlockVis(block);
 
+            // #region agent log
+            fetch('http://127.0.0.1:7922/ingest/65c82af4-f73f-44e5-bcb6-1a88fb41c1ed', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Debug-Session-Id': '298fe3'
+                },
+                body: JSON.stringify({
+                    sessionId: '298fe3',
+                    runId: 'initial',
+                    hypothesisId: 'H1',
+                    location: 'index.html:csvRenderTree',
+                    message: 'Render CSV block',
+                    data: {
+                        blockNum: block.blockNum,
+                        blockLabel: block.blockLabel,
+                        subs: (block.subs || []).length,
+                        visibility: bVis
+                    },
+                    timestamp: Date.now()
+                })
+            }).catch(() => { });
+            // #endregion agent log
+
             const li = document.createElement('li');
             li.className = 'nav-item';
             li.dataset.blockVisibility = bVis;
@@ -8965,16 +9359,36 @@
             pane.dataset.blockVisibility = bVis;
 
             let html = '<div class="tab-pane-card">';
-            block.subs.forEach(sub => {
-                html += `<h6 class="fw-bold text-primary mb-3 text-uppercase small" style="letter-spacing:1px;">${escH(sub.subBlock)}</h6><div class="row g-3 mb-4">`;
-                const fpr = sub.fields.length <= 2 ? 6 : 4;
-                sub.fields.forEach(f => {
-                    const t = csvDetectType(f.name);
-                    const cs = (t === 'date-range' || t === 'number') ? 6 : (t === 'checkbox' ? 4 : fpr);
-                    html += csvRenderField(f, cs);
+            if (block.subs && block.subs.length) {
+                const subNavId = `csv-subtabs-${block.blockNum}`;
+                const subContentId = `csv-subtabs-content-${block.blockNum}`;
+                html += `<ul class="nav nav-tabs csv-subtabs mb-3" id="${subNavId}" role="tablist">`;
+                block.subs.forEach((sub, index) => {
+                    const subPaneId = `csv-subtab-${block.blockNum}-${index}`;
+                    const activeCls = index === 0 ? ' active' : '';
+                    const selected = index === 0 ? 'true' : 'false';
+                    html += `<li class="nav-item" role="presentation">
+                                <button class="nav-link${activeCls}" id="${subPaneId}-tab" data-bs-toggle="tab" data-bs-target="#${subPaneId}" type="button" role="tab" aria-selected="${selected}">
+                                    <span class="csv-subtab-label">${escH(sub.subBlock)}</span>
+                                </button>
+                            </li>`;
+                });
+                html += `</ul><div class="tab-content csv-subtabs-content" id="${subContentId}">`;
+                block.subs.forEach((sub, index) => {
+                    const subPaneId = `csv-subtab-${block.blockNum}-${index}`;
+                    const showCls = index === 0 ? ' show active' : '';
+                    html += `<div class="tab-pane fade${showCls}" id="${subPaneId}" role="tabpanel">
+                                <div class="row g-3 mb-4">`;
+                    const fpr = sub.fields.length <= 2 ? 6 : 4;
+                    sub.fields.forEach(f => {
+                        const t = csvDetectType(f.name);
+                        const cs = (t === 'date-range' || t === 'number') ? 6 : (t === 'checkbox' ? 4 : fpr);
+                        html += csvRenderField(f, cs);
+                    });
+                    html += '</div></div>';
                 });
                 html += '</div>';
-            });
+            }
             html += '</div>';
             pane.innerHTML = html;
             tabsContent.appendChild(pane);
@@ -9067,19 +9481,37 @@
         const colors = MODE_COLORS[scope] || MODE_COLORS.all;
         document.body.setAttribute('data-scope-mode', scope);
 
+        // #region agent log
+        fetch('http://127.0.0.1:7922/ingest/65c82af4-f73f-44e5-bcb6-1a88fb41c1ed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Debug-Session-Id': '298fe3'
+            },
+            body: JSON.stringify({
+                sessionId: '298fe3',
+                runId: 'initial',
+                hypothesisId: 'H3',
+                location: 'index.html:csvApplyScopeColors',
+                message: 'Apply scope colors',
+                data: { scope, colors },
+                timestamp: Date.now()
+            })
+        }).catch(() => { });
+        // #endregion agent log
+
         let styleEl = document.getElementById('scope-dynamic-styles');
-        if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'scope-dynamic-styles'; document.head.appendChild(styleEl); }
+        if (!styleEl) {
+            styleEl = document.createElement('style');
+            styleEl.id = 'scope-dynamic-styles';
+            document.head.appendChild(styleEl);
+        }
+        // Динамически подсвечиваем только заголовки внутри карточек,
+        // не заливая сами вкладки разделов.
         styleEl.textContent = `
-            #filterTabs .nav-link.active {
-                background: ${colors.gradient} !important;
-                color: #fff !important;
-                box-shadow: 0 4px 12px ${colors.shadow} !important;
-            }
-            #filterTabs .nav-link:hover:not(.active) {
-                background: rgba(0,0,0,0.04) !important;
+            #filterTabsContent .tab-pane.active .tab-pane-card h6.text-primary {
                 color: ${colors.solid} !important;
             }
-            #filterTabsContent .tab-pane.active .tab-pane-card h6.text-primary { color: ${colors.solid} !important; }
         `;
     }
 
@@ -9113,12 +9545,9 @@
         colorize(incl); colorize(excl);
     }
 
-    async function initConstructorEngine() {
+    function initConstructorEngine() {
         try {
-            const resp = await fetch(CSV_PATH);
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            const text = await resp.text();
-            const rows = csvParse(text);
+            const rows = csvParse(EMBEDDED_CSV_DATA);
             if (rows.length < 2) { console.warn('[Engine] Empty CSV'); return; }
             const tree = csvBuildTree(rows);
             csvRenderTree(tree);
