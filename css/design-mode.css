@@ -193,6 +193,25 @@
             transform: translateY(-2px);
         }
 
+        [data-theme="dark"] .design-mode-active [data-field-id] {
+            background: rgba(30, 41, 59, 0.6);
+        }
+
+        [data-theme="dark"] .design-mode-active [data-field-id]:hover {
+            background: var(--surface);
+        }
+
+        [data-theme="dark"] .add-field-btn {
+            color: #94a3b8;
+            border-color: #475569;
+        }
+
+        [data-theme="dark"] .add-field-btn:hover {
+            color: #a5b4fc;
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
         /* Toolbar */
         .design-toolbar {
             position: fixed;

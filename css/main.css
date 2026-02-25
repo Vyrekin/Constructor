@@ -1,5 +1,5 @@
         :root {
-            /* Diamond Edition Palette */
+            /* Constructor Palette */
             --primary: #4361ee;
             --primary-soft: #eef2ff;
             --secondary: #3f37c9;
@@ -133,6 +133,72 @@
             text-overflow: clip;
         }
 
+        /* Row inside card (no negative margins) — labels not clipped on the left; inputs fill column width */
+        .tab-pane-card .row.g-3 {
+            overflow: visible;
+            width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+            --bs-gutter-x: 0.75rem;
+            gap: 0 var(--bs-gutter-x);
+        }
+        .tab-pane-card [data-field-id] {
+            overflow: visible;
+            box-sizing: border-box;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        /* Column widths with gap: so row stays 100% and labels are not clipped */
+        .tab-pane-card .row.g-3 .col-md-4 {
+            flex: 0 0 calc(33.333333% - var(--bs-gutter-x) * 2 / 3);
+            max-width: calc(33.333333% - var(--bs-gutter-x) * 2 / 3);
+        }
+        .tab-pane-card .row.g-3 .col-md-6 {
+            flex: 0 0 calc(50% - var(--bs-gutter-x) / 2);
+            max-width: calc(50% - var(--bs-gutter-x) / 2);
+        }
+        .tab-pane-card .row.g-3 .col-md-3 {
+            flex: 0 0 calc(25% - var(--bs-gutter-x) * 3 / 4);
+            max-width: calc(25% - var(--bs-gutter-x) * 3 / 4);
+        }
+        .tab-pane-card .row.g-3 .col-md-5 {
+            flex: 0 0 calc(41.666667% - var(--bs-gutter-x) * 2 / 3);
+            max-width: calc(41.666667% - var(--bs-gutter-x) * 2 / 3);
+        }
+        .tab-pane-card .row.g-3 .col-md-8 {
+            flex: 0 0 calc(66.666667% - var(--bs-gutter-x) * 2 / 3);
+            max-width: calc(66.666667% - var(--bs-gutter-x) * 2 / 3);
+        }
+        .tab-pane-card .row.g-3 .col-md-12 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+        .tab-pane-card [data-field-id] .form-control,
+        .tab-pane-card [data-field-id] .form-select {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+        .tab-pane-card [data-field-id] .input-group {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+        }
+        .tab-pane-card [data-field-id] .input-group .form-control {
+            flex: 1 1 0%;
+            min-width: 0;
+        }
+        .tab-pane-card [data-field-id] .form-label,
+        .tab-pane-card .form-label {
+            overflow: visible !important;
+            white-space: normal !important;
+            word-break: break-word;
+            text-overflow: clip !important;
+            max-width: 100%;
+            display: block;
+        }
+
         .form-control,
         .form-select {
             padding: 0.2rem 0.5rem;
@@ -163,6 +229,21 @@
             color: #0f172a;
             background-color: rgba(148, 163, 184, 0.15);
             border-color: #94a3b8;
+        }
+
+        /* Keyboard focus visibility (a11y) */
+        .btn:focus-visible,
+        .nav-pills .nav-link:focus-visible,
+        .custom-filter-tabs .nav-link:focus-visible,
+        .section-title-espo:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--primary-soft);
+        }
+
+        [data-theme="dark"] .btn:focus-visible,
+        [data-theme="dark"] .nav-pills .nav-link:focus-visible,
+        [data-theme="dark"] .custom-filter-tabs .nav-link:focus-visible {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
         }
 
         h6.text-primary.text-uppercase {
@@ -245,91 +326,41 @@
             position: relative;
         }
 
+        /* Base gradient — static, no animation (animation on canvas orbs) */
         body::before {
             content: "";
             position: fixed;
             inset: 0;
             z-index: 0;
             pointer-events: none;
-            background: linear-gradient(125deg,
+            background: linear-gradient(135deg,
                     #f4f8ff 0%,
-                    #e7f1ff 20%,
-                    #f2f8ff 42%,
-                    #e8fbf5 68%,
-                    #eef4ff 100%);
-            background-size: 320% 320%;
-            animation: appGradientShift 10s ease-in-out infinite;
+                    #e8f0ff 35%,
+                    #eef4ff 70%,
+                    #e8fbf5 100%);
         }
 
         [data-theme="dark"] body::before,
         body[data-theme="dark"]::before {
-            background: linear-gradient(125deg,
+            background: linear-gradient(135deg,
                     #0b1220 0%,
-                    #101a2b 25%,
-                    #0f1b2f 50%,
-                    #10242a 75%,
+                    #101a2b 40%,
+                    #0f1b2f 70%,
                     #0c1728 100%);
-            opacity: 0.92;
-        }
-
-        @keyframes appGradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            inset: -20%;
-            z-index: 0;
-            pointer-events: none;
-            background:
-                radial-gradient(circle at 15% 18%, rgba(67, 97, 238, 0.24) 0%, rgba(67, 97, 238, 0) 38%),
-                radial-gradient(circle at 82% 22%, rgba(76, 201, 240, 0.28) 0%, rgba(76, 201, 240, 0) 36%),
-                radial-gradient(circle at 70% 82%, rgba(63, 55, 201, 0.2) 0%, rgba(63, 55, 201, 0) 42%),
-                radial-gradient(circle at 22% 74%, rgba(20, 184, 166, 0.2) 0%, rgba(20, 184, 166, 0) 44%);
-            filter: blur(14px) saturate(125%);
-            transform-origin: center;
-            animation: appOrbsDrift 14s ease-in-out infinite alternate;
-            opacity: 0.9;
-        }
-
-        [data-theme="dark"] body::after,
-        body[data-theme="dark"]::after {
-            background:
-                radial-gradient(circle at 15% 18%, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0) 38%),
-                radial-gradient(circle at 82% 22%, rgba(56, 189, 248, 0.14) 0%, rgba(56, 189, 248, 0) 36%),
-                radial-gradient(circle at 70% 82%, rgba(129, 140, 248, 0.16) 0%, rgba(129, 140, 248, 0) 44%),
-                radial-gradient(circle at 22% 74%, rgba(45, 212, 191, 0.12) 0%, rgba(45, 212, 191, 0) 42%);
-            opacity: 0.78;
-        }
-
-        @keyframes appOrbsDrift {
-            0% {
-                transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-            }
-
-            50% {
-                transform: translate3d(-1.8%, 1.3%, 0) scale(1.06) rotate(2deg);
-            }
-
-            100% {
-                transform: translate3d(1.6%, -1.4%, 0) scale(1.03) rotate(-2deg);
-            }
+            opacity: 0.95;
         }
 
         body>* {
             position: relative;
             z-index: 1;
+        }
+
+        .app-bg-particles {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            display: block;
         }
 
         .app-header,
@@ -363,9 +394,11 @@
 
         .formula-card,
         .compact-control-card,
-        .tab-pane-card,
         .custom-filter-tabs {
             overflow: hidden;
+        }
+        .tab-pane-card {
+            overflow: visible;
         }
 
         /* CSV inner subtabs (Chrome-like) */
@@ -590,6 +623,11 @@
         .accordion-button:focus {
             box-shadow: none;
             border-color: var(--primary-soft);
+        }
+
+        .accordion-button:focus-visible {
+            box-shadow: 0 0 0 3px var(--primary-soft);
+            outline: none;
         }
 
         .accordion-button::after {
@@ -1267,14 +1305,14 @@
 
         #espo-include-list:empty::after {
             content: 'Оберіть фільтри для включення';
-            color: #bbb;
+            color: var(--text-muted);
             font-size: 0.75rem;
             font-weight: 600;
         }
 
         #espo-exclude-list:empty::after {
             content: 'Оберіть фільтри для виключення';
-            color: #bbb;
+            color: var(--text-muted);
             font-size: 0.75rem;
             font-weight: 600;
         }
@@ -1389,6 +1427,7 @@
                 max-height: calc(100vh - 380px);
                 /* Dynamic adjustment for desktop */
                 overflow-y: auto;
+                overflow-x: visible;
                 padding-right: 5px;
             }
         }
@@ -1440,6 +1479,16 @@
                 position: relative;
                 /* Unstick header on very small devices if needed, or keep glass */
             }
+
+            .compact-control-card .bg-light-subtle {
+                flex-wrap: wrap;
+            }
+
+            .compact-control-card .bg-light-subtle > div:last-child {
+                flex: 1 1 100%;
+                min-width: 200px;
+                max-width: none;
+            }
         }
 
         /* Better scrollbar for tab content */
@@ -1458,10 +1507,6 @@
             background: var(--surface);
             border-radius: 16px;
             border: 1px solid var(--border);
-        }
-
-        #pane-c1 {
-            color: rgba(27, 38, 59, 0);
         }
 
         /* Subsection tabs: ensure panes show when active */
@@ -1656,6 +1701,16 @@
             border-radius: 18px;
             padding: 8px 12px;
             box-shadow: var(--shadow-sm);
+        }
+
+        /* Same width as upper block (compact-control-card): same horizontal padding */
+        #filterTabsContent {
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+            overflow-x: visible;
+        }
+        #filterTabsContent .tab-pane {
+            overflow-x: visible;
         }
 
         .custom-filter-tabs::-webkit-scrollbar {
