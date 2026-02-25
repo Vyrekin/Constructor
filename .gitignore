@@ -1,0 +1,8 @@
+# Backup of monolith (optional to keep locally)
+index.html.backup
+
+# macOS
+.DS_Store
+
+# Editor / IDE
+.cursor/
