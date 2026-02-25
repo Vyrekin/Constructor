@@ -1131,7 +1131,10 @@
 
     function initMotionEnhancements() {
         const revealTargets = document.querySelectorAll('.card-diamond, .tab-pane-card, .formula-card, .condition-block');
-        revealTargets.forEach((el) => el.classList.add('motion-reveal'));
+        revealTargets.forEach((el) => {
+            if (el.closest('#pane-c10')) return;
+            el.classList.add('motion-reveal');
+        });
 
         if ('IntersectionObserver' in window) {
             const observer = new IntersectionObserver((entries) => {
@@ -1152,6 +1155,7 @@
             tabBtn.addEventListener('shown.bs.tab', (event) => {
                 const targetSelector = event.target.getAttribute('data-bs-target');
                 const pane = targetSelector ? document.querySelector(targetSelector) : null;
+                if (pane?.id === 'pane-c10') return;
 
                 const card = pane?.querySelector('.tab-pane-card');
                 if (!card) return;
@@ -1541,6 +1545,10 @@
         const geoPane = document.getElementById('pane-c10');
         const geoPaneHTML = geoPane ? geoPane.outerHTML : '';
 
+        if (typeof window.destroyGeoMap === 'function') window.destroyGeoMap();
+        const filterTabsEl = document.getElementById('filterTabs');
+        if (filterTabsEl) filterTabsEl._geoMapControllerBound = false;
+
         tabsList.innerHTML = '';
         tabsContent.innerHTML = '';
 
@@ -1633,7 +1641,18 @@
             tabsList.appendChild(geoLi);
             const geoDiv = document.createElement('div');
             geoDiv.innerHTML = geoPaneHTML;
-            tabsContent.appendChild(geoDiv.firstElementChild);
+            const restoredPane = geoDiv.firstElementChild;
+            tabsContent.appendChild(restoredPane);
+
+            // Strip motion-reveal that was baked into saved HTML;
+            // the geo card must always be visible — no reveal animation.
+            const geoCard = restoredPane.querySelector('.tab-pane-card');
+            if (geoCard) {
+                geoCard.classList.remove('motion-reveal');
+                geoCard.classList.add('motion-visible');
+                geoCard.style.opacity = '1';
+                geoCard.style.transform = 'none';
+            }
         }
 
         // Register fields in categoryMap
@@ -1656,6 +1675,7 @@
             tabBtn.addEventListener('shown.bs.tab', event => {
                 const t = event.target.getAttribute('data-bs-target');
                 const p = t ? document.querySelector(t) : null;
+                if (p?.id === 'pane-c10') return;
 
                 const c = p?.querySelector('.tab-pane-card');
                 if (!c) return;
@@ -1665,7 +1685,8 @@
             });
         });
 
-        // Formula colorizer
+        if (typeof initGeoTabController === 'function') initGeoTabController();
+
         csvInitFormulaSyncObserver();
 
         console.log('[Constructor Engine] Rendered', tree.length, 'blocks from CSV');

@@ -3,8 +3,37 @@
         let mapLayer;
         let branchLayerGroup;
 
+        function destroyMapIfDetached() {
+            if (typeof map === 'undefined' || !map) return;
+            try {
+                const container = map.getContainer();
+                if (!container || !document.body.contains(container)) {
+                    map.remove();
+                    map = null;
+                    branchLayerGroup = null;
+                    selectedPoints = [];
+                }
+            } catch (e) { map = null; branchLayerGroup = null; selectedPoints = []; }
+        }
+
+        function destroyGeoMap() {
+            try {
+                if (typeof map !== 'undefined' && map) {
+                    map.remove();
+                }
+            } catch (e) {}
+            map = null;
+            branchLayerGroup = null;
+            selectedPoints = [];
+        }
+        if (typeof window !== 'undefined') window.destroyGeoMap = destroyGeoMap;
+
         function initMap() {
-            if (map || typeof L === 'undefined') return;
+            if (typeof L === 'undefined') return;
+            destroyMapIfDetached();
+            if (map) return;
+            const container = document.getElementById('map-container');
+            if (!container) return;
             map = L.map('map-container', { zoomControl: false }).setView([48.3794, 31.1656], 6);
             L.control.zoom({ position: 'bottomright' }).addTo(map);
 
@@ -26,11 +55,31 @@
         }
 
         function initGeoTabController() {
-            document.getElementById('filterTabs')?.addEventListener('shown.bs.tab', (e) => {
-                if (e.target.id !== 'tab-c10') return;
-                initMap();
-                if (typeof populateGeoDatalists === 'function') populateGeoDatalists();
-                if (typeof map !== 'undefined' && map) setTimeout(() => map.invalidateSize(), 200);
+            const tabsEl = document.getElementById('filterTabs');
+            if (!tabsEl || tabsEl._geoMapControllerBound) return;
+            tabsEl._geoMapControllerBound = true;
+            tabsEl.addEventListener('shown.bs.tab', function onGeoShown(e) {
+                const target = e.target;
+                const paneId = target.getAttribute && target.getAttribute('data-bs-target');
+                if (paneId !== '#pane-c10') return;
+
+                // Ensure geo card is visible (motion-reveal may have set opacity: 0)
+                const geoCard = document.querySelector('#pane-c10 .tab-pane-card');
+                if (geoCard) {
+                    geoCard.classList.remove('motion-reveal');
+                    geoCard.classList.add('motion-visible');
+                    geoCard.style.opacity = '1';
+                    geoCard.style.transform = 'none';
+                }
+
+                setTimeout(function() {
+                    initMap();
+                    if (typeof populateGeoDatalists === 'function') populateGeoDatalists();
+                    if (typeof map !== 'undefined' && map) {
+                        map.invalidateSize();
+                        setTimeout(function() { map.invalidateSize(); }, 400);
+                    }
+                }, 100);
             });
         }
 
@@ -1580,8 +1629,9 @@
                             }
                         });
 
-                        // Show/Hide the row/wrapper itself
-                        child.style.display = (term === '' || visibleInThisContainer > 0) ? '' : 'none';
+                        // Show/Hide the row/wrapper itself (never hide row that contains the map)
+                        const hasMap = child.querySelector && child.querySelector('#map-container');
+                        child.style.display = (term === '' || visibleInThisContainer > 0 || hasMap) ? '' : 'none';
                     }
                 });
 
@@ -1615,8 +1665,8 @@
                     }
                 });
 
-                // 3. Tab Pane visibility during search: show if it has matches
-                if (term !== '') {
+                // 3. Tab Pane visibility during search: show if it has matches (never hide Geo map pane)
+                if (term !== '' && paneId !== 'pane-c10') {
                     const hasMatches = tabCounts[paneId] > 0;
                     pane.style.display = hasMatches ? 'block' : 'none';
                 }
@@ -1664,6 +1714,7 @@
         // --- 3. COUNTER ANIMATION ---
         // Initial setup for search interaction
         document.addEventListener('DOMContentLoaded', () => {
+            initGeoTabController();
             const searchInput = document.getElementById('field-search-input');
             const tabs = document.querySelectorAll('#filterTabs .nav-link');
             if (tabs) {
