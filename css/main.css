@@ -514,6 +514,17 @@
             }
         }
 
+        .app-header-logo {
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        .app-header h4.app-title { color: var(--text-main); }
+        #app-views-nav {
+            background: var(--surface);
+            border-color: var(--border) !important;
+        }
+
         /* Navigation Tabs */
         .nav-pills .nav-link {
             color: var(--text-muted);
