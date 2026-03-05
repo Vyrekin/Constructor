@@ -383,7 +383,7 @@
         modalEl.id = modalId;
         modalEl.className = 'modal fade';
         modalEl.tabIndex = -1;
-        modalEl.setAttribute('data-bs-backdrop', 'static');
+        modalEl.setAttribute('data-bs-backdrop', 'false');
         modalEl.innerHTML = `
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
@@ -507,7 +507,7 @@
         modalElNode.id = modalId;
         modalElNode.className = 'modal fade';
         modalElNode.tabIndex = -1;
-        modalElNode.setAttribute('data-bs-backdrop', 'static');
+        modalElNode.setAttribute('data-bs-backdrop', 'false');
 
         const types = [
             { id: 'text', label: 'Текстове поле', icon: 'bi-fonts' },
@@ -671,7 +671,7 @@
         modalEl.id = modalId;
         modalEl.className = 'modal fade';
         modalEl.tabIndex = -1;
-        modalEl.setAttribute('data-bs-backdrop', 'static');
+        modalEl.setAttribute('data-bs-backdrop', 'false');
         modalEl.innerHTML = `
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content bg-dark border-secondary shadow-lg" style="border-radius: 20px;">
