@@ -113,7 +113,7 @@
                             placeholder="Search"
                             oninput="filterFieldsBySearch(this.value)">
                     </div>
-                    <button class="btn-ai-sidebar" onclick="switchView('ai')">
+                    <button class="btn-ai-sidebar" onclick="toggleAIMode(this)">
                         <i class="bi bi-stars"></i> AI Помічник
                     </button>
                 </div>
@@ -196,6 +196,20 @@
                         <div class="np-cat-fields" id="fields-c2" style="display:none"></div>
                     </li>
                 </ul>
+
+                <!-- AI Query Input Mode (hidden by default) -->
+                <div id="np-ai-input-mode" style="display:none; padding:12px 14px; border-top:1px solid #E5E7EB;">
+                    <button class="btn btn-sm btn-link p-0 mb-2" onclick="toggleAIMode(null, true)" style="font-size:0.8rem; color:#6B7280;">
+                        <i class="bi bi-chevron-left"></i> Назад до полів
+                    </button>
+                    <label class="np-sidebar-label d-block mb-2">AI ЗАПИТ</label>
+                    <textarea class="form-control form-control-sm" id="ai-query-input"
+                        placeholder="Опишіть вибірку на українській, наприклад: Клієнти з Києва, які купили більше 3х разів за останній місяць"
+                        rows="4" style="font-size:0.8rem; resize:vertical; max-height:120px;"></textarea>
+                    <button class="btn btn-sm btn-primary w-100 mt-2" onclick="submitAIQuery()">
+                        <i class="bi bi-stars"></i> Сформувати запит
+                    </button>
+                </div>
             </div>
 
             <!-- ── MAIN CONTENT AREA ───────────────────────────── -->
@@ -2899,6 +2913,63 @@
         // Position picker near drop point
         const fakeAnchor = { getBoundingClientRect: () => ({ bottom: e.clientY, left: e.clientX, top: e.clientY }) };
         openPickerForField(fieldId, label, ftype, fakeAnchor);
+    }
+
+    // ── AI MODE: toggle between categories and AI query input ────
+    function toggleAIMode(btn, closeMode = false) {
+        const categoriesList = document.getElementById('np-categories-list');
+        const aiInputMode = document.getElementById('np-ai-input-mode');
+        const aiBtn = btn || document.querySelector('.btn-ai-sidebar');
+
+        if (closeMode || (aiInputMode && aiInputMode.style.display !== 'none')) {
+            // Close AI mode, show categories
+            if (categoriesList) categoriesList.style.display = '';
+            if (aiInputMode) aiInputMode.style.display = 'none';
+            if (aiBtn) aiBtn.classList.remove('active');
+        } else {
+            // Open AI mode, hide categories
+            if (categoriesList) categoriesList.style.display = 'none';
+            if (aiInputMode) aiInputMode.style.display = '';
+            if (aiBtn) aiBtn.classList.add('active');
+            // Focus on textarea
+            setTimeout(() => {
+                const input = document.getElementById('ai-query-input');
+                if (input) input.focus();
+            }, 50);
+        }
+    }
+
+    function submitAIQuery() {
+        const queryInput = document.getElementById('ai-query-input');
+        if (!queryInput || !queryInput.value.trim()) {
+            alert('Будь ласка, опишіть вибірку');
+            return;
+        }
+
+        const query = queryInput.value.trim();
+        console.log('AI Query:', query);
+
+        // Mock AI analysis - add some sample filters based on keywords
+        const lowerQuery = query.toLowerCase();
+
+        // Example mock: detect "київ" → add geo filter
+        if (lowerQuery.includes('київ') || lowerQuery.includes('kyiv')) {
+            addEspoBlock('Location', 'Місто', 'Київ', 'Include', null);
+        }
+
+        // Example: detect "купи" → show purchase fields
+        if (lowerQuery.includes('купи') || lowerQuery.includes('покуп') || lowerQuery.includes('замовлен')) {
+            addEspoBlock('PurchaseCount', 'Кількість замовлень', '> 1', 'Include', null);
+        }
+
+        // Show feedback
+        alert(`Запит аналізовано: "${query}"\n\nДобавлені фільтри на основі ключових слів.`);
+
+        // Close AI mode
+        toggleAIMode(null, true);
+
+        // Clear input
+        queryInput.value = '';
     }
 
     // ── EXPORT: show description only for template mode ────────

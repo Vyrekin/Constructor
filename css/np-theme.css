@@ -262,6 +262,7 @@ main.container-fluid { padding: 0 !important; }
     transition: background 0.15s;
 }
 .btn-ai-sidebar:hover { background: #374151; }
+.btn-ai-sidebar.active { background: var(--np-green); color: #fff; }
 
 /* Sidebar label */
 .np-sidebar-label {
@@ -1121,7 +1122,7 @@ main.container-fluid { padding: 0 !important; }
     flex-direction: row !important;
     align-items: stretch !important;
     width: 100% !important;
-    max-width: 100% !important;
+    max-width: 600px !important;
     min-width: 0 !important;
     background: #FFFFFF !important;
     border: 1px solid #E0E0E0 !important;
