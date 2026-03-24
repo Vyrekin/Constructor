@@ -1,655 +1,814 @@
 /* ============================================================
-   Nova Poshta Design Theme — overrides main.css
+   Nova Poshta Design Theme — matches Figma design exactly
    ============================================================ */
 
 /* ── 1. COLOR PALETTE ─────────────────────────────────────── */
 :root {
-    --np-red:          #C8102E;
-    --np-red-dark:     #A50D24;
+    --np-red:          #E2001A;
+    --np-blue:         #1B5CE7;
+    --np-blue-dark:    #1449C4;
     --np-green:        #3FA858;
     --np-green-dark:   #2D8A44;
-    --np-dark:         #2B3747;
-    --np-dark-2:       #1A2535;
-    --np-yellow:       #FFC107;
+    --np-green-light:  #E8F5EC;
+    --np-orange:       #D97706;
+    --np-orange-light: #FEF3C7;
+    --np-gray-tag:     #F3F4F6;
 
-    /* Override primary to NP green */
-    --primary:         #3FA858;
-    --primary-soft:    rgba(63, 168, 88, 0.1);
-    --secondary:       #2D8A44;
-    --accent:          #3FA858;
+    /* Override main.css primary */
+    --primary:         #1B5CE7;
+    --primary-soft:    rgba(27, 92, 231, 0.08);
+    --secondary:       #1449C4;
     --surface:         #FFFFFF;
-    --bg-app:          #F2F4F6;
-    --text-main:       #1A2535;
+    --bg-app:          #F8F9FA;
+    --text-main:       #111827;
     --text-muted:      #6B7280;
-    --border:          #E2E6EA;
+    --border:          #E5E7EB;
 
-    --shadow-float:    0 4px 16px rgba(0,0,0,0.10);
-    --shadow-card:     0 1px 4px rgba(0,0,0,0.06);
+    --shadow-card:     0 1px 3px rgba(0,0,0,0.08);
     --radius-btn:      6px;
     --radius-card:     8px;
-    --motion-base:     200ms;
-    --motion-ease:     ease;
 }
 
-/* ── 2. BACKGROUND ────────────────────────────────────────── */
+/* ── 2. BACKGROUND / BODY ─────────────────────────────────── */
 .app-bg-particles { display: none !important; }
 
 body::before {
-    background: #F2F4F6 !important;
+    background: #F8F9FA !important;
     opacity: 1 !important;
 }
 
-body {
-    background-color: #F2F4F6;
-}
+body { background-color: #F8F9FA; }
 
-/* Remove hover lift on cards */
+/* Remove hover lift */
 .card-diamond:hover,
 .tab-pane-card:hover,
 .formula-card:hover {
     transform: none !important;
     box-shadow: var(--shadow-card) !important;
 }
+.btn:hover { transform: none !important; }
+.form-control:focus,
+.form-select:focus { transform: none !important; }
 
-/* ── 3. HEADER — NP RED ───────────────────────────────────── */
+/* ── 3. SYSTEM HEADER (white, NP red text logo) ───────────── */
 .app-header {
-    background: var(--np-red) !important;
+    background: #FFFFFF !important;
     backdrop-filter: none !important;
-    border-bottom: none !important;
+    border-bottom: 1px solid #E5E7EB !important;
     height: 48px;
     padding: 0;
 }
 
-.app-header h4.app-title {
-    color: #fff !important;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.app-header-logo {
-    background: transparent !important;
-    box-shadow: none !important;
-    width: auto !important;
-    height: auto !important;
-    border-radius: 0 !important;
-}
-
-/* NP Logo badge */
-.np-logo-badge {
-    background: #FFC107;
-    color: #1A2535;
+/* NP Logo — red text */
+.np-logo-text {
+    color: var(--np-red);
     font-weight: 900;
-    font-size: 0.85rem;
-    letter-spacing: -0.5px;
-    padding: 3px 7px;
-    border-radius: 4px;
-    line-height: 1.2;
-}
-
-.np-brand-label {
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
+    font-size: 1rem;
+    letter-spacing: -0.3px;
     text-transform: uppercase;
+    white-space: nowrap;
+    text-decoration: none;
 }
 
-/* Header nav links — white text */
-.np-header-nav .nav-link {
-    color: rgba(255,255,255,0.85) !important;
+/* System nav links */
+.np-system-nav .nav-link {
+    color: #374151 !important;
     font-size: 0.8rem;
     font-weight: 500;
-    padding: 0.25rem 0.6rem !important;
+    padding: 0.2rem 0.5rem !important;
     border-radius: 4px;
+    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    background: transparent !important;
+    white-space: nowrap;
+}
+.np-system-nav .nav-link:hover {
+    color: #111827 !important;
+    background: #F3F4F6 !important;
 }
 
-.np-header-nav .nav-link:hover,
-.np-header-nav .nav-link.active {
-    color: #fff !important;
-    background: rgba(255,255,255,0.15) !important;
+.np-logout-link {
+    color: #374151;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+.np-logout-link:hover {
+    color: #111827;
+    background: #F3F4F6;
 }
 
-/* Header action buttons */
+/* Hide old header elements */
 .app-header .btn-outline-secondary,
 .app-header .btn-outline-primary {
-    color: rgba(255,255,255,0.85) !important;
+    color: #374151 !important;
     border-color: transparent !important;
     background: transparent !important;
 }
 .app-header .btn-outline-secondary:hover,
 .app-header .btn-outline-primary:hover {
-    background: rgba(255,255,255,0.15) !important;
-    color: #fff !important;
+    background: #F3F4F6 !important;
+    color: #111827 !important;
 }
-
 .app-header .bi-person-circle,
 .app-header .bi-moon-stars-fill,
-.app-header .bi-bookmark-star-fill {
-    color: rgba(255,255,255,0.85) !important;
-}
+.app-header .bi-bookmark-star-fill { color: #374151 !important; }
 
-.app-header #app-views-nav {
-    background: transparent !important;
-    border-color: transparent !important;
-}
-
-.app-header .nav-pills .nav-link {
-    color: rgba(255,255,255,0.8) !important;
-    background: transparent !important;
-    border: 1px solid rgba(255,255,255,0.25) !important;
-}
-
-.app-header .nav-pills .nav-link.active {
-    background: rgba(255,255,255,0.2) !important;
-    color: #fff !important;
-    box-shadow: none !important;
-}
-
-.np-logout-btn {
-    color: rgba(255,255,255,0.85);
-    font-size: 0.8rem;
-    font-weight: 500;
-    padding: 0.25rem 0.75rem;
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 4px;
-    background: transparent;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-.np-logout-btn:hover {
-    background: rgba(255,255,255,0.15);
-    color: #fff;
-}
-
-/* ── 4. PAGE SUB-HEADER ───────────────────────────────────── */
+/* ── 4. PAGE HEADER (title + segment tabs) ────────────────── */
 .page-subheader {
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-    padding: 0 1.25rem;
-    height: 48px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 0 24px;
+    height: 64px;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 24px;
     position: sticky;
     top: 48px;
     z-index: 990;
 }
 
 .page-title {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    color: var(--text-main);
+    color: #111827;
     white-space: nowrap;
     margin: 0;
+    flex-shrink: 0;
 }
 
-.page-tabs {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    flex: 1;
-    height: 100%;
+/* Segment tabs container */
+.segment-tabs {
+    display: inline-flex;
+    background: #F3F4F6;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
 }
 
-.page-tab-btn {
-    height: 100%;
-    padding: 0 1rem;
+.seg-tab {
+    padding: 5px 16px;
     font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--text-muted);
+    font-weight: 600;
+    color: #6B7280;
     background: transparent;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.15s;
     white-space: nowrap;
 }
-
-.page-tab-btn:hover {
-    color: var(--text-main);
+.seg-tab:hover { color: #374151; background: rgba(255,255,255,0.6); }
+.seg-tab.active {
+    background: #FFFFFF;
+    color: #111827;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
 }
 
-.page-tab-btn.active {
-    color: var(--np-green);
-    border-bottom-color: var(--np-green);
-    font-weight: 600;
-}
-
-.btn-np-save {
-    background: var(--np-green);
+/* Templates button — BLUE */
+.btn-templates {
+    background: var(--np-blue);
     color: #fff;
     border: none;
-    border-radius: 6px;
-    padding: 0.3rem 1rem;
-    font-size: 0.82rem;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
-    white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 7px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
-.btn-np-save:hover {
-    background: var(--np-green-dark);
-    color: #fff;
-}
+.btn-templates:hover { background: var(--np-blue-dark); color: #fff; }
 
 /* ── 5. MAIN LAYOUT ───────────────────────────────────────── */
-main.container-fluid {
-    padding: 0 !important;
-    background: #F2F4F6;
-}
+main.container-fluid { padding: 0 !important; }
 
 .np-layout {
     display: flex;
-    height: calc(100vh - 96px);
+    height: calc(100vh - 112px); /* 48px header + 64px sub-header */
     overflow: hidden;
 }
 
-/* Left categories sidebar */
+/* ── 6. LEFT SIDEBAR ──────────────────────────────────────── */
 .np-filter-sidebar {
-    width: 220px;
-    min-width: 220px;
-    background: #fff;
-    border-right: 1px solid var(--border);
+    width: 260px;
+    min-width: 260px;
+    background: #FFFFFF;
+    border-right: 1px solid #E5E7EB;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-.np-filter-sidebar-search {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
-}
-
-.np-filter-sidebar-search .form-control {
-    font-size: 0.8rem;
-    height: 30px;
-    border-radius: 5px;
-    border-color: var(--border);
-    padding: 0.25rem 0.5rem;
-    background: #F8F9FA;
-}
-
-.np-filter-sidebar-search .form-control:focus {
-    box-shadow: 0 0 0 2px rgba(63,168,88,0.2);
-    border-color: var(--np-green);
-    transform: none;
-}
-
-.np-categories-list {
-    list-style: none;
-    padding: 6px 0;
-    margin: 0;
-    overflow-y: auto;
-    flex: 1;
-}
-
-.np-categories-list li {
-    padding: 0;
-}
-
-.np-category-btn {
+/* Search + AI row */
+.np-search-ai {
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 100%;
-    padding: 7px 14px;
-    background: transparent;
-    border: none;
-    text-align: left;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--text-main);
-    cursor: pointer;
-    transition: background 0.1s;
-    border-left: 3px solid transparent;
-}
-
-.np-category-btn:hover {
-    background: #F2F4F6;
-}
-
-.np-category-btn.active {
-    background: rgba(63,168,88,0.08);
-    color: var(--np-green);
-    border-left-color: var(--np-green);
-    font-weight: 600;
-}
-
-.np-category-btn .bi {
-    font-size: 0.9rem;
-    opacity: 0.7;
-    flex-shrink: 0;
-}
-
-.np-category-btn.active .bi {
-    opacity: 1;
-    color: var(--np-green);
-}
-
-/* Center content area */
-.np-main-content {
-    flex: 1;
-    overflow-y: auto;
     padding: 12px 14px;
-    background: #F2F4F6;
+    border-bottom: 1px solid #F3F4F6;
 }
 
-/* Right sidebar */
-.np-right-sidebar {
-    width: 280px;
-    min-width: 280px;
-    background: #fff;
-    border-left: 1px solid var(--border);
-    overflow-y: auto;
-    padding: 12px;
+.np-search-wrap {
+    flex: 1;
+    position: relative;
+}
+.np-search-wrap .bi-search {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+.np-search-wrap .form-control {
+    padding-left: 30px !important;
+    font-size: 0.82rem;
+    height: 34px;
+    border-radius: 6px;
+    border: 1px solid #E5E7EB;
+    background: #F9FAFB;
+}
+.np-search-wrap .form-control:focus {
+    box-shadow: 0 0 0 2px rgba(27,92,231,0.18) !important;
+    border-color: var(--np-blue) !important;
+    transform: none !important;
 }
 
-/* ── 6. COUNTER BOX — DARK STYLE ─────────────────────────── */
-.counter-box {
-    background: var(--np-dark) !important;
-    border-radius: 8px !important;
-    padding: 16px !important;
-    margin-bottom: 12px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
-    text-align: left !important;
+.btn-ai-sidebar {
+    background: #1F2937;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0 12px;
+    height: 34px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    transition: background 0.15s;
 }
+.btn-ai-sidebar:hover { background: #374151; }
 
-.counter-box small {
-    font-size: 0.7rem !important;
-    color: rgba(255,255,255,0.55) !important;
+/* Sidebar label */
+.np-sidebar-label {
+    padding: 10px 14px 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #9CA3AF;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-.counter-number {
-    font-size: 2.2rem !important;
-    font-weight: 700 !important;
-    color: #fff !important;
-    line-height: 1.1 !important;
-    letter-spacing: -0.5px;
-    margin: 4px 0 2px 0 !important;
-    display: block;
+/* Category list */
+.np-categories-list {
+    list-style: none;
+    padding: 4px 0;
+    margin: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+.np-categories-list li { padding: 0; }
+
+.np-category-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 9px 14px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #374151;
+    cursor: pointer;
+    transition: background 0.1s;
+    border-left: 3px solid transparent;
+    gap: 8px;
+}
+.np-category-btn .cat-label { flex: 1; }
+.np-category-btn .bi-chevron-right {
+    font-size: 0.7rem;
+    color: #9CA3AF;
+    flex-shrink: 0;
+}
+.np-category-btn:hover { background: #F9FAFB; }
+.np-category-btn.active {
+    background: #F0F7FF;
+    color: #1B5CE7;
+    border-left-color: var(--np-blue);
+    font-weight: 500;
+}
+.np-category-btn.active .bi-chevron-right { color: var(--np-blue); }
+
+/* ── 7. MAIN CONTENT ──────────────────────────────────────── */
+.np-main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    background: #F8F9FA;
+    min-width: 0;
 }
 
-.counter-box .progress {
-    display: none !important;
+/* Audience section header */
+.audience-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
 }
-
-.counter-box .btn-white-soft {
-    background: rgba(255,255,255,0.1) !important;
-    border-color: rgba(255,255,255,0.2) !important;
-    color: rgba(255,255,255,0.8) !important;
-    font-size: 0.78rem !important;
-    border-radius: 5px !important;
-    padding: 0.3rem 0.75rem !important;
+.audience-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
 }
-
-.counter-box .btn-white-soft:hover {
-    background: rgba(255,255,255,0.2) !important;
-    color: #fff !important;
+.btn-clear-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--np-red);
+    border: 1px solid var(--np-red);
+    background: transparent;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
 }
+.btn-clear-all:hover { background: rgba(226,0,26,0.05); }
 
-/* counter sub-label */
-.counter-sub {
-    font-size: 0.72rem;
-    color: rgba(255,255,255,0.5);
-    display: block;
-    margin-bottom: 10px;
+/* Filter tags breadcrumb row */
+.filter-tags-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
 }
-
-/* counter arrow indicator */
-.counter-trend {
+.filter-tag {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-size: 0.72rem;
-    color: var(--np-green);
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: default;
+}
+.filter-tag.green {
+    background: #D1FAE5;
+    color: #065F46;
+}
+.filter-tag.yellow {
+    background: #FEF3C7;
+    color: #92400E;
+}
+.filter-tag.gray {
+    background: #F3F4F6;
+    color: #374151;
+}
+.filter-tag-op {
+    font-size: 0.75rem;
     font-weight: 600;
+    color: #6B7280;
+    padding: 0 2px;
 }
 
-/* ── 7. BUTTONS ──────────────────────────────────────────── */
+/* Filter group block */
+.filter-group {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    overflow: hidden;
+}
+.filter-group.group-include { border-color: #6EE7B7; }
+.filter-group.group-exclude { border-color: #FCD34D; }
+
+.filter-group-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+.filter-group-header.include { color: var(--np-green); }
+.filter-group-header.exclude { color: var(--np-orange); }
+.filter-group-header .bi-chevron-down { font-size: 0.75rem; }
+
+.filter-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-top: 1px solid #F3F4F6;
+}
+.filter-row .drag-handle {
+    color: #D1D5DB;
+    cursor: grab;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+.filter-row .field-label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #374151;
+    flex-shrink: 0;
+    min-width: 130px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.filter-row .field-label .bi-info-circle {
+    color: #9CA3AF;
+    font-size: 0.75rem;
+}
+.filter-row .form-control,
+.filter-row .form-select {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.82rem;
+    height: 36px;
+    border-color: #E5E7EB;
+    border-radius: 6px;
+}
+.filter-row .btn-delete-row {
+    background: transparent;
+    border: none;
+    color: #9CA3AF;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: color 0.1s;
+}
+.filter-row .btn-delete-row:hover { color: var(--np-red); }
+
+/* Selected tags in select */
+.selected-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #F3F4F6;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+.selected-tag .remove { cursor: pointer; color: #6B7280; }
+.selected-tag .remove:hover { color: #111827; }
+
+/* Add params placeholder */
+.add-params-hint {
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: #9CA3AF;
+    border-top: 1px solid #F3F4F6;
+}
+
+/* Operator button (АБО / ТА) */
+.filter-operator {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 4px 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #E5E7EB;
+    background: #fff;
+    transition: all 0.1s;
+}
+.filter-operator:hover { border-color: #9CA3AF; }
+.filter-operator .bi-chevron-down { font-size: 0.65rem; color: #9CA3AF; }
+
+/* ── 8. RIGHT SIDEBAR ─────────────────────────────────────── */
+.np-right-sidebar {
+    width: 320px;
+    min-width: 320px;
+    background: #FFFFFF;
+    border-left: 1px solid #E5E7EB;
+    overflow-y: auto;
+    padding: 0;
+}
+
+/* Counter box — GREEN */
+.counter-box {
+    background: var(--np-green) !important;
+    border-radius: 0 !important;
+    padding: 20px 20px 16px !important;
+    margin-bottom: 0 !important;
+    box-shadow: none !important;
+    text-align: left !important;
+    position: relative;
+}
+.counter-box small {
+    font-size: 0.78rem !important;
+    color: rgba(255,255,255,0.85) !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    display: block;
+    margin-top: 4px;
+}
+.counter-number {
+    font-size: 2.4rem !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+    line-height: 1.1 !important;
+    letter-spacing: -1px;
+    margin: 0 !important;
+    display: block;
+}
+.counter-box .progress { display: none !important; }
+.counter-box .btn-white-soft {
+    display: none !important; /* analytics button hidden, chart shown instead */
+}
+.counter-trend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: rgba(255,255,255,0.85);
+    font-size: 1.2rem;
+}
+.counter-sub {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.85);
+    display: block;
+    margin-top: 2px;
+}
+
+/* Donut / progress chart area */
+.np-donut-wrap {
+    padding: 16px 20px;
+    text-align: center;
+    border-bottom: 1px solid #F3F4F6;
+}
+.np-donut-chart {
+    width: 140px;
+    height: 80px;
+    margin: 0 auto;
+    position: relative;
+}
+.np-donut-percent {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #111827;
+    display: block;
+    margin-top: 4px;
+}
+.np-donut-label {
+    font-size: 0.75rem;
+    color: #9CA3AF;
+    margin-top: 2px;
+}
+
+/* Export section */
+.np-export-section {
+    padding: 16px 20px;
+}
+.np-export-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 14px;
+}
+.np-export-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 5px;
+    display: block;
+}
+.np-export-section .form-control,
+.np-export-section .form-select {
+    font-size: 0.82rem;
+    border-color: #E5E7EB;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+.np-export-section .form-control:focus,
+.np-export-section .form-select:focus {
+    border-color: var(--np-blue);
+    box-shadow: 0 0 0 2px rgba(27,92,231,0.15) !important;
+}
+.np-char-count {
+    font-size: 0.72rem;
+    color: #9CA3AF;
+    margin-top: -8px;
+    margin-bottom: 12px;
+}
+.btn-np-save-full {
+    background: var(--np-green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-np-save-full:hover { background: var(--np-green-dark); }
+
+/* ── 9. TABS / PILLS override ─────────────────────────────── */
+.nav-pills .nav-link.active {
+    background-color: var(--np-blue) !important;
+    box-shadow: none !important;
+}
+
+/* ── 10. BUTTONS override ─────────────────────────────────── */
 .btn-primary {
-    background-color: var(--np-green) !important;
-    border-color: var(--np-green) !important;
+    background-color: var(--np-blue) !important;
+    border-color: var(--np-blue) !important;
     color: #fff !important;
     box-shadow: none !important;
     border-radius: var(--radius-btn) !important;
 }
-
-.btn-primary:hover,
-.btn-primary:focus {
-    background-color: var(--np-green-dark) !important;
-    border-color: var(--np-green-dark) !important;
+.btn-primary:hover {
+    background-color: var(--np-blue-dark) !important;
+    border-color: var(--np-blue-dark) !important;
     color: #fff !important;
-    transform: none !important;
-    box-shadow: 0 2px 8px rgba(63,168,88,0.3) !important;
 }
-
 .btn-outline-primary {
-    color: var(--np-green) !important;
-    border-color: var(--np-green) !important;
+    color: var(--np-blue) !important;
+    border-color: var(--np-blue) !important;
 }
-
 .btn-outline-primary:hover {
-    background: rgba(63,168,88,0.1) !important;
-    color: var(--np-green-dark) !important;
+    background: rgba(27,92,231,0.08) !important;
+    color: var(--np-blue-dark) !important;
+}
+.mode-label { font-size: 0.65rem; padding: 4px 10px !important; }
+#mode-include:checked+label { background-color: var(--np-blue) !important; box-shadow: none !important; }
+
+/* ── 11. FORM ELEMENTS ─────────────────────────────────────── */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--np-blue) !important;
+    box-shadow: 0 0 0 2px rgba(27,92,231,0.15) !important;
+    transform: none !important;
 }
 
-/* ── 8. CARDS — FLAT DESIGN ──────────────────────────────── */
+/* ── 12. CARDS ─────────────────────────────────────────────── */
 .card-diamond {
     border-radius: 8px !important;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
-    border: 1px solid var(--border) !important;
+    border: 1px solid #E5E7EB !important;
 }
-
 .tab-pane-card {
     border-radius: 8px !important;
-    border: 1px solid var(--border) !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+    border: 1px solid #E5E7EB !important;
+    box-shadow: none !important;
+    background: #fff !important;
 }
-
 .formula-card {
     border-radius: 8px !important;
-    border: 1px solid var(--border) !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+    border: 1px solid #E5E7EB !important;
+    box-shadow: none !important;
 }
-
 .compact-control-card {
     border-radius: 8px !important;
-    border: 1px solid var(--border) !important;
+    border: 1px solid #E5E7EB !important;
     box-shadow: none !important;
+    background: #fff !important;
 }
 
-/* ── 9. FORM ELEMENTS ─────────────────────────────────────── */
-.form-control:focus,
-.form-select:focus {
-    border-color: var(--np-green) !important;
-    box-shadow: 0 0 0 2px rgba(63,168,88,0.15) !important;
-    transform: none !important;
+/* ── 13. TAG PILLS ─────────────────────────────────────────── */
+.tag-pill {
+    background-color: #DBEAFE !important;
+    color: #1E40AF !important;
 }
 
-/* ── 10. FILTER TABS (horizontal pills) ──────────────────── */
-.custom-filter-tabs .nav-link.active {
+/* ── 14. SECTION TITLE ESPO ────────────────────────────────── */
+.section-title-espo.text-primary {
     color: var(--np-green) !important;
-    border-bottom-color: var(--np-green) !important;
-    box-shadow: inset 0 -2px 0 var(--np-green) !important;
+    border-color: rgba(63,168,88,0.25) !important;
+    background: #F0FDF4 !important;
+}
+.section-title-espo.text-primary:hover {
+    border-color: var(--np-green) !important;
+    background: #DCFCE7 !important;
 }
 
-.nav-pills .nav-link.active {
-    background-color: var(--np-green) !important;
+/* ── 15. PILL TOGGLE ─────────────────────────────────────────── */
+.pill-toggle-item .btn-check:checked+label {
+    background-color: var(--np-blue) !important;
     box-shadow: none !important;
 }
 
-/* ── 11. STICKY POSITIONS (adjust for new headers) ───────── */
-#active-filters-summary {
-    top: 106px !important; /* 48px header + 48px subheader + 10px */
-}
-
-.sticky-controls-wrapper {
-    top: 168px !important; /* formula card approx height */
-}
+/* ── 16. STICKY POSITIONS ─────────────────────────────────── */
+#active-filters-summary { top: 124px !important; }
+.sticky-controls-wrapper { top: 186px !important; }
 
 @media (min-width: 992px) {
-    .tab-content {
-        max-height: calc(100vh - 430px) !important;
-    }
+    .tab-content { max-height: calc(100vh - 450px) !important; }
 }
 
-/* ── 12. NP SECTION HEADER ───────────────────────────────── */
-.np-section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 8px 8px 0 0;
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.np-section-title {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 0;
-}
-
-/* ── 13. AUDIENCE PANEL ──────────────────────────────────── */
+/* ── 17. AUDIENCE PANEL (inside np-main-content) ─────────── */
 .audience-panel {
     background: #fff;
-    border: 1px solid var(--border);
+    border: 1px solid #E5E7EB;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
+    margin-bottom: 0;
 }
-
 .audience-panel-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.88rem;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #F3F4F6;
+}
+.audience-panel-title {
+    font-size: 1rem;
     font-weight: 700;
-    color: var(--text-main);
+    color: #111827;
+    margin: 0;
 }
 
-.audience-panel-body {
-    padding: 12px 14px;
-}
+/* ── 18. FORMULA CARD override ────────────────────────────── */
+.formula-card { background: #fff !important; }
 
-/* ── 14. SECTION-TITLE-ESPO ─────────────────────────────── */
-.section-title-espo.text-primary {
-    color: var(--np-green) !important;
-    border-color: rgba(63,168,88,0.2) !important;
-    background: rgba(63,168,88,0.06) !important;
-}
-
-.section-title-espo.text-primary:hover {
-    border-color: var(--np-green) !important;
-    background: rgba(63,168,88,0.12) !important;
-    color: var(--np-green) !important;
-}
-
-/* ── 15. PILL TOGGLE ─────────────────────────────────────── */
-.pill-toggle-item .btn-check:checked+label {
-    background-color: var(--np-green) !important;
-    box-shadow: 0 2px 6px rgba(63,168,88,0.3) !important;
-}
-
-/* Include checked */
-#mode-include:checked+label {
-    background-color: var(--np-green) !important;
-    box-shadow: 0 2px 6px rgba(63,168,88,0.25) !important;
-}
-
-/* ── 16. TAG PILLS ───────────────────────────────────────── */
-.tag-pill {
-    background-color: rgba(63,168,88,0.1) !important;
-    color: var(--np-green-dark) !important;
-}
-
-/* ── 17. MOBILE ADJUSTMENTS ─────────────────────────────── */
+/* ── 19. MOBILE ───────────────────────────────────────────── */
 @media (max-width: 991px) {
     .np-filter-sidebar { display: none; }
-    .np-layout {
-        flex-direction: column;
-        height: auto;
-        overflow: visible;
-    }
-    .np-main-content,
-    .np-right-sidebar {
-        width: 100%;
-        min-width: 0;
-    }
-    .np-right-sidebar {
-        border-left: none;
-        border-top: 1px solid var(--border);
-    }
-    .page-subheader {
-        top: 48px;
-        gap: 0.5rem;
-        overflow-x: auto;
-    }
+    .np-layout { flex-direction: column; height: auto; overflow: visible; }
+    .np-main-content, .np-right-sidebar { width: 100%; min-width: 0; }
+    .np-right-sidebar { border-left: none; border-top: 1px solid #E5E7EB; }
+    .page-subheader { overflow-x: auto; gap: 12px; }
+    .page-title { font-size: 1.1rem; }
 }
 
-/* ── 18. TEMPLATES MODAL ─────────────────────────────────── */
-.templates-modal .modal-header {
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-    padding: 14px 18px;
-}
+/* ── 20. DARK MODE — light suppression ───────────────────── */
+[data-theme="dark"] .app-header { background: #111827 !important; border-color: #374151 !important; }
+[data-theme="dark"] .np-logo-text { color: #F87171 !important; }
+[data-theme="dark"] .np-system-nav .nav-link { color: #D1D5DB !important; }
+[data-theme="dark"] .np-system-nav .nav-link:hover { background: #1F2937 !important; }
+[data-theme="dark"] .page-subheader { background: #1F2937; border-color: #374151; }
+[data-theme="dark"] .page-title { color: #F9FAFB; }
+[data-theme="dark"] .seg-tab.active { background: #374151; color: #F9FAFB; box-shadow: none; }
+[data-theme="dark"] .seg-tab { color: #9CA3AF; }
+[data-theme="dark"] .np-filter-sidebar { background: #1F2937; border-color: #374151; }
+[data-theme="dark"] .np-category-btn { color: #D1D5DB; }
+[data-theme="dark"] .np-category-btn:hover { background: #374151; }
+[data-theme="dark"] .np-category-btn.active { background: #1E3A8A; color: #93C5FD; border-left-color: #3B82F6; }
+[data-theme="dark"] .np-right-sidebar { background: #1F2937; border-color: #374151; }
+[data-theme="dark"] .np-export-section .form-control,
+[data-theme="dark"] .np-export-section .form-select { background: #111827; border-color: #374151; color: #F9FAFB; }
+[data-theme="dark"] .filter-group { background: #1F2937; border-color: #374151; }
+[data-theme="dark"] .np-logout-link { color: #D1D5DB; }
 
+/* ── 21. SCROLLBAR ─────────────────────────────────────────── */
+.np-filter-sidebar::-webkit-scrollbar,
+.np-main-content::-webkit-scrollbar,
+.np-right-sidebar::-webkit-scrollbar,
+.np-categories-list::-webkit-scrollbar { width: 4px; }
+.np-filter-sidebar::-webkit-scrollbar-thumb,
+.np-main-content::-webkit-scrollbar-thumb,
+.np-right-sidebar::-webkit-scrollbar-thumb,
+.np-categories-list::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 10px; }
+
+/* ── 22. TEMPLATES MODAL ─────────────────────────────────── */
+.templates-modal .modal-header { border-bottom: 1px solid #F3F4F6; padding: 14px 20px; }
 .template-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 14px;
-    border: 1px solid var(--border);
+    border: 1px solid #E5E7EB;
     border-radius: 6px;
     background: #fff;
     margin-bottom: 8px;
     transition: border-color 0.15s;
 }
-
-.template-item:hover {
-    border-color: var(--np-green);
-}
-
-.template-item-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.template-type-badge {
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
-
-.badge-lal { background: #E3F2FD; color: #1565C0; }
-.badge-constructor { background: rgba(63,168,88,0.12); color: var(--np-green-dark); }
-
+.template-item:hover { border-color: var(--np-blue); }
+.template-item-left { display: flex; align-items: center; gap: 10px; }
+.template-type-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; }
+.badge-lal { background: #DBEAFE; color: #1E40AF; }
+.badge-constructor { background: #D1FAE5; color: #065F46; }
 .btn-template-add {
-    background: var(--np-green);
+    background: var(--np-blue);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -658,19 +817,14 @@ main.container-fluid {
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
+    white-space: nowrap;
 }
-.btn-template-add:hover { background: var(--np-green-dark); }
+.btn-template-add:hover { background: var(--np-blue-dark); }
 
-/* ── 19. UNSAVED CHANGES MODAL ───────────────────────────── */
-.unsaved-modal .modal-body {
-    padding: 24px;
-    text-align: center;
-}
-
+/* ── 23. UNSAVED MODAL ───────────────────────────────────── */
 .unsaved-modal-icon {
-    width: 52px;
-    height: 52px;
-    background: #FFF3CD;
+    width: 52px; height: 52px;
+    background: #FEF3C7;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -678,93 +832,25 @@ main.container-fluid {
     font-size: 1.5rem;
     margin: 0 auto 14px;
 }
+.btn-np-save {
+    background: var(--np-blue);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-np-save:hover { background: var(--np-blue-dark); color: #fff; }
 
-/* ── 20. SCROLLBAR — thin ────────────────────────────────── */
-.np-filter-sidebar::-webkit-scrollbar,
-.np-main-content::-webkit-scrollbar,
-.np-right-sidebar::-webkit-scrollbar,
-.np-categories-list::-webkit-scrollbar {
-    width: 4px;
-}
-.np-filter-sidebar::-webkit-scrollbar-thumb,
-.np-main-content::-webkit-scrollbar-thumb,
-.np-right-sidebar::-webkit-scrollbar-thumb,
-.np-categories-list::-webkit-scrollbar-thumb {
-    background: #D1D5DB;
-    border-radius: 10px;
-}
-
-/* ── 21. LEGEND DOTS ─────────────────────────────────────── */
-.legend-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-}
-.legend-dot.b2c { background: #3b82f6; }
-.legend-dot.b2b { background: #8b5cf6; }
-.legend-dot.universal { background: #6b7280; }
-
-/* ── 22. RESET/CLEAR BUTTON ─────────────────────────────── */
-.reset-all-btn {
-    font-size: 0.78rem !important;
-    color: #ef4444 !important;
-}
-
-/* ── 23. DARK MODE — suppress for NP ────────────────────── */
-/* NP design is light-only; dark mode kept minimal */
-[data-theme="dark"] .app-header {
-    background: #8a0b1f !important;
-}
-
-[data-theme="dark"] .np-filter-sidebar {
-    background: #1e293b;
-    border-color: #334155;
-}
-
-[data-theme="dark"] .np-right-sidebar {
-    background: #1e293b;
-    border-color: #334155;
-}
-
-[data-theme="dark"] .page-subheader {
-    background: #1e293b;
-    border-color: #334155;
-}
-
-[data-theme="dark"] .np-category-btn {
-    color: #cbd5e1;
-}
-
-[data-theme="dark"] .np-category-btn:hover {
-    background: rgba(255,255,255,0.05);
-}
-
-[data-theme="dark"] .np-category-btn.active {
-    background: rgba(63,168,88,0.15);
-    color: #6ee7b7;
-    border-left-color: #6ee7b7;
-}
-
-[data-theme="dark"] .page-title {
-    color: #f1f5f9;
-}
-
-[data-theme="dark"] .page-tab-btn {
-    color: #94a3b8;
-}
-
-[data-theme="dark"] .page-tab-btn.active {
-    color: #6ee7b7;
-    border-bottom-color: #6ee7b7;
-}
-
-[data-theme="dark"] .audience-panel,
-[data-theme="dark"] .audience-panel-header {
-    background: #1e293b;
-    border-color: #334155;
-}
-
-[data-theme="dark"] .counter-box {
-    background: #0f172a !important;
-}
+/* ── 24. LEGACY OVERRIDES ──────────────────────────────────── */
+.legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.legend-dot.b2c { background: #3B82F6; }
+.legend-dot.b2b { background: #8B5CF6; }
+.legend-dot.universal { background: #6B7280; }
+.reset-all-btn { font-size: 0.78rem !important; }

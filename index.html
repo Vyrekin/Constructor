@@ -32,72 +32,41 @@
         </button>
     </div>
 
-    <!-- ── NOVA POSHTA HEADER ─────────────────────────────── -->
+    <!-- ── SYSTEM HEADER (white, NP red text logo, decorative) ── -->
     <header class="app-header">
-        <div class="container-fluid px-3 h-100">
-            <div class="d-flex align-items-center h-100 gap-3">
+        <div class="container-fluid px-4 h-100">
+            <div class="d-flex align-items-center h-100 gap-0">
 
-                <!-- Logo -->
-                <div class="d-flex align-items-center gap-2 me-2">
-                    <span class="np-logo-badge">НП</span>
-                    <span class="np-brand-label">НОВА ПОШТА</span>
-                </div>
+                <!-- NP Logo — red text -->
+                <a href="#" class="np-logo-text me-4" style="text-decoration:none;">НОВА ПОШТА</a>
 
-                <!-- Main Nav -->
-                <nav class="np-header-nav d-flex align-items-center gap-1 flex-grow-1">
-                    <a href="#" class="nav-link active">Мапи</a>
-                    <a href="#" class="nav-link">Сегм. дозволи</a>
-                    <a href="#" class="nav-link">Папки</a>
-                    <a href="#" class="nav-link">ЗВК</a>
-                    <a href="#" class="nav-link">Чат</a>
-                    <a href="#" class="nav-link">Наглядач</a>
-                    <a href="#" class="nav-link">Антитаргет</a>
+                <!-- System Navigation (decorative, non-functional) -->
+                <nav class="np-system-nav d-flex align-items-center flex-grow-1" style="gap:2px;">
+                    <a href="#" class="nav-link">Orders <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Auto Registrations <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Client <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Tools <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">CMS <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">NovaAds <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Online events <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Assistant <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Imports <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
                 </nav>
 
-                <!-- Right actions -->
+                <!-- Right side: theme toggle + profile + Log out -->
                 <div class="d-flex align-items-center gap-2">
-                    <!-- Theme Toggle -->
                     <button class="btn btn-outline-secondary border-0 p-1" onclick="toggleTheme()" title="Тема" style="line-height:1;">
-                        <i class="bi bi-moon-stars-fill" id="theme-icon" style="font-size:0.9rem;"></i>
+                        <i class="bi bi-moon-stars-fill" id="theme-icon" style="font-size:0.85rem;"></i>
                     </button>
-
-                    <!-- Saved Segments -->
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary border-0 p-1 position-relative" type="button"
-                            data-bs-toggle="dropdown" data-bs-auto-close="outside" title="Мої сегменти" style="line-height:1;">
-                            <i class="bi bi-bookmark-star-fill" style="font-size:0.95rem;"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-warning border border-light rounded-circle"
-                                id="segments-badge" style="display:none; width:8px;height:8px;"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-3"
-                            style="width: 300px; max-height: 380px; overflow-y: auto;">
-                            <li><h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Мої сегменти</h6></li>
-                            <div id="header-saved-segments-list" class="vstack gap-2">
-                                <div class="text-center text-muted small py-2">Немає збережених сегментів</div>
-                            </div>
-                            <li class="mt-2">
-                                <button class="btn btn-sm btn-primary w-100" onclick="saveCurrentSegment()">
-                                    <i class="bi bi-plus-lg me-1"></i>Зберегти поточний
-                                </button>
-                            </li>
-                            <li><hr class="dropdown-divider mt-2"></li>
-                            <li><h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Автоматизації</h6></li>
-                            <div id="header-saved-automations-list" class="vstack gap-2">
-                                <div class="text-center text-muted small py-2">Немає активних автоматизацій</div>
-                            </div>
-                        </ul>
-                    </div>
-
-                    <!-- Profile -->
                     <div class="dropdown">
                         <button class="btn btn-outline-secondary border-0 p-1" type="button" data-bs-toggle="dropdown" style="line-height:1;">
-                            <i class="bi bi-person-circle" style="font-size:1.1rem;"></i>
+                            <i class="bi bi-person-circle" style="font-size:1rem;"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0">
                             <li><a class="dropdown-item" href="#">Профіль</a></li>
                             <li><a class="dropdown-item" href="#">Налаштування</a></li>
                             <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)" onclick="toggleDesignMode()">
-                                <i class="bi bi-palette text-primary"></i> Режим дизайну
+                                <i class="bi bi-palette" style="color:var(--np-blue)"></i> Режим дизайну
                             </a></li>
                             <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)" onclick="saveDesignChanges()">
                                 <i class="bi bi-download text-success"></i> Вивантажити JSON
@@ -109,39 +78,33 @@
                             <li><a class="dropdown-item text-danger" href="#">Вихід</a></li>
                         </ul>
                     </div>
-
-                    <!-- Logout -->
-                    <a href="#" class="np-logout-btn">
-                        <i class="bi bi-box-arrow-right"></i> Log-out
-                    </a>
+                    <!-- Hidden dropdowns (kept for JS compatibility) -->
+                    <div style="display:none">
+                        <span id="segments-badge"></span>
+                        <div id="header-saved-segments-list"></div>
+                        <div id="header-saved-automations-list"></div>
+                    </div>
+                    <a href="#" class="np-logout-link">Log out</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ── PAGE SUB-HEADER ──────────────────────────────────── -->
+    <!-- ── PAGE HEADER: title + segment tabs + Шаблони ──────── -->
     <div class="page-subheader">
-        <h5 class="page-title">Конструктор вибірок</h5>
+        <h4 class="page-title">Конструктор вибірок</h4>
 
-        <!-- Page-level tabs -->
-        <div class="page-tabs">
-            <button class="page-tab-btn active" onclick="switchPageTab('constructor', this)">Конструктор</button>
-            <button class="page-tab-btn" onclick="switchPageTab('lookalike', this)">Look-a-like</button>
-            <button class="page-tab-btn" onclick="switchPageTab('ai', this)">AI Помічник</button>
-            <button class="page-tab-btn" onclick="switchPageTab('api', this)">АПІ</button>
-            <button class="page-tab-btn" onclick="switchPageTab('sql', this)">SQL</button>
-            <button class="page-tab-btn" onclick="switchPageTab('params', this)">Параметри</button>
+        <!-- Segment tabs: B2B / B2C / Відправники / Одержувачі -->
+        <div class="segment-tabs">
+            <button class="seg-tab active" onclick="switchSegment('b2b', this)">B2B</button>
+            <button class="seg-tab" onclick="switchSegment('b2c', this)">B2C</button>
+            <button class="seg-tab" onclick="switchSegment('senders', this)">Відправники</button>
+            <button class="seg-tab" onclick="switchSegment('recipients', this)">Одержувачі</button>
         </div>
 
-        <div class="ms-auto d-flex align-items-center gap-2">
-            <!-- Templates -->
-            <button class="btn btn-sm btn-outline-secondary" style="font-size:0.78rem; border-radius:5px;"
-                data-bs-toggle="modal" data-bs-target="#templatesModal">
-                <i class="bi bi-grid-3x3-gap me-1"></i>Шаблони
-            </button>
-            <!-- Save -->
-            <button class="btn-np-save" onclick="saveCurrentSegment()">
-                <i class="bi bi-plus-lg"></i> Зберегти
+        <div class="ms-auto">
+            <button class="btn-templates" data-bs-toggle="modal" data-bs-target="#templatesModal">
+                <i class="bi bi-bookmark"></i> Шаблони
             </button>
         </div>
     </div>
@@ -151,104 +114,86 @@
 
             <!-- ── LEFT FILTER CATEGORIES SIDEBAR ─────────────── -->
             <div class="np-filter-sidebar" id="np-filter-sidebar">
-                <!-- Search -->
-                <div class="np-filter-sidebar-search">
-                    <div class="position-relative">
-                        <i class="bi bi-search position-absolute top-50 translate-middle-y ms-2 text-muted" style="font-size:0.75rem; left:2px;"></i>
-                        <input type="text" class="form-control ps-4" id="field-search-input"
-                            placeholder="Пошук поля..."
+
+                <!-- Search + AI button -->
+                <div class="np-search-ai">
+                    <div class="np-search-wrap">
+                        <i class="bi bi-search"></i>
+                        <input type="text" class="form-control" id="field-search-input"
+                            placeholder="Search"
                             oninput="filterFieldsBySearch(this.value)">
                     </div>
+                    <button class="btn-ai-sidebar">
+                        <i class="bi bi-stars"></i> AI
+                    </button>
                 </div>
 
-                <!-- Categories List (mirrors filterTabs) -->
+                <!-- ВСІ label -->
+                <div class="np-sidebar-label">ВСІ</div>
+
+                <!-- Categories (no icons, text + chevron) -->
                 <ul class="np-categories-list" id="np-categories-list" role="tablist">
                     <li>
-                        <button class="np-category-btn active" id="tab-c1" data-bs-toggle="pill"
-                            data-bs-target="#pane-c1" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-box-seam"></i>
-                            <span>Параметри ЕН</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c2" data-bs-toggle="pill"
-                            data-bs-target="#pane-c2" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-people-fill"></i>
-                            <span>Відправник та Отримувач</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c11" data-bs-toggle="pill"
-                            data-bs-target="#pane-c11" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-building"></i>
-                            <span>Контрагенти</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c3" data-bs-toggle="pill"
-                            data-bs-target="#pane-c3" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-cash-stack"></i>
-                            <span>Фінанси</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c4" data-bs-toggle="pill"
-                            data-bs-target="#pane-c4" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-person-vcard"></i>
-                            <span>Профіль та Маркетинг</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c8" data-bs-toggle="pill"
-                            data-bs-target="#pane-c8" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-shield-check"></i>
-                            <span>Верифікація</span>
+                        <button class="np-category-btn active" id="tab-c4" data-bs-toggle="pill"
+                            data-bs-target="#pane-c4" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Профіль бізнесу (B2B)</span>
+                            <i class="bi bi-chevron-right"></i>
                         </button>
                     </li>
                     <li>
                         <button class="np-category-btn" id="tab-c5" data-bs-toggle="pill"
-                            data-bs-target="#pane-c5" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-activity"></i>
-                            <span>Активність та Локації</span>
+                            data-bs-target="#pane-c5" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Локація</span>
+                            <i class="bi bi-chevron-right"></i>
                         </button>
                     </li>
                     <li>
-                        <button class="np-category-btn" id="tab-c9" data-bs-toggle="pill"
-                            data-bs-target="#pane-c9" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-exclamation-triangle"></i>
-                            <span>Проблеми та Додатково</span>
+                        <button class="np-category-btn" id="tab-c1" data-bs-toggle="pill"
+                            data-bs-target="#pane-c1" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Параметри ЕН</span>
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c3" data-bs-toggle="pill"
+                            data-bs-target="#pane-c3" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Фінанси та вантаж</span>
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c5b" data-bs-toggle="pill"
+                            data-bs-target="#pane-c5" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Активність</span>
+                            <i class="bi bi-chevron-right"></i>
                         </button>
                     </li>
                     <li>
                         <button class="np-category-btn" id="tab-c6" data-bs-toggle="pill"
-                            data-bs-target="#pane-c6" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-phone"></i>
-                            <span>Додаток та Пристрої</span>
+                            data-bs-target="#pane-c6" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Застосунок та пристрої</span>
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c11" data-bs-toggle="pill"
+                            data-bs-target="#pane-c11" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Сфери та мерчанти</span>
+                            <i class="bi bi-chevron-right"></i>
                         </button>
                     </li>
                     <li>
                         <button class="np-category-btn" id="tab-c7" data-bs-toggle="pill"
-                            data-bs-target="#pane-c7" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-check-circle"></i>
-                            <span>Згоди та Комунікація</span>
+                            data-bs-target="#pane-c7" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Згоди та комунікація</span>
+                            <i class="bi bi-chevron-right"></i>
                         </button>
                     </li>
                     <li>
-                        <button class="np-category-btn" id="tab-c10" data-bs-toggle="pill"
-                            data-bs-target="#pane-c10" type="button" role="tab"
-                            onclick="npSelectCategory(this)">
-                            <i class="bi bi-geo-alt"></i>
-                            <span>Гео-мапа</span>
+                        <button class="np-category-btn" id="tab-c2" data-bs-toggle="pill"
+                            data-bs-target="#pane-c2" type="button" role="tab" onclick="npSelectCategory(this)">
+                            <span class="cat-label">Look-a-like</span>
+                            <i class="bi bi-chevron-right"></i>
                         </button>
                     </li>
                 </ul>
@@ -260,16 +205,12 @@
 
                 <!-- VIEW 1: CONSTRUCTOR -->
                 <div id="view-constructor" class="view-section">
-                    <!-- Audience panel header -->
-                    <div class="audience-panel mb-2">
-                        <div class="audience-panel-header">
-                            <i class="bi bi-people-fill text-muted"></i>
-                            <span>Аудиторія</span>
-                            <div class="ms-auto d-flex align-items-center gap-2">
-                                <span class="text-muted" style="font-size:0.72rem; font-weight:500;">Фільтри активні:</span>
-                                <span class="badge bg-light text-dark border" id="active-filter-count" style="font-size:0.72rem;">0</span>
-                            </div>
-                        </div>
+                    <!-- Audience header row -->
+                    <div class="audience-header">
+                        <h5 class="audience-title">Аудиторія</h5>
+                        <button class="btn-clear-all" onclick="clearFilters()">
+                            <i class="bi bi-trash3"></i> Очистити все
+                        </button>
                     </div>
 
                     <!-- Improved Active Filters Area (Legacy + Formula Support) -->
@@ -2333,34 +2274,85 @@
             <!-- ── RIGHT SIDEBAR ──────────────────────────────── -->
             <div class="np-right-sidebar" id="np-right-sidebar">
                 <div class="sidebar-sticky" style="top: 0;">
-                    <!-- 1. Counter (Always Top) -->
+                    <!-- 1. Counter — GREEN box -->
                     <div class="counter-box mx-0">
-                        <small>Знайдено записів</small>
-                        <div class="d-flex align-items-baseline gap-2">
-                            <span class="counter-number" id="counter-display">0</span>
-                            <span class="counter-trend">
-                                <i class="bi bi-arrow-up-right"></i>
-                            </span>
-                        </div>
-                        <span class="counter-sub">відповідей під критеріям</span>
+                        <i class="bi bi-bar-chart-fill counter-trend"></i>
+                        <span class="counter-number" id="counter-display">0</span>
+                        <small>знайдено користувачів</small>
+                    </div>
 
-                        <!-- Analytics -->
-                        <button class="btn btn-sm btn-white-soft w-100 mt-1"
+                    <!-- 2. Donut chart placeholder -->
+                    <div class="np-donut-wrap">
+                        <canvas id="chart-donut-audience" width="200" height="110"></canvas>
+                        <span class="np-donut-percent" id="donut-percent">0%</span>
+                        <div class="np-donut-label">всіх аудиторії</div>
+                    </div>
+
+                    <!-- 3. Export section -->
+                    <div class="np-export-section">
+                        <div class="np-export-title">Експорт</div>
+
+                        <label class="np-export-label">Оберіть спосіб експорту:</label>
+                        <select id="export-action-type" class="form-select" onchange="toggleExportFields()">
+                            <option value="template">Зберегти як шаблон</option>
+                            <option value="csv">Завантажити CSV</option>
+                            <option value="cdp">Відправити в CDP</option>
+                            <option value="api">API Запит</option>
+                            <option value="automation">Автоматизація</option>
+                        </select>
+
+                        <label class="np-export-label">Назва шаблону</label>
+                        <input type="text" class="form-control" id="segmentNameInput"
+                            placeholder="Введіть назву шаблону...">
+
+                        <label class="np-export-label">Короткий опис</label>
+                        <textarea class="form-control" id="export-description" rows="3"
+                            placeholder="Опишіть аудиторію..."
+                            oninput="updateCharCount(this)"
+                            style="resize:none; font-size:0.82rem;"></textarea>
+                        <div class="np-char-count"><span id="char-count">0</span>/500 символів</div>
+
+                        <button class="btn-np-save-full" onclick="confirmSaveSegment()">Зберегти</button>
+
+                        <!-- Hidden format settings for other export types -->
+                        <div id="export-settings-block" style="display:none;">
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="np-export-label">Формат даних</label>
+                                    <div class="dropdown" id="constructor-format-unified-dropdown">
+                                        <button class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center bg-white multi-select-btn"
+                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                            <span class="selected-values text-muted text-truncate">Телефон</span>
+                                            <i class="bi bi-chevron-down small"></i>
+                                        </button>
+                                        <ul class="dropdown-menu w-100 shadow-sm border-0 multi-select-dropdown">
+                                            <li><label class="dropdown-item"><input class="form-check-input" type="checkbox" value="phone" checked onchange="updateMultiSelect('constructor-format-unified')"> <span>Телефон</span></label></li>
+                                            <li><label class="dropdown-item"><input class="form-check-input" type="checkbox" value="cid" onchange="updateMultiSelect('constructor-format-unified')"> <span>CID</span></label></li>
+                                            <li><label class="dropdown-item"><input class="form-check-input" type="checkbox" value="email" onchange="updateMultiSelect('constructor-format-unified')"> <span>E-mail</span></label></li>
+                                        </ul>
+                                    </div>
+                                    <input type="hidden" id="constructor-format-unified" value="phone">
+                                </div>
+                                <div class="col-6">
+                                    <label class="np-export-label">Кількість</label>
+                                    <input type="number" id="export-count" class="form-control" value="1000" min="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analytics button -->
+                        <button class="btn btn-outline-secondary w-100 mt-2" style="font-size:0.8rem; border-radius:6px;"
                             data-bs-toggle="modal" data-bs-target="#analyticsModal"
-                            onclick="setTimeout(updateAnalytics, 200)">
-                            <i class="bi bi-graph-up me-1"></i>Аналітика аудиторії
+                            onclick="setTimeout(updateAnalytics,200)">
+                            <i class="bi bi-graph-up me-1"></i>Переглянути аналітику
                         </button>
                     </div>
 
-                    <!-- 2. Shortcuts / Presets (Moved under Counter) -->
-                    <div class="card-diamond p-3 mb-3">
-                        <h6 class="fw-bold mb-3 small text-uppercase text-muted">Швидкі шаблони</h6>
-                        <div class="d-grid gap-2">
-                            <button
-                                class="btn btn-light text-start d-flex align-items-center p-2 border-0 shadow-sm rounded-3"
-                                onclick="applyPersona('vip')">
-                                <span class="badge bg-warning text-dark me-2 rounded-circle p-2"><i
-                                        class="bi bi-star-fill"></i></span>
+                    <!-- Hidden legacy elements (kept for JS compatibility) -->
+                    <div style="display:none;" aria-hidden="true">
+                        <div id="header-saved-automations-list-old"></div>
+                        <button onclick="applyPersona('vip')">
+                            <span><i class="bi bi-star-fill"></i></span>
                                 <div style="line-height:1.1">
                                     <span class="d-block fw-bold small">Клієнти VIP</span>
                                     <span class="text-muted" style="font-size: 0.7rem;">Чек > 5000, iPhone</span>
@@ -2384,22 +2376,16 @@
                         <h6 class="fw-bold mb-3 small text-uppercase text-muted border-bottom pb-2">Експорт результатів
                         </h6>
 
-                        <!-- Row 1: Action Type -->
+                        <!-- legacy export (hidden) -->
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold text-uppercase mb-1"
-                                style="font-size: 0.7rem;">Оберіть дію:</label>
-                            <select id="export-action-type" class="form-select form-select-sm"
-                                onchange="toggleExportFields()">
-                                <option value="preview">Попередній перегляд (Тільки графіки)</option>
+                            <select class="form-select form-select-sm">
+                                <option value="preview">Попередній перегляд</option>
                                 <option value="csv">Завантажити CSV файл</option>
-                                <option value="cdp">Відправити в CDP</option>
-                                <option value="automation">Автоматизація (Розсилка звіту)</option>
-                                <option value="api">API Запит (JSON)</option>
                             </select>
                         </div>
 
-                        <!-- Format Settings (Hidden for Preview) -->
-                        <div id="export-settings-block" style="display:none;">
+                        <!-- legacy format settings (hidden) -->
+                        <div style="display:none;">
                             <div class="row g-2 mb-3">
                                 <div class="col-6">
                                     <label class="form-label text-muted small fw-bold text-uppercase mb-1"
@@ -2530,17 +2516,21 @@
                             </div>
                         </div>
 
-                        <!-- Single Smart Button -->
-                        <button id="smart-execute-btn" class="btn btn-primary w-100 py-2 fw-bold shadow-sm"
+                        <!-- hidden smart execute btn -->
+                        <button id="smart-execute-btn" style="display:none;"
                             onclick="handleSmartExecute()">
-                            <i class="bi bi-play-circle-fill me-2"></i> <span id="smart-btn-text">Розрахувати
-                                показники</span>
+                            <span id="smart-btn-text">Розрахувати показники</span>
                         </button>
-                    </div>
+                        <div id="automation-settings-block" style="display:none;">
+                            <select id="automation-period"></select>
+                            <div id="automation-time-container"><input type="time" id="automation-time" value="09:00"></div>
+                            <input type="email" id="automation-email-input">
+                            <div id="automation-emails-list"></div>
+                        </div>
+                    </div> <!-- end hidden legacy div -->
 
                     <script src="js/export-ui.js"></script>
 
-                </div>
             </div> <!-- end np-right-sidebar -->
 
         </div> <!-- end np-layout -->
@@ -2768,18 +2758,27 @@
 
     <!-- ── NP HELPER SCRIPTS ─────────────────────────────────── -->
     <script>
-    // Page-level tab switcher (sub-header)
+    // Segment tab switcher (B2B/B2C/Відправники/Одержувачі)
+    function switchSegment(seg, btn) {
+        document.querySelectorAll('.seg-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window.currentSegment = seg;
+    }
+
+    // Page-level tab switcher (kept for compatibility)
     function switchPageTab(tab, btn) {
         document.querySelectorAll('.page-tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        if (btn) btn.classList.add('active');
         const viewMap = { constructor: 'constructor', lookalike: 'lookalike', ai: 'ai' };
-        if (viewMap[tab] && typeof switchView === 'function') {
-            switchView(viewMap[tab]);
-        }
-        // For api/sql/params tabs: show/hide left sidebar
-        const showSidebar = ['constructor', 'lookalike', 'ai'].includes(tab);
-        const sidebar = document.getElementById('np-filter-sidebar');
-        if (sidebar) sidebar.style.display = showSidebar ? '' : 'none';
+        if (viewMap[tab] && typeof switchView === 'function') switchView(viewMap[tab]);
+    }
+
+    // Char counter for description textarea
+    function updateCharCount(el) {
+        const count = el.value.length;
+        const span = document.getElementById('char-count');
+        if (span) span.textContent = count;
+        if (count > 500) el.value = el.value.substring(0, 500);
     }
 
     // Left sidebar category selector
