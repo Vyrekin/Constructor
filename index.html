@@ -131,70 +131,70 @@
                 <!-- ВСІ label -->
                 <div class="np-sidebar-label">ВСІ</div>
 
-                <!-- Categories (no icons, text + chevron) -->
-                <ul class="np-categories-list" id="np-categories-list" role="tablist">
-                    <li>
-                        <button class="np-category-btn active" id="tab-c4" data-bs-toggle="pill"
-                            data-bs-target="#pane-c4" type="button" role="tab" onclick="npSelectCategory(this)">
+                <!-- Category accordion — click to expand field list below -->
+                <ul class="np-categories-list" id="np-categories-list">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn active" onclick="toggleCatGroup('c4', this)">
                             <span class="cat-label">Профіль бізнесу (B2B)</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron" style="transform:rotate(90deg)"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c4"></div>
                     </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c5" data-bs-toggle="pill"
-                            data-bs-target="#pane-c5" type="button" role="tab" onclick="npSelectCategory(this)">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c5', this)">
                             <span class="cat-label">Локація</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c5" style="display:none"></div>
                     </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c1" data-bs-toggle="pill"
-                            data-bs-target="#pane-c1" type="button" role="tab" onclick="npSelectCategory(this)">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c1', this)">
                             <span class="cat-label">Параметри ЕН</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c1" style="display:none"></div>
                     </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c3" data-bs-toggle="pill"
-                            data-bs-target="#pane-c3" type="button" role="tab" onclick="npSelectCategory(this)">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c3', this)">
                             <span class="cat-label">Фінанси та вантаж</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c3" style="display:none"></div>
                     </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c5b" data-bs-toggle="pill"
-                            data-bs-target="#pane-c5" type="button" role="tab" onclick="npSelectCategory(this)">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c5b', this)">
                             <span class="cat-label">Активність</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c5b" style="display:none"></div>
                     </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c6" data-bs-toggle="pill"
-                            data-bs-target="#pane-c6" type="button" role="tab" onclick="npSelectCategory(this)">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c6', this)">
                             <span class="cat-label">Застосунок та пристрої</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c6" style="display:none"></div>
                     </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c11" data-bs-toggle="pill"
-                            data-bs-target="#pane-c11" type="button" role="tab" onclick="npSelectCategory(this)">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c11', this)">
                             <span class="cat-label">Сфери та мерчанти</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c11" style="display:none"></div>
                     </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c7" data-bs-toggle="pill"
-                            data-bs-target="#pane-c7" type="button" role="tab" onclick="npSelectCategory(this)">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c7', this)">
                             <span class="cat-label">Згоди та комунікація</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c7" style="display:none"></div>
                     </li>
-                    <li>
-                        <button class="np-category-btn" id="tab-c2" data-bs-toggle="pill"
-                            data-bs-target="#pane-c2" type="button" role="tab" onclick="npSelectCategory(this)">
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c2', this)">
                             <span class="cat-label">Look-a-like</span>
-                            <i class="bi bi-chevron-right"></i>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
+                        <div class="np-cat-fields" id="fields-c2" style="display:none"></div>
                     </li>
                 </ul>
             </div>
@@ -213,84 +213,75 @@
                         </button>
                     </div>
 
-                    <!-- Improved Active Filters Area (Legacy + Formula Support) -->
-                    <div id="active-filters-summary" class="mb-3">
-                        <div class="formula-card is-collapsed" id="main-formula-card">
-                            <div class="d-flex align-items-center justify-content-between mb-2" style="cursor: pointer;"
-                                onclick="toggleFormulaCard()">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-funnel text-primary fs-5"></i>
-                                    <h6 class="fw-bold mb-0">ПОТОЧНА ФОРМУЛА:</h6>
-                                    <div class="formula-legend ms-2">
-                                        <span class="legend-dot b2c"></span><span>B2C</span>
-                                        <span class="legend-dot b2b ms-1"></span><span>B2B</span>
-                                        <span class="legend-dot universal ms-1"></span><span>Універсальні</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-chevron-up toggle-icon" id="formula-toggle-icon"></i>
-                            </div>
+                    <!-- ── FILTER BUILDER CARD ─────────────────────── -->
+                    <div class="filter-builder-card" id="main-formula-card">
 
-                            <div class="formula-content-wrapper">
-                                <div id="formula-filters-view" class="mb-2">
-                                    <div class="formula-box" id="formula-display" style="display:none;"></div>
-                                </div>
-
-                                <!-- Espo-style Hierarchical View -->
-                                <div id="standard-filters-view" class="standard-view px-2">
-                                    <div id="filters-blocks-container">
-                                        <div class="section-title-row">
-                                            <div class="section-title-espo text-primary"
-                                                onclick="openFilterPicker('Include', event)">
-                                                <i class="bi bi-plus-circle-fill"></i> Включити
-                                            </div>
-                                        </div>
-                                        <div id="espo-include-list"></div>
-
-                                        <div class="section-title-row">
-                                            <div class="section-title-espo text-danger"
-                                                onclick="openFilterPicker('Exclude', event)">
-                                                <i class="bi bi-dash-circle-fill"></i> Виключити
-                                            </div>
-                                        </div>
-                                        <div id="espo-exclude-list"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mode / Scope Selector Bar -->
-                    <div class="compact-control-card mb-2 p-2">
-                        <div class="d-flex align-items-center flex-wrap gap-2">
-                            <!-- Logic mode -->
-                            <div class="d-flex align-items-center gap-1">
-                                <span class="text-muted fw-bold text-uppercase" style="font-size: 0.62rem;">Логіка:</span>
-                                <div class="d-inline-flex bg-white rounded-pill p-1 border">
-                                    <input type="radio" class="btn-check" name="global-filter-mode" id="mode-include"
-                                        value="Include" checked onchange="window.currentFilterMode='Include'">
-                                    <label class="btn btn-sm rounded-pill px-2 fw-bold mode-label" for="mode-include">Включити</label>
-                                    <input type="radio" class="btn-check" name="global-filter-mode" id="mode-exclude"
-                                        value="Exclude" onchange="window.currentFilterMode='Exclude'">
-                                    <label class="btn btn-sm rounded-pill px-2 fw-bold mode-label" for="mode-exclude">Виключити</label>
-                                </div>
-                            </div>
-                            <!-- Scope -->
-                            <div class="d-inline-flex bg-white rounded-pill p-1 border scope-pill">
-                                <input type="radio" class="btn-check" name="field-scope-mode" id="scope-all" value="all" checked>
-                                <label class="btn btn-sm btn-outline-secondary" for="scope-all">Усі</label>
-                                <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2b" value="b2b">
-                                <label class="btn btn-sm btn-outline-secondary" for="scope-b2b">В-клієнти</label>
-                                <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2c" value="b2c">
-                                <label class="btn btn-sm btn-outline-secondary" for="scope-b2c">С-клієнти</label>
-                            </div>
-                            <!-- Reset -->
-                            <button class="btn btn-sm btn-outline-danger border-0 ms-auto reset-all-btn" onclick="clearFilters()">
-                                <i class="bi bi-trash3 me-1"></i>Скинути
+                        <!-- Mode bar: Include/Exclude | scope | clear -->
+                        <div class="filter-mode-bar">
+                            <button class="fmode-tab active" id="fmode-include"
+                                onclick="setFMode('Include', this)">ВКЛЮЧИТИ</button>
+                            <button class="fmode-tab" id="fmode-exclude"
+                                onclick="setFMode('Exclude', this)">ВИКЛЮЧИТИ</button>
+                            <div class="filter-mode-sep"></div>
+                            <button class="fmode-tab active" id="fscope-all"
+                                onclick="setFScope('all', this)">ВСІ</button>
+                            <button class="fmode-tab" id="fscope-b2b"
+                                onclick="setFScope('b2b', this)">В-КЛІЄНТИ</button>
+                            <button class="fmode-tab" id="fscope-b2c"
+                                onclick="setFScope('b2c', this)">С-КЛІЄНТИ</button>
+                            <button class="btn-filter-clear" onclick="clearFilters()">
+                                <i class="bi bi-trash3"></i> Очистити
                             </button>
                         </div>
+
+                        <!-- Legend: B2C / B2B / Universal + formula toggle -->
+                        <div class="formula-legend-bar">
+                            <span class="legend-badge"><span class="dot-b2c"></span> B2C</span>
+                            <span class="legend-badge"><span class="dot-b2b"></span> B2B</span>
+                            <span class="legend-badge"><span class="dot-uni"></span> УНІВЕРСИТАЛЬНІ</span>
+                            <button class="formula-collapse-btn" onclick="toggleFormulaCard()">
+                                <span class="fw-bold" style="font-size:0.72rem;letter-spacing:.4px">ПОТОЧНА ФОРМУЛА:</span>
+                                <i class="bi bi-chevron-up" id="formula-toggle-icon"></i>
+                            </button>
+                        </div>
+
+                        <!-- Conditions area -->
+                        <div class="filter-conditions-area formula-content-wrapper">
+                            <div id="formula-filters-view" class="mb-2">
+                                <div class="formula-box" id="formula-display" style="display:none;"></div>
+                            </div>
+                            <div id="standard-filters-view" class="standard-view">
+                                <div id="filters-blocks-container">
+                                    <div class="section-title-row">
+                                        <div class="section-title-espo text-primary"
+                                            onclick="openFilterPicker('Include', event)">
+                                            <i class="bi bi-plus-circle-fill"></i> Включити
+                                        </div>
+                                    </div>
+                                    <div id="espo-include-list"></div>
+                                    <div class="section-title-row">
+                                        <div class="section-title-espo text-danger"
+                                            onclick="openFilterPicker('Exclude', event)">
+                                            <i class="bi bi-dash-circle-fill"></i> Виключити
+                                        </div>
+                                    </div>
+                                    <div id="espo-exclude-list"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="tab-content mt-3" id="filterTabsContent">
+                    <!-- Hidden mode/scope radios (kept for JS compatibility) -->
+                    <div style="display:none;" aria-hidden="true">
+                        <input type="radio" name="global-filter-mode" id="mode-include" value="Include" checked onchange="window.currentFilterMode='Include'">
+                        <input type="radio" name="global-filter-mode" id="mode-exclude" value="Exclude" onchange="window.currentFilterMode='Exclude'">
+                        <input type="radio" name="field-scope-mode" id="scope-all" value="all" checked>
+                        <input type="radio" name="field-scope-mode" id="scope-b2b" value="b2b">
+                        <input type="radio" name="field-scope-mode" id="scope-b2c" value="b2c">
+                    </div>
+
+                    <!-- Tab pane field forms — hidden from UI, DOM kept for buildFieldListForCategory() -->
+                    <div style="display:none;" aria-hidden="true" id="filterTabsContent">
                         <!-- 1. Параметри ЕН -->
                         <div class="tab-pane fade show active" id="pane-c1" role="tabpanel">
                             <div class="tab-pane-card">
@@ -1970,11 +1961,9 @@
                     </div>
 
                     <!-- Розрахувати button -->
-                    <div class="mt-3">
-                        <button class="btn btn-primary w-100 py-2 fw-bold" onclick="handleSmartExecute()">
-                            <i class="bi bi-play-circle-fill me-2"></i>Розрахувати показники
-                        </button>
-                    </div>
+                    <button class="btn-calculate-full" onclick="handleSmartExecute()">
+                        <i class="bi bi-play-circle-fill"></i> Розрахувати показники
+                    </button>
 
                 </div>
 
@@ -2800,11 +2789,143 @@
         console.log('Applying template:', id);
     }
 
+    // ── CATEGORY ACCORDION ────────────────────────────────────
+    function toggleCatGroup(catId, btn) {
+        const fieldsEl = document.getElementById('fields-' + catId);
+        if (!fieldsEl) return;
+        const isOpen = fieldsEl.style.display !== 'none';
+
+        // Close all open panels
+        document.querySelectorAll('.np-cat-fields').forEach(el => { el.style.display = 'none'; });
+        document.querySelectorAll('.np-cat-chevron').forEach(el => { el.style.transform = ''; });
+        document.querySelectorAll('.np-category-btn').forEach(b => b.classList.remove('active'));
+
+        if (!isOpen) {
+            // Build field list lazily on first open
+            if (fieldsEl.childElementCount === 0) {
+                buildFieldListForCategory(catId, fieldsEl);
+            }
+            fieldsEl.style.display = 'block';
+            const chevron = btn.querySelector('.np-cat-chevron');
+            if (chevron) chevron.style.transform = 'rotate(90deg)';
+            btn.classList.add('active');
+        }
+    }
+
+    // Build draggable field items from hidden tab pane
+    function buildFieldListForCategory(catId, container) {
+        // Map catId to the pane id
+        const paneIdMap = { c5b: 'pane-c5' };
+        const paneId = paneIdMap[catId] || ('pane-' + catId);
+        const pane = document.getElementById(paneId);
+        if (!pane) return;
+
+        const seen = new Set();
+        const items = pane.querySelectorAll('[data-field-id]');
+        items.forEach(item => {
+            const fieldId = item.dataset.fieldId;
+            if (seen.has(fieldId)) return;
+            seen.add(fieldId);
+
+            const labelEl = item.querySelector('label.form-label');
+            if (!labelEl) return;
+            const label = labelEl.textContent.trim();
+
+            // Detect field type
+            let ftype = 'select';
+            if (item.querySelector('input[type=date]')) ftype = 'date';
+            else if (item.querySelector('input[type=number]')) ftype = 'number';
+            else if (item.querySelector('input[type=text], input[type=email]')) ftype = 'text';
+
+            const row = document.createElement('div');
+            row.className = 'np-field-item';
+            row.draggable = true;
+            row.dataset.fieldId = fieldId;
+            row.dataset.ftype = ftype;
+            row.innerHTML = `<span class="np-field-name">${label}</span>
+                <button class="np-field-add" title="Додати в фільтр"
+                    onclick="addFieldFromSidebar('${fieldId}', ${JSON.stringify(label)}, '${ftype}', event)">
+                    <i class="bi bi-plus"></i>
+                </button>`;
+            container.appendChild(row);
+        });
+    }
+
+    // Open the filter picker pre-focused on a specific field
+    function addFieldFromSidebar(fieldId, label, ftype, event) {
+        event.stopPropagation();
+
+        // Try to find the field in the registry, or build a minimal entry
+        const reg = (typeof buildFilterRegistryFromDOM === 'function')
+            ? buildFilterRegistryFromDOM()
+            : (typeof filterRegistry !== 'undefined' ? filterRegistry : []);
+        let field = reg.find(f => f.id === fieldId);
+        if (!field) {
+            field = { id: fieldId, label: label, type: ftype || 'select', options: {}, category: '', icon: 'bi-tag' };
+        }
+
+        const zone = window.currentFilterMode || 'Include';
+        const sibCount = (typeof espoConditionRegistry !== 'undefined')
+            ? espoConditionRegistry.filter(i => i.zone === zone && i.parentId === null).length
+            : 0;
+
+        if (typeof pickerState !== 'undefined' && typeof renderPicker === 'function') {
+            pickerState.field = field;
+            pickerState.zone = zone;
+            pickerState.parentId = null;
+            pickerState.fieldOp = null;
+
+            if (sibCount === 0) {
+                pickerState.linkOp = zone === 'Exclude' ? 'ОКРІМ' : 'ТА';
+                pickerState.step = (field.type === 'date') ? 4 : 2;
+            } else {
+                pickerState.step = 1;
+            }
+            renderPicker();
+
+            const picker = document.getElementById('filter-picker');
+            if (!picker) return;
+            const btn = event.currentTarget;
+            const rect = btn.getBoundingClientRect();
+            picker.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+            picker.style.left = Math.min(rect.left, window.innerWidth - 340) + 'px';
+            picker.style.display = 'block';
+
+            const closer = e => {
+                if (!picker.contains(e.target) && !btn.contains(e.target)) {
+                    picker.style.display = 'none';
+                    document.removeEventListener('click', closer);
+                }
+            };
+            setTimeout(() => document.addEventListener('click', closer), 10);
+        }
+    }
+
+    // Mode tab toggle (ВКЛЮЧИТИ / ВИКЛЮЧИТИ)
+    function setFMode(mode, btn) {
+        window.currentFilterMode = mode;
+        document.querySelectorAll('#fmode-include, #fmode-exclude').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Sync hidden radio
+        const radio = document.getElementById(mode === 'Include' ? 'mode-include' : 'mode-exclude');
+        if (radio) radio.checked = true;
+    }
+
+    // Scope tab toggle
+    function setFScope(scope, btn) {
+        document.querySelectorAll('#fscope-all, #fscope-b2b, #fscope-b2c').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const radio = document.getElementById('scope-' + scope);
+        if (radio) radio.checked = true;
+    }
+
     // Sync page tab visual state when switchView is called
     document.addEventListener('DOMContentLoaded', () => {
-        // Make sure first category btn is active
-        const firstCat = document.querySelector('.np-category-btn');
-        if (firstCat) firstCat.classList.add('active');
+        // Build field list for first (active) category on load
+        const firstFields = document.getElementById('fields-c4');
+        if (firstFields && firstFields.childElementCount === 0) {
+            buildFieldListForCategory('c4', firstFields);
+        }
     });
     </script>
 
