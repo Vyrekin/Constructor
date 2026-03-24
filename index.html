@@ -14,6 +14,7 @@
 
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/design-mode.css">
+    <link rel="stylesheet" href="css/np-theme.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 
@@ -31,133 +32,244 @@
         </button>
     </div>
 
+    <!-- ── NOVA POSHTA HEADER ─────────────────────────────── -->
     <header class="app-header">
-        <div class="container-fluid px-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="app-header-logo bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
-                        <i class="bi bi-layers-fill"></i>
-                    </div>
-                    <h4 class="app-title mb-0 fw-bold">Конструктор вибірок</h4>
+        <div class="container-fluid px-3 h-100">
+            <div class="d-flex align-items-center h-100 gap-3">
+
+                <!-- Logo -->
+                <div class="d-flex align-items-center gap-2 me-2">
+                    <span class="np-logo-badge">НП</span>
+                    <span class="np-brand-label">НОВА ПОШТА</span>
                 </div>
 
-                <div class="header-main-row flex-grow-1 d-flex justify-content-center">
-                    <ul class="nav nav-pills d-inline-flex border p-1 rounded-3 gap-1" id="app-views-nav">
-                        <li class="nav-item">
-                            <button class="nav-link active px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
-                                id="nav-btn-constructor" onclick="switchView('constructor')">
-                                <i class="bi bi-sliders"></i> Конструктор
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="nav-link px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
-                                id="nav-btn-lookalike" onclick="switchView('lookalike')">
-                                <i class="bi bi-people"></i> Look-a-like
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="nav-link px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
-                                id="nav-btn-ai" onclick="switchView('ai')">
-                                <i class="bi bi-stars"></i> AI Помічник
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                <!-- Main Nav -->
+                <nav class="np-header-nav d-flex align-items-center gap-1 flex-grow-1">
+                    <a href="#" class="nav-link active">Мапи</a>
+                    <a href="#" class="nav-link">Сегм. дозволи</a>
+                    <a href="#" class="nav-link">Папки</a>
+                    <a href="#" class="nav-link">ЗВК</a>
+                    <a href="#" class="nav-link">Чат</a>
+                    <a href="#" class="nav-link">Наглядач</a>
+                    <a href="#" class="nav-link">Антитаргет</a>
+                </nav>
 
-
-
-                <div class="d-flex align-items-center gap-3">
+                <!-- Right actions -->
+                <div class="d-flex align-items-center gap-2">
                     <!-- Theme Toggle -->
-                    <button class="btn btn-outline-secondary border-0 p-2" onclick="toggleTheme()"
-                        title="Перемикач теми">
-                        <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+                    <button class="btn btn-outline-secondary border-0 p-1" onclick="toggleTheme()" title="Тема" style="line-height:1;">
+                        <i class="bi bi-moon-stars-fill" id="theme-icon" style="font-size:0.9rem;"></i>
                     </button>
 
-                    <!-- My Segments (New Location) -->
+                    <!-- Saved Segments -->
                     <div class="dropdown">
-                        <button class="btn btn-outline-primary border-0 p-2 position-relative" type="button"
-                            data-bs-toggle="dropdown" data-bs-auto-close="outside" title="Мої сегменти">
-                            <i class="bi bi-bookmark-star-fill fs-4"></i>
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
-                                id="segments-badge" style="display:none">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
+                        <button class="btn btn-outline-secondary border-0 p-1 position-relative" type="button"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside" title="Мої сегменти" style="line-height:1;">
+                            <i class="bi bi-bookmark-star-fill" style="font-size:0.95rem;"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-warning border border-light rounded-circle"
+                                id="segments-badge" style="display:none; width:8px;height:8px;"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-3"
-                            style="width: 320px; max-height: 400px; overflow-y: auto;">
-                            <li>
-                                <h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Мої збережені
-                                    сегменти</h6>
-                            </li>
+                            style="width: 300px; max-height: 380px; overflow-y: auto;">
+                            <li><h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Мої сегменти</h6></li>
                             <div id="header-saved-segments-list" class="vstack gap-2">
-                                <!-- Dynamic List -->
-                                <div class="text-center text-muted small py-3">Немає збережених сегментів</div>
+                                <div class="text-center text-muted small py-2">Немає збережених сегментів</div>
                             </div>
-                            <li class="mt-2 text-center">
-                                <button class="btn btn-sm btn-primary w-100 rounded-pill"
-                                    onclick="saveCurrentSegment()">
+                            <li class="mt-2">
+                                <button class="btn btn-sm btn-primary w-100" onclick="saveCurrentSegment()">
                                     <i class="bi bi-plus-lg me-1"></i>Зберегти поточний
                                 </button>
                             </li>
-                            <li>
-                                <hr class="dropdown-divider mt-2">
-                            </li>
-                            <li>
-                                <h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Мої
-                                    автоматизації</h6>
-                            </li>
+                            <li><hr class="dropdown-divider mt-2"></li>
+                            <li><h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Автоматизації</h6></li>
                             <div id="header-saved-automations-list" class="vstack gap-2">
-                                <div class="text-center text-muted small py-3">Немає активних автоматизацій</div>
+                                <div class="text-center text-muted small py-2">Немає активних автоматизацій</div>
                             </div>
                         </ul>
                     </div>
 
                     <!-- Profile -->
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary border-0 p-2" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                        <button class="btn btn-outline-secondary border-0 p-1" type="button" data-bs-toggle="dropdown" style="line-height:1;">
+                            <i class="bi bi-person-circle" style="font-size:1.1rem;"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0">
                             <li><a class="dropdown-item" href="#">Профіль</a></li>
                             <li><a class="dropdown-item" href="#">Налаштування</a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)"
-                                    onclick="toggleDesignMode()">
-                                    <i class="bi bi-palette text-primary"></i> Режим дизайну
-                                </a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)"
-                                    onclick="saveDesignChanges()">
-                                    <i class="bi bi-download text-success"></i> Вивантажити JSON
-                                </a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2 text-warning"
-                                    href="javascript:void(0)" onclick="resetDesign()">
-                                    <i class="bi bi-arrow-counterclockwise"></i> Скинути дизайн
-                                </a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)" onclick="toggleDesignMode()">
+                                <i class="bi bi-palette text-primary"></i> Режим дизайну
+                            </a></li>
+                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)" onclick="saveDesignChanges()">
+                                <i class="bi bi-download text-success"></i> Вивантажити JSON
+                            </a></li>
+                            <li><a class="dropdown-item d-flex align-items-center gap-2 text-warning" href="javascript:void(0)" onclick="resetDesign()">
+                                <i class="bi bi-arrow-counterclockwise"></i> Скинути дизайн
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="#">Вихід</a></li>
                         </ul>
                     </div>
+
+                    <!-- Logout -->
+                    <a href="#" class="np-logout-btn">
+                        <i class="bi bi-box-arrow-right"></i> Log-out
+                    </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="container-fluid px-3 py-3">
-        <div class="row g-3">
+    <!-- ── PAGE SUB-HEADER ──────────────────────────────────── -->
+    <div class="page-subheader">
+        <h5 class="page-title">Конструктор вибірок</h5>
 
-            <!-- Main Content Area -->
-            <div class="col-lg-9">
+        <!-- Page-level tabs -->
+        <div class="page-tabs">
+            <button class="page-tab-btn active" onclick="switchPageTab('constructor', this)">Конструктор</button>
+            <button class="page-tab-btn" onclick="switchPageTab('lookalike', this)">Look-a-like</button>
+            <button class="page-tab-btn" onclick="switchPageTab('ai', this)">AI Помічник</button>
+            <button class="page-tab-btn" onclick="switchPageTab('api', this)">АПІ</button>
+            <button class="page-tab-btn" onclick="switchPageTab('sql', this)">SQL</button>
+            <button class="page-tab-btn" onclick="switchPageTab('params', this)">Параметри</button>
+        </div>
+
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <!-- Templates -->
+            <button class="btn btn-sm btn-outline-secondary" style="font-size:0.78rem; border-radius:5px;"
+                data-bs-toggle="modal" data-bs-target="#templatesModal">
+                <i class="bi bi-grid-3x3-gap me-1"></i>Шаблони
+            </button>
+            <!-- Save -->
+            <button class="btn-np-save" onclick="saveCurrentSegment()">
+                <i class="bi bi-plus-lg"></i> Зберегти
+            </button>
+        </div>
+    </div>
+
+    <main class="container-fluid p-0">
+        <div class="np-layout">
+
+            <!-- ── LEFT FILTER CATEGORIES SIDEBAR ─────────────── -->
+            <div class="np-filter-sidebar" id="np-filter-sidebar">
+                <!-- Search -->
+                <div class="np-filter-sidebar-search">
+                    <div class="position-relative">
+                        <i class="bi bi-search position-absolute top-50 translate-middle-y ms-2 text-muted" style="font-size:0.75rem; left:2px;"></i>
+                        <input type="text" class="form-control ps-4" id="field-search-input"
+                            placeholder="Пошук поля..."
+                            oninput="filterFieldsBySearch(this.value)">
+                    </div>
+                </div>
+
+                <!-- Categories List (mirrors filterTabs) -->
+                <ul class="np-categories-list" id="np-categories-list" role="tablist">
+                    <li>
+                        <button class="np-category-btn active" id="tab-c1" data-bs-toggle="pill"
+                            data-bs-target="#pane-c1" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Параметри ЕН</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c2" data-bs-toggle="pill"
+                            data-bs-target="#pane-c2" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-people-fill"></i>
+                            <span>Відправник та Отримувач</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c11" data-bs-toggle="pill"
+                            data-bs-target="#pane-c11" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-building"></i>
+                            <span>Контрагенти</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c3" data-bs-toggle="pill"
+                            data-bs-target="#pane-c3" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-cash-stack"></i>
+                            <span>Фінанси</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c4" data-bs-toggle="pill"
+                            data-bs-target="#pane-c4" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-person-vcard"></i>
+                            <span>Профіль та Маркетинг</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c8" data-bs-toggle="pill"
+                            data-bs-target="#pane-c8" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Верифікація</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c5" data-bs-toggle="pill"
+                            data-bs-target="#pane-c5" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-activity"></i>
+                            <span>Активність та Локації</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c9" data-bs-toggle="pill"
+                            data-bs-target="#pane-c9" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <span>Проблеми та Додатково</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c6" data-bs-toggle="pill"
+                            data-bs-target="#pane-c6" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-phone"></i>
+                            <span>Додаток та Пристрої</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c7" data-bs-toggle="pill"
+                            data-bs-target="#pane-c7" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-check-circle"></i>
+                            <span>Згоди та Комунікація</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="np-category-btn" id="tab-c10" data-bs-toggle="pill"
+                            data-bs-target="#pane-c10" type="button" role="tab"
+                            onclick="npSelectCategory(this)">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>Гео-мапа</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- ── MAIN CONTENT AREA ───────────────────────────── -->
+            <div class="np-main-content" id="np-main-content">
+                <!-- (col-lg-9 content moved here) -->
 
                 <!-- VIEW 1: CONSTRUCTOR -->
                 <div id="view-constructor" class="view-section">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold mb-0">Фільтри сегментації</h5>
-                        <button class="btn btn-sm btn-outline-danger btn-light border-0 text-danger reset-all-btn"
-                            onclick="clearFilters()">
-                            <i class="bi bi-trash3 me-1"></i>Скинути все
-                        </button>
+                    <!-- Audience panel header -->
+                    <div class="audience-panel mb-2">
+                        <div class="audience-panel-header">
+                            <i class="bi bi-people-fill text-muted"></i>
+                            <span>Аудиторія</span>
+                            <div class="ms-auto d-flex align-items-center gap-2">
+                                <span class="text-muted" style="font-size:0.72rem; font-weight:500;">Фільтри активні:</span>
+                                <span class="badge bg-light text-dark border" id="active-filter-count" style="font-size:0.72rem;">0</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Improved Active Filters Area (Legacy + Formula Support) -->
@@ -206,114 +318,34 @@
                         </div>
                     </div>
 
-                    <div class="sticky-controls-wrapper">
-                        <div class="compact-control-card p-1">
-                            <!-- Tabs Area (Now Wrapping, no scroll) -->
-                            <div class="px-2 pt-1">
-                                <ul class="nav nav-pills custom-filter-tabs border-0 shadow-none p-0 flex-wrap"
-                                    id="filterTabs" role="tablist">
-                                    <li class="nav-item">
-                                        <button class="nav-link active" id="tab-c1" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c1" type="button" role="tab"><i
-                                                class="bi bi-box-seam"></i> Параметри ЕН</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c2" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c2" type="button" role="tab"><i
-                                                class="bi bi-people-fill"></i> Відправник та Отримувач</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c11" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c11" type="button" role="tab"><i
-                                                class="bi bi-building"></i> Контрагенти</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c3" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c3" type="button" role="tab"><i
-                                                class="bi bi-cash-stack"></i> Фінанси</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c4" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c4" type="button" role="tab"><i
-                                                class="bi bi-person-vcard"></i> Профіль та Маркетинг</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c8" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c8" type="button" role="tab"><i
-                                                class="bi bi-shield-check"></i> Верифікація</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c5" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c5" type="button" role="tab"><i
-                                                class="bi bi-activity"></i> Активність та Локації</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c9" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c9" type="button" role="tab"><i
-                                                class="bi bi-exclamation-triangle"></i> Проблеми та Додатково</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c6" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c6" type="button" role="tab"><i
-                                                class="bi bi-phone"></i> Додаток та Пристрої</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c7" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c7" type="button" role="tab"><i
-                                                class="bi bi-check-circle"></i> Згоди та Комунікація</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c10" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c10" type="button" role="tab"><i
-                                                class="bi bi-geo-alt"></i> Гео-мапа</button>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Separate Mode Selector Block -->
-                            <div class="d-flex align-items-center px-3 py-2 bg-light-subtle"
-                                style="gap: 15px; border-radius: 12px; margin: 4px;">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-gear-wide-connected text-primary small"></i>
-                                    <span class="fw-bold text-muted text-uppercase"
-                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Логіка додавання:</span>
-                                </div>
-                                <div class="position-relative d-inline-flex bg-white rounded-pill p-1 border shadow-sm">
+                    <!-- Mode / Scope Selector Bar -->
+                    <div class="compact-control-card mb-2 p-2">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <!-- Logic mode -->
+                            <div class="d-flex align-items-center gap-1">
+                                <span class="text-muted fw-bold text-uppercase" style="font-size: 0.62rem;">Логіка:</span>
+                                <div class="d-inline-flex bg-white rounded-pill p-1 border">
                                     <input type="radio" class="btn-check" name="global-filter-mode" id="mode-include"
                                         value="Include" checked onchange="window.currentFilterMode='Include'">
-                                    <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
-                                        for="mode-include">Включити</label>
-
+                                    <label class="btn btn-sm rounded-pill px-2 fw-bold mode-label" for="mode-include">Включити</label>
                                     <input type="radio" class="btn-check" name="global-filter-mode" id="mode-exclude"
                                         value="Exclude" onchange="window.currentFilterMode='Exclude'">
-                                    <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
-                                        for="mode-exclude">Виключити</label>
-
-                                </div>
-                                <div
-                                    class="position-relative d-inline-flex bg-white rounded-pill p-1 border shadow-sm scope-pill">
-                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-all"
-                                        value="all" checked>
-                                    <label class="btn btn-sm btn-outline-secondary" for="scope-all">Усі</label>
-
-                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2b"
-                                        value="b2b">
-                                    <label class="btn btn-sm btn-outline-secondary" for="scope-b2b">В-клієнти</label>
-
-                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2c"
-                                        value="b2c">
-                                    <label class="btn btn-sm btn-outline-secondary" for="scope-b2c">С-клієнти</label>
-                                </div>
-                                <div class="ms-3 flex-grow-1 position-relative" style="max-width: 250px;">
-                                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
-                                        style="font-size: 0.75rem;"></i>
-                                    <input type="text"
-                                        class="form-control form-control-sm rounded-pill ps-5 border-0 shadow-sm"
-                                        id="field-search-input" placeholder="Пошук поля за назвою..."
-                                        style="font-size: 0.75rem; height: 32px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);"
-                                        oninput="filterFieldsBySearch(this.value)">
+                                    <label class="btn btn-sm rounded-pill px-2 fw-bold mode-label" for="mode-exclude">Виключити</label>
                                 </div>
                             </div>
+                            <!-- Scope -->
+                            <div class="d-inline-flex bg-white rounded-pill p-1 border scope-pill">
+                                <input type="radio" class="btn-check" name="field-scope-mode" id="scope-all" value="all" checked>
+                                <label class="btn btn-sm btn-outline-secondary" for="scope-all">Усі</label>
+                                <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2b" value="b2b">
+                                <label class="btn btn-sm btn-outline-secondary" for="scope-b2b">В-клієнти</label>
+                                <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2c" value="b2c">
+                                <label class="btn btn-sm btn-outline-secondary" for="scope-b2c">С-клієнти</label>
+                            </div>
+                            <!-- Reset -->
+                            <button class="btn btn-sm btn-outline-danger border-0 ms-auto reset-all-btn" onclick="clearFilters()">
+                                <i class="bi bi-trash3 me-1"></i>Скинути
+                            </button>
                         </div>
                     </div>
 
@@ -1996,7 +2028,12 @@
                         </div>
                     </div>
 
-
+                    <!-- Розрахувати button -->
+                    <div class="mt-3">
+                        <button class="btn btn-primary w-100 py-2 fw-bold" onclick="handleSmartExecute()">
+                            <i class="bi bi-play-circle-fill me-2"></i>Розрахувати показники
+                        </button>
+                    </div>
 
                 </div>
 
@@ -2291,25 +2328,27 @@
                         </div>
                     </div>
                 </div> <!-- End view-ai -->
-            </div> <!-- End col-lg-9 -->
+            </div> <!-- End np-main-content -->
 
-            <!-- Sidebar -->
-            <div class="col-lg-3">
-                <div class="sidebar-sticky" style="top: 90px;">
+            <!-- ── RIGHT SIDEBAR ──────────────────────────────── -->
+            <div class="np-right-sidebar" id="np-right-sidebar">
+                <div class="sidebar-sticky" style="top: 0;">
                     <!-- 1. Counter (Always Top) -->
                     <div class="counter-box mx-0">
-                        <small class="text-white-50 text-uppercase letter-spacing-1">Знайдено записів</small>
-                        <div class="counter-number my-2" id="counter-display">24.5M</div>
-                        <div class="progress mb-2" style="height: 4px; background: rgba(255,255,255,0.3);">
-                            <div class="progress-bar bg-white" style="width: 75%"></div>
+                        <small>Знайдено записів</small>
+                        <div class="d-flex align-items-baseline gap-2">
+                            <span class="counter-number" id="counter-display">0</span>
+                            <span class="counter-trend">
+                                <i class="bi bi-arrow-up-right"></i>
+                            </span>
                         </div>
+                        <span class="counter-sub">відповідей під критеріям</span>
 
-                        <!-- Analytics Trigger Button (Integrated) -->
-                        <button class="btn btn-sm btn-white-soft w-100 rounded-pill mt-2 text-white border-white-50"
-                            style="background: rgba(255,255,255,0.1); backdrop-filter: blur(5px);"
+                        <!-- Analytics -->
+                        <button class="btn btn-sm btn-white-soft w-100 mt-1"
                             data-bs-toggle="modal" data-bs-target="#analyticsModal"
                             onclick="setTimeout(updateAnalytics, 200)">
-                            <i class="bi bi-graph-up me-2"></i>Відкрити аналітику
+                            <i class="bi bi-graph-up me-1"></i>Аналітика аудиторії
                         </button>
                     </div>
 
@@ -2502,10 +2541,10 @@
                     <script src="js/export-ui.js"></script>
 
                 </div>
-            </div>
+            </div> <!-- end np-right-sidebar -->
 
-        </div>
-    </div>
+        </div> <!-- end np-layout -->
+    </main>
 
     <!-- Analytics Modal -->
     <div class="modal fade" id="analyticsModal" tabindex="-1" data-bs-backdrop="false" data-bs-scroll="true">
@@ -2610,7 +2649,7 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div> <!-- end saveAutomationModal -->
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -2638,6 +2677,138 @@
             </button>
         </div>
     </div>
+
+    <!-- ── TEMPLATES MODAL ──────────────────────────────────── -->
+    <div class="modal fade templates-modal" id="templatesModal" tabindex="-1" data-bs-backdrop="true" data-bs-scroll="false">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 560px;">
+            <div class="modal-content border-0 shadow" style="border-radius: 10px; overflow: hidden;">
+                <div class="modal-header py-3 px-4 border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-grid-3x3-gap text-muted"></i>
+                        <h5 class="modal-title fw-bold mb-0" style="font-size: 1rem;">Шаблони</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <!-- Search -->
+                    <div class="position-relative mb-3">
+                        <i class="bi bi-search position-absolute top-50 translate-middle-y ms-3 text-muted" style="font-size:0.8rem; left:2px;"></i>
+                        <input type="text" class="form-control ps-5" placeholder="Пошук шаблону..." style="font-size:0.85rem;">
+                    </div>
+
+                    <!-- Template items -->
+                    <div class="template-item">
+                        <div class="template-item-left">
+                            <span class="template-type-badge badge-lal">Lal</span>
+                            <div>
+                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що отримали відправлення в Київській області</div>
+                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432324 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                            </div>
+                        </div>
+                        <button class="btn-template-add" onclick="applyTemplate('lal-kyiv')">Додати до вибірки</button>
+                    </div>
+
+                    <div class="template-item">
+                        <div class="template-item-left">
+                            <span class="template-type-badge badge-constructor">Конструктор</span>
+                            <div>
+                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що не отримали котегорії 2</div>
+                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432325 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                            </div>
+                        </div>
+                        <button class="btn-template-add" onclick="applyTemplate('cat2')">Додати до вибірки</button>
+                    </div>
+
+                    <div class="template-item">
+                        <div class="template-item-left">
+                            <span class="template-type-badge badge-lal">Lal</span>
+                            <div>
+                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що не отримали котегорії 2</div>
+                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432326 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                            </div>
+                        </div>
+                        <button class="btn-template-add" onclick="applyTemplate('cat2-lal')">Додати до вибірки</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <span class="text-muted" style="font-size:0.78rem;">Знайдено 3 шаблони</span>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-2 px-4 justify-content-end">
+                    <button class="btn-template-add" style="border-radius: 6px;" data-bs-dismiss="modal">Додати шаблон</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── UNSAVED CHANGES MODAL ─────────────────────────────── -->
+    <div class="modal fade unsaved-modal" id="unsavedChangesModal" tabindex="-1" data-bs-backdrop="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content border-0 shadow" style="border-radius: 10px;">
+                <div class="modal-body unsaved-modal p-0">
+                    <div class="unsaved-modal-body p-4 text-center">
+                        <div class="unsaved-modal-icon">
+                            <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">У вас є незбережені зміни</h5>
+                        <p class="text-muted mb-0" style="font-size:0.88rem;">
+                            Якщо ви покинете цю сторінку, ваші незбережені зміни будуть втрачені. Продовжити без збереження?
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer border-top justify-content-center gap-2 py-3">
+                    <button class="btn btn-outline-secondary" style="min-width:120px; border-radius:6px;" data-bs-dismiss="modal">Скасувати</button>
+                    <button class="btn-np-save" style="min-width:160px; padding: 0.45rem 1.25rem;" onclick="proceedWithoutSaving()">
+                        Продовжити до вибірки
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── NP HELPER SCRIPTS ─────────────────────────────────── -->
+    <script>
+    // Page-level tab switcher (sub-header)
+    function switchPageTab(tab, btn) {
+        document.querySelectorAll('.page-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const viewMap = { constructor: 'constructor', lookalike: 'lookalike', ai: 'ai' };
+        if (viewMap[tab] && typeof switchView === 'function') {
+            switchView(viewMap[tab]);
+        }
+        // For api/sql/params tabs: show/hide left sidebar
+        const showSidebar = ['constructor', 'lookalike', 'ai'].includes(tab);
+        const sidebar = document.getElementById('np-filter-sidebar');
+        if (sidebar) sidebar.style.display = showSidebar ? '' : 'none';
+    }
+
+    // Left sidebar category selector
+    function npSelectCategory(btn) {
+        document.querySelectorAll('.np-category-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    // Proceed without saving (unsaved changes modal)
+    function proceedWithoutSaving() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('unsavedChangesModal'));
+        if (modal) modal.hide();
+    }
+
+    // Template apply stub
+    function applyTemplate(id) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('templatesModal'));
+        if (modal) modal.hide();
+        console.log('Applying template:', id);
+    }
+
+    // Sync page tab visual state when switchView is called
+    document.addEventListener('DOMContentLoaded', () => {
+        // Make sure first category btn is active
+        const firstCat = document.querySelector('.np-category-btn');
+        if (firstCat) firstCat.classList.add('active');
+    });
+    </script>
+
 </body>
 
 <script src="csv-layout.js"></script>

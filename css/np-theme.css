@@ -1,0 +1,770 @@
+/* ============================================================
+   Nova Poshta Design Theme — overrides main.css
+   ============================================================ */
+
+/* ── 1. COLOR PALETTE ─────────────────────────────────────── */
+:root {
+    --np-red:          #C8102E;
+    --np-red-dark:     #A50D24;
+    --np-green:        #3FA858;
+    --np-green-dark:   #2D8A44;
+    --np-dark:         #2B3747;
+    --np-dark-2:       #1A2535;
+    --np-yellow:       #FFC107;
+
+    /* Override primary to NP green */
+    --primary:         #3FA858;
+    --primary-soft:    rgba(63, 168, 88, 0.1);
+    --secondary:       #2D8A44;
+    --accent:          #3FA858;
+    --surface:         #FFFFFF;
+    --bg-app:          #F2F4F6;
+    --text-main:       #1A2535;
+    --text-muted:      #6B7280;
+    --border:          #E2E6EA;
+
+    --shadow-float:    0 4px 16px rgba(0,0,0,0.10);
+    --shadow-card:     0 1px 4px rgba(0,0,0,0.06);
+    --radius-btn:      6px;
+    --radius-card:     8px;
+    --motion-base:     200ms;
+    --motion-ease:     ease;
+}
+
+/* ── 2. BACKGROUND ────────────────────────────────────────── */
+.app-bg-particles { display: none !important; }
+
+body::before {
+    background: #F2F4F6 !important;
+    opacity: 1 !important;
+}
+
+body {
+    background-color: #F2F4F6;
+}
+
+/* Remove hover lift on cards */
+.card-diamond:hover,
+.tab-pane-card:hover,
+.formula-card:hover {
+    transform: none !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+/* ── 3. HEADER — NP RED ───────────────────────────────────── */
+.app-header {
+    background: var(--np-red) !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    height: 48px;
+    padding: 0;
+}
+
+.app-header h4.app-title {
+    color: #fff !important;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.app-header-logo {
+    background: transparent !important;
+    box-shadow: none !important;
+    width: auto !important;
+    height: auto !important;
+    border-radius: 0 !important;
+}
+
+/* NP Logo badge */
+.np-logo-badge {
+    background: #FFC107;
+    color: #1A2535;
+    font-weight: 900;
+    font-size: 0.85rem;
+    letter-spacing: -0.5px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    line-height: 1.2;
+}
+
+.np-brand-label {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Header nav links — white text */
+.np-header-nav .nav-link {
+    color: rgba(255,255,255,0.85) !important;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.25rem 0.6rem !important;
+    border-radius: 4px;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.np-header-nav .nav-link:hover,
+.np-header-nav .nav-link.active {
+    color: #fff !important;
+    background: rgba(255,255,255,0.15) !important;
+}
+
+/* Header action buttons */
+.app-header .btn-outline-secondary,
+.app-header .btn-outline-primary {
+    color: rgba(255,255,255,0.85) !important;
+    border-color: transparent !important;
+    background: transparent !important;
+}
+.app-header .btn-outline-secondary:hover,
+.app-header .btn-outline-primary:hover {
+    background: rgba(255,255,255,0.15) !important;
+    color: #fff !important;
+}
+
+.app-header .bi-person-circle,
+.app-header .bi-moon-stars-fill,
+.app-header .bi-bookmark-star-fill {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+.app-header #app-views-nav {
+    background: transparent !important;
+    border-color: transparent !important;
+}
+
+.app-header .nav-pills .nav-link {
+    color: rgba(255,255,255,0.8) !important;
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,0.25) !important;
+}
+
+.app-header .nav-pills .nav-link.active {
+    background: rgba(255,255,255,0.2) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+.np-logout-btn {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.np-logout-btn:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+/* ── 4. PAGE SUB-HEADER ───────────────────────────────────── */
+.page-subheader {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.25rem;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: sticky;
+    top: 48px;
+    z-index: 990;
+}
+
+.page-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    white-space: nowrap;
+    margin: 0;
+}
+
+.page-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    height: 100%;
+}
+
+.page-tab-btn {
+    height: 100%;
+    padding: 0 1rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.page-tab-btn:hover {
+    color: var(--text-main);
+}
+
+.page-tab-btn.active {
+    color: var(--np-green);
+    border-bottom-color: var(--np-green);
+    font-weight: 600;
+}
+
+.btn-np-save {
+    background: var(--np-green);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.3rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-np-save:hover {
+    background: var(--np-green-dark);
+    color: #fff;
+}
+
+/* ── 5. MAIN LAYOUT ───────────────────────────────────────── */
+main.container-fluid {
+    padding: 0 !important;
+    background: #F2F4F6;
+}
+
+.np-layout {
+    display: flex;
+    height: calc(100vh - 96px);
+    overflow: hidden;
+}
+
+/* Left categories sidebar */
+.np-filter-sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: #fff;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.np-filter-sidebar-search {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.np-filter-sidebar-search .form-control {
+    font-size: 0.8rem;
+    height: 30px;
+    border-radius: 5px;
+    border-color: var(--border);
+    padding: 0.25rem 0.5rem;
+    background: #F8F9FA;
+}
+
+.np-filter-sidebar-search .form-control:focus {
+    box-shadow: 0 0 0 2px rgba(63,168,88,0.2);
+    border-color: var(--np-green);
+    transform: none;
+}
+
+.np-categories-list {
+    list-style: none;
+    padding: 6px 0;
+    margin: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.np-categories-list li {
+    padding: 0;
+}
+
+.np-category-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 7px 14px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: background 0.1s;
+    border-left: 3px solid transparent;
+}
+
+.np-category-btn:hover {
+    background: #F2F4F6;
+}
+
+.np-category-btn.active {
+    background: rgba(63,168,88,0.08);
+    color: var(--np-green);
+    border-left-color: var(--np-green);
+    font-weight: 600;
+}
+
+.np-category-btn .bi {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.np-category-btn.active .bi {
+    opacity: 1;
+    color: var(--np-green);
+}
+
+/* Center content area */
+.np-main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px;
+    background: #F2F4F6;
+}
+
+/* Right sidebar */
+.np-right-sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: #fff;
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 12px;
+}
+
+/* ── 6. COUNTER BOX — DARK STYLE ─────────────────────────── */
+.counter-box {
+    background: var(--np-dark) !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    margin-bottom: 12px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    text-align: left !important;
+}
+
+.counter-box small {
+    font-size: 0.7rem !important;
+    color: rgba(255,255,255,0.55) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.counter-number {
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.5px;
+    margin: 4px 0 2px 0 !important;
+    display: block;
+}
+
+.counter-box .progress {
+    display: none !important;
+}
+
+.counter-box .btn-white-soft {
+    background: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.2) !important;
+    color: rgba(255,255,255,0.8) !important;
+    font-size: 0.78rem !important;
+    border-radius: 5px !important;
+    padding: 0.3rem 0.75rem !important;
+}
+
+.counter-box .btn-white-soft:hover {
+    background: rgba(255,255,255,0.2) !important;
+    color: #fff !important;
+}
+
+/* counter sub-label */
+.counter-sub {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* counter arrow indicator */
+.counter-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    color: var(--np-green);
+    font-weight: 600;
+}
+
+/* ── 7. BUTTONS ──────────────────────────────────────────── */
+.btn-primary {
+    background-color: var(--np-green) !important;
+    border-color: var(--np-green) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    border-radius: var(--radius-btn) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--np-green-dark) !important;
+    border-color: var(--np-green-dark) !important;
+    color: #fff !important;
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(63,168,88,0.3) !important;
+}
+
+.btn-outline-primary {
+    color: var(--np-green) !important;
+    border-color: var(--np-green) !important;
+}
+
+.btn-outline-primary:hover {
+    background: rgba(63,168,88,0.1) !important;
+    color: var(--np-green-dark) !important;
+}
+
+/* ── 8. CARDS — FLAT DESIGN ──────────────────────────────── */
+.card-diamond {
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.tab-pane-card {
+    border-radius: 8px !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+.formula-card {
+    border-radius: 8px !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+.compact-control-card {
+    border-radius: 8px !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: none !important;
+}
+
+/* ── 9. FORM ELEMENTS ─────────────────────────────────────── */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--np-green) !important;
+    box-shadow: 0 0 0 2px rgba(63,168,88,0.15) !important;
+    transform: none !important;
+}
+
+/* ── 10. FILTER TABS (horizontal pills) ──────────────────── */
+.custom-filter-tabs .nav-link.active {
+    color: var(--np-green) !important;
+    border-bottom-color: var(--np-green) !important;
+    box-shadow: inset 0 -2px 0 var(--np-green) !important;
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--np-green) !important;
+    box-shadow: none !important;
+}
+
+/* ── 11. STICKY POSITIONS (adjust for new headers) ───────── */
+#active-filters-summary {
+    top: 106px !important; /* 48px header + 48px subheader + 10px */
+}
+
+.sticky-controls-wrapper {
+    top: 168px !important; /* formula card approx height */
+}
+
+@media (min-width: 992px) {
+    .tab-content {
+        max-height: calc(100vh - 430px) !important;
+    }
+}
+
+/* ── 12. NP SECTION HEADER ───────────────────────────────── */
+.np-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px 8px 0 0;
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.np-section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+/* ── 13. AUDIENCE PANEL ──────────────────────────────────── */
+.audience-panel {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.audience-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.audience-panel-body {
+    padding: 12px 14px;
+}
+
+/* ── 14. SECTION-TITLE-ESPO ─────────────────────────────── */
+.section-title-espo.text-primary {
+    color: var(--np-green) !important;
+    border-color: rgba(63,168,88,0.2) !important;
+    background: rgba(63,168,88,0.06) !important;
+}
+
+.section-title-espo.text-primary:hover {
+    border-color: var(--np-green) !important;
+    background: rgba(63,168,88,0.12) !important;
+    color: var(--np-green) !important;
+}
+
+/* ── 15. PILL TOGGLE ─────────────────────────────────────── */
+.pill-toggle-item .btn-check:checked+label {
+    background-color: var(--np-green) !important;
+    box-shadow: 0 2px 6px rgba(63,168,88,0.3) !important;
+}
+
+/* Include checked */
+#mode-include:checked+label {
+    background-color: var(--np-green) !important;
+    box-shadow: 0 2px 6px rgba(63,168,88,0.25) !important;
+}
+
+/* ── 16. TAG PILLS ───────────────────────────────────────── */
+.tag-pill {
+    background-color: rgba(63,168,88,0.1) !important;
+    color: var(--np-green-dark) !important;
+}
+
+/* ── 17. MOBILE ADJUSTMENTS ─────────────────────────────── */
+@media (max-width: 991px) {
+    .np-filter-sidebar { display: none; }
+    .np-layout {
+        flex-direction: column;
+        height: auto;
+        overflow: visible;
+    }
+    .np-main-content,
+    .np-right-sidebar {
+        width: 100%;
+        min-width: 0;
+    }
+    .np-right-sidebar {
+        border-left: none;
+        border-top: 1px solid var(--border);
+    }
+    .page-subheader {
+        top: 48px;
+        gap: 0.5rem;
+        overflow-x: auto;
+    }
+}
+
+/* ── 18. TEMPLATES MODAL ─────────────────────────────────── */
+.templates-modal .modal-header {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 18px;
+}
+
+.template-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    margin-bottom: 8px;
+    transition: border-color 0.15s;
+}
+
+.template-item:hover {
+    border-color: var(--np-green);
+}
+
+.template-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.template-type-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-lal { background: #E3F2FD; color: #1565C0; }
+.badge-constructor { background: rgba(63,168,88,0.12); color: var(--np-green-dark); }
+
+.btn-template-add {
+    background: var(--np-green);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-template-add:hover { background: var(--np-green-dark); }
+
+/* ── 19. UNSAVED CHANGES MODAL ───────────────────────────── */
+.unsaved-modal .modal-body {
+    padding: 24px;
+    text-align: center;
+}
+
+.unsaved-modal-icon {
+    width: 52px;
+    height: 52px;
+    background: #FFF3CD;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto 14px;
+}
+
+/* ── 20. SCROLLBAR — thin ────────────────────────────────── */
+.np-filter-sidebar::-webkit-scrollbar,
+.np-main-content::-webkit-scrollbar,
+.np-right-sidebar::-webkit-scrollbar,
+.np-categories-list::-webkit-scrollbar {
+    width: 4px;
+}
+.np-filter-sidebar::-webkit-scrollbar-thumb,
+.np-main-content::-webkit-scrollbar-thumb,
+.np-right-sidebar::-webkit-scrollbar-thumb,
+.np-categories-list::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 10px;
+}
+
+/* ── 21. LEGEND DOTS ─────────────────────────────────────── */
+.legend-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.legend-dot.b2c { background: #3b82f6; }
+.legend-dot.b2b { background: #8b5cf6; }
+.legend-dot.universal { background: #6b7280; }
+
+/* ── 22. RESET/CLEAR BUTTON ─────────────────────────────── */
+.reset-all-btn {
+    font-size: 0.78rem !important;
+    color: #ef4444 !important;
+}
+
+/* ── 23. DARK MODE — suppress for NP ────────────────────── */
+/* NP design is light-only; dark mode kept minimal */
+[data-theme="dark"] .app-header {
+    background: #8a0b1f !important;
+}
+
+[data-theme="dark"] .np-filter-sidebar {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .np-right-sidebar {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .page-subheader {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .np-category-btn {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .np-category-btn:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+[data-theme="dark"] .np-category-btn.active {
+    background: rgba(63,168,88,0.15);
+    color: #6ee7b7;
+    border-left-color: #6ee7b7;
+}
+
+[data-theme="dark"] .page-title {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .page-tab-btn {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .page-tab-btn.active {
+    color: #6ee7b7;
+    border-bottom-color: #6ee7b7;
+}
+
+[data-theme="dark"] .audience-panel,
+[data-theme="dark"] .audience-panel-header {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .counter-box {
+    background: #0f172a !important;
+}
