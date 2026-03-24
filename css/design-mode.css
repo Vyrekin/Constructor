@@ -1,6 +1,6 @@
         /* Design Mode Styles */
         .design-mode-active .tab-pane-card {
-            border: 2px dashed #6366f1 !important;
+            border: 2px dashed #10b981 !important;
             padding-top: 45px !important;
             position: relative;
             min-height: 150px;
@@ -12,7 +12,7 @@
             top: 0;
             left: 0;
             right: 0;
-            background: #6366f1;
+            background: #10b981;
             color: white;
             font-size: 0.7rem;
             padding: 4px 12px;
@@ -24,7 +24,7 @@
         .design-mode-active [data-field-id] {
             cursor: move;
             position: relative;
-            outline: 1px dashed rgba(99, 102, 241, 0.4);
+            outline: 1px dashed rgba(16, 185, 129, 0.4);
             border-radius: 12px;
             padding: 12px;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -32,10 +32,10 @@
         }
 
         .design-mode-active [data-field-id]:hover {
-            outline: 2px solid #6366f1;
+            outline: 2px solid #10b981;
             background: white;
             z-index: 50;
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
             transform: translateY(-2px);
         }
 
@@ -89,10 +89,10 @@
             appearance: none;
             width: 14px;
             height: 14px;
-            background: #6366f1;
+            background: #10b981;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
         }
 
         .btn-design-action {
@@ -129,8 +129,8 @@
 
         .btn-add-tab {
             background: none;
-            border: 2px dashed #6366f1;
-            color: #6366f1;
+            border: 2px dashed #10b981;
+            color: #10b981;
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.75rem;
@@ -139,7 +139,7 @@
         }
 
         .btn-add-tab:hover {
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(16, 185, 129, 0.1);
             transform: scale(1.05);
         }
 
@@ -187,9 +187,9 @@
         }
 
         .add-field-btn:hover {
-            border-color: #6366f1;
-            color: #6366f1;
-            background: rgba(99, 102, 241, 0.03);
+            border-color: #10b981;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.03);
             transform: translateY(-2px);
         }
 
@@ -208,8 +208,8 @@
 
         [data-theme="dark"] .add-field-btn:hover {
             color: #a5b4fc;
-            border-color: #6366f1;
-            background: rgba(99, 102, 241, 0.1);
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
         }
 
         /* Toolbar */
@@ -236,7 +236,7 @@
 
         .sortable-ghost {
             opacity: 0.3;
-            background: #6366f1 !important;
+            background: #10b981 !important;
             border-radius: 12px;
         }
 
@@ -256,7 +256,7 @@
         }
 
         .bg-soft-primary {
-            background-color: rgba(67, 97, 238, 0.12) !important;
+            background-color: rgba(16, 185, 129, 0.12) !important;
         }
 
         .field-search-wrap {
@@ -301,15 +301,15 @@
         }
 
         #scope-all:checked+label {
-            background: linear-gradient(135deg, #2f6bff, #4361ee);
+            background: linear-gradient(135deg, #059669, #10b981);
             color: #fff;
-            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.35);
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.35);
         }
 
         #scope-b2c:checked+label {
-            background: linear-gradient(135deg, #0d6efd, #3b82f6);
+            background: linear-gradient(135deg, #059669, #10b981);
             color: #fff;
-            box-shadow: 0 3px 10px rgba(13, 110, 253, 0.35);
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.35);
         }
 
         #scope-b2b:checked+label {
@@ -336,7 +336,7 @@
         }
 
         .formula-legend .legend-dot.b2c {
-            background: rgba(13, 110, 253, 0.9);
+            background: rgba(16, 185, 129, 0.9);
         }
 
         .formula-legend .legend-dot.universal {
@@ -352,9 +352,9 @@
             margin-left: 0.35rem;
             padding: 0.08rem 0.38rem;
             border-radius: 999px;
-            background: rgba(67, 97, 238, 0.14);
+            background: rgba(16, 185, 129, 0.14);
             color: var(--primary);
-            border: 1px solid rgba(67, 97, 238, 0.28);
+            border: 1px solid rgba(16, 185, 129, 0.28);
             vertical-align: middle;
         }
 
@@ -383,18 +383,18 @@
 
         body[data-scope-mode="all"] {
             --scope-accent: var(--primary);
-            --scope-soft: rgba(67, 97, 238, 0.04);
-            --scope-border: rgba(67, 97, 238, 0.14);
-            --scope-title: #4361ee;
-            --scope-title-soft: #5c6f8a;
+            --scope-soft: rgba(16, 185, 129, 0.04);
+            --scope-border: rgba(16, 185, 129, 0.14);
+            --scope-title: #10b981;
+            --scope-title-soft: #059669;
         }
 
         body[data-scope-mode="b2c"] {
-            --scope-accent: #0d6efd;
-            --scope-soft: rgba(13, 110, 253, 0.04);
-            --scope-border: rgba(13, 110, 253, 0.16);
-            --scope-title: #0d6efd;
-            --scope-title-soft: #3f77c9;
+            --scope-accent: #10b981;
+            --scope-soft: rgba(16, 185, 129, 0.04);
+            --scope-border: rgba(16, 185, 129, 0.16);
+            --scope-title: #10b981;
+            --scope-title-soft: #059669;
         }
 
         body[data-scope-mode="universal"] {
@@ -451,7 +451,7 @@
         }
 
         .condition-vis-badge.b2c {
-            background: #4361ee;
+            background: #10b981;
             color: #fff;
         }
 
@@ -466,8 +466,8 @@
         }
 
         .formula-item.vis-b2c {
-            background: rgba(67, 97, 238, 0.1);
-            border-color: rgba(67, 97, 238, 0.25);
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.25);
             color: #084298;
         }
 
