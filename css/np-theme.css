@@ -1014,3 +1014,208 @@ main.container-fluid { padding: 0 !important; }
 .filter-builder-card.is-collapsed .formula-legend-bar { border-bottom: none; }
 #formula-toggle-icon { transition: transform 0.3s; }
 .filter-builder-card.is-collapsed #formula-toggle-icon { transform: rotate(180deg); }
+
+/* ============================================================
+   REDESIGN V4 — match Figma screenshots exactly
+   ============================================================ */
+
+/* ── LEFT SIDEBAR COLORS & STYLE ─────────────────────────── */
+.np-filter-sidebar { background: #E8E8E8 !important; }
+.np-search-ai { background: #E8E8E8; border-bottom: 1px solid #D0D0D0; }
+.np-search-wrap .form-control { background: #F2F2F2 !important; border-color: #CACACA !important; color: #1F2937 !important; }
+.btn-ai-sidebar { background: #3D3D3D !important; }
+.btn-ai-sidebar:hover { background: #2D2D2D !important; }
+.np-sidebar-label { color: #888888; }
+.np-categories-list, .np-cat-group { background: transparent; }
+
+.np-category-btn {
+    background: transparent !important;
+    color: #1F2937 !important;
+    font-size: 0.84rem !important;
+    padding: 10px 14px !important;
+    border-left: 3px solid transparent !important;
+    border-radius: 0 !important;
+    font-weight: 400 !important;
+}
+.np-category-btn:hover { background: #DCDCDC !important; }
+.np-category-btn.active {
+    background: #FFFFFF !important;
+    color: #111827 !important;
+    font-weight: 600 !important;
+    border-left-color: #6B7280 !important;
+}
+.np-category-btn .np-cat-icon {
+    font-size: 0.9rem;
+    color: #6B7280;
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+}
+.np-category-btn.active .np-cat-icon { color: #374151; }
+
+.np-cat-fields { background: #EBEBEB !important; border-left: none !important; padding: 2px 0; }
+
+/* Field items with grip handle — no add button */
+.np-field-item {
+    background: transparent !important;
+    color: #1F2937 !important;
+    padding: 6px 12px 6px 10px !important;
+    border-bottom: 1px solid #E0E0E0 !important;
+    cursor: grab !important;
+}
+.np-field-item:last-child { border-bottom: none !important; }
+.np-field-item:hover { background: #DCDCDC !important; }
+.np-field-drag {
+    color: #AAAAAA;
+    font-size: 0.95rem;
+    margin-right: 8px;
+    cursor: grab;
+    flex-shrink: 0;
+    pointer-events: none;
+}
+.np-field-add { display: none !important; } /* Hide add button — drag only */
+.np-field-item.dragging { opacity: 0.4; }
+
+/* Breadcrumb in sidebar */
+.np-sidebar-breadcrumb {
+    padding: 7px 14px;
+    font-size: 0.72rem;
+    color: #6B7280;
+    border-bottom: 1px solid #D0D0D0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.np-sidebar-breadcrumb a { color: #6B7280; text-decoration: none; font-weight: 500; }
+.np-sidebar-breadcrumb a:hover { color: #374151; }
+.np-sidebar-breadcrumb .sep { color: #9CA3AF; }
+.np-sidebar-breadcrumb .current { color: #1F2937; font-weight: 600; text-transform: uppercase; font-size: 0.68rem; }
+
+/* ── AUDIENCE HEADER ─────────────────────────────────────── */
+.audience-title { font-size: 1.5rem !important; font-weight: 700 !important; color: #111827 !important; }
+
+/* ── FILTER BUILDER CARD ─────────────────────────────────── */
+.filter-builder-card { border-color: #E0E0E0 !important; }
+.filter-conditions-area { padding: 12px 14px !important; }
+
+/* Include/exclude lists: vertical column */
+#espo-include-list, #espo-exclude-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    min-height: 40px;
+}
+#espo-include-list.drag-over, #espo-exclude-list.drag-over {
+    background: rgba(27,92,231,0.04);
+    border-radius: 6px;
+    outline: 2px dashed var(--np-blue);
+    outline-offset: 2px;
+}
+
+/* ── CONDITION ROWS (full-width, Figma style) ─────────────── */
+.condition-block {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E0E0E0 !important;
+    border-radius: 6px !important;
+    margin-bottom: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    cursor: default !important;
+    overflow: visible !important;
+}
+.condition-block.dragging { opacity: 0.4 !important; border: 1px dashed var(--np-blue) !important; }
+
+/* Drag handle prepended via a wrapper span rendered in JS */
+.cond-drag-handle {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    color: #BDBDBD;
+    font-size: 1rem;
+    cursor: grab;
+    flex-shrink: 0;
+    border-right: 1px solid #F0F0F0;
+}
+.cond-drag-handle:active { cursor: grabbing; }
+
+/* Field label section */
+.condition-header {
+    flex: 0 0 auto !important;
+    min-width: 130px !important;
+    max-width: 165px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 10px 10px !important;
+    background: transparent !important;
+    border-bottom: none !important;
+    border-radius: 0 !important;
+    gap: 4px !important;
+    font-size: 0.82rem !important;
+    border-right: 1px solid #F0F0F0 !important;
+    box-sizing: border-box !important;
+}
+.condition-header .op-tag { display: none !important; }
+.condition-vis-badge { display: none !important; }
+.add-sub-btn { display: none !important; }
+
+/* Value section */
+.condition-body {
+    flex: 1 !important;
+    padding: 8px 10px !important;
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    border-bottom: none !important;
+    font-size: 0.82rem !important;
+}
+.condition-content-row { flex-wrap: wrap !important; }
+.condition-item { padding-left: 0 !important; border-left: none !important; }
+
+/* Delete button at far right */
+.condition-block > .condition-header ~ .ms-auto,
+.condition-block .ms-auto:last-child { display: none !important; } /* hidden, it's inside header */
+
+/* ── INTER-CONDITION OPERATOR ─────────────────────────────── */
+.inter-block-op { display: flex !important; align-items: center !important; margin: 3px 0 !important; }
+.inter-op-select {
+    background: #FFFBEB !important;
+    border: 1px solid #F59E0B !important;
+    color: #D97706 !important;
+    border-radius: 4px !important;
+    padding: 2px 8px !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    appearance: auto !important;
+}
+
+/* ── SECTION TITLES (include / exclude headers) ───────────── */
+.section-title-espo {
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 6px 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    width: auto !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+}
+.section-title-espo.text-primary { color: var(--np-green) !important; }
+.section-title-espo.text-danger { color: #D97706 !important; }
+.section-title-row { margin: 10px 0 6px 0 !important; justify-content: flex-start !important; }
+.section-title-row::before, .section-title-row::after { display: none !important; }
+
+/* Placeholder inside conditions */
+#no-filters-msg { color: #9CA3AF !important; font-size: 0.82rem !important; padding: 8px 2px !important; font-style: italic !important; background: transparent !important; border: none !important; }

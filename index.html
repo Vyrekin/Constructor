@@ -13,7 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/design-mode.css">
     <link rel="stylesheet" href="css/np-theme.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
@@ -65,15 +64,6 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0">
                             <li><a class="dropdown-item" href="#">Профіль</a></li>
                             <li><a class="dropdown-item" href="#">Налаштування</a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)" onclick="toggleDesignMode()">
-                                <i class="bi bi-palette" style="color:var(--np-blue)"></i> Режим дизайну
-                            </a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)" onclick="saveDesignChanges()">
-                                <i class="bi bi-download text-success"></i> Вивантажити JSON
-                            </a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2 text-warning" href="javascript:void(0)" onclick="resetDesign()">
-                                <i class="bi bi-arrow-counterclockwise"></i> Скинути дизайн
-                            </a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="#">Вихід</a></li>
                         </ul>
@@ -135,13 +125,15 @@
                 <ul class="np-categories-list" id="np-categories-list">
                     <li class="np-cat-group">
                         <button class="np-category-btn active" onclick="toggleCatGroup('c4', this)">
-                            <span class="cat-label">Профіль бізнесу (B2B)</span>
+                            <i class="bi bi-person np-cat-icon"></i>
+                            <span class="cat-label">Профіль клієнта</span>
                             <i class="bi bi-chevron-right np-cat-chevron" style="transform:rotate(90deg)"></i>
                         </button>
                         <div class="np-cat-fields" id="fields-c4"></div>
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c5', this)">
+                            <i class="bi bi-geo-alt np-cat-icon"></i>
                             <span class="cat-label">Локація</span>
                             <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
@@ -149,6 +141,7 @@
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c1', this)">
+                            <i class="bi bi-box-seam np-cat-icon"></i>
                             <span class="cat-label">Параметри ЕН</span>
                             <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
@@ -156,6 +149,7 @@
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c3', this)">
+                            <i class="bi bi-cash-stack np-cat-icon"></i>
                             <span class="cat-label">Фінанси та вантаж</span>
                             <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
@@ -163,6 +157,7 @@
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c5b', this)">
+                            <i class="bi bi-activity np-cat-icon"></i>
                             <span class="cat-label">Активність</span>
                             <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
@@ -170,6 +165,7 @@
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c6', this)">
+                            <i class="bi bi-phone np-cat-icon"></i>
                             <span class="cat-label">Застосунок та пристрої</span>
                             <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
@@ -177,6 +173,7 @@
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c11', this)">
+                            <i class="bi bi-shop np-cat-icon"></i>
                             <span class="cat-label">Сфери та мерчанти</span>
                             <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
@@ -184,6 +181,7 @@
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c7', this)">
+                            <i class="bi bi-chat-dots np-cat-icon"></i>
                             <span class="cat-label">Згоди та комунікація</span>
                             <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
@@ -191,6 +189,7 @@
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c2', this)">
+                            <i class="bi bi-people np-cat-icon"></i>
                             <span class="cat-label">Look-a-like</span>
                             <i class="bi bi-chevron-right np-cat-chevron"></i>
                         </button>
@@ -215,63 +214,42 @@
 
                     <!-- ── FILTER BUILDER CARD ─────────────────────── -->
                     <div class="filter-builder-card" id="main-formula-card">
-
-                        <!-- Mode bar: Include/Exclude | scope | clear -->
-                        <div class="filter-mode-bar">
-                            <button class="fmode-tab active" id="fmode-include"
-                                onclick="setFMode('Include', this)">ВКЛЮЧИТИ</button>
-                            <button class="fmode-tab" id="fmode-exclude"
-                                onclick="setFMode('Exclude', this)">ВИКЛЮЧИТИ</button>
-                            <div class="filter-mode-sep"></div>
-                            <button class="fmode-tab active" id="fscope-all"
-                                onclick="setFScope('all', this)">ВСІ</button>
-                            <button class="fmode-tab" id="fscope-b2b"
-                                onclick="setFScope('b2b', this)">В-КЛІЄНТИ</button>
-                            <button class="fmode-tab" id="fscope-b2c"
-                                onclick="setFScope('b2c', this)">С-КЛІЄНТИ</button>
-                            <button class="btn-filter-clear" onclick="clearFilters()">
-                                <i class="bi bi-trash3"></i> Очистити
-                            </button>
+                        <!-- Active filter formula tags row (generated by JS) -->
+                        <div id="formula-filters-view" style="padding:8px 14px 0; display:none;">
+                            <div class="formula-box" id="formula-display"></div>
                         </div>
 
-                        <!-- Legend: B2C / B2B / Universal + formula toggle -->
-                        <div class="formula-legend-bar">
-                            <span class="legend-badge"><span class="dot-b2c"></span> B2C</span>
-                            <span class="legend-badge"><span class="dot-b2b"></span> B2B</span>
-                            <span class="legend-badge"><span class="dot-uni"></span> УНІВЕРСИТАЛЬНІ</span>
-                            <button class="formula-collapse-btn" onclick="toggleFormulaCard()">
-                                <span class="fw-bold" style="font-size:0.72rem;letter-spacing:.4px">ПОТОЧНА ФОРМУЛА:</span>
-                                <i class="bi bi-chevron-up" id="formula-toggle-icon"></i>
-                            </button>
-                        </div>
+                        <!-- Conditions area — drop target for sidebar fields -->
+                        <div class="filter-conditions-area"
+                            ondragover="onConditionAreaDragOver(event)"
+                            ondrop="onConditionAreaDrop(event)">
+                            <div id="filters-blocks-container">
+                                <div class="section-title-row">
+                                    <div class="section-title-espo text-primary"
+                                        onclick="openFilterPicker('Include', event)">
+                                        <i class="bi bi-plus-circle-fill"></i> включити у вибірку
+                                        <i class="bi bi-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
+                                    </div>
+                                </div>
+                                <div id="espo-include-list"></div>
 
-                        <!-- Conditions area -->
-                        <div class="filter-conditions-area formula-content-wrapper">
-                            <div id="formula-filters-view" class="mb-2">
-                                <div class="formula-box" id="formula-display" style="display:none;"></div>
-                            </div>
-                            <div id="standard-filters-view" class="standard-view">
-                                <div id="filters-blocks-container">
-                                    <div class="section-title-row">
-                                        <div class="section-title-espo text-primary"
-                                            onclick="openFilterPicker('Include', event)">
-                                            <i class="bi bi-plus-circle-fill"></i> Включити
-                                        </div>
+                                <div class="section-title-row" style="margin-top:16px;">
+                                    <div class="section-title-espo text-danger"
+                                        onclick="openFilterPicker('Exclude', event)">
+                                        <i class="bi bi-dash-circle-fill"></i> виключити з вибірки
+                                        <i class="bi bi-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
                                     </div>
-                                    <div id="espo-include-list"></div>
-                                    <div class="section-title-row">
-                                        <div class="section-title-espo text-danger"
-                                            onclick="openFilterPicker('Exclude', event)">
-                                            <i class="bi bi-dash-circle-fill"></i> Виключити
-                                        </div>
-                                    </div>
-                                    <div id="espo-exclude-list"></div>
+                                </div>
+                                <div id="espo-exclude-list"></div>
+
+                                <div id="no-filters-msg" style="display:none; padding:16px 0; color:#9CA3AF; font-size:0.82rem; font-style:italic;">
+                                    Перетягніть поля сюди або натисніть «включити у вибірку»
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Hidden mode/scope radios (kept for JS compatibility) -->
+                    <!-- Hidden radio inputs (JS compatibility) -->
                     <div style="display:none;" aria-hidden="true">
                         <input type="radio" name="global-filter-mode" id="mode-include" value="Include" checked onchange="window.currentFilterMode='Include'">
                         <input type="radio" name="global-filter-mode" id="mode-exclude" value="Exclude" onchange="window.currentFilterMode='Exclude'">
@@ -2294,12 +2272,15 @@
                         <input type="text" class="form-control" id="segmentNameInput"
                             placeholder="Введіть назву шаблону...">
 
-                        <label class="np-export-label">Короткий опис</label>
-                        <textarea class="form-control" id="export-description" rows="3"
-                            placeholder="Опишіть аудиторію..."
-                            oninput="updateCharCount(this)"
-                            style="resize:none; font-size:0.82rem;"></textarea>
-                        <div class="np-char-count"><span id="char-count">0</span>/500 символів</div>
+                        <!-- Description — shown only for template creation -->
+                        <div id="export-desc-wrap">
+                            <label class="np-export-label">Короткий опис</label>
+                            <textarea class="form-control" id="export-description" rows="3"
+                                placeholder="Опишіть аудиторію..."
+                                oninput="updateCharCount(this)"
+                                style="resize:none; font-size:0.82rem;"></textarea>
+                            <div class="np-char-count"><span id="char-count">0</span>/500 символів</div>
+                        </div>
 
                         <button class="btn-np-save-full" onclick="confirmSaveSegment()">Зберегти</button>
 
@@ -2635,27 +2616,6 @@
     <script src="js/app.js"></script>
     <div id="filter-picker" class="filter-picker-overlay"></div>
 
-    <!-- Design Mode Toolbar -->
-    <div class="design-toolbar">
-        <div class="d-flex align-items-center gap-2 px-2 border-end border-secondary me-2">
-            <i class="bi bi-palette-fill text-primary"></i>
-            <span class="text-white small fw-bold">DESIGN MODE PRO</span>
-        </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="resetDesign()"
-                title="Скинути всі зміни">
-                <i class="bi bi-arrow-counterclockwise me-1"></i>Скинути
-            </button>
-            <button class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleDesignMode()"
-                title="Перегляд без інструментів">
-                <i class="bi bi-eye me-1"></i>Вихід
-            </button>
-            <button class="btn btn-sm btn-primary rounded-pill px-4" onclick="saveDesignChanges()"
-                title="Отримати JSON">
-                <i class="bi bi-check2-all me-1"></i>Готово
-            </button>
-        </div>
-    </div>
 
     <!-- ── TEMPLATES MODAL ──────────────────────────────────── -->
     <div class="modal fade templates-modal" id="templatesModal" tabindex="-1" data-bs-backdrop="true" data-bs-scroll="false">
@@ -2814,24 +2774,19 @@
 
     // Build draggable field items from hidden tab pane
     function buildFieldListForCategory(catId, container) {
-        // Map catId to the pane id
         const paneIdMap = { c5b: 'pane-c5' };
         const paneId = paneIdMap[catId] || ('pane-' + catId);
         const pane = document.getElementById(paneId);
         if (!pane) return;
 
         const seen = new Set();
-        const items = pane.querySelectorAll('[data-field-id]');
-        items.forEach(item => {
+        pane.querySelectorAll('[data-field-id]').forEach(item => {
             const fieldId = item.dataset.fieldId;
             if (seen.has(fieldId)) return;
             seen.add(fieldId);
-
             const labelEl = item.querySelector('label.form-label');
             if (!labelEl) return;
             const label = labelEl.textContent.trim();
-
-            // Detect field type
             let ftype = 'select';
             if (item.querySelector('input[type=date]')) ftype = 'date';
             else if (item.querySelector('input[type=number]')) ftype = 'number';
@@ -2842,85 +2797,93 @@
             row.draggable = true;
             row.dataset.fieldId = fieldId;
             row.dataset.ftype = ftype;
-            row.innerHTML = `<span class="np-field-name">${label}</span>
-                <button class="np-field-add" title="Додати в фільтр"
-                    onclick="addFieldFromSidebar('${fieldId}', ${JSON.stringify(label)}, '${ftype}', event)">
-                    <i class="bi bi-plus"></i>
-                </button>`;
+            row.dataset.flabel = label;
+            row.innerHTML = `<i class="bi bi-grip-vertical np-field-drag"></i><span class="np-field-name">${label}</span>`;
+
+            // Drag-from-sidebar events
+            row.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('np-field-id', fieldId);
+                e.dataTransfer.setData('np-field-label', label);
+                e.dataTransfer.setData('np-field-type', ftype);
+                e.dataTransfer.effectAllowed = 'copy';
+                row.classList.add('dragging');
+            });
+            row.addEventListener('dragend', () => row.classList.remove('dragging'));
+
+            // Click to add field
+            row.addEventListener('click', () => openPickerForField(fieldId, label, ftype, row));
             container.appendChild(row);
         });
     }
 
-    // Open the filter picker pre-focused on a specific field
-    function addFieldFromSidebar(fieldId, label, ftype, event) {
-        event.stopPropagation();
-
-        // Try to find the field in the registry, or build a minimal entry
+    // Open the filter picker positioned near a given anchor element
+    function openPickerForField(fieldId, label, ftype, anchor) {
         const reg = (typeof buildFilterRegistryFromDOM === 'function')
             ? buildFilterRegistryFromDOM()
             : (typeof filterRegistry !== 'undefined' ? filterRegistry : []);
-        let field = reg.find(f => f.id === fieldId);
-        if (!field) {
-            field = { id: fieldId, label: label, type: ftype || 'select', options: {}, category: '', icon: 'bi-tag' };
-        }
+        let field = reg.find(f => f.id === fieldId)
+            || { id: fieldId, label: label, type: ftype || 'select', options: {}, category: '', icon: 'bi-tag' };
 
         const zone = window.currentFilterMode || 'Include';
-        const sibCount = (typeof espoConditionRegistry !== 'undefined')
-            ? espoConditionRegistry.filter(i => i.zone === zone && i.parentId === null).length
-            : 0;
+        const sibCount = typeof espoConditionRegistry !== 'undefined'
+            ? espoConditionRegistry.filter(i => i.zone === zone && i.parentId === null).length : 0;
 
-        if (typeof pickerState !== 'undefined' && typeof renderPicker === 'function') {
-            pickerState.field = field;
-            pickerState.zone = zone;
-            pickerState.parentId = null;
-            pickerState.fieldOp = null;
+        if (typeof pickerState === 'undefined' || typeof renderPicker !== 'function') return;
+        pickerState.field = field;
+        pickerState.zone = zone;
+        pickerState.parentId = null;
+        pickerState.fieldOp = null;
+        pickerState.linkOp = zone === 'Exclude' ? 'ОКРІМ' : 'ТА';
+        pickerState.step = sibCount === 0 ? ((field.type === 'date') ? 4 : 2) : 1;
+        renderPicker();
 
-            if (sibCount === 0) {
-                pickerState.linkOp = zone === 'Exclude' ? 'ОКРІМ' : 'ТА';
-                pickerState.step = (field.type === 'date') ? 4 : 2;
-            } else {
-                pickerState.step = 1;
+        const picker = document.getElementById('filter-picker');
+        if (!picker) return;
+        const rect = anchor.getBoundingClientRect();
+        picker.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+        picker.style.left = Math.min(rect.left, window.innerWidth - 340) + 'px';
+        picker.style.display = 'block';
+
+        const closer = e => {
+            if (!picker.contains(e.target) && !anchor.contains(e.target)) {
+                picker.style.display = 'none';
+                document.removeEventListener('click', closer);
             }
-            renderPicker();
+        };
+        setTimeout(() => document.addEventListener('click', closer), 10);
+    }
 
-            const picker = document.getElementById('filter-picker');
-            if (!picker) return;
-            const btn = event.currentTarget;
-            const rect = btn.getBoundingClientRect();
-            picker.style.top = (rect.bottom + window.scrollY + 5) + 'px';
-            picker.style.left = Math.min(rect.left, window.innerWidth - 340) + 'px';
-            picker.style.display = 'block';
-
-            const closer = e => {
-                if (!picker.contains(e.target) && !btn.contains(e.target)) {
-                    picker.style.display = 'none';
-                    document.removeEventListener('click', closer);
-                }
-            };
-            setTimeout(() => document.addEventListener('click', closer), 10);
+    // ── CENTER DROP ZONE (sidebar → conditions) ────────────────
+    function onConditionAreaDragOver(e) {
+        if (e.dataTransfer.types.includes('np-field-id')) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
         }
     }
-
-    // Mode tab toggle (ВКЛЮЧИТИ / ВИКЛЮЧИТИ)
-    function setFMode(mode, btn) {
-        window.currentFilterMode = mode;
-        document.querySelectorAll('#fmode-include, #fmode-exclude').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        // Sync hidden radio
-        const radio = document.getElementById(mode === 'Include' ? 'mode-include' : 'mode-exclude');
-        if (radio) radio.checked = true;
+    function onConditionAreaDrop(e) {
+        const fieldId = e.dataTransfer.getData('np-field-id');
+        if (!fieldId) return;
+        e.preventDefault();
+        const label = e.dataTransfer.getData('np-field-label');
+        const ftype = e.dataTransfer.getData('np-field-type');
+        // Position picker near drop point
+        const fakeAnchor = { getBoundingClientRect: () => ({ bottom: e.clientY, left: e.clientX, top: e.clientY }) };
+        openPickerForField(fieldId, label, ftype, fakeAnchor);
     }
 
-    // Scope tab toggle
-    function setFScope(scope, btn) {
-        document.querySelectorAll('#fscope-all, #fscope-b2b, #fscope-b2c').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const radio = document.getElementById('scope-' + scope);
-        if (radio) radio.checked = true;
+    // ── EXPORT: show description only for template mode ────────
+    function toggleExportDescVisibility() {
+        const type = document.getElementById('export-action-type')?.value;
+        const wrap = document.getElementById('export-desc-wrap');
+        if (wrap) wrap.style.display = (type === 'template') ? '' : 'none';
     }
-
-    // Sync page tab visual state when switchView is called
     document.addEventListener('DOMContentLoaded', () => {
+        const exportSel = document.getElementById('export-action-type');
+        if (exportSel) {
+            exportSel.addEventListener('change', toggleExportDescVisibility);
+            toggleExportDescVisibility();
+        }
+
         // Build field list for first (active) category on load
         const firstFields = document.getElementById('fields-c4');
         if (firstFields && firstFields.childElementCount === 0) {
@@ -2932,6 +2895,4 @@
 </body>
 
 <script src="csv-layout.js"></script>
-<script src="js/design-mode.js"></script>
-<script src="js/bg-particles.js"></script>
 </html>
