@@ -113,8 +113,8 @@
                             placeholder="Search"
                             oninput="filterFieldsBySearch(this.value)">
                     </div>
-                    <button class="btn-ai-sidebar">
-                        <i class="bi bi-stars"></i> AI
+                    <button class="btn-ai-sidebar" onclick="switchView('ai')">
+                        <i class="bi bi-stars"></i> AI Помічник
                     </button>
                 </div>
 
@@ -2712,6 +2712,25 @@
         document.querySelectorAll('.seg-tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         window.currentSegment = seg;
+
+        // Map segment to field scope
+        const scopeMap = { b2b: 'b2b', b2c: 'b2c', senders: 'all', recipients: 'all' };
+        const scope = scopeMap[seg] || 'all';
+
+        // Update hidden scope radio so applyFieldSearch uses correct mode
+        const radioId = scope === 'b2b' ? 'scope-b2b' : scope === 'b2c' ? 'scope-b2c' : 'scope-all';
+        const radio = document.getElementById(radioId);
+        if (radio) {
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change'));
+        }
+
+        // Filter already-built sidebar field items
+        document.querySelectorAll('.np-cat-fields .np-field-item').forEach(item => {
+            const vis = (item.dataset.fieldVisibility || 'universal').toLowerCase();
+            const visible = scope === 'all' || vis === 'universal' || vis === 'all' || vis === scope;
+            item.style.display = visible ? '' : 'none';
+        });
     }
 
     // Page-level tab switcher (kept for compatibility)
@@ -2792,12 +2811,23 @@
             else if (item.querySelector('input[type=number]')) ftype = 'number';
             else if (item.querySelector('input[type=text], input[type=email]')) ftype = 'text';
 
+            const vis = (typeof getFieldVisibilityById === 'function')
+                ? getFieldVisibilityById(fieldId, label)
+                : 'universal';
+
             const row = document.createElement('div');
             row.className = 'np-field-item';
             row.draggable = true;
             row.dataset.fieldId = fieldId;
             row.dataset.ftype = ftype;
             row.dataset.flabel = label;
+            row.dataset.fieldVisibility = vis;
+
+            // Apply current segment scope immediately
+            const currentScope = (typeof getCurrentFieldScope === 'function') ? getCurrentFieldScope() : 'all';
+            if (currentScope !== 'all' && vis !== 'universal' && vis !== 'all' && vis !== currentScope) {
+                row.style.display = 'none';
+            }
             row.innerHTML = `<i class="bi bi-grip-vertical np-field-drag"></i><span class="np-field-name">${label}</span>`;
 
             // Drag-from-sidebar events
