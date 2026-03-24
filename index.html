@@ -198,17 +198,22 @@
                 </ul>
 
                 <!-- AI Query Input Mode (hidden by default) -->
-                <div id="np-ai-input-mode" style="display:none; padding:12px 14px; border-top:1px solid #E5E7EB;">
-                    <button class="btn btn-sm btn-link p-0 mb-2" onclick="toggleAIMode(null, true)" style="font-size:0.8rem; color:#6B7280;">
-                        <i class="bi bi-chevron-left"></i> Назад до полів
+                <div id="np-ai-input-mode" style="display:none; padding:14px; flex-direction:column; gap:10px;">
+                    <label class="np-sidebar-label">Опишіть вашу цільову аудиторію</label>
+                    <div style="position:relative;">
+                        <textarea class="form-control" id="ai-query-input"
+                            placeholder="Жінки і чоловіки, 25-35 років, відправляли чи отримували в Одесі"
+                            maxlength="500" rows="6"
+                            oninput="updateAICharCount(this)"
+                            style="font-size:0.82rem; resize:none; border-radius:8px;"></textarea>
+                        <span id="ai-char-count" style="position:absolute; bottom:8px; right:10px; font-size:0.72rem; color:#9CA3AF;">0/500 символів</span>
+                    </div>
+                    <button class="btn-np-save-full" onclick="submitAIQuery()" style="width:100%;">
+                        Шукати
                     </button>
-                    <label class="np-sidebar-label d-block mb-2">AI ЗАПИТ</label>
-                    <textarea class="form-control form-control-sm" id="ai-query-input"
-                        placeholder="Опишіть вибірку на українській, наприклад: Клієнти з Києва, які купили більше 3х разів за останній місяць"
-                        rows="4" style="font-size:0.8rem; resize:vertical; max-height:120px;"></textarea>
-                    <button class="btn btn-sm btn-primary w-100 mt-2" onclick="submitAIQuery()">
-                        <i class="bi bi-stars"></i> Сформувати запит
-                    </button>
+                    <div id="ai-query-status" style="display:none; text-align:center; color:#6B7280; font-size:0.8rem;">
+                        <div class="spinner-border spinner-border-sm text-secondary me-1"></div> Аналізуємо запит...
+                    </div>
                 </div>
             </div>
 
@@ -2355,11 +2360,8 @@
                         </div>
                     </div>
 
-                    <!-- 3. Actions & Format (Unified Block) -->
-                    <div class="card-diamond p-3 mb-3">
-                        <h6 class="fw-bold mb-3 small text-uppercase text-muted border-bottom pb-2">Експорт результатів
-                        </h6>
-
+                    <!-- 3. Actions & Format (legacy hidden — kept for JS compat) -->
+                    <div style="display:none;" aria-hidden="true">
                         <!-- legacy export (hidden) -->
                         <div class="mb-3">
                             <select class="form-select form-select-sm">
@@ -2918,58 +2920,81 @@
     // ── AI MODE: toggle between categories and AI query input ────
     function toggleAIMode(btn, closeMode = false) {
         const categoriesList = document.getElementById('np-categories-list');
+        const sidebarLabel = document.querySelector('.np-filter-sidebar .np-sidebar-label');
+        const searchWrap = document.querySelector('.np-search-ai');
         const aiInputMode = document.getElementById('np-ai-input-mode');
         const aiBtn = btn || document.querySelector('.btn-ai-sidebar');
 
-        if (closeMode || (aiInputMode && aiInputMode.style.display !== 'none')) {
-            // Close AI mode, show categories
+        const isOpen = aiInputMode && aiInputMode.style.display !== 'none';
+
+        if (closeMode || isOpen) {
+            // Close AI mode — restore full sidebar
             if (categoriesList) categoriesList.style.display = '';
+            if (sidebarLabel) sidebarLabel.style.display = '';
+            if (searchWrap) searchWrap.style.display = '';
             if (aiInputMode) aiInputMode.style.display = 'none';
             if (aiBtn) aiBtn.classList.remove('active');
         } else {
-            // Open AI mode, hide categories
+            // Open AI mode — hide categories + search
             if (categoriesList) categoriesList.style.display = 'none';
-            if (aiInputMode) aiInputMode.style.display = '';
+            if (sidebarLabel) sidebarLabel.style.display = 'none';
+            if (searchWrap) searchWrap.style.display = 'none';
+            if (aiInputMode) { aiInputMode.style.display = 'flex'; }
             if (aiBtn) aiBtn.classList.add('active');
-            // Focus on textarea
             setTimeout(() => {
-                const input = document.getElementById('ai-query-input');
-                if (input) input.focus();
+                const ta = document.getElementById('ai-query-input');
+                if (ta) ta.focus();
             }, 50);
         }
     }
 
+    function updateAICharCount(el) {
+        const counter = document.getElementById('ai-char-count');
+        if (counter) counter.textContent = `${el.value.length}/500 символів`;
+    }
+
     function submitAIQuery() {
         const queryInput = document.getElementById('ai-query-input');
-        if (!queryInput || !queryInput.value.trim()) {
-            alert('Будь ласка, опишіть вибірку');
-            return;
-        }
+        const statusEl = document.getElementById('ai-query-status');
+        if (!queryInput || !queryInput.value.trim()) return;
 
         const query = queryInput.value.trim();
-        console.log('AI Query:', query);
-
-        // Mock AI analysis - add some sample filters based on keywords
         const lowerQuery = query.toLowerCase();
 
-        // Example mock: detect "київ" → add geo filter
-        if (lowerQuery.includes('київ') || lowerQuery.includes('kyiv')) {
-            addEspoBlock('Location', 'Місто', 'Київ', 'Include', null);
-        }
+        // Show loading state
+        const btn = queryInput.closest('#np-ai-input-mode')?.querySelector('button');
+        if (btn) btn.disabled = true;
+        if (statusEl) statusEl.style.display = '';
 
-        // Example: detect "купи" → show purchase fields
-        if (lowerQuery.includes('купи') || lowerQuery.includes('покуп') || lowerQuery.includes('замовлен')) {
-            addEspoBlock('PurchaseCount', 'Кількість замовлень', '> 1', 'Include', null);
-        }
+        // Mock AI: parse keywords and build filters after short delay
+        setTimeout(() => {
+            if (statusEl) statusEl.style.display = 'none';
+            if (btn) btn.disabled = false;
 
-        // Show feedback
-        alert(`Запит аналізовано: "${query}"\n\nДобавлені фільтри на основі ключових слів.`);
+            // Gender detection
+            const hasFemale = /жінк|женщин/i.test(lowerQuery);
+            const hasMale = /чолові|мужч/i.test(lowerQuery);
+            if (hasFemale) addEspoBlock('Gender', 'Гендер', 'Жінки', 'Include', null);
+            if (hasMale) addEspoBlock('Gender', 'Гендер', 'Чоловіки', 'Include', null);
 
-        // Close AI mode
-        toggleAIMode(null, true);
+            // Age detection
+            const ageMatch = lowerQuery.match(/(\d{1,2})[\s\-–—]+(\d{1,2})\s*(рок|лет|year)/);
+            if (ageMatch) addEspoBlock('Age', 'Вік', `${ageMatch[1]}-${ageMatch[2]}`, 'Include', null);
 
-        // Clear input
-        queryInput.value = '';
+            // City detection
+            const cities = ['київ','одес','харків','дніпр','львів','запоріж'];
+            cities.forEach(city => {
+                if (lowerQuery.includes(city)) {
+                    const cityName = city.charAt(0).toUpperCase() + city.slice(1);
+                    addEspoBlock('City', 'Місто', cityName, 'Include', null);
+                }
+            });
+
+            // Close AI mode and clear
+            toggleAIMode(null, true);
+            queryInput.value = '';
+            updateAICharCount(queryInput);
+        }, 1200);
     }
 
     // ── EXPORT: show description only for template mode ────────
