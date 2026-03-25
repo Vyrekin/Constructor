@@ -114,7 +114,7 @@
                             oninput="filterFieldsBySearch(this.value)">
                     </div>
                     <button class="btn-ai-sidebar" onclick="toggleAIMode(this)">
-                        <i class="bi bi-stars"></i> AI Помічник
+                        ✨ AI
                     </button>
                 </div>
 
@@ -126,10 +126,18 @@
                     <li class="np-cat-group">
                         <button class="np-category-btn active" onclick="toggleCatGroup('c4', this)">
                             <i class="bi bi-person np-cat-icon"></i>
-                            <span class="cat-label">Профіль клієнта</span>
+                            <span class="cat-label">Профіль клієнта (B2C)</span>
                             <i class="bi bi-chevron-right np-cat-chevron" style="transform:rotate(90deg)"></i>
                         </button>
                         <div class="np-cat-fields" id="fields-c4"></div>
+                    </li>
+                    <li class="np-cat-group">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c4b', this)">
+                            <i class="bi bi-building np-cat-icon"></i>
+                            <span class="cat-label">Профіль бізнесу (B2B)</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c4b" style="display:none"></div>
                     </li>
                     <li class="np-cat-group">
                         <button class="np-category-btn" onclick="toggleCatGroup('c5', this)">
@@ -261,8 +269,8 @@
                                 </div>
                                 <div id="espo-exclude-list"></div>
 
-                                <div id="no-filters-msg" style="display:none; padding:16px 0; color:#9CA3AF; font-size:0.82rem; font-style:italic;">
-                                    Перетягніть поля сюди або натисніть «включити у вибірку»
+                                <div id="no-filters-msg" style="display:none; padding:40px 0; color:#9CA3AF; font-size:0.75rem; text-align:center; font-style:normal;">
+                                    Додавайте параметри для формування аудиторії
                                 </div>
                             </div>
                         </div>
@@ -2259,22 +2267,21 @@
 
             <!-- ── RIGHT SIDEBAR ──────────────────────────────── -->
             <div class="np-right-sidebar" id="np-right-sidebar">
-                <div class="sidebar-sticky" style="top: 0;">
-                    <!-- 1. Counter — GREEN box -->
-                    <div class="counter-box mx-0">
+                    <!-- 1. Counter — GREEN card -->
+                    <div class="counter-box">
                         <i class="bi bi-bar-chart-fill counter-trend"></i>
                         <span class="counter-number" id="counter-display">0</span>
                         <small>знайдено користувачів</small>
                     </div>
 
-                    <!-- 2. Donut chart placeholder -->
+                    <!-- 2. Donut chart card -->
                     <div class="np-donut-wrap">
                         <canvas id="chart-donut-audience" width="200" height="110"></canvas>
                         <span class="np-donut-percent" id="donut-percent">0%</span>
                         <div class="np-donut-label">всіх аудиторії</div>
                     </div>
 
-                    <!-- 3. Export section -->
+                    <!-- 3. Export section card -->
                     <div class="np-export-section">
                         <div class="np-export-title">Експорт</div>
 
@@ -2798,6 +2805,9 @@
         document.querySelectorAll('.np-cat-chevron').forEach(el => { el.style.transform = ''; });
         document.querySelectorAll('.np-category-btn').forEach(b => b.classList.remove('active'));
 
+        // Reset sidebar label to "ВСІ"
+        const labelEl = document.querySelector('.np-sidebar-label');
+
         if (!isOpen) {
             // Build field list lazily on first open
             if (fieldsEl.childElementCount === 0) {
@@ -2807,7 +2817,27 @@
             const chevron = btn.querySelector('.np-cat-chevron');
             if (chevron) chevron.style.transform = 'rotate(90deg)';
             btn.classList.add('active');
+
+            // Update breadcrumb label
+            if (labelEl) {
+                const catLabel = btn.querySelector('.cat-label');
+                const catName = catLabel ? catLabel.textContent.trim().toUpperCase() : catId.toUpperCase();
+                labelEl.innerHTML = '<a href="#" onclick="npResetSidebarBreadcrumb(event)" style="color:var(--text-muted);text-decoration:none;font-weight:700;">ВСІ</a> <span style="color:#C4C4C4;margin:0 3px;">›</span> <span style="color:var(--text-secondary);">' + catName + '</span>';
+            }
+        } else {
+            // Collapsed: reset to "ВСІ"
+            if (labelEl) labelEl.textContent = 'ВСІ';
         }
+    }
+
+    function npResetSidebarBreadcrumb(e) {
+        e.preventDefault();
+        // Close all open panels
+        document.querySelectorAll('.np-cat-fields').forEach(el => { el.style.display = 'none'; });
+        document.querySelectorAll('.np-cat-chevron').forEach(el => { el.style.transform = ''; });
+        document.querySelectorAll('.np-category-btn').forEach(b => b.classList.remove('active'));
+        const labelEl = document.querySelector('.np-sidebar-label');
+        if (labelEl) labelEl.textContent = 'ВСІ';
     }
 
     // Build draggable field items from hidden tab pane
