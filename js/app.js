@@ -830,6 +830,26 @@
                 block.dataset.id = item.id;
                 block.draggable = true;
 
+                let valueInputHtml = '';
+                if (item.fieldType === 'select' && item.fieldOptions) {
+                    const opts = Object.entries(item.fieldOptions)
+                        .map(([k, v]) => `<option value="${v}" ${item.value === v ? 'selected' : ''}>${v}</option>`)
+                        .join('');
+                    valueInputHtml = `<select class="cond-value-select" onchange="updateFilterValue(${item.id}, this.value)" style="font-size:0.82rem; border:1px solid #dee2e6; border-radius:4px; padding:2px 6px; background:#fff; color:#212529; cursor:pointer; min-width:100px; max-width:200px;">
+                        <option value="">Оберіть...</option>
+                        ${opts}
+                    </select>`;
+                } else if (item.fieldType === 'date') {
+                    valueInputHtml = `<input type="date" class="cond-value-input" value="${item.value || ''}"
+                        onchange="updateFilterValue(${item.id}, this.value)"
+                        style="font-size:0.82rem; border:1px solid #dee2e6; border-radius:4px; padding:2px 6px; color:#212529; width:140px;">`;
+                } else {
+                    valueInputHtml = `<input type="text" class="cond-value-input" value="${item.value || ''}"
+                        onblur="updateFilterValue(${item.id}, this.value)"
+                        onkeydown="if(event.key==='Enter') updateFilterValue(${item.id}, this.value)"
+                        style="font-size:0.82rem; border:1px solid #dee2e6; border-radius:4px; padding:2px 6px; color:#212529; min-width:80px; max-width:180px;">`;
+                }
+
                 block.innerHTML = `
                     <span class="cond-drag-handle" title="Перетягнути"><i class="bi bi-grip-vertical"></i></span>
                     <div class="condition-header">
@@ -839,8 +859,8 @@
                     <div class="condition-body">
                         <div class="condition-content-row">
                             <div class="condition-item">
-                                ${item.fieldOp ? `<span style="color:#6c757d; font-size:0.78rem;">${item.fieldOp}:</span> ` : ''}
-                                <b style="font-size:0.82rem;">${item.value || ''}</b>
+                                ${item.fieldOp ? `<span style="color:#6c757d; font-size:0.78rem; margin-right:4px;">${item.fieldOp}:</span>` : ''}
+                                ${valueInputHtml}
                             </div>
                         </div>
                         <div class="sub-conditions-container" id="sub-container-${item.id}" style="display:none;"></div>
