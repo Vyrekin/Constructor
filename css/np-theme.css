@@ -1354,8 +1354,18 @@ main.container-fluid { padding: 0 !important; }
 .condition-item { padding-left: 0 !important; border-left: none !important; }
 
 /* Delete button at far right */
-.condition-block > .condition-header ~ .ms-auto,
-.condition-block .ms-auto:last-child { display: none !important; } /* hidden, it's inside header */
+.cond-delete {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    color: #BDBDBD;
+    font-size: 0.85rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-left: 1px solid #F0F0F0;
+    transition: color 0.12s;
+}
+.cond-delete:hover { color: #DC3545; }
 
 /* ── INTER-CONDITION OPERATOR ─────────────────────────────── */
 .inter-block-op { display: flex !important; align-items: center !important; margin: 3px 0 !important; }

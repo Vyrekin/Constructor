@@ -121,9 +121,8 @@
                 <!-- ВСІ label -->
                 <div class="np-sidebar-label">ВСІ</div>
 
-                <!-- Category accordion — click to expand field list below -->
                 <ul class="np-categories-list" id="np-categories-list">
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="b2c">
                         <button class="np-category-btn active" onclick="toggleCatGroup('c4', this)">
                             <i class="bi bi-person np-cat-icon"></i>
                             <span class="cat-label">Профіль клієнта (B2C)</span>
@@ -131,7 +130,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c4"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="b2b">
                         <button class="np-category-btn" onclick="toggleCatGroup('c4b', this)">
                             <i class="bi bi-building np-cat-icon"></i>
                             <span class="cat-label">Профіль бізнесу (B2B)</span>
@@ -139,7 +138,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c4b" style="display:none"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="all">
                         <button class="np-category-btn" onclick="toggleCatGroup('c5', this)">
                             <i class="bi bi-geo-alt np-cat-icon"></i>
                             <span class="cat-label">Локація</span>
@@ -147,7 +146,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c5" style="display:none"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="all">
                         <button class="np-category-btn" onclick="toggleCatGroup('c1', this)">
                             <i class="bi bi-box-seam np-cat-icon"></i>
                             <span class="cat-label">Параметри ЕН</span>
@@ -155,7 +154,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c1" style="display:none"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="all">
                         <button class="np-category-btn" onclick="toggleCatGroup('c3', this)">
                             <i class="bi bi-cash-stack np-cat-icon"></i>
                             <span class="cat-label">Фінанси та вантаж</span>
@@ -163,7 +162,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c3" style="display:none"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="all">
                         <button class="np-category-btn" onclick="toggleCatGroup('c5b', this)">
                             <i class="bi bi-activity np-cat-icon"></i>
                             <span class="cat-label">Активність</span>
@@ -171,7 +170,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c5b" style="display:none"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="b2c">
                         <button class="np-category-btn" onclick="toggleCatGroup('c6', this)">
                             <i class="bi bi-phone np-cat-icon"></i>
                             <span class="cat-label">Застосунок та пристрої</span>
@@ -179,7 +178,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c6" style="display:none"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="b2b">
                         <button class="np-category-btn" onclick="toggleCatGroup('c11', this)">
                             <i class="bi bi-shop np-cat-icon"></i>
                             <span class="cat-label">Сфери та мерчанти</span>
@@ -187,7 +186,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c11" style="display:none"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="all">
                         <button class="np-category-btn" onclick="toggleCatGroup('c7', this)">
                             <i class="bi bi-chat-dots np-cat-icon"></i>
                             <span class="cat-label">Згоди та комунікація</span>
@@ -195,7 +194,7 @@
                         </button>
                         <div class="np-cat-fields" id="fields-c7" style="display:none"></div>
                     </li>
-                    <li class="np-cat-group">
+                    <li class="np-cat-group" data-scope="all">
                         <button class="np-category-btn" onclick="toggleCatGroup('c2', this)">
                             <i class="bi bi-people np-cat-icon"></i>
                             <span class="cat-label">Look-a-like</span>
@@ -2743,20 +2742,27 @@
         const scopeMap = { b2b: 'b2b', b2c: 'b2c', senders: 'all', recipients: 'all' };
         const scope = scopeMap[seg] || 'all';
 
-        // Update hidden scope radio so applyFieldSearch uses correct mode
+        // Update hidden scope radio
         const radioId = scope === 'b2b' ? 'scope-b2b' : scope === 'b2c' ? 'scope-b2c' : 'scope-all';
         const radio = document.getElementById(radioId);
-        if (radio) {
-            radio.checked = true;
-            radio.dispatchEvent(new Event('change'));
-        }
+        if (radio) { radio.checked = true; radio.dispatchEvent(new Event('change')); }
 
-        // Filter already-built sidebar field items
-        document.querySelectorAll('.np-cat-fields .np-field-item').forEach(item => {
-            const vis = (item.dataset.fieldVisibility || 'universal').toLowerCase();
-            const visible = scope === 'all' || vis === 'universal' || vis === 'all' || vis === scope;
-            item.style.display = visible ? '' : 'none';
+        // Show/hide top-level categories based on data-scope
+        document.querySelectorAll('.np-cat-group[data-scope]').forEach(li => {
+            const catScope = li.dataset.scope;
+            const visible = scope === 'all' || catScope === 'all' || catScope === scope;
+            li.style.display = visible ? '' : 'none';
         });
+
+        // If active category became hidden, reset to first visible one
+        const activeBtn = document.querySelector('.np-category-btn.active');
+        if (activeBtn) {
+            const parentLi = activeBtn.closest('.np-cat-group');
+            if (parentLi && parentLi.style.display === 'none') {
+                const firstVisible = document.querySelector('.np-cat-group:not([style*="display: none"]) .np-category-btn');
+                if (firstVisible) firstVisible.click();
+            }
+        }
     }
 
     // Page-level tab switcher (kept for compatibility)

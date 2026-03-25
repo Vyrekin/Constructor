@@ -803,28 +803,23 @@
                 block.draggable = true;
 
                 block.innerHTML = `
+                    <span class="cond-drag-handle" title="Перетягнути"><i class="bi bi-grip-vertical"></i></span>
                     <div class="condition-header">
-                        ${displayOp ? `<span class="op-tag ${opClass}">${isEx ? 'ОКРІМ' : displayOp}</span>` : ''}
-                        <span class="fw-bold ms-1 text-truncate" style="color: #444; font-size: 0.75rem; max-width: 120px;" title="${item.label}">${item.label}</span>
-                        <span class="condition-vis-badge ${visClass}">${visText}</span>
-                        <div class="add-sub-btn ms-1" style="width:18px; height:18px;" title="Додати вкладену умову" onclick="openFilterPicker('${zone}', event, ${item.id})">
-                            <i class="bi bi-plus"></i>
-                        </div>
-                        <div class="ms-auto">
-                            <i class="bi bi-trash3 text-muted" style="cursor:pointer; font-size: 0.75rem;" onclick="removeEspoBlock(${item.id})"></i>
-                        </div>
+                        <span class="text-truncate" style="font-size:0.82rem; color:#212529;" title="${item.label}">${item.label}</span>
+                        <i class="bi bi-info-circle" style="font-size:0.65rem; color:#9CA3AF; flex-shrink:0; cursor:help;" title="${item.label}"></i>
                     </div>
                     <div class="condition-body">
                         <div class="condition-content-row">
-                            <div class="condition-item" style="border-left-color: ${isEx ? '#dc3545' : 'var(--primary-soft)'}">
-                                <div class="fs-6" style="font-size: 0.8rem !important;">
-                                    ${item.fieldOp ? `<span class="text-muted fw-normal me-1">${item.fieldOp}:</span>` : ''}
-                                    <b>${item.value || ''}</b>
-                                </div>
+                            <div class="condition-item">
+                                ${item.fieldOp ? `<span style="color:#6c757d; font-size:0.78rem;">${item.fieldOp}:</span> ` : ''}
+                                <b style="font-size:0.82rem;">${item.value || ''}</b>
                             </div>
                         </div>
-                        <div class="sub-conditions-container" id="sub-container-${item.id}" style="display: none;"></div>
+                        <div class="sub-conditions-container" id="sub-container-${item.id}" style="display:none;"></div>
                     </div>
+                    <span class="cond-delete" onclick="removeEspoBlock(${item.id})" title="Видалити">
+                        <i class="bi bi-trash3"></i>
+                    </span>
                 `;
 
                 block.addEventListener('dragstart', (e) => {
