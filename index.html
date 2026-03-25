@@ -2281,53 +2281,56 @@
                         <label class="np-export-label">Оберіть спосіб експорту:</label>
                         <select id="export-action-type" class="form-select" onchange="toggleExportFields()">
                             <option value="template">Зберегти як шаблон</option>
-                            <option value="csv">Завантажити CSV</option>
+                            <option value="csv">Завантажити CSV файл</option>
                             <option value="cdp">Відправити в CDP</option>
-                            <option value="api">API Запит</option>
-                            <option value="automation">Автоматизація</option>
+                            <option value="api">API запит (JSON)</option>
                         </select>
 
-                        <label class="np-export-label">Назва шаблону</label>
-                        <input type="text" class="form-control" id="segmentNameInput"
-                            placeholder="Введіть назву шаблону...">
-
-                        <!-- Description — shown only for template creation -->
-                        <div id="export-desc-wrap">
+                        <!-- Template fields -->
+                        <div id="export-template-wrap">
+                            <label class="np-export-label">Назва шаблону</label>
+                            <input type="text" class="form-control" id="segmentNameInput"
+                                placeholder="Введіть назву шаблону...">
                             <label class="np-export-label">Короткий опис</label>
-                            <textarea class="form-control" id="export-description" rows="3"
+                            <textarea class="form-control" id="export-description" rows="4"
                                 placeholder="Опишіть аудиторію..."
                                 oninput="updateCharCount(this)"
                                 style="resize:none; font-size:0.82rem;"></textarea>
                             <div class="np-char-count"><span id="char-count">0</span>/500 символів</div>
                         </div>
 
-                        <button class="btn-np-save-full" onclick="confirmSaveSegment()">Зберегти</button>
-
-                        <!-- Hidden format settings for other export types -->
+                        <!-- Format chips + quantity (for CSV/CDP/API) -->
                         <div id="export-settings-block" style="display:none;">
-                            <div class="row g-2 mb-3">
-                                <div class="col-6">
-                                    <label class="np-export-label">Формат даних</label>
-                                    <div class="dropdown" id="constructor-format-unified-dropdown">
-                                        <button class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center bg-white multi-select-btn"
-                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                            <span class="selected-values text-muted text-truncate">Телефон</span>
-                                            <i class="bi bi-chevron-down small"></i>
-                                        </button>
-                                        <ul class="dropdown-menu w-100 shadow-sm border-0 multi-select-dropdown">
-                                            <li><label class="dropdown-item"><input class="form-check-input" type="checkbox" value="phone" checked onchange="updateMultiSelect('constructor-format-unified')"> <span>Телефон</span></label></li>
-                                            <li><label class="dropdown-item"><input class="form-check-input" type="checkbox" value="cid" onchange="updateMultiSelect('constructor-format-unified')"> <span>CID</span></label></li>
-                                            <li><label class="dropdown-item"><input class="form-check-input" type="checkbox" value="email" onchange="updateMultiSelect('constructor-format-unified')"> <span>E-mail</span></label></li>
-                                        </ul>
-                                    </div>
-                                    <input type="hidden" id="constructor-format-unified" value="phone">
-                                </div>
-                                <div class="col-6">
-                                    <label class="np-export-label">Кількість</label>
-                                    <input type="number" id="export-count" class="form-control" value="1000" min="1">
+                            <label class="np-export-label">Оберіть формат даних для звіту:</label>
+                            <div class="np-format-chips">
+                                <button class="np-format-chip active" data-value="phone" onclick="toggleFormatChip(this)">Телефон</button>
+                                <button class="np-format-chip" data-value="cid"   onclick="toggleFormatChip(this)">CID</button>
+                                <button class="np-format-chip" data-value="email" onclick="toggleFormatChip(this)">E-mail</button>
+                                <button class="np-format-chip" data-value="aud"   onclick="toggleFormatChip(this)">ID Ауд.</button>
+                            </div>
+                            <input type="hidden" id="constructor-format-unified" value="phone">
+
+                            <!-- Export all toggle -->
+                            <div class="np-toggle-row">
+                                <span class="np-toggle-label">Вивантажити всіх користувачів</span>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input np-toggle-switch" type="checkbox" id="export-all-toggle"
+                                        checked onchange="toggleExportCount(this)">
                                 </div>
                             </div>
+
+                            <!-- Count input — shown only when toggle is OFF -->
+                            <div id="export-count-wrap" style="display:none;">
+                                <div class="np-export-label d-flex align-items-center gap-1">
+                                    Введіть кількість користувачів
+                                    <i class="bi bi-question-circle text-muted" style="cursor:help;"
+                                       title="Максимальна кількість записів у файлі"></i>
+                                </div>
+                                <input type="number" id="export-count" class="form-control" value="1000" min="1" placeholder="1000">
+                            </div>
                         </div>
+
+                        <button class="btn-np-save-full" id="export-main-btn" onclick="handleExportAction()">Зберегти</button>
 
                         <!-- Analytics button -->
                         <button class="btn btn-outline-secondary w-100 mt-2" style="font-size:0.8rem; border-radius:6px;"
@@ -2997,18 +3000,47 @@
         }, 1200);
     }
 
-    // ── EXPORT: show description only for template mode ────────
-    function toggleExportDescVisibility() {
+    // ── EXPORT: switch between template / output modes ───────────
+    function toggleExportFields() {
         const type = document.getElementById('export-action-type')?.value;
-        const wrap = document.getElementById('export-desc-wrap');
-        if (wrap) wrap.style.display = (type === 'template') ? '' : 'none';
+        const templateWrap  = document.getElementById('export-template-wrap');
+        const settingsBlock = document.getElementById('export-settings-block');
+        const mainBtn       = document.getElementById('export-main-btn');
+
+        const isTemplate = (type === 'template');
+        if (templateWrap)  templateWrap.style.display  = isTemplate ? '' : 'none';
+        if (settingsBlock) settingsBlock.style.display  = isTemplate ? 'none' : '';
+        if (mainBtn) mainBtn.textContent = isTemplate ? 'Зберегти' : 'Створити';
     }
-    document.addEventListener('DOMContentLoaded', () => {
-        const exportSel = document.getElementById('export-action-type');
-        if (exportSel) {
-            exportSel.addEventListener('change', toggleExportDescVisibility);
-            toggleExportDescVisibility();
+
+    function toggleFormatChip(chip) {
+        chip.classList.toggle('active');
+        const selected = [...document.querySelectorAll('.np-format-chip.active')]
+            .map(c => c.dataset.value).join(',');
+        const hidden = document.getElementById('constructor-format-unified');
+        if (hidden) hidden.value = selected || 'phone';
+    }
+
+    function toggleExportCount(toggle) {
+        const wrap = document.getElementById('export-count-wrap');
+        if (wrap) wrap.style.display = toggle.checked ? 'none' : '';
+    }
+
+    function handleExportAction() {
+        const type = document.getElementById('export-action-type')?.value;
+        if (type === 'template') {
+            confirmSaveSegment();
+        } else {
+            const format    = document.getElementById('constructor-format-unified')?.value;
+            const exportAll = document.getElementById('export-all-toggle')?.checked;
+            const count     = exportAll ? null : document.getElementById('export-count')?.value;
+            console.log('Export:', { type, format, exportAll, count });
+            if (typeof window.handleSmartExecute === 'function') window.handleSmartExecute();
         }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        toggleExportFields();
 
         // Build field list for first (active) category on load
         const firstFields = document.getElementById('fields-c4');
