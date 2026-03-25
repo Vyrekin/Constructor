@@ -791,26 +791,33 @@ main.container-fluid { padding: 0 !important; }
 /* Export format chips */
 .np-format-chips {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-wrap: nowrap;
+    gap: 0;
     margin-bottom: 14px;
+    border: 1.5px solid #374151;
+    border-radius: 6px;
+    overflow: hidden;
 }
 .np-format-chip {
-    padding: 4px 12px;
-    font-size: 0.78rem;
-    font-weight: 500;
-    border: 1.5px solid #D1D5DB;
-    border-radius: 20px;
+    flex: 1;
+    padding: 5px 8px;
+    font-size: 0.8rem;
+    font-weight: 400;
+    border: none;
+    border-right: 1.5px solid #374151;
+    border-radius: 0;
     background: #fff;
     color: #374151;
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background 0.12s, color 0.12s;
     line-height: 1.4;
+    text-align: center;
+    user-select: none;
 }
-.np-format-chip:hover { border-color: var(--np-green); color: var(--np-green); }
+.np-format-chip:last-child { border-right: none; }
+.np-format-chip:hover { background: #F3F4F6; }
 .np-format-chip.active {
-    background: var(--np-green);
-    border-color: var(--np-green);
+    background: #374151;
     color: #fff;
 }
 
