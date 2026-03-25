@@ -5,39 +5,40 @@
 /* ── 1. COLOR PALETTE ─────────────────────────────────────── */
 :root {
     --np-red:          #E2001A;
-    --np-blue:         #1B5CE7;
-    --np-blue-dark:    #1449C4;
-    --np-green:        #1E8A2E;
-    --np-green-dark:   #156B22;
-    --np-green-light:  #E8F5EC;
+    --np-blue:         #0d6efd;
+    --np-blue-dark:    #0a58ca;
+    --np-green:        #198754;
+    --np-green-dark:   #146c43;
+    --np-green-light:  #d1e7dd;
     --np-orange:       #D97706;
     --np-orange-light: #FEF3C7;
     --np-gray-tag:     #F3F4F6;
 
     /* Override main.css primary */
-    --primary:         #1B5CE7;
-    --primary-soft:    rgba(27, 92, 231, 0.08);
-    --secondary:       #1449C4;
+    --primary:         #0d6efd;
+    --primary-soft:    rgba(13, 110, 253, 0.08);
+    --secondary:       #0a58ca;
     --surface:         #FFFFFF;
-    --bg-app:          #F8F9FA;
-    --text-main:       #111827;
-    --text-muted:      #6B7280;
-    --border:          #E5E7EB;
+    --bg-app:          #f6f6f9;
+    --text-main:       #212529;
+    --text-secondary:  #495057;
+    --text-muted:      #6c757d;
+    --border:          #dee2e6;
 
     --shadow-card:     0 1px 3px rgba(0,0,0,0.08);
     --radius-btn:      6px;
-    --radius-card:     8px;
+    --radius-card:     12px;
 }
 
 /* ── 2. BACKGROUND / BODY ─────────────────────────────────── */
 .app-bg-particles { display: none !important; }
 
 body::before {
-    background: #F8F9FA !important;
+    background: #f6f6f9 !important;
     opacity: 1 !important;
 }
 
-body { background-color: #F8F9FA; }
+body { background-color: #f6f6f9; }
 
 /* Remove hover lift */
 .card-diamond:hover,
@@ -120,7 +121,7 @@ body { background-color: #F8F9FA; }
 /* ── 4. PAGE HEADER (title + segment tabs) ────────────────── */
 .page-subheader {
     background: #FFFFFF;
-    border-bottom: 1px solid #E5E7EB;
+    border-bottom: 1px solid var(--border);
     padding: 0 24px;
     height: 64px;
     display: flex;
@@ -132,9 +133,9 @@ body { background-color: #F8F9FA; }
 }
 
 .page-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #111827;
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: var(--text-main);
     white-space: nowrap;
     margin: 0;
     flex-shrink: 0;
@@ -143,8 +144,8 @@ body { background-color: #F8F9FA; }
 /* Segment tabs container */
 .segment-tabs {
     display: inline-flex;
-    border: 1.5px solid #D1D5DB;
-    border-radius: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
     overflow: hidden;
     background: #fff;
 }
@@ -153,19 +154,19 @@ body { background-color: #F8F9FA; }
     padding: 6px 16px;
     font-size: 0.82rem;
     font-weight: 500;
-    color: #6B7280;
+    color: var(--text-muted);
     background: transparent;
     border: none;
-    border-right: 1px solid #D1D5DB;
+    border-right: 1px solid var(--border);
     cursor: pointer;
     transition: all 0.15s;
     white-space: nowrap;
 }
 .seg-tab:last-child { border-right: none; }
-.seg-tab:hover { color: #374151; background: #F9FAFB; }
+.seg-tab:hover { color: var(--text-secondary); background: #f8f9fa; }
 .seg-tab.active {
-    background: #F3F4F6;
-    color: #111827;
+    background: #e9ecef;
+    color: var(--text-main);
     font-weight: 600;
 }
 
@@ -174,10 +175,10 @@ body { background-color: #F8F9FA; }
     background: var(--np-blue);
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 8px 18px;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition: background 0.15s;
     display: inline-flex;
@@ -195,6 +196,11 @@ main.container-fluid { padding: 0 !important; }
     display: flex;
     height: calc(100vh - 112px); /* 48px header + 64px sub-header */
     overflow: hidden;
+    background: var(--bg-app);
+    gap: 0;
+    padding: 16px;
+    gap: 12px;
+    box-sizing: border-box;
 }
 
 /* ── 6. LEFT SIDEBAR ──────────────────────────────────────── */
