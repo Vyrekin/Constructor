@@ -1310,6 +1310,7 @@ main.container-fluid { padding: 0 !important; }
 .cond-drag-handle {
     display: flex;
     align-items: center;
+    align-self: stretch;
     padding: 0 8px;
     color: #BDBDBD;
     font-size: 1rem;
@@ -1322,8 +1323,8 @@ main.container-fluid { padding: 0 !important; }
 /* Field label section */
 .condition-header {
     flex: 0 0 auto !important;
-    min-width: 130px !important;
-    max-width: 165px !important;
+    min-width: 140px !important;
+    max-width: 180px !important;
     display: flex !important;
     align-items: center !important;
     padding: 10px 10px !important;
@@ -1332,6 +1333,8 @@ main.container-fluid { padding: 0 !important; }
     border-radius: 0 !important;
     gap: 4px !important;
     font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    color: #212529 !important;
     border-right: 1px solid #F0F0F0 !important;
     box-sizing: border-box !important;
 }

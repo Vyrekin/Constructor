@@ -750,6 +750,10 @@
             renderEspoUI();
             updateState();
         }
+        window.removeEspoBlock = removeEspoBlock;
+        window.addEspoBlock = addEspoBlock;
+        window.updateInterOp = updateInterOp;
+        window.openFilterPicker = openFilterPicker;
 
         function updateInterOp(id, newOp) {
             const item = espoConditionRegistry.find(i => i.id === id);
@@ -1722,6 +1726,18 @@
                     });
                 });
             }
+
+            // Event delegation for filter delete buttons (backup for inline onclick)
+            ['espo-include-list', 'espo-exclude-list'].forEach(listId => {
+                const el = document.getElementById(listId);
+                if (el) el.addEventListener('click', e => {
+                    const del = e.target.closest('.cond-delete');
+                    if (del) {
+                        const block = del.closest('.condition-block');
+                        if (block) removeEspoBlock(parseInt(block.dataset.id));
+                    }
+                });
+            });
         });
         function updateState() {
             const display = document.getElementById('counter-display');
