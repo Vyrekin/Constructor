@@ -687,6 +687,11 @@
             parentId = parentId === undefined ? null : parentId;
             const resolvedVisibility = visibility || getFieldVisibilityById(id, label);
 
+            // Look up field definition
+            const allRegistry = (typeof runtimeFilterRegistry !== 'undefined' && runtimeFilterRegistry.length)
+                ? runtimeFilterRegistry : filterRegistry;
+            const fieldDef = allRegistry.find(f => f.id === id);
+
             // Advanced conflict check: compare branch signatures
             // We temporarily add the item to generate its signature
             const tempId = Date.now();
@@ -718,7 +723,9 @@
                 bracketOpen: false,
                 bracketClose: false,
                 parentId: parentId,
-                visibility: resolvedVisibility
+                visibility: resolvedVisibility,
+                fieldType: fieldDef?.type || 'text',
+                fieldOptions: fieldDef?.options || null
             };
             espoConditionRegistry.push(item);
 
@@ -754,6 +761,23 @@
         window.addEspoBlock = addEspoBlock;
         window.updateInterOp = updateInterOp;
         window.openFilterPicker = openFilterPicker;
+
+        function updateFilterValue(id, newValue) {
+            const item = espoConditionRegistry.find(i => i.id === id);
+            if (item) {
+                item.value = newValue;
+                // Update formula display without full re-render
+                const formulaDisplay = document.getElementById('formula-display');
+                const formulaView = document.getElementById('formula-filters-view');
+                if (formulaDisplay) {
+                    const chips = espoConditionRegistry.map(i => `<span class="formula-tag">${i.label}${i.value ? ': ' + i.value : ''}</span>`).join(' ');
+                    formulaDisplay.innerHTML = chips;
+                    if (formulaView) formulaView.style.display = espoConditionRegistry.length ? '' : 'none';
+                }
+                updateState();
+            }
+        }
+        window.updateFilterValue = updateFilterValue;
 
         function updateInterOp(id, newOp) {
             const item = espoConditionRegistry.find(i => i.id === id);
