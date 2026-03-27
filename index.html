@@ -3019,7 +3019,9 @@
         if (!queryInput || !queryInput.value.trim()) return;
 
         const query = queryInput.value.trim();
-        const lowerQuery = query.toLowerCase();
+        const q = query.toLowerCase()
+            // normalise Ukrainian ї→і, є→е for fuzzy matching
+            .replace(/ї/g, 'і').replace(/є/g, 'е').replace(/ь/g, '');
 
         // Show loading state
         const btn = queryInput.closest('#np-ai-input-mode')?.querySelector('button');
@@ -3032,111 +3034,160 @@
 
             const added = [];
 
-            // Gender detection
-            const hasFemale = /жінк|жіноч/i.test(lowerQuery);
-            const hasMale = /чоловік|чолові/i.test(lowerQuery);
-            if (hasFemale) { addEspoBlock('Gender', 'Гендер', 'Жінки', 'Include', null); added.push('Гендер: Жінки'); }
+            // ── GENDER ──────────────────────────────────────────────────────
+            // Female: formal + informal Ukrainian + Russian-style (common in UA)
+            const femaleRx = /жінк|жіноч|жінок|дівч|дівок|дів[оа]|баб[аи]|тіток|тіт[оа]к|тітон|тьот|леді|girls?|женщин|девчат|девушк|дам[иа]\b|самиц|пані\b|панян/i;
+            // Male: formal + informal
+            const maleRx = /чоловік|чолові|хлопц|хлопок|хлопак|хлопін|пацан|пацон|мужик|мужчин|дядьк|дядок|хлопів|парен|чувак|guys?|boys?|men\b|guy\b|boy\b/i;
+
+            const hasFemale = femaleRx.test(q);
+            const hasMale   = maleRx.test(q);
+            if (hasFemale) { addEspoBlock('Gender', 'Гендер', 'Жінки',    'Include', null); added.push('Гендер: Жінки'); }
             if (hasMale)   { addEspoBlock('Gender', 'Гендер', 'Чоловіки', 'Include', null); added.push('Гендер: Чоловіки'); }
 
-            // Age detection — range "від X до Y" or "X-Y років"
-            const ageRange = lowerQuery.match(/від\s+(\d{1,3})\s+до\s+(\d{1,3})\s*(?:рок|років|рр\.?|year)/i)
-                          || lowerQuery.match(/(\d{1,3})\s*[-–—]\s*(\d{1,3})\s*(?:рок|років|рр\.?|year)/i);
+            // ── AGE ─────────────────────────────────────────────────────────
+            // Explicit range "від X до Y" or "X-Y років"
+            const ageRange = q.match(/від\s+(\d{1,3})\s+до\s+(\d{1,3})\s*(?:рок|роки|років|рр|year)/i)
+                          || q.match(/(\d{1,3})\s*[-–—]\s*(\d{1,3})\s*(?:рок|роки|років|рр|year)/i);
             if (ageRange) {
                 const val = `${ageRange[1]}-${ageRange[2]}`;
                 addEspoBlock('Age', 'Вік', val, 'Include', null);
                 added.push(`Вік: ${val}`);
             } else {
-                // Single age "більше X років" / "до X"
-                const ageGt = lowerQuery.match(/(?:більше|старше|від)\s+(\d{1,3})\s*(?:рок|років|рр\.?|year)/i);
-                const ageLt = lowerQuery.match(/(?:до|менше)\s+(\d{1,3})\s*(?:рок|років|рр\.?|year)/i);
-                if (ageGt) { addEspoBlock('Age', 'Вік', `${ageGt[1]}+`, 'Include', null); added.push(`Вік: ${ageGt[1]}+`); }
-                if (ageLt) { addEspoBlock('Age', 'Вік', `0-${ageLt[1]}`, 'Include', null); added.push(`Вік: 0-${ageLt[1]}`); }
+                const ageGt = q.match(/(?:більше|старше|від|понад|старіш)\s+(\d{1,3})\s*(?:рок|роки|років|рр|year)/i);
+                const ageLt = q.match(/(?:до|менше|молодш)\s+(\d{1,3})\s*(?:рок|роки|років|рр|year)/i);
+                if (ageGt) { addEspoBlock('Age', 'Вік', `${ageGt[1]}+`,   'Include', null); added.push(`Вік: ${ageGt[1]}+`); }
+                if (ageLt) { addEspoBlock('Age', 'Вік', `0-${ageLt[1]}`,  'Include', null); added.push(`Вік: 0-${ageLt[1]}`); }
+            }
+            // Semantic age groups (informal)
+            if (!ageRange && !/\d{1,3}\s*(?:рок|роки|років)/.test(q)) {
+                // Youth / молодь: школяр, студент, юнак, підліток, молодь, молоді, молодіж
+                if (/молод|студент|школяр|юнак|юнат|підліток|молодіж|молодь|тінейджер|teen|young/i.test(q)) {
+                    addEspoBlock('Age', 'Вік', '18-35', 'Include', null);
+                    added.push('Вік: 18-35 (молодь)');
+                }
+                // Middle age: середній вік, дорослі, мужній
+                if (/середн[ій]\s+вік|дорослі|дорослий|мужній/i.test(q)) {
+                    addEspoBlock('Age', 'Вік', '36-54', 'Include', null);
+                    added.push('Вік: 36-54 (дорослі)');
+                }
+                // Senior: літній, пенсіонер, бабуся, дідусь, старший
+                if (/літн[ій]|пенсіонер|пенсійн|бабус|дідус|старший|немолод|похилий|senior|elder/i.test(q)) {
+                    addEspoBlock('Age', 'Вік', '55+', 'Include', null);
+                    added.push('Вік: 55+');
+                }
             }
 
-            // City detection — all major Ukrainian cities
+            // ── CITY ────────────────────────────────────────────────────────
             const cityMap = [
-                { pattern: /київ|kyiv/i,       label: 'Київ' },
-                { pattern: /харків/i,           label: 'Харків' },
-                { pattern: /одес/i,             label: 'Одеса' },
-                { pattern: /дніпр/i,            label: 'Дніпро' },
-                { pattern: /львів/i,            label: 'Львів' },
-                { pattern: /запоріж/i,          label: 'Запоріжжя' },
-                { pattern: /миколаї/i,          label: 'Миколаїв' },
-                { pattern: /вінниц/i,           label: 'Вінниця' },
-                { pattern: /полтав/i,           label: 'Полтава' },
-                { pattern: /херсон/i,           label: 'Херсон' },
-                { pattern: /суми|сум[иі]/i,     label: 'Суми' },
-                { pattern: /черкас/i,           label: 'Черкаси' },
-                { pattern: /луцьк|луцк/i,       label: 'Луцьк' },
-                { pattern: /рівн/i,             label: 'Рівне' },
-                { pattern: /чернів/i,           label: 'Чернівці' },
-                { pattern: /житомир/i,          label: 'Житомир' },
-                { pattern: /ужгород/i,          label: 'Ужгород' },
-                { pattern: /кропивниц|кіровоград/i, label: 'Кропивницький' },
-                { pattern: /тернопіл/i,         label: 'Тернопіль' },
-                { pattern: /хмельниц/i,         label: 'Хмельницький' },
-                { pattern: /івано.?франк/i,     label: 'Івано-Франківськ' },
-                { pattern: /черніг/i,           label: 'Чернігів' },
+                { pattern: /київ|kyiv|киев/i,                       label: 'Київ' },
+                { pattern: /харків|харков|kharkiv/i,                 label: 'Харків' },
+                { pattern: /одес[аи]|odesa|odessa/i,                 label: 'Одеса' },
+                { pattern: /дніпр|дніпропетровськ|dnipro/i,          label: 'Дніпро' },
+                { pattern: /львів|lviv|lvov/i,                       label: 'Львів' },
+                { pattern: /запоріж|zaporizhzhia|zaporizhia/i,       label: 'Запоріжжя' },
+                { pattern: /миколаів|миколаєв|mykolaiv/i,            label: 'Миколаїв' },
+                { pattern: /вінниц|vinnyts/i,                        label: 'Вінниця' },
+                { pattern: /полтав|poltava/i,                        label: 'Полтава' },
+                { pattern: /херсон|kherson/i,                        label: 'Херсон' },
+                { pattern: /\bсуми\b|сум[иі]х|sumy/i,               label: 'Суми' },
+                { pattern: /черкас|cherkasy/i,                       label: 'Черкаси' },
+                { pattern: /луцк|луцьк|lutsk/i,                      label: 'Луцьк' },
+                { pattern: /рівне|рівн|rivne|rovno/i,                label: 'Рівне' },
+                { pattern: /чернівц|chernivc|chernivtsi/i,           label: 'Чернівці' },
+                { pattern: /житомир|zhytomyr/i,                      label: 'Житомир' },
+                { pattern: /ужгород|uzhhorod/i,                      label: 'Ужгород' },
+                { pattern: /кропивниц|кіровоград|kropyvnytskyi/i,    label: 'Кропивницький' },
+                { pattern: /тернопіл|тернопол|ternopil/i,            label: 'Тернопіль' },
+                { pattern: /хмельниц|khmelnytskyi/i,                 label: 'Хмельницький' },
+                { pattern: /івано.?франк|ів.?франк|ivano.?frankivsk/i, label: 'Івано-Франківськ' },
+                { pattern: /черніг|chernihiv/i,                      label: 'Чернігів' },
+                { pattern: /маріупол|mariupol/i,                     label: 'Маріуполь' },
+                { pattern: /краматорськ|kramatorsk/i,                label: 'Краматорськ' },
             ];
             cityMap.forEach(({ pattern, label }) => {
-                if (pattern.test(lowerQuery)) {
+                if (pattern.test(q)) {
                     addEspoBlock('City', 'Місто', label, 'Include', null);
                     added.push(`Місто: ${label}`);
                 }
             });
 
-            // Date period
-            if (/за останній місяць|за місяць/i.test(lowerQuery)) {
+            // ── DATE PERIOD ──────────────────────────────────────────────────
+            if (/за останн[ій]\s+місяц|за місяц|цього місяц|місяц тому/i.test(q)) {
                 addEspoBlock('LastActivityDate', 'Остання активність', 'last_month', 'Include', null);
                 added.push('Період: останній місяць');
-            } else if (/за останній тиждень|за тиждень/i.test(lowerQuery)) {
+            } else if (/за останн[ій]\s+тижден|за тижден|тиждень тому/i.test(q)) {
                 addEspoBlock('LastActivityDate', 'Остання активність', 'last_week', 'Include', null);
                 added.push('Період: останній тиждень');
-            } else if (/за останній рік|за рік/i.test(lowerQuery)) {
+            } else if (/за останн[ій]\s+рік|за рік|цього року|рік тому/i.test(q)) {
                 addEspoBlock('LastActivityDate', 'Остання активність', 'last_year', 'Include', null);
                 added.push('Період: останній рік');
-            } else if (/за квартал|за останній квартал/i.test(lowerQuery)) {
+            } else if (/за квартал|за останн[ій]\s+квартал/i.test(q)) {
                 addEspoBlock('LastActivityDate', 'Остання активність', 'last_quarter', 'Include', null);
                 added.push('Період: останній квартал');
+            } else if (/за останн[ій]\s+3\s*місяц|три\s+місяц/i.test(q)) {
+                addEspoBlock('LastActivityDate', 'Остання активність', 'last_quarter', 'Include', null);
+                added.push('Період: останні 3 місяці');
             }
 
-            // Purchase count
-            const purchaseMatch = lowerQuery.match(/(?:більше|понад)\s+(\d+)\s*(?:раз|замовлень|покупок|замовлення)/i);
+            // ── PURCHASE COUNT ───────────────────────────────────────────────
+            // "більше 5 замовлень", "понад 10 покупок", "купував більше 3 разів"
+            const purchaseMatch = q.match(/(?:більше|понад|понад)\s+(\d+)\s*(?:раз|замовлен|покупок|купівел|purchase)/i)
+                               || q.match(/(\d+)\+?\s*(?:замовлен|покупок|покупки|купівел)/i);
             if (purchaseMatch) {
                 addEspoBlock('PurchaseCount', 'Кількість покупок', `>${purchaseMatch[1]}`, 'Include', null);
                 added.push(`Покупки: більше ${purchaseMatch[1]}`);
             }
-
-            // Inactive users
-            const inactiveMatch = lowerQuery.match(/не\s+активн\S*\s+(\d+)\s*(днів|день|місяців|місяць)/i);
-            if (inactiveMatch) {
-                const unit = /місяц/i.test(inactiveMatch[2]) ? 'місяців' : 'днів';
-                addEspoBlock('LastActivityDate', 'Остання активність', `inactive_${inactiveMatch[1]}_${unit}`, 'Include', null);
-                added.push(`Неактивні: ${inactiveMatch[1]} ${unit}`);
+            // Semantic: loyal / active buyers
+            if (/постійн[ий]|лоялн|vip\b|преміум|активн[ий]\s+клієнт|часто\s+купу/i.test(q)) {
+                addEspoBlock('PurchaseCount', 'Кількість покупок', '>10', 'Include', null);
+                added.push('Покупки: >10 (постійні клієнти)');
             }
 
-            // Sender / recipient
-            if (/відправля|надсила|відправник/i.test(lowerQuery)) {
+            // ── INACTIVE / CHURNED ───────────────────────────────────────────
+            const inactiveMatch = q.match(/не\s+активн\S*\s+(\d+)\s*(днів|день|місяців|місяц)/i)
+                               || q.match(/(\d+)\s*(дні[вь]|днів|місяц\S*)\s+не\s+активн/i);
+            if (inactiveMatch) {
+                const num  = inactiveMatch[1];
+                const unit = /місяц/i.test(inactiveMatch[2]) ? 'місяців' : 'днів';
+                addEspoBlock('LastActivityDate', 'Остання активність', `inactive_${num}_${unit}`, 'Include', null);
+                added.push(`Неактивні: ${num} ${unit}`);
+            }
+            // Semantic: "втрачені клієнти", "спали", "давно не купували"
+            if (!inactiveMatch && /втрачен[иі]|відтоки|відтік|давно не\s+(?:купу|замовля|активн)|сплячі|засну\S+\s+клієнт/i.test(q)) {
+                addEspoBlock('LastActivityDate', 'Остання активність', 'inactive_90_днів', 'Include', null);
+                added.push('Неактивні: 90+ днів');
+            }
+
+            // ── ROLE ─────────────────────────────────────────────────────────
+            if (/відправля|надсила|відправник|sender/i.test(q)) {
                 addEspoBlock('Role', 'Роль', 'Відправник', 'Include', null);
                 added.push('Роль: Відправник');
             }
+            if (/отримував|одержувач|recipient|покупець|покупц|клієнт-покупец/i.test(q)) {
+                addEspoBlock('Role', 'Роль', 'Одержувач', 'Include', null);
+                added.push('Роль: Одержувач');
+            }
 
-            // Business (B2B)
-            if (/компані|підприємств|тов\b|фоп\b|бізнес/i.test(lowerQuery)) {
+            // ── PROFILE TYPE ─────────────────────────────────────────────────
+            if (/компані|підприємств|юридична\s+особа|тов\b|фоп\b|бізнес|b2b|корпоратив|організац/i.test(q)) {
                 addEspoBlock('ProfileType', 'Тип профілю', 'B2B', 'Include', null);
                 added.push('Тип профілю: B2B');
             }
+            if (/фізична\s+особа|приватн[ий]|b2c|простий\s+клієнт|звичайн[ий]\s+клієнт/i.test(q)) {
+                addEspoBlock('ProfileType', 'Тип профілю', 'B2C', 'Include', null);
+                added.push('Тип профілю: B2C');
+            }
 
-            // Close AI mode and clear
+            // ── CLOSE & REPORT ───────────────────────────────────────────────
             toggleAIMode(null, true);
             queryInput.value = '';
             updateAICharCount(queryInput);
 
-            // Show toast with results
             if (added.length > 0) {
                 showAIToast('Додано фільтри: ' + added.join(', '));
             } else {
-                showAIToast('Не вдалося розпізнати параметри. Спробуйте уточнити запит.');
+                showAIToast('Не вдалося розпізнати параметри. Спробуйте: «жінки від 25 до 40 років, Київ» або «пацани-студенти, Харків».');
             }
         }, 1200);
     }
