@@ -206,6 +206,11 @@
 
                 <!-- AI Query Input Mode (hidden by default) -->
                 <div id="np-ai-input-mode" style="display:none; padding:14px; flex-direction:column; gap:10px;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
+                        <button type="button" onclick="toggleAIMode(null, true)" style="background:none; border:none; padding:0; color:#6B7280; cursor:pointer; display:flex; align-items:center; gap:4px; font-size:0.8rem;">
+                            <i class="bi bi-arrow-left"></i> Назад
+                        </button>
+                    </div>
                     <label class="np-sidebar-label">Опишіть вашу цільову аудиторію</label>
                     <div style="position:relative;">
                         <textarea class="form-control" id="ai-query-input"
