@@ -687,6 +687,11 @@
             parentId = parentId === undefined ? null : parentId;
             const resolvedVisibility = visibility || getFieldVisibilityById(id, label);
 
+            // Look up field definition
+            const allRegistry = (typeof runtimeFilterRegistry !== 'undefined' && runtimeFilterRegistry.length)
+                ? runtimeFilterRegistry : filterRegistry;
+            const fieldDef = allRegistry.find(f => f.id === id);
+
             // Advanced conflict check: compare branch signatures
             // We temporarily add the item to generate its signature
             const tempId = Date.now();
@@ -718,7 +723,9 @@
                 bracketOpen: false,
                 bracketClose: false,
                 parentId: parentId,
-                visibility: resolvedVisibility
+                visibility: resolvedVisibility,
+                fieldType: fieldDef?.type || 'text',
+                fieldOptions: fieldDef?.options || null
             };
             espoConditionRegistry.push(item);
 
@@ -750,6 +757,27 @@
             renderEspoUI();
             updateState();
         }
+        window.removeEspoBlock = removeEspoBlock;
+        window.addEspoBlock = addEspoBlock;
+        window.updateInterOp = updateInterOp;
+        window.openFilterPicker = openFilterPicker;
+
+        function updateFilterValue(id, newValue) {
+            const item = espoConditionRegistry.find(i => i.id === id);
+            if (item) {
+                item.value = newValue;
+                // Update formula display without full re-render
+                const formulaDisplay = document.getElementById('formula-display');
+                const formulaView = document.getElementById('formula-filters-view');
+                if (formulaDisplay) {
+                    const chips = espoConditionRegistry.map(i => `<span class="formula-tag">${i.label}${i.value ? ': ' + i.value : ''}</span>`).join(' ');
+                    formulaDisplay.innerHTML = chips;
+                    if (formulaView) formulaView.style.display = espoConditionRegistry.length ? '' : 'none';
+                }
+                updateState();
+            }
+        }
+        window.updateFilterValue = updateFilterValue;
 
         function updateInterOp(id, newOp) {
             const item = espoConditionRegistry.find(i => i.id === id);
@@ -802,29 +830,44 @@
                 block.dataset.id = item.id;
                 block.draggable = true;
 
+                let valueInputHtml = '';
+                if (item.fieldType === 'select' && item.fieldOptions) {
+                    const opts = Object.entries(item.fieldOptions)
+                        .map(([k, v]) => `<option value="${v}" ${item.value === v ? 'selected' : ''}>${v}</option>`)
+                        .join('');
+                    valueInputHtml = `<select class="cond-value-select" onchange="updateFilterValue(${item.id}, this.value)" style="font-size:0.82rem; border:1px solid #dee2e6; border-radius:4px; padding:2px 6px; background:#fff; color:#212529; cursor:pointer; min-width:100px; max-width:200px;">
+                        <option value="">Оберіть...</option>
+                        ${opts}
+                    </select>`;
+                } else if (item.fieldType === 'date') {
+                    valueInputHtml = `<input type="date" class="cond-value-input" value="${item.value || ''}"
+                        onchange="updateFilterValue(${item.id}, this.value)"
+                        style="font-size:0.82rem; border:1px solid #dee2e6; border-radius:4px; padding:2px 6px; color:#212529; width:140px;">`;
+                } else {
+                    valueInputHtml = `<input type="text" class="cond-value-input" value="${item.value || ''}"
+                        onblur="updateFilterValue(${item.id}, this.value)"
+                        onkeydown="if(event.key==='Enter') updateFilterValue(${item.id}, this.value)"
+                        style="font-size:0.82rem; border:1px solid #dee2e6; border-radius:4px; padding:2px 6px; color:#212529; min-width:80px; max-width:180px;">`;
+                }
+
                 block.innerHTML = `
+                    <span class="cond-drag-handle" title="Перетягнути"><i class="bi bi-grip-vertical"></i></span>
                     <div class="condition-header">
-                        ${displayOp ? `<span class="op-tag ${opClass}">${isEx ? 'ОКРІМ' : displayOp}</span>` : ''}
-                        <span class="fw-bold ms-1 text-truncate" style="color: #444; font-size: 0.75rem; max-width: 120px;" title="${item.label}">${item.label}</span>
-                        <span class="condition-vis-badge ${visClass}">${visText}</span>
-                        <div class="add-sub-btn ms-1" style="width:18px; height:18px;" title="Додати вкладену умову" onclick="openFilterPicker('${zone}', event, ${item.id})">
-                            <i class="bi bi-plus"></i>
-                        </div>
-                        <div class="ms-auto">
-                            <i class="bi bi-trash3 text-muted" style="cursor:pointer; font-size: 0.75rem;" onclick="removeEspoBlock(${item.id})"></i>
-                        </div>
+                        <span class="text-truncate" style="font-size:0.82rem; color:#212529;" title="${item.label}">${item.label}</span>
+                        <i class="bi bi-info-circle" style="font-size:0.65rem; color:#9CA3AF; flex-shrink:0; cursor:help;" title="${item.label}"></i>
                     </div>
                     <div class="condition-body">
                         <div class="condition-content-row">
-                            <div class="condition-item" style="border-left-color: ${isEx ? '#dc3545' : 'var(--primary-soft)'}">
-                                <div class="fs-6" style="font-size: 0.8rem !important;">
-                                    ${item.fieldOp ? `<span class="text-muted fw-normal me-1">${item.fieldOp}:</span>` : ''}
-                                    <b>${item.value || ''}</b>
-                                </div>
+                            <div class="condition-item">
+                                ${item.fieldOp ? `<span style="color:#6c757d; font-size:0.78rem; margin-right:4px;">${item.fieldOp}:</span>` : ''}
+                                ${valueInputHtml}
                             </div>
                         </div>
-                        <div class="sub-conditions-container" id="sub-container-${item.id}" style="display: none;"></div>
+                        <div class="sub-conditions-container" id="sub-container-${item.id}" style="display:none;"></div>
                     </div>
+                    <span class="cond-delete" onclick="removeEspoBlock(${item.id})" title="Видалити">
+                        <i class="bi bi-trash3"></i>
+                    </span>
                 `;
 
                 block.addEventListener('dragstart', (e) => {
@@ -1715,6 +1758,8 @@
         // Initial setup for search interaction
         document.addEventListener('DOMContentLoaded', () => {
             initGeoTabController();
+            // Initial counter load
+            updateState();
             const searchInput = document.getElementById('field-search-input');
             const tabs = document.querySelectorAll('#filterTabs .nav-link');
             if (tabs) {
@@ -1727,6 +1772,18 @@
                     });
                 });
             }
+
+            // Event delegation for filter delete buttons (backup for inline onclick)
+            ['espo-include-list', 'espo-exclude-list'].forEach(listId => {
+                const el = document.getElementById(listId);
+                if (el) el.addEventListener('click', e => {
+                    const del = e.target.closest('.cond-delete');
+                    if (del) {
+                        const block = del.closest('.condition-block');
+                        if (block) removeEspoBlock(parseInt(block.dataset.id));
+                    }
+                });
+            });
         });
         function updateState() {
             const display = document.getElementById('counter-display');
@@ -1751,6 +1808,27 @@
                 if (mobileDisplay) {
                     mobileDisplay.innerText = formatted;
                     mobileDisplay.style.opacity = '1';
+                }
+
+                // Update donut percent
+                const pct = (Math.random() * 30 + 1).toFixed(1);
+                const donutPct = document.getElementById('donut-percent');
+                if (donutPct) donutPct.textContent = pct + '%';
+
+                // Update donut chart arc if canvas exists
+                const canvas = document.getElementById('chart-donut-audience');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    const p = parseFloat(pct) / 100;
+                    const cx = canvas.width / 2, cy = canvas.height / 2;
+                    const r = Math.min(cx, cy) - 8;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    // Background arc
+                    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.strokeStyle = '#e9ecef'; ctx.lineWidth = 12; ctx.stroke();
+                    // Value arc
+                    ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * p);
+                    ctx.strokeStyle = '#198754'; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.stroke();
                 }
 
                 // Trigger Analytics Update

@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/design-mode.css">
+    <link rel="stylesheet" href="css/np-theme.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 
@@ -31,293 +31,266 @@
         </button>
     </div>
 
+    <!-- ── SYSTEM HEADER (white, NP red text logo, decorative) ── -->
     <header class="app-header">
-        <div class="container-fluid px-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="app-header-logo bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
-                        <i class="bi bi-layers-fill"></i>
-                    </div>
-                    <h4 class="app-title mb-0 fw-bold">Конструктор вибірок</h4>
-                </div>
+        <div class="container-fluid px-4 h-100">
+            <div class="d-flex align-items-center h-100 gap-0">
 
-                <div class="header-main-row flex-grow-1 d-flex justify-content-center">
-                    <ul class="nav nav-pills d-inline-flex border p-1 rounded-3 gap-1" id="app-views-nav">
-                        <li class="nav-item">
-                            <button class="nav-link active px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
-                                id="nav-btn-constructor" onclick="switchView('constructor')">
-                                <i class="bi bi-sliders"></i> Конструктор
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="nav-link px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
-                                id="nav-btn-lookalike" onclick="switchView('lookalike')">
-                                <i class="bi bi-people"></i> Look-a-like
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="nav-link px-3 rounded-3 d-flex align-items-center gap-2 fw-medium"
-                                id="nav-btn-ai" onclick="switchView('ai')">
-                                <i class="bi bi-stars"></i> AI Помічник
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                <!-- NP Logo — red text -->
+                <a href="#" class="np-logo-text me-4" style="text-decoration:none;">НОВА ПОШТА</a>
 
+                <!-- System Navigation (decorative, non-functional) -->
+                <nav class="np-system-nav d-flex align-items-center flex-grow-1" style="gap:2px;">
+                    <a href="#" class="nav-link">Orders <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Auto Registrations <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Client <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Tools <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">CMS <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">NovaAds <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Online events <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Assistant <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                    <a href="#" class="nav-link">Imports <i class="bi bi-chevron-down" style="font-size:0.6rem;"></i></a>
+                </nav>
 
-
-                <div class="d-flex align-items-center gap-3">
-                    <!-- Theme Toggle -->
-                    <button class="btn btn-outline-secondary border-0 p-2" onclick="toggleTheme()"
-                        title="Перемикач теми">
-                        <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+                <!-- Right side: theme toggle + profile + Log out -->
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-outline-secondary border-0 p-1" onclick="toggleTheme()" title="Тема" style="line-height:1;">
+                        <i class="bi bi-moon-stars-fill" id="theme-icon" style="font-size:0.85rem;"></i>
                     </button>
-
-                    <!-- My Segments (New Location) -->
                     <div class="dropdown">
-                        <button class="btn btn-outline-primary border-0 p-2 position-relative" type="button"
-                            data-bs-toggle="dropdown" data-bs-auto-close="outside" title="Мої сегменти">
-                            <i class="bi bi-bookmark-star-fill fs-4"></i>
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
-                                id="segments-badge" style="display:none">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-3"
-                            style="width: 320px; max-height: 400px; overflow-y: auto;">
-                            <li>
-                                <h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Мої збережені
-                                    сегменти</h6>
-                            </li>
-                            <div id="header-saved-segments-list" class="vstack gap-2">
-                                <!-- Dynamic List -->
-                                <div class="text-center text-muted small py-3">Немає збережених сегментів</div>
-                            </div>
-                            <li class="mt-2 text-center">
-                                <button class="btn btn-sm btn-primary w-100 rounded-pill"
-                                    onclick="saveCurrentSegment()">
-                                    <i class="bi bi-plus-lg me-1"></i>Зберегти поточний
-                                </button>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider mt-2">
-                            </li>
-                            <li>
-                                <h6 class="dropdown-header text-uppercase text-muted fw-bold small mb-2">Мої
-                                    автоматизації</h6>
-                            </li>
-                            <div id="header-saved-automations-list" class="vstack gap-2">
-                                <div class="text-center text-muted small py-3">Немає активних автоматизацій</div>
-                            </div>
-                        </ul>
-                    </div>
-
-                    <!-- Profile -->
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary border-0 p-2" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                        <button class="btn btn-outline-secondary border-0 p-1" type="button" data-bs-toggle="dropdown" style="line-height:1;">
+                            <i class="bi bi-person-circle" style="font-size:1rem;"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0">
                             <li><a class="dropdown-item" href="#">Профіль</a></li>
                             <li><a class="dropdown-item" href="#">Налаштування</a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)"
-                                    onclick="toggleDesignMode()">
-                                    <i class="bi bi-palette text-primary"></i> Режим дизайну
-                                </a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0)"
-                                    onclick="saveDesignChanges()">
-                                    <i class="bi bi-download text-success"></i> Вивантажити JSON
-                                </a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2 text-warning"
-                                    href="javascript:void(0)" onclick="resetDesign()">
-                                    <i class="bi bi-arrow-counterclockwise"></i> Скинути дизайн
-                                </a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="#">Вихід</a></li>
                         </ul>
                     </div>
+                    <!-- Hidden dropdowns (kept for JS compatibility) -->
+                    <div style="display:none">
+                        <span id="segments-badge"></span>
+                        <div id="header-saved-segments-list"></div>
+                        <div id="header-saved-automations-list"></div>
+                    </div>
+                    <a href="#" class="np-logout-link">Log out</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="container-fluid px-3 py-3">
-        <div class="row g-3">
+    <!-- ── PAGE HEADER: title + segment tabs + Шаблони ──────── -->
+    <div class="page-subheader">
+        <h4 class="page-title">Конструктор вибірок</h4>
 
-            <!-- Main Content Area -->
-            <div class="col-lg-9">
+        <!-- Segment tabs: B2B / B2C / Відправники / Одержувачі -->
+        <div class="segment-tabs">
+            <button class="seg-tab active" onclick="switchSegment('b2b', this)">B2B</button>
+            <button class="seg-tab" onclick="switchSegment('b2c', this)">B2C</button>
+            <button class="seg-tab" onclick="switchSegment('senders', this)">Відправники</button>
+            <button class="seg-tab" onclick="switchSegment('recipients', this)">Одержувачі</button>
+        </div>
+
+        <div class="ms-auto">
+            <button class="btn-templates" data-bs-toggle="modal" data-bs-target="#templatesModal">
+                <i class="bi bi-bookmark"></i> Шаблони
+            </button>
+        </div>
+    </div>
+
+    <main class="container-fluid p-0">
+        <div class="np-layout">
+
+            <!-- ── LEFT FILTER CATEGORIES SIDEBAR ─────────────── -->
+            <div class="np-filter-sidebar" id="np-filter-sidebar">
+
+                <!-- Search + AI button -->
+                <div class="np-search-ai">
+                    <div class="np-search-wrap">
+                        <i class="bi bi-search"></i>
+                        <input type="text" class="form-control" id="field-search-input"
+                            placeholder="Search"
+                            oninput="filterFieldsBySearch(this.value)">
+                    </div>
+                    <button class="btn-ai-sidebar" onclick="toggleAIMode(this)">
+                        ✨ AI
+                    </button>
+                </div>
+
+                <!-- ВСІ label -->
+                <div class="np-sidebar-label">ВСІ</div>
+
+                <ul class="np-categories-list" id="np-categories-list">
+                    <li class="np-cat-group" data-scope="b2c">
+                        <button class="np-category-btn active" onclick="toggleCatGroup('c4', this)">
+                            <i class="bi bi-person np-cat-icon"></i>
+                            <span class="cat-label">Профіль клієнта (B2C)</span>
+                            <i class="bi bi-chevron-right np-cat-chevron" style="transform:rotate(90deg)"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c4"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="b2b">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c4b', this)">
+                            <i class="bi bi-building np-cat-icon"></i>
+                            <span class="cat-label">Профіль бізнесу (B2B)</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c4b" style="display:none"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="all">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c5', this)">
+                            <i class="bi bi-geo-alt np-cat-icon"></i>
+                            <span class="cat-label">Локація</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c5" style="display:none"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="all">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c1', this)">
+                            <i class="bi bi-box-seam np-cat-icon"></i>
+                            <span class="cat-label">Параметри ЕН</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c1" style="display:none"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="all">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c3', this)">
+                            <i class="bi bi-cash-stack np-cat-icon"></i>
+                            <span class="cat-label">Фінанси та вантаж</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c3" style="display:none"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="all">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c5b', this)">
+                            <i class="bi bi-activity np-cat-icon"></i>
+                            <span class="cat-label">Активність</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c5b" style="display:none"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="b2c">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c6', this)">
+                            <i class="bi bi-phone np-cat-icon"></i>
+                            <span class="cat-label">Застосунок та пристрої</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c6" style="display:none"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="b2b">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c11', this)">
+                            <i class="bi bi-shop np-cat-icon"></i>
+                            <span class="cat-label">Сфери та мерчанти</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c11" style="display:none"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="all">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c7', this)">
+                            <i class="bi bi-chat-dots np-cat-icon"></i>
+                            <span class="cat-label">Згоди та комунікація</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c7" style="display:none"></div>
+                    </li>
+                    <li class="np-cat-group" data-scope="all">
+                        <button class="np-category-btn" onclick="toggleCatGroup('c2', this)">
+                            <i class="bi bi-people np-cat-icon"></i>
+                            <span class="cat-label">Look-a-like</span>
+                            <i class="bi bi-chevron-right np-cat-chevron"></i>
+                        </button>
+                        <div class="np-cat-fields" id="fields-c2" style="display:none"></div>
+                    </li>
+                </ul>
+
+                <!-- AI Query Input Mode (hidden by default) -->
+                <div id="np-ai-input-mode" style="display:none; padding:14px; flex-direction:column; gap:10px;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
+                        <button type="button" onclick="toggleAIMode(null, true)" style="background:none; border:none; padding:0; color:#6B7280; cursor:pointer; display:flex; align-items:center; gap:4px; font-size:0.8rem;">
+                            <i class="bi bi-arrow-left"></i> Назад
+                        </button>
+                    </div>
+                    <label class="np-sidebar-label">Опишіть вашу цільову аудиторію</label>
+                    <div style="position:relative;">
+                        <textarea class="form-control" id="ai-query-input"
+                            placeholder="Жінки і чоловіки, 25-35 років, відправляли чи отримували в Одесі"
+                            maxlength="500" rows="6"
+                            oninput="updateAICharCount(this)"
+                            style="font-size:0.82rem; resize:none; border-radius:8px;"></textarea>
+                        <span id="ai-char-count" style="position:absolute; bottom:8px; right:10px; font-size:0.72rem; color:#9CA3AF;">0/500 символів</span>
+                    </div>
+                    <button class="btn-np-save-full" onclick="submitAIQuery()" style="width:100%;">
+                        Шукати
+                    </button>
+                    <div id="ai-query-status" style="display:none; text-align:center; color:#6B7280; font-size:0.8rem;">
+                        <div class="spinner-border spinner-border-sm text-secondary me-1"></div> Аналізуємо запит...
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── MAIN CONTENT AREA ───────────────────────────── -->
+            <div class="np-main-content" id="np-main-content">
+                <!-- (col-lg-9 content moved here) -->
 
                 <!-- VIEW 1: CONSTRUCTOR -->
                 <div id="view-constructor" class="view-section">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold mb-0">Фільтри сегментації</h5>
-                        <button class="btn btn-sm btn-outline-danger btn-light border-0 text-danger reset-all-btn"
-                            onclick="clearFilters()">
-                            <i class="bi bi-trash3 me-1"></i>Скинути все
+                    <!-- Audience header row -->
+                    <div class="audience-header">
+                        <h5 class="audience-title">Аудиторія</h5>
+                        <button class="btn-clear-all" onclick="clearFilters()">
+                            <i class="bi bi-trash3"></i> Очистити все
                         </button>
                     </div>
 
-                    <!-- Improved Active Filters Area (Legacy + Formula Support) -->
-                    <div id="active-filters-summary" class="mb-3">
-                        <div class="formula-card is-collapsed" id="main-formula-card">
-                            <div class="d-flex align-items-center justify-content-between mb-2" style="cursor: pointer;"
-                                onclick="toggleFormulaCard()">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-funnel text-primary fs-5"></i>
-                                    <h6 class="fw-bold mb-0">ПОТОЧНА ФОРМУЛА:</h6>
-                                    <div class="formula-legend ms-2">
-                                        <span class="legend-dot b2c"></span><span>B2C</span>
-                                        <span class="legend-dot b2b ms-1"></span><span>B2B</span>
-                                        <span class="legend-dot universal ms-1"></span><span>Універсальні</span>
+                    <!-- ── FILTER BUILDER CARD ─────────────────────── -->
+                    <div class="filter-builder-card" id="main-formula-card">
+                        <!-- Active filter formula tags row (generated by JS) -->
+                        <div id="formula-filters-view" style="padding:8px 14px 0; display:none;">
+                            <div class="formula-box" id="formula-display"></div>
+                        </div>
+
+                        <!-- Conditions area — drop target for sidebar fields -->
+                        <div class="filter-conditions-area"
+                            ondragover="onConditionAreaDragOver(event)"
+                            ondrop="onConditionAreaDrop(event)">
+                            <div id="filters-blocks-container">
+                                <div class="section-title-row">
+                                    <div class="section-title-espo text-primary"
+                                        onclick="openFilterPicker('Include', event)">
+                                        <i class="bi bi-plus-circle-fill"></i> включити у вибірку
+                                        <i class="bi bi-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
                                     </div>
                                 </div>
-                                <i class="bi bi-chevron-up toggle-icon" id="formula-toggle-icon"></i>
-                            </div>
+                                <div id="espo-include-list"></div>
 
-                            <div class="formula-content-wrapper">
-                                <div id="formula-filters-view" class="mb-2">
-                                    <div class="formula-box" id="formula-display" style="display:none;"></div>
-                                </div>
-
-                                <!-- Espo-style Hierarchical View -->
-                                <div id="standard-filters-view" class="standard-view px-2">
-                                    <div id="filters-blocks-container">
-                                        <div class="section-title-row">
-                                            <div class="section-title-espo text-primary"
-                                                onclick="openFilterPicker('Include', event)">
-                                                <i class="bi bi-plus-circle-fill"></i> Включити
-                                            </div>
-                                        </div>
-                                        <div id="espo-include-list"></div>
-
-                                        <div class="section-title-row">
-                                            <div class="section-title-espo text-danger"
-                                                onclick="openFilterPicker('Exclude', event)">
-                                                <i class="bi bi-dash-circle-fill"></i> Виключити
-                                            </div>
-                                        </div>
-                                        <div id="espo-exclude-list"></div>
+                                <div class="section-title-row" style="margin-top:16px;">
+                                    <div class="section-title-espo text-danger"
+                                        onclick="openFilterPicker('Exclude', event)">
+                                        <i class="bi bi-dash-circle-fill"></i> виключити з вибірки
+                                        <i class="bi bi-chevron-down" style="font-size:0.75rem;margin-left:2px;"></i>
                                     </div>
+                                </div>
+                                <div id="espo-exclude-list"></div>
+
+                                <div id="no-filters-msg" style="display:none; padding:40px 0; color:#9CA3AF; font-size:0.75rem; text-align:center; font-style:normal;">
+                                    Додавайте параметри для формування аудиторії
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="sticky-controls-wrapper">
-                        <div class="compact-control-card p-1">
-                            <!-- Tabs Area (Now Wrapping, no scroll) -->
-                            <div class="px-2 pt-1">
-                                <ul class="nav nav-pills custom-filter-tabs border-0 shadow-none p-0 flex-wrap"
-                                    id="filterTabs" role="tablist">
-                                    <li class="nav-item">
-                                        <button class="nav-link active" id="tab-c1" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c1" type="button" role="tab"><i
-                                                class="bi bi-box-seam"></i> Параметри ЕН</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c2" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c2" type="button" role="tab"><i
-                                                class="bi bi-people-fill"></i> Відправник та Отримувач</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c11" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c11" type="button" role="tab"><i
-                                                class="bi bi-building"></i> Контрагенти</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c3" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c3" type="button" role="tab"><i
-                                                class="bi bi-cash-stack"></i> Фінанси</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c4" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c4" type="button" role="tab"><i
-                                                class="bi bi-person-vcard"></i> Профіль та Маркетинг</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c8" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c8" type="button" role="tab"><i
-                                                class="bi bi-shield-check"></i> Верифікація</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c5" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c5" type="button" role="tab"><i
-                                                class="bi bi-activity"></i> Активність та Локації</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c9" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c9" type="button" role="tab"><i
-                                                class="bi bi-exclamation-triangle"></i> Проблеми та Додатково</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c6" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c6" type="button" role="tab"><i
-                                                class="bi bi-phone"></i> Додаток та Пристрої</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c7" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c7" type="button" role="tab"><i
-                                                class="bi bi-check-circle"></i> Згоди та Комунікація</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="nav-link" id="tab-c10" data-bs-toggle="pill"
-                                            data-bs-target="#pane-c10" type="button" role="tab"><i
-                                                class="bi bi-geo-alt"></i> Гео-мапа</button>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Separate Mode Selector Block -->
-                            <div class="d-flex align-items-center px-3 py-2 bg-light-subtle"
-                                style="gap: 15px; border-radius: 12px; margin: 4px;">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-gear-wide-connected text-primary small"></i>
-                                    <span class="fw-bold text-muted text-uppercase"
-                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Логіка додавання:</span>
-                                </div>
-                                <div class="position-relative d-inline-flex bg-white rounded-pill p-1 border shadow-sm">
-                                    <input type="radio" class="btn-check" name="global-filter-mode" id="mode-include"
-                                        value="Include" checked onchange="window.currentFilterMode='Include'">
-                                    <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
-                                        for="mode-include">Включити</label>
-
-                                    <input type="radio" class="btn-check" name="global-filter-mode" id="mode-exclude"
-                                        value="Exclude" onchange="window.currentFilterMode='Exclude'">
-                                    <label class="btn btn-sm rounded-pill px-3 fw-bold mode-label"
-                                        for="mode-exclude">Виключити</label>
-
-                                </div>
-                                <div
-                                    class="position-relative d-inline-flex bg-white rounded-pill p-1 border shadow-sm scope-pill">
-                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-all"
-                                        value="all" checked>
-                                    <label class="btn btn-sm btn-outline-secondary" for="scope-all">Усі</label>
-
-                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2b"
-                                        value="b2b">
-                                    <label class="btn btn-sm btn-outline-secondary" for="scope-b2b">В-клієнти</label>
-
-                                    <input type="radio" class="btn-check" name="field-scope-mode" id="scope-b2c"
-                                        value="b2c">
-                                    <label class="btn btn-sm btn-outline-secondary" for="scope-b2c">С-клієнти</label>
-                                </div>
-                                <div class="ms-3 flex-grow-1 position-relative" style="max-width: 250px;">
-                                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
-                                        style="font-size: 0.75rem;"></i>
-                                    <input type="text"
-                                        class="form-control form-control-sm rounded-pill ps-5 border-0 shadow-sm"
-                                        id="field-search-input" placeholder="Пошук поля за назвою..."
-                                        style="font-size: 0.75rem; height: 32px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);"
-                                        oninput="filterFieldsBySearch(this.value)">
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Hidden radio inputs (JS compatibility) -->
+                    <div style="display:none;" aria-hidden="true">
+                        <input type="radio" name="global-filter-mode" id="mode-include" value="Include" checked onchange="window.currentFilterMode='Include'">
+                        <input type="radio" name="global-filter-mode" id="mode-exclude" value="Exclude" onchange="window.currentFilterMode='Exclude'">
+                        <input type="radio" name="field-scope-mode" id="scope-all" value="all" checked>
+                        <input type="radio" name="field-scope-mode" id="scope-b2b" value="b2b">
+                        <input type="radio" name="field-scope-mode" id="scope-b2c" value="b2c">
                     </div>
 
-                    <div class="tab-content mt-3" id="filterTabsContent">
+                    <!-- Tab pane field forms — hidden from UI, DOM kept for buildFieldListForCategory() -->
+                    <div style="display:none;" aria-hidden="true" id="filterTabsContent">
                         <!-- 1. Параметри ЕН -->
                         <div class="tab-pane fade show active" id="pane-c1" role="tabpanel">
                             <div class="tab-pane-card">
@@ -1996,7 +1969,10 @@
                         </div>
                     </div>
 
-
+                    <!-- Розрахувати button -->
+                    <button class="btn-calculate-full" onclick="handleSmartExecute()">
+                        <i class="bi bi-play-circle-fill"></i> Розрахувати показники
+                    </button>
 
                 </div>
 
@@ -2291,37 +2267,95 @@
                         </div>
                     </div>
                 </div> <!-- End view-ai -->
-            </div> <!-- End col-lg-9 -->
+            </div> <!-- End np-main-content -->
 
-            <!-- Sidebar -->
-            <div class="col-lg-3">
-                <div class="sidebar-sticky" style="top: 90px;">
-                    <!-- 1. Counter (Always Top) -->
-                    <div class="counter-box mx-0">
-                        <small class="text-white-50 text-uppercase letter-spacing-1">Знайдено записів</small>
-                        <div class="counter-number my-2" id="counter-display">24.5M</div>
-                        <div class="progress mb-2" style="height: 4px; background: rgba(255,255,255,0.3);">
-                            <div class="progress-bar bg-white" style="width: 75%"></div>
+            <!-- ── RIGHT SIDEBAR ──────────────────────────────── -->
+            <div class="np-right-sidebar" id="np-right-sidebar">
+                    <!-- 1. Counter — GREEN card -->
+                    <div class="counter-box">
+                        <i class="bi bi-bar-chart-fill counter-trend"></i>
+                        <span class="counter-number" id="counter-display">0</span>
+                        <small>знайдено користувачів</small>
+                    </div>
+
+                    <!-- 2. Donut chart card -->
+                    <div class="np-donut-wrap">
+                        <canvas id="chart-donut-audience" width="200" height="110"></canvas>
+                        <span class="np-donut-percent" id="donut-percent">0%</span>
+                        <div class="np-donut-label">всіх аудиторії</div>
+                    </div>
+
+                    <!-- 3. Export section card -->
+                    <div class="np-export-section">
+                        <div class="np-export-title">Експорт</div>
+
+                        <label class="np-export-label">Оберіть спосіб експорту:</label>
+                        <select id="export-action-type" class="form-select" onchange="toggleExportFields()">
+                            <option value="template">Зберегти як шаблон</option>
+                            <option value="csv">Завантажити CSV файл</option>
+                            <option value="cdp">Відправити в CDP</option>
+                            <option value="api">API запит (JSON)</option>
+                        </select>
+
+                        <!-- Template fields -->
+                        <div id="export-template-wrap">
+                            <label class="np-export-label">Назва шаблону</label>
+                            <input type="text" class="form-control" id="segmentNameInput"
+                                placeholder="Введіть назву шаблону...">
+                            <label class="np-export-label">Короткий опис</label>
+                            <textarea class="form-control" id="export-description" rows="4"
+                                placeholder="Опишіть аудиторію..."
+                                oninput="updateCharCount(this)"
+                                style="resize:none; font-size:0.82rem;"></textarea>
+                            <div class="np-char-count"><span id="char-count">0</span>/500 символів</div>
                         </div>
 
-                        <!-- Analytics Trigger Button (Integrated) -->
-                        <button class="btn btn-sm btn-white-soft w-100 rounded-pill mt-2 text-white border-white-50"
-                            style="background: rgba(255,255,255,0.1); backdrop-filter: blur(5px);"
+                        <!-- Format chips + quantity (for CSV/CDP/API) -->
+                        <div id="export-settings-block" style="display:none;">
+                            <label class="np-export-label">Оберіть формат даних для звіту:</label>
+                            <div class="np-format-chips">
+                                <button type="button" class="np-format-chip active" data-value="phone" onclick="toggleFormatChip(this)">Телефон</button>
+                                <button type="button" class="np-format-chip" data-value="cid"   onclick="toggleFormatChip(this)">CID</button>
+                                <button type="button" class="np-format-chip" data-value="email" onclick="toggleFormatChip(this)">E-mail</button>
+                                <button type="button" class="np-format-chip" data-value="aud"   onclick="toggleFormatChip(this)">ID Ауд.</button>
+                            </div>
+                            <input type="hidden" id="constructor-format-unified" value="phone">
+
+                            <!-- Export all toggle -->
+                            <div class="np-toggle-row">
+                                <span class="np-toggle-label">Вивантажити всіх користувачів</span>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input np-toggle-switch" type="checkbox" id="export-all-toggle"
+                                        checked onchange="toggleExportCount(this)">
+                                </div>
+                            </div>
+
+                            <!-- Count input — shown only when toggle is OFF -->
+                            <div id="export-count-wrap" style="display:none;">
+                                <div class="np-export-label d-flex align-items-center gap-1">
+                                    Введіть кількість користувачів
+                                    <i class="bi bi-question-circle text-muted" style="cursor:help;"
+                                       title="Максимальна кількість записів у файлі"></i>
+                                </div>
+                                <input type="number" id="export-count" class="form-control" value="1000" min="1" placeholder="1000">
+                            </div>
+                        </div>
+
+                        <button class="btn-np-save-full" id="export-main-btn" onclick="handleExportAction()">Зберегти</button>
+
+                        <!-- Analytics button -->
+                        <button class="btn btn-outline-secondary w-100 mt-2" style="font-size:0.8rem; border-radius:6px;"
                             data-bs-toggle="modal" data-bs-target="#analyticsModal"
-                            onclick="setTimeout(updateAnalytics, 200)">
-                            <i class="bi bi-graph-up me-2"></i>Відкрити аналітику
+                            onclick="setTimeout(updateAnalytics,200)">
+                            <i class="bi bi-graph-up me-1"></i>Переглянути аналітику
                         </button>
                     </div>
 
-                    <!-- 2. Shortcuts / Presets (Moved under Counter) -->
-                    <div class="card-diamond p-3 mb-3">
-                        <h6 class="fw-bold mb-3 small text-uppercase text-muted">Швидкі шаблони</h6>
-                        <div class="d-grid gap-2">
-                            <button
-                                class="btn btn-light text-start d-flex align-items-center p-2 border-0 shadow-sm rounded-3"
-                                onclick="applyPersona('vip')">
-                                <span class="badge bg-warning text-dark me-2 rounded-circle p-2"><i
-                                        class="bi bi-star-fill"></i></span>
+                    <!-- Hidden legacy elements (kept for JS compatibility) -->
+                    <div style="display:none;" aria-hidden="true">
+                        <div id="header-saved-automations-list-old"></div>
+                        <button onclick="applyPersona('vip')">
+                            <span><i class="bi bi-star-fill"></i></span>
                                 <div style="line-height:1.1">
                                     <span class="d-block fw-bold small">Клієнти VIP</span>
                                     <span class="text-muted" style="font-size: 0.7rem;">Чек > 5000, iPhone</span>
@@ -2340,27 +2374,18 @@
                         </div>
                     </div>
 
-                    <!-- 3. Actions & Format (Unified Block) -->
-                    <div class="card-diamond p-3 mb-3">
-                        <h6 class="fw-bold mb-3 small text-uppercase text-muted border-bottom pb-2">Експорт результатів
-                        </h6>
-
-                        <!-- Row 1: Action Type -->
+                    <!-- 3. Actions & Format (legacy hidden — kept for JS compat) -->
+                    <div style="display:none;" aria-hidden="true">
+                        <!-- legacy export (hidden) -->
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold text-uppercase mb-1"
-                                style="font-size: 0.7rem;">Оберіть дію:</label>
-                            <select id="export-action-type" class="form-select form-select-sm"
-                                onchange="toggleExportFields()">
-                                <option value="preview">Попередній перегляд (Тільки графіки)</option>
+                            <select class="form-select form-select-sm">
+                                <option value="preview">Попередній перегляд</option>
                                 <option value="csv">Завантажити CSV файл</option>
-                                <option value="cdp">Відправити в CDP</option>
-                                <option value="automation">Автоматизація (Розсилка звіту)</option>
-                                <option value="api">API Запит (JSON)</option>
                             </select>
                         </div>
 
-                        <!-- Format Settings (Hidden for Preview) -->
-                        <div id="export-settings-block" style="display:none;">
+                        <!-- legacy format settings (hidden) -->
+                        <div style="display:none;">
                             <div class="row g-2 mb-3">
                                 <div class="col-6">
                                     <label class="form-label text-muted small fw-bold text-uppercase mb-1"
@@ -2491,21 +2516,25 @@
                             </div>
                         </div>
 
-                        <!-- Single Smart Button -->
-                        <button id="smart-execute-btn" class="btn btn-primary w-100 py-2 fw-bold shadow-sm"
+                        <!-- hidden smart execute btn -->
+                        <button id="smart-execute-btn" style="display:none;"
                             onclick="handleSmartExecute()">
-                            <i class="bi bi-play-circle-fill me-2"></i> <span id="smart-btn-text">Розрахувати
-                                показники</span>
+                            <span id="smart-btn-text">Розрахувати показники</span>
                         </button>
-                    </div>
+                        <div id="automation-settings-block" style="display:none;">
+                            <select id="automation-period"></select>
+                            <div id="automation-time-container"><input type="time" id="automation-time" value="09:00"></div>
+                            <input type="email" id="automation-email-input">
+                            <div id="automation-emails-list"></div>
+                        </div>
+                    </div> <!-- end hidden legacy div -->
 
                     <script src="js/export-ui.js"></script>
 
-                </div>
-            </div>
+            </div> <!-- end np-right-sidebar -->
 
-        </div>
-    </div>
+        </div> <!-- end np-layout -->
+    </main>
 
     <!-- Analytics Modal -->
     <div class="modal fade" id="analyticsModal" tabindex="-1" data-bs-backdrop="false" data-bs-scroll="true">
@@ -2610,37 +2639,615 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div> <!-- end saveAutomationModal -->
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/app.js"></script>
     <div id="filter-picker" class="filter-picker-overlay"></div>
 
-    <!-- Design Mode Toolbar -->
-    <div class="design-toolbar">
-        <div class="d-flex align-items-center gap-2 px-2 border-end border-secondary me-2">
-            <i class="bi bi-palette-fill text-primary"></i>
-            <span class="text-white small fw-bold">DESIGN MODE PRO</span>
-        </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="resetDesign()"
-                title="Скинути всі зміни">
-                <i class="bi bi-arrow-counterclockwise me-1"></i>Скинути
-            </button>
-            <button class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleDesignMode()"
-                title="Перегляд без інструментів">
-                <i class="bi bi-eye me-1"></i>Вихід
-            </button>
-            <button class="btn btn-sm btn-primary rounded-pill px-4" onclick="saveDesignChanges()"
-                title="Отримати JSON">
-                <i class="bi bi-check2-all me-1"></i>Готово
-            </button>
+
+    <!-- ── TEMPLATES MODAL ──────────────────────────────────── -->
+    <div class="modal fade templates-modal" id="templatesModal" tabindex="-1" data-bs-backdrop="true" data-bs-scroll="false">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 560px;">
+            <div class="modal-content border-0 shadow" style="border-radius: 10px; overflow: hidden;">
+                <div class="modal-header py-3 px-4 border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-grid-3x3-gap text-muted"></i>
+                        <h5 class="modal-title fw-bold mb-0" style="font-size: 1rem;">Шаблони</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <!-- Search -->
+                    <div class="position-relative mb-3">
+                        <i class="bi bi-search position-absolute top-50 translate-middle-y ms-3 text-muted" style="font-size:0.8rem; left:2px;"></i>
+                        <input type="text" class="form-control ps-5" placeholder="Пошук шаблону..." style="font-size:0.85rem;">
+                    </div>
+
+                    <!-- Template items -->
+                    <div class="template-item">
+                        <div class="template-item-left">
+                            <span class="template-type-badge badge-lal">Lal</span>
+                            <div>
+                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що отримали відправлення в Київській області</div>
+                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432324 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                            </div>
+                        </div>
+                        <button class="btn-template-add" onclick="applyTemplate('lal-kyiv')">Додати до вибірки</button>
+                    </div>
+
+                    <div class="template-item">
+                        <div class="template-item-left">
+                            <span class="template-type-badge badge-constructor">Конструктор</span>
+                            <div>
+                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що не отримали котегорії 2</div>
+                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432325 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                            </div>
+                        </div>
+                        <button class="btn-template-add" onclick="applyTemplate('cat2')">Додати до вибірки</button>
+                    </div>
+
+                    <div class="template-item">
+                        <div class="template-item-left">
+                            <span class="template-type-badge badge-lal">Lal</span>
+                            <div>
+                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що не отримали котегорії 2</div>
+                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432326 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                            </div>
+                        </div>
+                        <button class="btn-template-add" onclick="applyTemplate('cat2-lal')">Додати до вибірки</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <span class="text-muted" style="font-size:0.78rem;">Знайдено 3 шаблони</span>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-2 px-4 justify-content-end">
+                    <button class="btn-template-add" style="border-radius: 6px;" data-bs-dismiss="modal">Додати шаблон</button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- ── UNSAVED CHANGES MODAL ─────────────────────────────── -->
+    <div class="modal fade unsaved-modal" id="unsavedChangesModal" tabindex="-1" data-bs-backdrop="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content border-0 shadow" style="border-radius: 10px;">
+                <div class="modal-body unsaved-modal p-0">
+                    <div class="unsaved-modal-body p-4 text-center">
+                        <div class="unsaved-modal-icon">
+                            <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">У вас є незбережені зміни</h5>
+                        <p class="text-muted mb-0" style="font-size:0.88rem;">
+                            Якщо ви покинете цю сторінку, ваші незбережені зміни будуть втрачені. Продовжити без збереження?
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer border-top justify-content-center gap-2 py-3">
+                    <button class="btn btn-outline-secondary" style="min-width:120px; border-radius:6px;" data-bs-dismiss="modal">Скасувати</button>
+                    <button class="btn-np-save" style="min-width:160px; padding: 0.45rem 1.25rem;" onclick="proceedWithoutSaving()">
+                        Продовжити до вибірки
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── NP HELPER SCRIPTS ─────────────────────────────────── -->
+    <script>
+    // Segment tab switcher (B2B/B2C/Відправники/Одержувачі)
+    function switchSegment(seg, btn) {
+        document.querySelectorAll('.seg-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window.currentSegment = seg;
+
+        // Map segment to field scope
+        const scopeMap = { b2b: 'b2b', b2c: 'b2c', senders: 'all', recipients: 'all' };
+        const scope = scopeMap[seg] || 'all';
+
+        // Update hidden scope radio
+        const radioId = scope === 'b2b' ? 'scope-b2b' : scope === 'b2c' ? 'scope-b2c' : 'scope-all';
+        const radio = document.getElementById(radioId);
+        if (radio) { radio.checked = true; radio.dispatchEvent(new Event('change')); }
+
+        // Show/hide top-level categories based on data-scope
+        document.querySelectorAll('.np-cat-group[data-scope]').forEach(li => {
+            const catScope = li.dataset.scope;
+            const visible = scope === 'all' || catScope === 'all' || catScope === scope;
+            li.style.display = visible ? '' : 'none';
+        });
+
+        // If active category became hidden, reset to first visible one
+        const activeBtn = document.querySelector('.np-category-btn.active');
+        if (activeBtn) {
+            const parentLi = activeBtn.closest('.np-cat-group');
+            if (parentLi && parentLi.style.display === 'none') {
+                const firstVisible = document.querySelector('.np-cat-group:not([style*="display: none"]) .np-category-btn');
+                if (firstVisible) firstVisible.click();
+            }
+        }
+    }
+
+    // Page-level tab switcher (kept for compatibility)
+    function switchPageTab(tab, btn) {
+        document.querySelectorAll('.page-tab-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        const viewMap = { constructor: 'constructor', lookalike: 'lookalike', ai: 'ai' };
+        if (viewMap[tab] && typeof switchView === 'function') switchView(viewMap[tab]);
+    }
+
+    // Char counter for description textarea
+    function updateCharCount(el) {
+        const count = el.value.length;
+        const span = document.getElementById('char-count');
+        if (span) span.textContent = count;
+        if (count > 500) el.value = el.value.substring(0, 500);
+    }
+
+    // Left sidebar category selector
+    function npSelectCategory(btn) {
+        document.querySelectorAll('.np-category-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    // Proceed without saving (unsaved changes modal)
+    function proceedWithoutSaving() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('unsavedChangesModal'));
+        if (modal) modal.hide();
+    }
+
+    // Template apply stub
+    function applyTemplate(id) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('templatesModal'));
+        if (modal) modal.hide();
+        console.log('Applying template:', id);
+    }
+
+    // ── CATEGORY ACCORDION ────────────────────────────────────
+    function toggleCatGroup(catId, btn) {
+        const fieldsEl = document.getElementById('fields-' + catId);
+        if (!fieldsEl) return;
+        const isOpen = fieldsEl.style.display !== 'none';
+
+        // Close all open panels
+        document.querySelectorAll('.np-cat-fields').forEach(el => { el.style.display = 'none'; });
+        document.querySelectorAll('.np-cat-chevron').forEach(el => { el.style.transform = ''; });
+        document.querySelectorAll('.np-category-btn').forEach(b => b.classList.remove('active'));
+
+        // Reset sidebar label to "ВСІ"
+        const labelEl = document.querySelector('.np-sidebar-label');
+
+        if (!isOpen) {
+            // Build field list lazily on first open
+            if (fieldsEl.childElementCount === 0) {
+                buildFieldListForCategory(catId, fieldsEl);
+            }
+            fieldsEl.style.display = 'block';
+            const chevron = btn.querySelector('.np-cat-chevron');
+            if (chevron) chevron.style.transform = 'rotate(90deg)';
+            btn.classList.add('active');
+
+            // Update breadcrumb label
+            if (labelEl) {
+                const catLabel = btn.querySelector('.cat-label');
+                const catName = catLabel ? catLabel.textContent.trim().toUpperCase() : catId.toUpperCase();
+                labelEl.innerHTML = '<a href="#" onclick="npResetSidebarBreadcrumb(event)" style="color:var(--text-muted);text-decoration:none;font-weight:700;">ВСІ</a> <span style="color:#C4C4C4;margin:0 3px;">›</span> <span style="color:var(--text-secondary);">' + catName + '</span>';
+            }
+        } else {
+            // Collapsed: reset to "ВСІ"
+            if (labelEl) labelEl.textContent = 'ВСІ';
+        }
+    }
+
+    function npResetSidebarBreadcrumb(e) {
+        e.preventDefault();
+        // Close all open panels
+        document.querySelectorAll('.np-cat-fields').forEach(el => { el.style.display = 'none'; });
+        document.querySelectorAll('.np-cat-chevron').forEach(el => { el.style.transform = ''; });
+        document.querySelectorAll('.np-category-btn').forEach(b => b.classList.remove('active'));
+        const labelEl = document.querySelector('.np-sidebar-label');
+        if (labelEl) labelEl.textContent = 'ВСІ';
+    }
+
+    // Build draggable field items from hidden tab pane
+    function buildFieldListForCategory(catId, container) {
+        const paneIdMap = { c5b: 'pane-c5' };
+        const paneId = paneIdMap[catId] || ('pane-' + catId);
+        const pane = document.getElementById(paneId);
+        if (!pane) return;
+
+        const seen = new Set();
+        pane.querySelectorAll('[data-field-id]').forEach(item => {
+            const fieldId = item.dataset.fieldId;
+            if (seen.has(fieldId)) return;
+            seen.add(fieldId);
+            const labelEl = item.querySelector('label.form-label');
+            if (!labelEl) return;
+            const label = labelEl.textContent.trim();
+            let ftype = 'select';
+            if (item.querySelector('input[type=date]')) ftype = 'date';
+            else if (item.querySelector('input[type=number]')) ftype = 'number';
+            else if (item.querySelector('input[type=text], input[type=email]')) ftype = 'text';
+
+            const vis = (typeof getFieldVisibilityById === 'function')
+                ? getFieldVisibilityById(fieldId, label)
+                : 'universal';
+
+            const row = document.createElement('div');
+            row.className = 'np-field-item';
+            row.draggable = true;
+            row.dataset.fieldId = fieldId;
+            row.dataset.ftype = ftype;
+            row.dataset.flabel = label;
+            row.dataset.fieldVisibility = vis;
+
+            // Apply current segment scope immediately
+            const currentScope = (typeof getCurrentFieldScope === 'function') ? getCurrentFieldScope() : 'all';
+            if (currentScope !== 'all' && vis !== 'universal' && vis !== 'all' && vis !== currentScope) {
+                row.style.display = 'none';
+            }
+            row.innerHTML = `<i class="bi bi-grip-vertical np-field-drag"></i><span class="np-field-name">${label}</span>`;
+
+            // Drag-from-sidebar events
+            row.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('np-field-id', fieldId);
+                e.dataTransfer.setData('np-field-label', label);
+                e.dataTransfer.setData('np-field-type', ftype);
+                e.dataTransfer.effectAllowed = 'copy';
+                row.classList.add('dragging');
+            });
+            row.addEventListener('dragend', () => row.classList.remove('dragging'));
+
+            // Click to add field
+            row.addEventListener('click', () => openPickerForField(fieldId, label, ftype, row));
+            container.appendChild(row);
+        });
+    }
+
+    // Open the filter picker positioned near a given anchor element
+    function openPickerForField(fieldId, label, ftype, anchor) {
+        const reg = (typeof buildFilterRegistryFromDOM === 'function')
+            ? buildFilterRegistryFromDOM()
+            : (typeof filterRegistry !== 'undefined' ? filterRegistry : []);
+        let field = reg.find(f => f.id === fieldId)
+            || { id: fieldId, label: label, type: ftype || 'select', options: {}, category: '', icon: 'bi-tag' };
+
+        const zone = window.currentFilterMode || 'Include';
+        const sibCount = typeof espoConditionRegistry !== 'undefined'
+            ? espoConditionRegistry.filter(i => i.zone === zone && i.parentId === null).length : 0;
+
+        if (typeof pickerState === 'undefined' || typeof renderPicker !== 'function') return;
+        pickerState.field = field;
+        pickerState.zone = zone;
+        pickerState.parentId = null;
+        pickerState.fieldOp = null;
+        pickerState.linkOp = zone === 'Exclude' ? 'ОКРІМ' : 'ТА';
+        pickerState.step = sibCount === 0 ? ((field.type === 'date') ? 4 : 2) : 1;
+        renderPicker();
+
+        const picker = document.getElementById('filter-picker');
+        if (!picker) return;
+        const rect = anchor.getBoundingClientRect();
+        picker.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+        picker.style.left = Math.min(rect.left, window.innerWidth - 340) + 'px';
+        picker.style.display = 'block';
+
+        const closer = e => {
+            if (!picker.contains(e.target) && !anchor.contains(e.target)) {
+                picker.style.display = 'none';
+                document.removeEventListener('click', closer);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', closer), 10);
+    }
+
+    // ── CENTER DROP ZONE (sidebar → conditions) ────────────────
+    function onConditionAreaDragOver(e) {
+        if (e.dataTransfer.types.includes('np-field-id')) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+        }
+    }
+    function onConditionAreaDrop(e) {
+        const fieldId = e.dataTransfer.getData('np-field-id');
+        if (!fieldId) return;
+        e.preventDefault();
+        const label = e.dataTransfer.getData('np-field-label');
+        const ftype = e.dataTransfer.getData('np-field-type');
+        // Position picker near drop point
+        const fakeAnchor = { getBoundingClientRect: () => ({ bottom: e.clientY, left: e.clientX, top: e.clientY }) };
+        openPickerForField(fieldId, label, ftype, fakeAnchor);
+    }
+
+    // ── AI MODE: toggle between categories and AI query input ────
+    function toggleAIMode(btn, closeMode = false) {
+        const categoriesList = document.getElementById('np-categories-list');
+        const sidebarLabel = document.querySelector('.np-filter-sidebar .np-sidebar-label');
+        const searchWrap = document.querySelector('.np-search-ai');
+        const aiInputMode = document.getElementById('np-ai-input-mode');
+        const aiBtn = btn || document.querySelector('.btn-ai-sidebar');
+
+        const isOpen = aiInputMode && aiInputMode.style.display !== 'none';
+
+        if (closeMode || isOpen) {
+            // Close AI mode — restore full sidebar
+            if (categoriesList) categoriesList.style.display = '';
+            if (sidebarLabel) sidebarLabel.style.display = '';
+            if (searchWrap) searchWrap.style.display = '';
+            if (aiInputMode) aiInputMode.style.display = 'none';
+            if (aiBtn) aiBtn.classList.remove('active');
+        } else {
+            // Open AI mode — hide categories + search
+            if (categoriesList) categoriesList.style.display = 'none';
+            if (sidebarLabel) sidebarLabel.style.display = 'none';
+            if (searchWrap) searchWrap.style.display = 'none';
+            if (aiInputMode) { aiInputMode.style.display = 'flex'; }
+            if (aiBtn) aiBtn.classList.add('active');
+            setTimeout(() => {
+                const ta = document.getElementById('ai-query-input');
+                if (ta) ta.focus();
+            }, 50);
+        }
+    }
+
+    function updateAICharCount(el) {
+        const counter = document.getElementById('ai-char-count');
+        if (counter) counter.textContent = `${el.value.length}/500 символів`;
+    }
+
+    function showAIToast(message) {
+        let toast = document.getElementById('ai-result-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'ai-result-toast';
+            toast.style.cssText = [
+                'position:fixed', 'bottom:28px', 'left:50%', 'transform:translateX(-50%)',
+                'background:#212529', 'color:#fff', 'padding:10px 20px', 'border-radius:8px',
+                'font-size:0.85rem', 'z-index:9999', 'box-shadow:0 4px 16px rgba(0,0,0,0.18)',
+                'max-width:420px', 'text-align:center', 'transition:opacity 0.4s'
+            ].join(';');
+            document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.style.opacity = '1';
+        clearTimeout(toast._hideTimer);
+        toast._hideTimer = setTimeout(() => {
+            toast.style.opacity = '0';
+        }, 3500);
+    }
+
+    function submitAIQuery() {
+        const queryInput = document.getElementById('ai-query-input');
+        const statusEl = document.getElementById('ai-query-status');
+        if (!queryInput || !queryInput.value.trim()) return;
+
+        const query = queryInput.value.trim();
+        const q = query.toLowerCase()
+            // normalise Ukrainian ї→і, є→е for fuzzy matching
+            .replace(/ї/g, 'і').replace(/є/g, 'е').replace(/ь/g, '');
+
+        // Show loading state
+        const btn = queryInput.closest('#np-ai-input-mode')?.querySelector('button');
+        if (btn) btn.disabled = true;
+        if (statusEl) statusEl.style.display = '';
+
+        setTimeout(() => {
+            if (statusEl) statusEl.style.display = 'none';
+            if (btn) btn.disabled = false;
+
+            const added = [];
+
+            // ── GENDER ──────────────────────────────────────────────────────
+            // Female: formal + informal Ukrainian + Russian-style (common in UA)
+            const femaleRx = /жінк|жіноч|жінок|дівч|дівок|дів[оа]|баб[аи]|тіток|тіт[оа]к|тітон|тьот|леді|girls?|женщин|девчат|девушк|дам[иа]\b|самиц|пані\b|панян/i;
+            // Male: formal + informal
+            const maleRx = /чоловік|чолові|хлопц|хлопок|хлопак|хлопін|пацан|пацон|мужик|мужчин|дядьк|дядок|хлопів|парен|чувак|guys?|boys?|men\b|guy\b|boy\b/i;
+
+            const hasFemale = femaleRx.test(q);
+            const hasMale   = maleRx.test(q);
+            if (hasFemale) { addEspoBlock('Gender', 'Гендер', 'Жінки',    'Include', null); added.push('Гендер: Жінки'); }
+            if (hasMale)   { addEspoBlock('Gender', 'Гендер', 'Чоловіки', 'Include', null); added.push('Гендер: Чоловіки'); }
+
+            // ── AGE ─────────────────────────────────────────────────────────
+            // Explicit range "від X до Y" or "X-Y років"
+            const ageRange = q.match(/від\s+(\d{1,3})\s+до\s+(\d{1,3})\s*(?:рок|роки|років|рр|year)/i)
+                          || q.match(/(\d{1,3})\s*[-–—]\s*(\d{1,3})\s*(?:рок|роки|років|рр|year)/i);
+            if (ageRange) {
+                const val = `${ageRange[1]}-${ageRange[2]}`;
+                addEspoBlock('Age', 'Вік', val, 'Include', null);
+                added.push(`Вік: ${val}`);
+            } else {
+                const ageGt = q.match(/(?:більше|старше|від|понад|старіш)\s+(\d{1,3})\s*(?:рок|роки|років|рр|year)/i);
+                const ageLt = q.match(/(?:до|менше|молодш)\s+(\d{1,3})\s*(?:рок|роки|років|рр|year)/i);
+                if (ageGt) { addEspoBlock('Age', 'Вік', `${ageGt[1]}+`,   'Include', null); added.push(`Вік: ${ageGt[1]}+`); }
+                if (ageLt) { addEspoBlock('Age', 'Вік', `0-${ageLt[1]}`,  'Include', null); added.push(`Вік: 0-${ageLt[1]}`); }
+            }
+            // Semantic age groups (informal)
+            if (!ageRange && !/\d{1,3}\s*(?:рок|роки|років)/.test(q)) {
+                // Youth / молодь: школяр, студент, юнак, підліток, молодь, молоді, молодіж
+                if (/молод|студент|школяр|юнак|юнат|підліток|молодіж|молодь|тінейджер|teen|young/i.test(q)) {
+                    addEspoBlock('Age', 'Вік', '18-35', 'Include', null);
+                    added.push('Вік: 18-35 (молодь)');
+                }
+                // Middle age: середній вік, дорослі, мужній
+                if (/середн[ій]\s+вік|дорослі|дорослий|мужній/i.test(q)) {
+                    addEspoBlock('Age', 'Вік', '36-54', 'Include', null);
+                    added.push('Вік: 36-54 (дорослі)');
+                }
+                // Senior: літній, пенсіонер, бабуся, дідусь, старший
+                if (/літн[ій]|пенсіонер|пенсійн|бабус|дідус|старший|немолод|похилий|senior|elder/i.test(q)) {
+                    addEspoBlock('Age', 'Вік', '55+', 'Include', null);
+                    added.push('Вік: 55+');
+                }
+            }
+
+            // ── CITY ────────────────────────────────────────────────────────
+            const cityMap = [
+                { pattern: /київ|kyiv|киев/i,                       label: 'Київ' },
+                { pattern: /харків|харков|kharkiv/i,                 label: 'Харків' },
+                { pattern: /одес[аи]|odesa|odessa/i,                 label: 'Одеса' },
+                { pattern: /дніпр|дніпропетровськ|dnipro/i,          label: 'Дніпро' },
+                { pattern: /львів|lviv|lvov/i,                       label: 'Львів' },
+                { pattern: /запоріж|zaporizhzhia|zaporizhia/i,       label: 'Запоріжжя' },
+                { pattern: /миколаів|миколаєв|mykolaiv/i,            label: 'Миколаїв' },
+                { pattern: /вінниц|vinnyts/i,                        label: 'Вінниця' },
+                { pattern: /полтав|poltava/i,                        label: 'Полтава' },
+                { pattern: /херсон|kherson/i,                        label: 'Херсон' },
+                { pattern: /\bсуми\b|сум[иі]х|sumy/i,               label: 'Суми' },
+                { pattern: /черкас|cherkasy/i,                       label: 'Черкаси' },
+                { pattern: /луцк|луцьк|lutsk/i,                      label: 'Луцьк' },
+                { pattern: /рівне|рівн|rivne|rovno/i,                label: 'Рівне' },
+                { pattern: /чернівц|chernivc|chernivtsi/i,           label: 'Чернівці' },
+                { pattern: /житомир|zhytomyr/i,                      label: 'Житомир' },
+                { pattern: /ужгород|uzhhorod/i,                      label: 'Ужгород' },
+                { pattern: /кропивниц|кіровоград|kropyvnytskyi/i,    label: 'Кропивницький' },
+                { pattern: /тернопіл|тернопол|ternopil/i,            label: 'Тернопіль' },
+                { pattern: /хмельниц|khmelnytskyi/i,                 label: 'Хмельницький' },
+                { pattern: /івано.?франк|ів.?франк|ivano.?frankivsk/i, label: 'Івано-Франківськ' },
+                { pattern: /черніг|chernihiv/i,                      label: 'Чернігів' },
+                { pattern: /маріупол|mariupol/i,                     label: 'Маріуполь' },
+                { pattern: /краматорськ|kramatorsk/i,                label: 'Краматорськ' },
+            ];
+            cityMap.forEach(({ pattern, label }) => {
+                if (pattern.test(q)) {
+                    addEspoBlock('City', 'Місто', label, 'Include', null);
+                    added.push(`Місто: ${label}`);
+                }
+            });
+
+            // ── DATE PERIOD ──────────────────────────────────────────────────
+            if (/за останн[ій]\s+місяц|за місяц|цього місяц|місяц тому/i.test(q)) {
+                addEspoBlock('LastActivityDate', 'Остання активність', 'last_month', 'Include', null);
+                added.push('Період: останній місяць');
+            } else if (/за останн[ій]\s+тижден|за тижден|тиждень тому/i.test(q)) {
+                addEspoBlock('LastActivityDate', 'Остання активність', 'last_week', 'Include', null);
+                added.push('Період: останній тиждень');
+            } else if (/за останн[ій]\s+рік|за рік|цього року|рік тому/i.test(q)) {
+                addEspoBlock('LastActivityDate', 'Остання активність', 'last_year', 'Include', null);
+                added.push('Період: останній рік');
+            } else if (/за квартал|за останн[ій]\s+квартал/i.test(q)) {
+                addEspoBlock('LastActivityDate', 'Остання активність', 'last_quarter', 'Include', null);
+                added.push('Період: останній квартал');
+            } else if (/за останн[ій]\s+3\s*місяц|три\s+місяц/i.test(q)) {
+                addEspoBlock('LastActivityDate', 'Остання активність', 'last_quarter', 'Include', null);
+                added.push('Період: останні 3 місяці');
+            }
+
+            // ── PURCHASE COUNT ───────────────────────────────────────────────
+            // "більше 5 замовлень", "понад 10 покупок", "купував більше 3 разів"
+            const purchaseMatch = q.match(/(?:більше|понад|понад)\s+(\d+)\s*(?:раз|замовлен|покупок|купівел|purchase)/i)
+                               || q.match(/(\d+)\+?\s*(?:замовлен|покупок|покупки|купівел)/i);
+            if (purchaseMatch) {
+                addEspoBlock('PurchaseCount', 'Кількість покупок', `>${purchaseMatch[1]}`, 'Include', null);
+                added.push(`Покупки: більше ${purchaseMatch[1]}`);
+            }
+            // Semantic: loyal / active buyers
+            if (/постійн[ий]|лоялн|vip\b|преміум|активн[ий]\s+клієнт|часто\s+купу/i.test(q)) {
+                addEspoBlock('PurchaseCount', 'Кількість покупок', '>10', 'Include', null);
+                added.push('Покупки: >10 (постійні клієнти)');
+            }
+
+            // ── INACTIVE / CHURNED ───────────────────────────────────────────
+            const inactiveMatch = q.match(/не\s+активн\S*\s+(\d+)\s*(днів|день|місяців|місяц)/i)
+                               || q.match(/(\d+)\s*(дні[вь]|днів|місяц\S*)\s+не\s+активн/i);
+            if (inactiveMatch) {
+                const num  = inactiveMatch[1];
+                const unit = /місяц/i.test(inactiveMatch[2]) ? 'місяців' : 'днів';
+                addEspoBlock('LastActivityDate', 'Остання активність', `inactive_${num}_${unit}`, 'Include', null);
+                added.push(`Неактивні: ${num} ${unit}`);
+            }
+            // Semantic: "втрачені клієнти", "спали", "давно не купували"
+            if (!inactiveMatch && /втрачен[иі]|відтоки|відтік|давно не\s+(?:купу|замовля|активн)|сплячі|засну\S+\s+клієнт/i.test(q)) {
+                addEspoBlock('LastActivityDate', 'Остання активність', 'inactive_90_днів', 'Include', null);
+                added.push('Неактивні: 90+ днів');
+            }
+
+            // ── ROLE ─────────────────────────────────────────────────────────
+            if (/відправля|надсила|відправник|sender/i.test(q)) {
+                addEspoBlock('Role', 'Роль', 'Відправник', 'Include', null);
+                added.push('Роль: Відправник');
+            }
+            if (/отримував|одержувач|recipient|покупець|покупц|клієнт-покупец/i.test(q)) {
+                addEspoBlock('Role', 'Роль', 'Одержувач', 'Include', null);
+                added.push('Роль: Одержувач');
+            }
+
+            // ── PROFILE TYPE ─────────────────────────────────────────────────
+            if (/компані|підприємств|юридична\s+особа|тов\b|фоп\b|бізнес|b2b|корпоратив|організац/i.test(q)) {
+                addEspoBlock('ProfileType', 'Тип профілю', 'B2B', 'Include', null);
+                added.push('Тип профілю: B2B');
+            }
+            if (/фізична\s+особа|приватн[ий]|b2c|простий\s+клієнт|звичайн[ий]\s+клієнт/i.test(q)) {
+                addEspoBlock('ProfileType', 'Тип профілю', 'B2C', 'Include', null);
+                added.push('Тип профілю: B2C');
+            }
+
+            // ── CLOSE & REPORT ───────────────────────────────────────────────
+            toggleAIMode(null, true);
+            queryInput.value = '';
+            updateAICharCount(queryInput);
+
+            if (added.length > 0) {
+                showAIToast('Додано фільтри: ' + added.join(', '));
+            } else {
+                showAIToast('Не вдалося розпізнати параметри. Спробуйте: «жінки від 25 до 40 років, Київ» або «пацани-студенти, Харків».');
+            }
+        }, 1200);
+    }
+
+    // ── EXPORT: switch between template / output modes ───────────
+    function toggleExportFields() {
+        const type = document.getElementById('export-action-type')?.value;
+        const templateWrap  = document.getElementById('export-template-wrap');
+        const settingsBlock = document.getElementById('export-settings-block');
+        const mainBtn       = document.getElementById('export-main-btn');
+
+        const isTemplate = (type === 'template');
+        if (templateWrap)  templateWrap.style.display  = isTemplate ? '' : 'none';
+        if (settingsBlock) settingsBlock.style.display  = isTemplate ? 'none' : '';
+        if (mainBtn) mainBtn.textContent = isTemplate ? 'Зберегти' : 'Створити';
+    }
+
+    function toggleFormatChip(chip) {
+        chip.classList.toggle('active');
+        const selected = [...document.querySelectorAll('.np-format-chip.active')]
+            .map(c => c.dataset.value).join(',');
+        const hidden = document.getElementById('constructor-format-unified');
+        if (hidden) hidden.value = selected || 'phone';
+    }
+
+    function toggleExportCount(toggle) {
+        const wrap = document.getElementById('export-count-wrap');
+        if (wrap) wrap.style.display = toggle.checked ? 'none' : '';
+    }
+
+    function handleExportAction() {
+        const type = document.getElementById('export-action-type')?.value;
+        if (type === 'template') {
+            confirmSaveSegment();
+        } else {
+            const format    = document.getElementById('constructor-format-unified')?.value;
+            const exportAll = document.getElementById('export-all-toggle')?.checked;
+            const count     = exportAll ? null : document.getElementById('export-count')?.value;
+            console.log('Export:', { type, format, exportAll, count });
+            if (typeof window.handleSmartExecute === 'function') window.handleSmartExecute();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        toggleExportFields();
+
+        // Build field list for first (active) category on load
+        const firstFields = document.getElementById('fields-c4');
+        if (firstFields && firstFields.childElementCount === 0) {
+            buildFieldListForCategory('c4', firstFields);
+        }
+    });
+    </script>
+
 </body>
 
 <script src="csv-layout.js"></script>
-<script src="js/design-mode.js"></script>
-<script src="js/bg-particles.js"></script>
 </html>
