@@ -1758,6 +1758,8 @@
         // Initial setup for search interaction
         document.addEventListener('DOMContentLoaded', () => {
             initGeoTabController();
+            // Initial counter load
+            updateState();
             const searchInput = document.getElementById('field-search-input');
             const tabs = document.querySelectorAll('#filterTabs .nav-link');
             if (tabs) {
@@ -1806,6 +1808,27 @@
                 if (mobileDisplay) {
                     mobileDisplay.innerText = formatted;
                     mobileDisplay.style.opacity = '1';
+                }
+
+                // Update donut percent
+                const pct = (Math.random() * 30 + 1).toFixed(1);
+                const donutPct = document.getElementById('donut-percent');
+                if (donutPct) donutPct.textContent = pct + '%';
+
+                // Update donut chart arc if canvas exists
+                const canvas = document.getElementById('chart-donut-audience');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    const p = parseFloat(pct) / 100;
+                    const cx = canvas.width / 2, cy = canvas.height / 2;
+                    const r = Math.min(cx, cy) - 8;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    // Background arc
+                    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.strokeStyle = '#e9ecef'; ctx.lineWidth = 12; ctx.stroke();
+                    // Value arc
+                    ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * p);
+                    ctx.strokeStyle = '#198754'; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.stroke();
                 }
 
                 // Trigger Analytics Update
