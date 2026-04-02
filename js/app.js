@@ -990,87 +990,72 @@
 
         function updateFormulaView() {
             const formulaDisplay = document.getElementById('formula-display');
+            const formulaView   = document.getElementById('formula-filters-view');
             if (!formulaDisplay) return;
 
             if (espoConditionRegistry.length === 0) {
                 formulaDisplay.style.display = 'none';
                 formulaDisplay.innerHTML = '';
+                if (formulaView) formulaView.style.display = 'none';
                 return;
             }
+
+            // Show the wrapper row
+            if (formulaView) formulaView.style.display = '';
             formulaDisplay.style.display = 'flex';
 
-            const formatOp = (op) => {
-                const lower = op.toLowerCase();
-                let cls = 'text-primary';
-                if (lower === 'або') cls = 'text-warning';
-                if (lower === 'окрім') cls = 'text-danger';
-                return `<span class="formula-operator mx-2 fw-bold ${cls}">${lower}</span>`;
-            };
+            // Build Figma-style chips: FieldName: Value  [тА]  FieldName: Value  ...
+            let chips = '';
+            const topItems = espoConditionRegistry.filter(i => i.parentId === null);
 
-            const wrap = (html) => `<span class="formula-bracket">(</span> ${html} <span class="formula-bracket">)</span>`;
+            topItems.forEach((item, idx) => {
+                const isExclude = item.zone === 'Exclude';
+                const chipCls   = isExclude ? 'formula-chip formula-chip--exclude' : 'formula-chip';
+                const label     = item.label || '';
+                const val       = item.value  || '';
+                const text      = val ? `${label}: ${val}` : label;
 
-            let includeFormula = buildRecursiveFormula(null, 'Include');
-            let excludeFormula = buildRecursiveFormula(null, 'Exclude');
-
-            const includeCount = espoConditionRegistry.filter(i => i.parentId === null && i.zone === 'Include').length;
-            const excludeCount = espoConditionRegistry.filter(i => i.parentId === null && i.zone === 'Exclude').length;
-
-            // If there is an exclusion, we wrap inclusion in brackets for clarity
-            if (excludeCount > 0 && includeFormula) {
-                // Only wrap if it's not already starting/ending with brackets from buildRecursiveFormula
-                const trimmed = includeFormula.trim();
-                const startsWithBracket = trimmed.startsWith('<span class="formula-bracket">(</span>');
-                const endsWithBracket = trimmed.endsWith('<span class="formula-bracket">)</span>');
-
-                // If it has multiple top-level items OR doesn't have outer brackets, wrap it.
-                if (includeCount > 1 || !startsWithBracket || !endsWithBracket) {
-                    includeFormula = wrap(includeFormula);
+                if (idx > 0) {
+                    const op = (item.op || 'ТА').toLowerCase();
+                    const opCls = op === 'або' ? 'formula-chip-op formula-chip-op--abo'
+                                : op === 'окрім' ? 'formula-chip-op formula-chip-op--okrim'
+                                : 'formula-chip-op';
+                    chips += `<span class="${opCls}">${op}</span>`;
                 }
-            }
+                chips += `<span class="${chipCls}" title="${text}">${text}
+                    <span class="formula-chip-del" onclick="removeEspoBlock(${item.id})" title="Видалити">×</span>
+                </span>`;
+            });
 
-            const wrapDanger = (html) => `<span class="formula-bracket is-danger">(</span> ${html} <span class="formula-bracket is-danger">)</span>`;
+            // "Показати всі" button if many filters
+            const showMoreId = 'formula-show-more';
+            const hasMore = topItems.length > 5;
+            const visibleChips = hasMore ? (() => {
+                // recount visible (rough): show first 5 inline, rest under expand
+                const parts = chips.split('</span>').slice(0, 10).join('</span>') + '</span>';
+                return parts;
+            })() : chips;
 
-            let finalHtml = includeFormula;
-            if (includeFormula && excludeFormula) {
-                finalHtml += ` ${formatOp('окрім')} ${wrapDanger(excludeFormula)}`;
-            } else if (excludeFormula) {
-                finalHtml = `${formatOp('окрім')} ${wrapDanger(excludeFormula)}`;
-            }
+            formulaDisplay.innerHTML = chips;
 
-            formulaDisplay.innerHTML = finalHtml;
-
-            // Handle truncation button
-            let expandBtn = formulaDisplay.querySelector('.formula-expand-btn');
-            if (finalHtml) {
-                if (!expandBtn) {
-                    expandBtn = document.createElement('div');
-                    expandBtn.className = 'formula-expand-btn';
-                    expandBtn.innerHTML = '<i class="bi bi-three-dots"></i>';
-                    expandBtn.onclick = (e) => {
+            if (hasMore) {
+                let btn = formulaDisplay.querySelector('.formula-expand-btn');
+                if (!btn) {
+                    btn = document.createElement('span');
+                    btn.className = 'formula-expand-btn';
+                    btn.innerHTML = 'Показати всі <i class="bi bi-chevron-down"></i>';
+                    btn.onclick = (e) => {
                         e.stopPropagation();
-                        const isExpanded = formulaDisplay.classList.toggle('is-expanded');
-                        expandBtn.innerHTML = isExpanded ? '<i class="bi bi-chevron-up"></i>' : '<i class="bi bi-three-dots"></i>';
+                        const expanded = formulaDisplay.classList.toggle('is-expanded');
+                        btn.innerHTML = expanded
+                            ? 'Сховати <i class="bi bi-chevron-up"></i>'
+                            : 'Показати всі <i class="bi bi-chevron-down"></i>';
                     };
-                    formulaDisplay.appendChild(expandBtn);
-                }
-
-                // Show/hide button based on actual overflow
-                // We reset expansion to check original height
-                const originalExpansion = formulaDisplay.classList.contains('is-expanded');
-                formulaDisplay.classList.remove('is-expanded');
-                if (formulaDisplay.scrollHeight > formulaDisplay.clientHeight + 5) {
-                    expandBtn.style.display = 'flex';
-                } else {
-                    expandBtn.style.display = 'none';
-                    formulaDisplay.classList.remove('is-expanded');
-                }
-                if (originalExpansion) {
-                    formulaDisplay.classList.add('is-expanded');
-                    expandBtn.innerHTML = '<i class="bi bi-chevron-up"></i>';
+                    formulaDisplay.appendChild(btn);
                 }
             } else {
-                if (expandBtn) expandBtn.remove();
-                formulaDisplay.classList.remove('is-expanded');
+                const btn = formulaDisplay.querySelector('.formula-expand-btn');
+                if (btn) btn.remove();
             }
         }
 

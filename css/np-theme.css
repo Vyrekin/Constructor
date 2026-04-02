@@ -1432,3 +1432,182 @@ main.container-fluid { padding: 0 !important; }
     border: none !important;
     text-align: center !important;
 }
+
+/* ============================================================
+   FIGMA SYNC — additional overrides
+   ============================================================ */
+
+/* Page title: match Figma size */
+.page-title {
+    font-size: 1.375rem !important;
+}
+
+/* ── TEMPLATE MODAL BADGES ────────────────────────────────── */
+.badge-b2b      { background: #DBEAFE; color: #1E40AF; }
+.badge-b2c      { background: #D1FAE5; color: #065F46; }
+.badge-senders  { background: #FEF3C7; color: #92400E; }
+.badge-recipients { background: #EDE9FE; color: #5B21B6; }
+
+/* Delete button in template list */
+.btn-template-delete {
+    background: transparent;
+    border: none;
+    color: #DC3545;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: background 0.12s;
+}
+.btn-template-delete:hover { background: #FEE2E2; }
+
+/* ── TOP TOAST NOTIFICATION ─────────────────────────────────── */
+.np-top-toast {
+    position: fixed;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: #212529;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.83rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    max-width: 520px;
+    white-space: nowrap;
+    transition: top 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+}
+.np-top-toast.show {
+    top: 58px;
+    pointer-events: auto;
+}
+.np-top-toast--success { background: #1A6B42; }
+.np-top-toast--error   { background: #DC3545; }
+.np-top-toast--info    { background: #0d6efd; }
+
+.np-toast-copy-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    border-radius: 5px;
+    padding: 3px 10px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+.np-toast-copy-btn:hover { background: rgba(255,255,255,0.35); }
+
+/* ── EXPORT SAVE + PLUS BUTTON ──────────────────────────────── */
+#export-save-row { align-items: stretch; }
+.btn-np-save-plus {
+    background: var(--np-green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    width: 42px;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    font-weight: 400;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    display: none;
+}
+.btn-np-save-plus:hover { background: var(--np-green-dark); }
+
+/* counter-box color already correct via --np-green */
+/*.counter-box-override {
+    background: #1DB954 !important;
+}
+*/
+
+/* ── OVERRIDE EMPTY DROP ZONE DASHED BORDERS ─────────────────── */
+#espo-include-list:empty,
+#espo-exclude-list:empty {
+    border: none !important;
+    background: transparent !important;
+    margin-bottom: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+}
+#espo-include-list:empty::after,
+#espo-exclude-list:empty::after {
+    content: '' !important;
+    display: none !important;
+}
+
+/* ── FIGMA-STYLE FORMULA CHIPS ───────────────────────────────── */
+#formula-filters-view {
+    padding: 6px 0 4px 0;
+    border-bottom: 1px solid #F3F4F6;
+    margin-bottom: 4px;
+}
+#formula-display {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 0;
+}
+.formula-chip {
+    background: #DCFCE7;
+    color: #166534;
+    border-radius: 20px;
+    padding: 3px 10px 3px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.formula-chip--exclude {
+    background: #FEF3C7;
+    color: #92400E;
+}
+.formula-chip-op {
+    background: #F3F4F6;
+    color: #6B7280;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.formula-chip-op--abo   { background: #FEF3C7; color: #D97706; }
+.formula-chip-op--okrim { background: #FEE2E2; color: #DC3545; }
+.formula-chip-del {
+    cursor: pointer;
+    color: #9CA3AF;
+    font-size: 0.9rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-left: 2px;
+}
+.formula-chip-del:hover { color: #DC3545; }
+.formula-show-all-btn {
+    background: transparent;
+    border: 1px solid #D1D5DB;
+    color: #6B7280;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.73rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.12s;
+}
+.formula-show-all-btn:hover { background: #F3F4F6; }
+
