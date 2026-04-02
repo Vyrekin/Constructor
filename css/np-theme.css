@@ -1528,4 +1528,87 @@ main.container-fluid { padding: 0 !important; }
 /*.counter-box-override {
     background: #1DB954 !important;
 }
+*/
+
+/* ── OVERRIDE EMPTY DROP ZONE DASHED BORDERS ─────────────────── */
+#espo-include-list:empty,
+#espo-exclude-list:empty {
+    border: none !important;
+    background: transparent !important;
+    margin-bottom: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+}
+#espo-include-list:empty::after,
+#espo-exclude-list:empty::after {
+    content: '' !important;
+    display: none !important;
+}
+
+/* ── FIGMA-STYLE FORMULA CHIPS ───────────────────────────────── */
+#formula-filters-view {
+    padding: 6px 0 4px 0;
+    border-bottom: 1px solid #F3F4F6;
+    margin-bottom: 4px;
+}
+#formula-display {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 0;
+}
+.formula-chip {
+    background: #DCFCE7;
+    color: #166534;
+    border-radius: 20px;
+    padding: 3px 10px 3px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.formula-chip--exclude {
+    background: #FEF3C7;
+    color: #92400E;
+}
+.formula-chip-op {
+    background: #F3F4F6;
+    color: #6B7280;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.formula-chip-op--abo   { background: #FEF3C7; color: #D97706; }
+.formula-chip-op--okrim { background: #FEE2E2; color: #DC3545; }
+.formula-chip-del {
+    cursor: pointer;
+    color: #9CA3AF;
+    font-size: 0.9rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-left: 2px;
+}
+.formula-chip-del:hover { color: #DC3545; }
+.formula-show-all-btn {
+    background: transparent;
+    border: 1px solid #D1D5DB;
+    color: #6B7280;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.73rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.12s;
+}
+.formula-show-all-btn:hover { background: #F3F4F6; }
+
 
