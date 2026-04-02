@@ -3,28 +3,31 @@ import { getFieldById } from '../../data/filterRegistry';
 
 export default function ConditionBlock({ filter, onRemove, onUpdate }) {
   const field = getFieldById(filter.fieldId);
-  const isInclude = filter.zone === 'include';
-  const accentColor = isInclude ? '#198754' : '#dc3545';
 
   const handleValueChange = (e) => {
     onUpdate(filter.id, { value: e.target.value });
   };
 
-  const handleOpToggle = () => {
-    const nextOp = filter.op === 'ТА' ? 'АБО' : 'ТА';
-    onUpdate(filter.id, { op: nextOp });
-  };
-
   const renderValueInput = () => {
-    if (!field) return <span className="text-muted small">—</span>;
+    if (!field) return <span style={{ color: '#9CA3AF', fontSize: '0.82rem' }}>—</span>;
 
     if (field.type === 'select' && field.options && Object.keys(field.options).length > 0) {
       return (
         <select
-          className="form-select form-select-sm"
+          className="cond-value-select"
           value={filter.value || ''}
           onChange={handleValueChange}
-          style={{ maxWidth: 180 }}
+          style={{
+            fontSize: '0.82rem',
+            border: '1px solid #dee2e6',
+            borderRadius: 4,
+            padding: '3px 8px',
+            background: '#fff',
+            color: '#212529',
+            flex: 1,
+            minWidth: 0,
+            height: 36,
+          }}
         >
           <option value="">Обери...</option>
           {Object.entries(field.options).map(([key, label]) => (
@@ -38,72 +41,120 @@ export default function ConditionBlock({ filter, onRemove, onUpdate }) {
       return (
         <input
           type="date"
-          className="form-control form-control-sm"
+          className="cond-value-input"
           value={filter.value || ''}
           onChange={handleValueChange}
-          style={{ maxWidth: 170 }}
-        />
-      );
-    }
-
-    if (field.type === 'number') {
-      return (
-        <input
-          type="number"
-          className="form-control form-control-sm"
-          value={filter.value || ''}
-          onChange={handleValueChange}
-          placeholder="0"
-          style={{ maxWidth: 120 }}
+          style={{
+            fontSize: '0.82rem',
+            border: '1px solid #dee2e6',
+            borderRadius: 4,
+            padding: '3px 8px',
+            background: '#fff',
+            flex: 1,
+            minWidth: 0,
+            height: 36,
+          }}
         />
       );
     }
 
     return (
       <input
-        type="text"
-        className="form-control form-control-sm"
+        type={field.type === 'number' ? 'number' : 'text'}
+        className="cond-value-input"
         value={filter.value || ''}
         onChange={handleValueChange}
-        placeholder="Значення..."
-        style={{ maxWidth: 180 }}
+        placeholder={field.type === 'number' ? '0' : 'Значення...'}
+        style={{
+          fontSize: '0.82rem',
+          border: '1px solid #dee2e6',
+          borderRadius: 4,
+          padding: '3px 8px',
+          background: '#fff',
+          flex: 1,
+          minWidth: 0,
+          height: 36,
+        }}
       />
     );
   };
 
   return (
-    <div
-      className="condition-block d-flex align-items-center gap-2 px-2 py-2 mb-1 rounded-2"
-      style={{
-        background: '#f8f9fa',
-        borderLeft: `3px solid ${accentColor}`,
-        fontSize: '0.83rem',
-      }}
-    >
-      <button
-        className="btn btn-sm px-1 py-0 border-0"
-        onClick={handleOpToggle}
-        title="Переключити ТА / АБО"
-        style={{
-          fontSize: '0.65rem',
-          fontWeight: 700,
-          color: filter.op === 'ТА' ? '#0d6efd' : '#fd7e14',
-          minWidth: 30,
-        }}
-      >
-        {filter.op}
-      </button>
-      <span className="fw-semibold text-truncate" style={{ maxWidth: 140 }}>
-        {filter.label}
-      </span>
-      {renderValueInput()}
-      <button
-        className="btn btn-sm btn-outline-danger border-0 px-1 py-0 ms-auto"
+    <div className="condition-block" style={{
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'stretch',
+      width: '100%',
+      background: '#fff',
+      border: '1px solid #E0E0E0',
+      borderRadius: 6,
+      overflow: 'visible',
+    }}>
+      {/* Drag handle */}
+      <div className="cond-drag-handle" style={{
+        display: 'flex',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        padding: '0 8px',
+        color: '#BDBDBD',
+        fontSize: '1rem',
+        cursor: 'grab',
+        flexShrink: 0,
+        borderRight: '1px solid #F0F0F0',
+      }}>
+        <i className="bi bi-grip-vertical"></i>
+      </div>
+
+      {/* Field label */}
+      <div className="condition-header" style={{
+        flex: '0 0 auto',
+        minWidth: 140,
+        maxWidth: 180,
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 10px',
+        borderRight: '1px solid #F0F0F0',
+        fontSize: '0.82rem',
+        fontWeight: 500,
+        color: '#212529',
+        gap: 4,
+      }}>
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {filter.label}
+        </span>
+      </div>
+
+      {/* Value */}
+      <div className="condition-body" style={{
+        flex: 1,
+        padding: '8px 10px',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '0.82rem',
+        minWidth: 0,
+      }}>
+        {renderValueInput()}
+      </div>
+
+      {/* Delete */}
+      <div
+        className="cond-delete"
         onClick={() => onRemove(filter.id)}
-        title="Видалити"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 10px',
+          color: '#BDBDBD',
+          fontSize: '0.85rem',
+          cursor: 'pointer',
+          flexShrink: 0,
+          borderLeft: '1px solid #F0F0F0',
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = '#DC3545')}
+        onMouseLeave={(e) => (e.currentTarget.style.color = '#BDBDBD')}
       >
-        <i className="bi bi-x-lg" style={{ fontSize: '0.75rem' }}></i>
-      </button>
+        <i className="bi bi-x-lg"></i>
+      </div>
     </div>
   );
 }

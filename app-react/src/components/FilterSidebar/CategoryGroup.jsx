@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import FieldItem from './FieldItem';
 
-export default function CategoryGroup({ category, fields, searchQuery, onDragStart }) {
-  const [isOpen, setIsOpen] = useState(true);
+export default function CategoryGroup({ category, fields, searchQuery }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   const filtered = searchQuery
     ? fields.filter((f) => f.label.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -11,28 +11,64 @@ export default function CategoryGroup({ category, fields, searchQuery, onDragSta
   if (filtered.length === 0) return null;
 
   return (
-    <div className="mb-1">
+    <div>
       <button
-        className="btn btn-sm w-100 d-flex align-items-center gap-2 px-3 py-2 text-start border-0"
         onClick={() => setIsOpen(!isOpen)}
         style={{
-          background: isOpen ? '#f0f4ff' : 'transparent',
-          fontWeight: 600,
-          fontSize: '0.8rem',
-          letterSpacing: '0.3px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+          padding: '9px 12px',
+          background: isOpen ? '#EFF6FF' : 'transparent',
+          border: 'none',
+          textAlign: 'left',
+          fontSize: '0.85rem',
+          fontWeight: isOpen ? 500 : 400,
+          color: isOpen ? 'var(--np-blue)' : '#495057',
+          cursor: 'pointer',
+          gap: 8,
         }}
+        onMouseEnter={(e) => { if (!isOpen) e.currentTarget.style.background = '#F9FAFB'; }}
+        onMouseLeave={(e) => { if (!isOpen) e.currentTarget.style.background = 'transparent'; }}
       >
-        <i className={`bi ${category.icon} text-primary`}></i>
-        <span className="flex-grow-1 text-truncate">{category.label}</span>
-        <span className="badge bg-primary bg-opacity-10 text-primary" style={{ fontSize: '0.65rem' }}>
-          {filtered.length}
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 0 }}>
+          <i className={`bi ${category.icon}`} style={{
+            fontSize: '0.9rem',
+            color: isOpen ? 'var(--np-blue)' : '#6c757d',
+            width: 18,
+            textAlign: 'center',
+            flexShrink: 0,
+          }}></i>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {category.label}
+          </span>
         </span>
-        <i className={`bi bi-chevron-${isOpen ? 'up' : 'down'} text-muted`} style={{ fontSize: '0.65rem' }}></i>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{
+            fontSize: '0.65rem',
+            color: '#9CA3AF',
+            background: '#F3F4F6',
+            padding: '1px 6px',
+            borderRadius: 3,
+          }}>{filtered.length}</span>
+          <i className={`bi bi-chevron-right`} style={{
+            fontSize: '0.7rem',
+            color: isOpen ? 'var(--np-blue)' : '#9CA3AF',
+            transition: 'transform 0.2s',
+            transform: isOpen ? 'rotate(90deg)' : 'none',
+            flexShrink: 0,
+          }}></i>
+        </span>
       </button>
       {isOpen && (
-        <div className="ps-3 pe-1 pb-1">
+        <div style={{
+          background: '#F9FAFB',
+          borderTop: '1px solid #F3F4F6',
+          padding: '2px 0',
+        }}>
           {filtered.map((field) => (
-            <FieldItem key={field.id} field={field} onDragStart={onDragStart} />
+            <FieldItem key={field.id} field={field} />
           ))}
         </div>
       )}
