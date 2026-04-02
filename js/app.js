@@ -1798,7 +1798,7 @@
             setTimeout(() => {
                 // Random count between 10k and 24M for simulation
                 const randomCount = Math.floor(Math.random() * (24000000 - 10000) + 10000);
-                const formatted = new Intl.NumberFormat('en-US', { notation: "compact", compactDisplay: "short" }).format(randomCount);
+                const formatted = new Intl.NumberFormat('uk-UA').format(randomCount).replace(/,/g, ' ').replace(/\u00A0/g, ' ');
 
                 if (display) {
                     display.innerText = formatted;
@@ -1857,9 +1857,9 @@
             // Mock Counter Updates
             const counter = document.getElementById('counter-display');
             const mobileCounter = document.getElementById('mobile-counter-display');
-            let val = '10.5M';
-            if (viewId === 'lookalike') val = '4.1M';
-            else if (viewId === 'ai') val = '16M';
+            let val = '10 500 000';
+            if (viewId === 'lookalike') val = '4 100 000';
+            else if (viewId === 'ai') val = '16 000 000';
 
             if (counter) counter.innerText = val;
             if (mobileCounter) mobileCounter.innerText = val;
