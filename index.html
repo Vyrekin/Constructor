@@ -2341,7 +2341,11 @@
                             </div>
                         </div>
 
-                        <button class="btn-np-save-full" id="export-main-btn" onclick="handleExportAction()">Зберегти</button>
+                        <!-- Save button: full-width "Зберегти" OR "Зберегти зміни" + "+" side btn -->
+                        <div id="export-save-row" class="d-flex gap-2">
+                            <button class="btn-np-save-full" id="export-main-btn" onclick="handleExportAction()" style="flex:1;">Зберегти</button>
+                            <button class="btn-np-save-plus" id="export-save-new-btn" onclick="handleSaveAsNew()" style="display:none;" title="Зберегти як новий шаблон">+</button>
+                        </div>
 
                         <!-- Analytics button -->
                         <button class="btn btn-outline-secondary w-100 mt-2" style="font-size:0.8rem; border-radius:6px;"
@@ -2652,83 +2656,127 @@
         <div class="modal-dialog modal-dialog-centered" style="max-width: 560px;">
             <div class="modal-content border-0 shadow" style="border-radius: 10px; overflow: hidden;">
                 <div class="modal-header py-3 px-4 border-bottom">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-grid-3x3-gap text-muted"></i>
-                        <h5 class="modal-title fw-bold mb-0" style="font-size: 1rem;">Шаблони</h5>
-                    </div>
+                    <h5 class="modal-title fw-bold mb-0" style="font-size: 1rem;">Шаблони</h5>
                     <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-3">
                     <!-- Search -->
                     <div class="position-relative mb-3">
                         <i class="bi bi-search position-absolute top-50 translate-middle-y ms-3 text-muted" style="font-size:0.8rem; left:2px;"></i>
-                        <input type="text" class="form-control ps-5" placeholder="Пошук шаблону..." style="font-size:0.85rem;">
+                        <input type="text" class="form-control ps-5" id="template-search-input" placeholder="Search" style="font-size:0.85rem;" oninput="filterTemplates(this.value)">
                     </div>
 
                     <!-- Template items -->
-                    <div class="template-item">
-                        <div class="template-item-left">
-                            <span class="template-type-badge badge-lal">Lal</span>
-                            <div>
-                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що отримали відправлення в Київській області</div>
-                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432324 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                    <div id="templates-list">
+                        <div class="template-item">
+                            <div class="template-item-left">
+                                <span class="template-type-badge badge-b2b">B2B</span>
+                                <div>
+                                    <div class="fw-semibold" style="font-size:0.85rem;">Люди, з сіл Вінницької області</div>
+                                    <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
+                                        ID: 88883232229
+                                        <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', this)" title="Скопіювати ID"></i>
+                                    </div>
+                                    <div class="text-muted" style="font-size:0.75rem;">Міntракторів в селах Вінницької обл.</div>
+                                </div>
                             </div>
+                            <button class="btn-template-delete" onclick="deleteTemplate(this)" title="Видалити"><i class="bi bi-trash3"></i></button>
                         </div>
-                        <button class="btn-template-add" onclick="applyTemplate('lal-kyiv')">Додати до вибірки</button>
-                    </div>
 
-                    <div class="template-item">
-                        <div class="template-item-left">
-                            <span class="template-type-badge badge-constructor">Конструктор</span>
-                            <div>
-                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що не отримали котегорії 2</div>
-                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432325 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                        <div class="template-item">
+                            <div class="template-item-left">
+                                <span class="template-type-badge badge-b2c">B2C</span>
+                                <div>
+                                    <div class="fw-semibold" style="font-size:0.85rem;">Люди, які отримували зоотовари</div>
+                                    <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
+                                        ID: 88883232229
+                                        <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', this)" title="Скопіювати ID"></i>
+                                    </div>
+                                    <div class="text-muted" style="font-size:0.75rem;">Зоомагазин біля м. Дарниця</div>
+                                </div>
                             </div>
+                            <button class="btn-template-delete" onclick="deleteTemplate(this)" title="Видалити"><i class="bi bi-trash3"></i></button>
                         </div>
-                        <button class="btn-template-add" onclick="applyTemplate('cat2')">Додати до вибірки</button>
-                    </div>
 
-                    <div class="template-item">
-                        <div class="template-item-left">
-                            <span class="template-type-badge badge-lal">Lal</span>
-                            <div>
-                                <div class="fw-semibold" style="font-size:0.85rem;">Люди, що не отримали котегорії 2</div>
-                                <div class="text-muted" style="font-size:0.75rem;">id: 00004432326 <i class="bi bi-clipboard ms-1" style="cursor:pointer;"></i></div>
+                        <div class="template-item">
+                            <div class="template-item-left">
+                                <span class="template-type-badge badge-senders">Відправники</span>
+                                <div>
+                                    <div class="fw-semibold" style="font-size:0.85rem;">Люди, які отримували зоотовари2</div>
+                                    <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
+                                        ID: 88883232229
+                                        <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', this)" title="Скопіювати ID"></i>
+                                    </div>
+                                    <div class="text-muted" style="font-size:0.75rem;">Зоомагазин біля м. Дарниця</div>
+                                </div>
                             </div>
+                            <button class="btn-template-delete" onclick="deleteTemplate(this)" title="Видалити"><i class="bi bi-trash3"></i></button>
                         </div>
-                        <button class="btn-template-add" onclick="applyTemplate('cat2-lal')">Додати до вибірки</button>
-                    </div>
 
-                    <div class="text-center mt-3">
-                        <span class="text-muted" style="font-size:0.78rem;">Знайдено 3 шаблони</span>
+                        <div class="template-item">
+                            <div class="template-item-left">
+                                <span class="template-type-badge badge-recipients">Одержувачі</span>
+                                <div>
+                                    <div class="fw-semibold" style="font-size:0.85rem;">Люди, які отримували зоотовари2</div>
+                                    <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
+                                        ID: 88883232229
+                                        <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', this)" title="Скопіювати ID"></i>
+                                    </div>
+                                    <div class="text-muted" style="font-size:0.75rem;">Зоомагазин біля м. Дарниця</div>
+                                </div>
+                            </div>
+                            <button class="btn-template-delete" onclick="deleteTemplate(this)" title="Видалити"><i class="bi bi-trash3"></i></button>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-top py-2 px-4 justify-content-end">
-                    <button class="btn-template-add" style="border-radius: 6px;" data-bs-dismiss="modal">Додати шаблон</button>
+                    <button class="btn-template-add" style="border-radius: 6px;" onclick="openAddTemplateModal()">Додати шаблон</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── ADD TEMPLATE BY ID MODAL ──────────────────────────── -->
+    <div class="modal fade" id="addTemplateModal" tabindex="-1" data-bs-backdrop="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 360px;">
+            <div class="modal-content border-0 shadow" style="border-radius: 10px;">
+                <div class="modal-header py-3 px-4 border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-bookmark text-muted"></i>
+                        <h5 class="modal-title fw-bold mb-0" style="font-size:0.95rem;">Додати шаблон</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="text-muted mb-3" style="font-size:0.85rem;">Ви можете додати шаблон якщо знаєте його ID</p>
+                    <label class="np-export-label">Введіть ID шаблону</label>
+                    <input type="text" class="form-control" id="add-template-id-input" placeholder="ID шаблону" style="font-size:0.85rem;">
+                </div>
+                <div class="modal-footer border-top py-2 px-4 gap-2 justify-content-end">
+                    <button class="btn btn-outline-secondary" style="font-size:0.85rem; border-radius:6px;" data-bs-dismiss="modal">Скасувати</button>
+                    <button class="btn-template-add" style="border-radius:6px;" onclick="confirmAddTemplate()">Додати</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- ── UNSAVED CHANGES MODAL ─────────────────────────────── -->
-    <div class="modal fade unsaved-modal" id="unsavedChangesModal" tabindex="-1" data-bs-backdrop="true">
+    <div class="modal fade" id="unsavedChangesModal" tabindex="-1" data-bs-backdrop="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
             <div class="modal-content border-0 shadow" style="border-radius: 10px;">
-                <div class="modal-body unsaved-modal p-0">
-                    <div class="unsaved-modal-body p-4 text-center">
-                        <div class="unsaved-modal-icon">
-                            <i class="bi bi-exclamation-triangle-fill text-warning"></i>
-                        </div>
-                        <h5 class="fw-bold mb-2">У вас є незбережені зміни</h5>
-                        <p class="text-muted mb-0" style="font-size:0.88rem;">
-                            Якщо ви покинете цю сторінку, ваші незбережені зміни будуть втрачені. Продовжити без збереження?
-                        </p>
+                <div class="modal-body p-4 text-center">
+                    <div class="unsaved-modal-icon">
+                        <i class="bi bi-info-circle-fill" style="color:#0d6efd;"></i>
                     </div>
+                    <h5 class="fw-bold mb-2">У вас є незбережені зміни</h5>
+                    <p class="text-muted mb-0" style="font-size:0.88rem;">
+                        У вас є незбережені зміни у шаблоні, щоб не втратити дані, збережіть їх або збережіть їх як новий шаблон чи змінте існуючий.
+                    </p>
                 </div>
                 <div class="modal-footer border-top justify-content-center gap-2 py-3">
-                    <button class="btn btn-outline-secondary" style="min-width:120px; border-radius:6px;" data-bs-dismiss="modal">Скасувати</button>
-                    <button class="btn-np-save" style="min-width:160px; padding: 0.45rem 1.25rem;" onclick="proceedWithoutSaving()">
-                        Продовжити до вибірки
+                    <button class="btn btn-outline-secondary" style="min-width:140px; border-radius:6px;" onclick="proceedWithoutSaving()">Покинути сторінку</button>
+                    <button class="btn-np-save" style="min-width:160px; padding: 0.45rem 1.25rem;" data-bs-dismiss="modal">
+                        Повернутися до вибірки
                     </button>
                 </div>
             </div>
@@ -2804,6 +2852,102 @@
         if (modal) modal.hide();
         console.log('Applying template:', id);
     }
+
+    // ── TEMPLATE MODAL HELPERS ─────────────────────────────────
+    function filterTemplates(q) {
+        const items = document.querySelectorAll('#templates-list .template-item');
+        const lower = q.toLowerCase();
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(lower) ? '' : 'none';
+        });
+    }
+
+    function copyTemplateId(id, icon) {
+        navigator.clipboard.writeText(id).catch(() => {});
+        icon.className = 'bi bi-clipboard-check text-success';
+        setTimeout(() => { icon.className = 'bi bi-clipboard'; }, 2000);
+    }
+
+    function deleteTemplate(btn) {
+        const item = btn.closest('.template-item');
+        if (item) item.remove();
+    }
+
+    function openAddTemplateModal() {
+        const tmplModal = bootstrap.Modal.getInstance(document.getElementById('templatesModal'));
+        if (tmplModal) tmplModal.hide();
+        setTimeout(() => {
+            const addModal = new bootstrap.Modal(document.getElementById('addTemplateModal'));
+            addModal.show();
+        }, 300);
+    }
+
+    function confirmAddTemplate() {
+        const id = document.getElementById('add-template-id-input')?.value.trim();
+        if (!id) return;
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addTemplateModal'));
+        if (modal) modal.hide();
+        document.getElementById('add-template-id-input').value = '';
+        showTopToast(`Шаблон ${id} додано`, 'success');
+    }
+
+    // ── TOP TOAST NOTIFICATIONS ────────────────────────────────
+    function showTopToast(message, type, copyId) {
+        let bar = document.getElementById('np-top-toast');
+        if (!bar) {
+            bar = document.createElement('div');
+            bar.id = 'np-top-toast';
+            document.body.appendChild(bar);
+        }
+        const icon = type === 'success' ? '<i class="bi bi-check-circle-fill me-2"></i>'
+                   : type === 'error'   ? '<i class="bi bi-x-circle-fill me-2"></i>'
+                   :                      '<i class="bi bi-info-circle-fill me-2"></i>';
+        const copyBtn = copyId
+            ? `<button onclick="navigator.clipboard.writeText('${copyId}');this.textContent='Скопійовано!'" class="np-toast-copy-btn">Скопіювати ID</button>`
+            : '';
+        bar.className = `np-top-toast np-top-toast--${type} show`;
+        bar.innerHTML = `<span>${icon}${message}</span>${copyBtn}`;
+        clearTimeout(bar._hideTimer);
+        bar._hideTimer = setTimeout(() => bar.classList.remove('show'), 4000);
+    }
+
+    function showSavedToast(isNew) {
+        const fakeId = Math.floor(Math.random() * 90000000 + 10000000).toString();
+        const msg = isNew ? 'Шаблон збережено як новий' : 'Зміни збережено';
+        showTopToast(msg + '. Ви можете скопіювати ID шаблону для того, щоб ним поділитись.', 'success', fakeId);
+    }
+
+    // ── EXPORT SAVE BUTTON: toggle Зберегти / Зберегти зміни ──
+    function updateSaveBtn() {
+        const nameInput = document.getElementById('segmentNameInput');
+        const mainBtn = document.getElementById('export-main-btn');
+        const plusBtn = document.getElementById('export-save-new-btn');
+        const exportType = document.getElementById('export-action-type')?.value;
+        if (exportType !== 'template') return;
+        const hasName = nameInput && nameInput.value.trim().length > 0;
+        if (mainBtn) mainBtn.textContent = hasName ? 'Зберегти зміни' : 'Зберегти';
+        if (plusBtn) plusBtn.style.display = hasName ? 'flex' : 'none';
+    }
+
+    function handleSaveAsNew() {
+        showSavedToast(true);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Wire save button dynamic label
+        const nameInput = document.getElementById('segmentNameInput');
+        if (nameInput) nameInput.addEventListener('input', updateSaveBtn);
+        const exportType = document.getElementById('export-action-type');
+        if (exportType) exportType.addEventListener('change', updateSaveBtn);
+
+        // Wrap clearFilters to show toast (app.js loads before this script)
+        const _origClearFilters = window.clearFilters;
+        window.clearFilters = function() {
+            if (typeof _origClearFilters === 'function') _origClearFilters();
+            showTopToast('Вибірку очищено', 'error');
+        };
+    });
 
     // ── CATEGORY ACCORDION ────────────────────────────────────
     function toggleCatGroup(catId, btn) {
@@ -3226,7 +3370,10 @@
     function handleExportAction() {
         const type = document.getElementById('export-action-type')?.value;
         if (type === 'template') {
-            confirmSaveSegment();
+            const nameInput = document.getElementById('segmentNameInput');
+            const hasName = nameInput && nameInput.value.trim().length > 0;
+            if (typeof confirmSaveSegment === 'function') confirmSaveSegment();
+            setTimeout(() => showSavedToast(false), 300);
         } else {
             const format    = document.getElementById('constructor-format-unified')?.value;
             const exportAll = document.getElementById('export-all-toggle')?.checked;

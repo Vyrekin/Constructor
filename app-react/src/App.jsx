@@ -5,6 +5,7 @@ import FilterPicker from './components/FilterPicker/FilterPicker';
 import AIQueryPanel from './components/AIQueryPanel/AIQueryPanel';
 import StatsPanel from './components/StatsPanel/StatsPanel';
 import { useFiltersStore } from './store/useFiltersStore';
+import './app.css';
 
 export default function App() {
   const {
@@ -17,7 +18,7 @@ export default function App() {
     clearFilters,
   } = useFiltersStore();
 
-  const [scope, setScope] = useState('all'); // 'all' | 'b2c' | 'b2b'
+  const [scope, setScope] = useState('all');
   const [isAIMode, setIsAIMode] = useState(false);
   const [picker, setPicker] = useState({ isOpen: false, zone: 'include', position: null });
 
@@ -50,7 +51,7 @@ export default function App() {
   );
 
   const handleOpenPicker = useCallback((zone) => {
-    setPicker({ isOpen: true, zone, position: { x: 340, y: 120 } });
+    setPicker({ isOpen: true, zone, position: { x: 340, y: 160 } });
   }, []);
 
   const handleClosePicker = useCallback(() => {
@@ -67,56 +68,111 @@ export default function App() {
     [addFilter]
   );
 
-  const scopeLabels = { all: 'Усі', b2c: 'С-клієнти', b2b: 'В-клієнти' };
+  const scopeLabels = { all: 'Усі', b2c: 'C-клієнти', b2b: 'B-клієнти' };
 
   return (
-    <div className="d-flex flex-column vh-100" style={{ background: '#f6f6f9' }}>
-      {/* Header */}
-      <header
-        className="d-flex align-items-center px-3 py-2 border-bottom bg-white shadow-sm"
-        style={{ minHeight: 56, zIndex: 1040 }}
-      >
-        <div className="d-flex align-items-center gap-2">
-          <div
-            className="rounded-2 d-flex align-items-center justify-content-center"
-            style={{ width: 36, height: 36, background: '#198754', color: '#fff', fontWeight: 800, fontSize: '1rem' }}
-          >
-            НП
-          </div>
-          <div>
-            <div className="fw-bold" style={{ fontSize: '0.95rem', lineHeight: 1.2 }}>
-              Конструктор вибірок
-            </div>
-            <div className="text-muted" style={{ fontSize: '0.68rem' }}>
-              React Edition
-            </div>
-          </div>
+    <div className="d-flex flex-column vh-100" style={{ background: 'var(--bg-app, #f6f6f9)' }}>
+      {/* ── System Header (48px) ── */}
+      <header className="app-header d-flex align-items-center px-3" style={{
+        background: '#fff',
+        borderBottom: '1px solid #E5E7EB',
+        height: 48,
+        minHeight: 48,
+        zIndex: 1040,
+      }}>
+        <span className="np-logo-text" style={{
+          color: '#E2001A',
+          fontWeight: 900,
+          fontSize: '1rem',
+          letterSpacing: '-0.3px',
+          textTransform: 'uppercase',
+        }}>Нова Пошта</span>
+        <div className="np-system-nav d-flex gap-1 ms-3">
+          <span className="nav-link" style={{ color: '#495057', fontSize: '0.8rem', fontWeight: 500, padding: '0.2rem 0.5rem' }}>
+            Конструктор
+          </span>
         </div>
-
-        {/* Scope toggle */}
-        <div className="ms-4 d-inline-flex bg-light rounded-pill p-1 border">
-          {['all', 'b2b', 'b2c'].map((s) => (
-            <button
-              key={s}
-              className={`btn btn-sm px-3 ${scope === s ? 'btn-primary shadow-sm' : 'btn-link text-decoration-none text-muted'}`}
-              style={{ borderRadius: 20, fontSize: '0.78rem' }}
-              onClick={() => setScope(s)}
-            >
-              {scopeLabels[s]}
-            </button>
-          ))}
-        </div>
-
         <div className="ms-auto d-flex align-items-center gap-2">
-          <span className="badge bg-success bg-opacity-10 text-success px-2 py-1" style={{ fontSize: '0.72rem' }}>
-            <i className="bi bi-circle-fill me-1" style={{ fontSize: '0.4rem' }}></i>
-            Онлайн
+          <span style={{ fontSize: '0.8rem', color: '#495057' }}>
+            <i className="bi bi-person-circle me-1"></i>User
           </span>
         </div>
       </header>
 
-      {/* Main layout */}
-      <div className="d-flex flex-grow-1 overflow-hidden">
+      {/* ── Page Sub-header (64px) ── */}
+      <div className="page-subheader d-flex align-items-center" style={{
+        background: '#fff',
+        borderBottom: '1px solid #dee2e6',
+        padding: '0 24px',
+        height: 64,
+        minHeight: 64,
+        gap: 24,
+        position: 'sticky',
+        top: 48,
+        zIndex: 990,
+      }}>
+        <h1 className="page-title mb-0" style={{
+          fontSize: '1.875rem',
+          fontWeight: 600,
+          color: '#212529',
+          whiteSpace: 'nowrap',
+          flexShrink: 0,
+        }}>Конструктор вибірок</h1>
+
+        {/* Segment tabs */}
+        <div className="segment-tabs" style={{
+          display: 'inline-flex',
+          border: '1px solid #dee2e6',
+          borderRadius: 6,
+          overflow: 'hidden',
+          background: '#fff',
+        }}>
+          {['all', 'b2b', 'b2c'].map((s) => (
+            <button
+              key={s}
+              className={`seg-tab ${scope === s ? 'active' : ''}`}
+              onClick={() => setScope(s)}
+              style={{
+                padding: '6px 16px',
+                fontSize: '0.82rem',
+                fontWeight: scope === s ? 600 : 500,
+                color: scope === s ? '#212529' : '#6c757d',
+                background: scope === s ? '#e9ecef' : 'transparent',
+                border: 'none',
+                borderRight: '1px solid #dee2e6',
+                cursor: 'pointer',
+              }}
+            >{scopeLabels[s]}</button>
+          ))}
+        </div>
+
+        <button className="btn-templates ms-auto" style={{
+          background: '#0d6efd',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 6,
+          padding: '8px 18px',
+          fontSize: '0.85rem',
+          fontWeight: 500,
+          cursor: 'pointer',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 7,
+          flexShrink: 0,
+        }}>
+          <i className="bi bi-bookmark"></i> Шаблони
+        </button>
+      </div>
+
+      {/* ── Main 3-column layout ── */}
+      <div className="np-layout" style={{
+        display: 'flex',
+        flex: 1,
+        overflow: 'hidden',
+        background: '#f6f6f9',
+        padding: 16,
+        gap: 12,
+      }}>
         {/* Left sidebar */}
         <FilterSidebar
           scope={scope}
@@ -124,8 +180,18 @@ export default function App() {
           onToggleAI={() => setIsAIMode(!isAIMode)}
         />
 
-        {/* Center: Condition builder or AI panel */}
-        <div className="flex-grow-1 d-flex flex-column overflow-hidden">
+        {/* Center content */}
+        <div className="np-main-content" style={{
+          flex: 1,
+          background: '#fff',
+          borderRadius: 12,
+          border: '1px solid #dee2e6',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+          padding: '20px 20px 16px',
+          overflowY: 'auto',
+          alignSelf: 'flex-start',
+          minHeight: 200,
+        }}>
           {isAIMode ? (
             <AIQueryPanel onApplyFilters={handleAIApply} />
           ) : (
@@ -141,7 +207,7 @@ export default function App() {
           )}
         </div>
 
-        {/* Right stats panel */}
+        {/* Right sidebar */}
         <StatsPanel
           includeCount={includeFilters.length}
           excludeCount={excludeFilters.length}
