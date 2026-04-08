@@ -2335,6 +2335,10 @@
             margin-bottom: 0;
         }
 
+        .reborn-ui #filterTabsContent.is-searching>.tab-pane:not(.active):not(.show) {
+            display: none !important;
+        }
+
         body[data-scope-mode="all"] {
             --scope-accent: var(--primary);
             --scope-soft: rgba(67, 97, 238, 0.12);
@@ -2566,6 +2570,207 @@
 
         .reborn-ui .counter-box .btn-white-soft {
             display: none !important;
+        }
+
+        /* Sidebar geo-targeting button */
+        .reborn-ui .sidebar-geo-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border: 1px dashed #94a3b8;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            color: #166534;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .reborn-ui .sidebar-geo-btn:hover {
+            border-color: var(--tz-primary-btn);
+            background: linear-gradient(135deg, #dcfce7 0%, #d1fae5 100%);
+            box-shadow: 0 2px 8px rgba(22,101,52,0.12);
+            transform: translateY(-1px);
+        }
+        .reborn-ui .sidebar-geo-btn i:first-child {
+            font-size: 1rem;
+            color: var(--tz-primary-btn);
+        }
+
+        /* Geo-targeting modal */
+        .geo-main-row {
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            gap: 0;
+            min-height: 420px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .geo-form-col {
+            padding: 14px 14px 10px;
+            overflow: visible;
+        }
+        .geo-form-col .form-control-sm,
+        .geo-form-col .form-select-sm {
+            font-size: 0.72rem;
+            padding: 3px 8px;
+            height: auto;
+        }
+        .geo-map-col {
+            position: relative;
+            background: #e8ecf1;
+            min-height: 420px;
+            overflow: hidden;
+        }
+        .geo-mode-tabs {
+            display: flex;
+            gap: 0;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+        .geo-mode-tab {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 6px 4px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .geo-mode-tab i { font-size: 0.7rem; }
+        .geo-mode-tab:last-child { border-right: none; }
+        .geo-mode-tab.active {
+            background: #f0fdf4;
+            color: #166534;
+            font-weight: 600;
+            border-bottom: 2px solid var(--tz-primary-btn);
+        }
+        .geo-mode-tab:not(.active):hover { background: #f9fafb; }
+        .geo-input-group {
+            margin-bottom: 8px;
+        }
+        .geo-input-group > label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 3px;
+        }
+        .geo-section-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        .geo-file-upload {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+        .geo-file-upload:hover { border-color: #94a3b8; }
+        .geo-file-btn {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            padding: 2px 10px;
+            font-size: 0.7rem;
+            color: #374151;
+            flex-shrink: 0;
+        }
+        .geo-file-name {
+            font-size: 0.7rem;
+            color: #6b7280;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+        .geo-add-btn {
+            width: 100%;
+            background: #f0fdf4;
+            border: 2px solid var(--tz-primary-btn);
+            border-radius: 8px;
+            padding: 7px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--tz-primary-btn);
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-top: 4px;
+        }
+        .geo-add-btn:hover {
+            background: var(--tz-primary-btn);
+            color: #fff;
+        }
+        .geo-chips-section {
+            margin-top: 20px;
+        }
+        .geo-chips-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .geo-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
+        .geo-chip .chip-text {
+            color: #374151;
+        }
+        .geo-chip .chip-remove {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 0.75rem;
+            padding: 0;
+            line-height: 1;
+        }
+        .geo-chip .chip-remove:hover { color: #ef4444; }
+        .geo-apply-btn {
+            background: var(--tz-primary-btn);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 32px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .geo-apply-btn:hover { background: var(--tz-primary-btn-hover); }
+        @media (max-width: 767px) {
+            .geo-main-row { grid-template-columns: 1fr; }
+            .geo-form-col { max-height: none; }
+            .geo-map-col { min-height: 280px; }
         }
 
         /* Analytics modal cards */
@@ -2849,6 +3054,9 @@
             padding: 8px 10px !important;
             text-align: left;
             justify-content: flex-start !important;
+            white-space: normal !important;
+            word-break: break-word;
+            line-height: 1.3;
         }
 
         .reborn-ui .sidebar-main-picker-list .nav-link::after {
@@ -2905,9 +3113,8 @@
         .reborn-ui .sidebar-accordion-head .acc-title {
             flex: 1;
             min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            word-break: break-word;
+            line-height: 1.3;
         }
 
         .reborn-ui .sidebar-accordion-head .acc-badge {
@@ -2983,9 +3190,8 @@
         .reborn-ui .sidebar-field-row .field-label-text {
             flex: 1;
             min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            word-break: break-word;
+            line-height: 1.3;
             line-height: 1.4;
         }
 
@@ -3043,6 +3249,8 @@
             font-weight: 500;
             padding: 8px 10px !important;
             border-radius: 8px !important;
+            white-space: normal !important;
+            line-height: 1.3;
         }
 
         .reborn-ui #filterTabs .nav-link.active {
@@ -3055,6 +3263,18 @@
         .reborn-ui #filterTabs .nav-link i {
             margin-right: 8px;
             color: #7e93b2;
+        }
+        .reborn-ui #filterTabs .nav-link--geo {
+            border: 1px dashed #94a3b8 !important;
+            background: #f8fafc !important;
+        }
+        .reborn-ui #filterTabs .nav-link--geo:hover {
+            border-color: var(--tz-primary-btn) !important;
+            background: #ecfdf5 !important;
+            color: var(--tz-primary-btn) !important;
+        }
+        .reborn-ui #filterTabs .nav-link--geo i {
+            color: var(--tz-primary-btn);
         }
 
         .reborn-ui .tab-pane-card {
@@ -4034,12 +4254,10 @@
                                         class="ai-btn-label">AI</span></button>
                             </div>
                             <div class="sidebar-browser">
-                                <div class="sidebar-breadcrumb d-flex align-items-center flex-wrap px-2 py-2 gap-1">
+                                <div class="sidebar-breadcrumb d-none">
                                     <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none sidebar-crumb-all fw-semibold"
                                         id="sidebar-crumb-all" aria-expanded="false" aria-controls="sidebar-main-picker">Всі</button>
-                                    <span class="text-muted" aria-hidden="true">›</span>
-                                    <span class="small fw-semibold text-secondary text-uppercase flex-grow-1"
-                                        id="sidebar-active-category">Категорія</span>
+                                    <span id="sidebar-active-category"></span>
                                 </div>
                                 <div class="collapse border-bottom border-light-subtle" id="sidebar-main-picker">
                                     <ul class="nav flex-column sidebar-main-picker-list px-2 pb-2 gap-0" id="filterTabs"
@@ -4094,10 +4312,22 @@
                                             data-bs-target="#pane-c10" type="button" role="tab"><i
                                                 class="bi bi-people"></i> Гео / Look-a-like</button>
                                     </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link nav-link--geo" id="tab-geo" type="button"
+                                            data-bs-toggle="modal" data-bs-target="#geoTargetingModal"><i
+                                                class="bi bi-geo-alt-fill"></i> Гео-таргетинг</button>
+                                    </li>
                                 </ul>
                                 </div>
                                 <div id="sidebar-accordion" class="sidebar-field-accordion px-1 pb-2"
                                     aria-live="polite"></div>
+                                <div class="px-2 pb-2 pt-1">
+                                    <button type="button" class="sidebar-geo-btn" data-bs-toggle="modal" data-bs-target="#geoTargetingModal">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                        <span>Гео-таргетинг</span>
+                                        <i class="bi bi-box-arrow-up-right" style="font-size:0.65rem;opacity:0.5;margin-left:auto;"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -4662,13 +4892,13 @@
                                         style="max-height: 50px;">
                                         <span class="text-muted small italic">Локації не вибрані...</span>
                                     </div>
-                                    <input type="file" id="geo-excel-file" hidden accept=".csv, .txt"
+                                    <input type="file" id="geo-excel-file" hidden accept=".csv,.txt,.xlsx,.xls"
                                         onchange="handleExcelUpload(event)">
                                     <button class="btn btn-success btn-sm px-2 py-1"
                                         onclick="document.getElementById('geo-excel-file').click()"
                                         data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="top"
                                         data-bs-html="true" data-bs-title="Інструкція імпорту"
-                                        data-bs-content="<b>Формат стовпців:</b><br>1. Локація (Координати/Адреса)<br>2. Радіус (км)<br>3. Ціль (Відправлення/Отримання)<br><br><span class='text-primary'>Приклад: Київ, Хрещатик 1; 5; Отримання</span>"
+                                        data-bs-content="<b>Формати:</b> .xlsx, .csv, .txt<br><br><b>Стовпці (колонки):</b><br>1. <b>location</b> — Адреса або координати (обов'язково)<br>2. <b>radius_km</b> — Радіус в км (необов'язково)<br>3. <b>target</b> — Ціль: Відправлення / Отримання (необов'язково)<br><br><span class='text-primary'>Приклад: Київ, Хрещатик 1; 5; Отримання</span><br><small class='text-muted'>Перший рядок із заголовками буде пропущений автоматично.</small>"
                                         style="font-size: 11px;">
                                         <i class="bi bi-file-earmark-spreadsheet me-1"></i> Імпорт
                                     </button>
@@ -5436,6 +5666,136 @@
         </div>
     </div>
 
+    <!-- Geo-Targeting Modal -->
+    <div class="modal fade" id="geoTargetingModal" tabindex="-1" aria-labelledby="geoTargetingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width:1260px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius:16px;overflow:hidden;">
+                <div class="modal-header border-0 pt-4 pb-0 px-4">
+                    <div>
+                        <h5 class="modal-title fw-bold mb-1" id="geoTargetingModalLabel" style="font-size:1.25rem;">Гео-таргетинг</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4 pb-4 pt-3">
+                    <input type="file" id="geo-modal-import-file" hidden accept=".csv,.txt,.xlsx,.xls" onchange="geoModalImportFile(event)">
+                    <span id="geo-modal-count" style="display:none;">0</span>
+                    <!-- Top: form + map -->
+                    <div class="geo-main-row">
+                        <div class="geo-form-col">
+                            <div class="geo-mode-tabs">
+                                <button type="button" class="geo-mode-tab active" data-geo-mode="coords" onclick="geoSwitchMode(this)">
+                                    <i class="bi bi-crosshair"></i> Точка
+                                </button>
+                                <button type="button" class="geo-mode-tab" data-geo-mode="branches" onclick="geoSwitchMode(this)">
+                                    <i class="bi bi-building"></i> Відділення
+                                </button>
+                                <button type="button" class="geo-mode-tab" data-geo-mode="address" onclick="geoSwitchMode(this)">
+                                    <i class="bi bi-signpost-2"></i> Адреса
+                                </button>
+                            </div>
+                            <div class="geo-input-group">
+                                <label>Радіус</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="number" class="form-control form-control-sm" id="geo-modal-radius" value="5" min="1" max="500" style="max-width:100px;" oninput="geoModalRadiusChanged()">
+                                    <span class="text-muted" style="font-size:0.75rem;">км</span>
+                                </div>
+                            </div>
+                            <!-- Coords mode -->
+                            <div id="geo-modal-block-coords">
+                                <div class="geo-input-group">
+                                    <div class="geo-section-label">РУЧНЕ ВВЕДЕННЯ:</div>
+                                    <div class="d-flex gap-2">
+                                        <div class="flex-fill">
+                                            <label style="font-size:0.68rem;color:#6b7280;margin-bottom:2px;">Широта</label>
+                                            <input type="text" class="form-control form-control-sm" id="geo-modal-lat" placeholder="Координати">
+                                        </div>
+                                        <div class="flex-fill">
+                                            <label style="font-size:0.68rem;color:#6b7280;margin-bottom:2px;">Довгота</label>
+                                            <input type="text" class="form-control form-control-sm" id="geo-modal-lng" placeholder="Координати">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Branches mode -->
+                            <div id="geo-modal-block-branches" style="display:none;">
+                                <div class="geo-input-group">
+                                    <label>Пошук міста/відділення</label>
+                                    <input class="form-control form-control-sm mb-2" list="geo-city-datalist" id="geo-modal-city" placeholder="Місто..." onchange="geoModalCityChanged(this.value)">
+                                    <div class="input-group input-group-sm">
+                                        <input class="form-control" id="geo-modal-branch-search" placeholder="Відділення №...">
+                                        <button class="btn btn-outline-primary" onclick="geoModalHandleBranch()"><i class="bi bi-plus-lg"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Address mode -->
+                            <div id="geo-modal-block-address" style="display:none;">
+                                <div class="geo-input-group">
+                                    <label>Впишіть адресу</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" id="geo-modal-address" placeholder="Місто, вулиця, буд...">
+                                        <button class="btn btn-outline-primary" onclick="geoModalAddAddress()"><i class="bi bi-geo-alt"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="geo-input-group">
+                                <label>Ціль (оператор)</label>
+                                <select class="form-select form-select-sm" id="geo-modal-target">
+                                    <option value="Sender">Відправлення</option>
+                                    <option value="Recipient">Отримання</option>
+                                    <option value="AppLocation_New">Локація (Новий додаток)</option>
+                                    <option value="AppLocation_Old">Локація (Старий додаток)</option>
+                                </select>
+                            </div>
+                            <div class="geo-section-label mt-1">АБО</div>
+                            <div class="geo-input-group">
+                                <label>Завантажити масив данних</label>
+                                <div class="geo-file-upload" onclick="document.getElementById('geo-modal-import-file').click()">
+                                    <span class="geo-file-btn">Оберіть файл</span>
+                                    <span class="geo-file-name" id="geo-file-name-display">файл не вибрано</span>
+                                    <i class="bi bi-file-earmark-arrow-up text-muted"></i>
+                                </div>
+                            </div>
+                            <textarea id="geo-modal-bulk" rows="2" class="form-control form-control-sm mb-2" placeholder="Київ&#10;50.4501,30.5234&#10;Одеса;10;Отримання" style="font-size:0.75rem;display:none;"></textarea>
+                            <button class="geo-add-btn" onclick="geoModalAddManualPoint()">
+                                <i class="bi bi-plus-circle me-2"></i>Додати локацію
+                            </button>
+                        </div>
+                        <div class="geo-map-col">
+                            <div id="geo-map" style="height:100%;width:100%;"></div>
+                            <div class="position-absolute top-0 end-0 p-2" style="z-index:1000;">
+                                <span class="badge bg-white text-dark border shadow-sm small" style="font-size:0.7rem;">Клікніть на мапу, щоб додати точку</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bottom: selected chips -->
+                    <div class="geo-chips-section">
+                        <div class="geo-section-label">ОБРАНІ ЛОКАЦІЇ:</div>
+                        <div id="geo-modal-chips" class="geo-chips-row">
+                            <span class="text-muted" style="font-size:0.82rem;">Локації не вибрані...</span>
+                        </div>
+                    </div>
+                    <!-- Apply button -->
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="geo-apply-btn" onclick="geoModalApplyFilter()">
+                            Додати у вибірку
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <datalist id="geo-city-datalist">
+        <option value="Київ"><option value="Харків"><option value="Одеса"><option value="Дніпро">
+        <option value="Львів"><option value="Запоріжжя"><option value="Вінниця"><option value="Полтава">
+        <option value="Черкаси"><option value="Чернігів"><option value="Тернопіль"><option value="Рівне">
+        <option value="Суми"><option value="Миколаїв"><option value="Хмельницький"><option value="Івано-Франківськ">
+        <option value="Ужгород"><option value="Кропивницький"><option value="Житомир"><option value="Луцьк">
+        <option value="Чернівці"><option value="Херсон"><option value="Біла Церква"><option value="Кременчук">
+        <option value="Маріуполь"><option value="Краматорськ"><option value="Бровари"><option value="Мелітополь">
+        <option value="Нікополь"><option value="Бердянськ"><option value="Павлоград"><option value="Каменець-Подільський">
+    </datalist>
+
     <!-- Save Segment Modal -->
     <div class="modal fade" id="saveSegmentModal" tabindex="-1" aria-labelledby="saveSegmentModalLabel"
         aria-hidden="true">
@@ -5492,6 +5852,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="application/json" id="excel-dimensions-embedded">
 [{"group":"1. Профіль Клієнта (B2C)","subgroup":"Ідентифікація","dimension_label":"СІД","dimension_name":"client_cid"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Ідентифікація","dimension_label":"Клієнт НПУ","dimension_name":"client_npu"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Ідентифікація","dimension_label":"ПІБ (КА)","dimension_name":"ka_full_name"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Ідентифікація","dimension_label":"Email","dimension_name":"email"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Ідентифікація","dimension_label":"Мобільний телефон","dimension_name":"phone_client"},{"group":"1. Профіль Клієнта","subgroup":"Ідентифікація","dimension_label":"Мобільний телефон","dimension_name":"phone_sender"},{"group":"1. Профіль Клієнта","subgroup":"Ідентифікація","dimension_label":"Мобільний телефон","dimension_name":"phone_recipient"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Ідентифікація","dimension_label":"Наявність додаткового телефону","dimension_name":"has_additional_phone"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Демографія","dimension_label":"Стать (розрахункова)","dimension_name":"gender"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Демографія","dimension_label":"Дата народження","dimension_name":"date_of_birth"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Демографія","dimension_label":"Вікова група","dimension_name":"age_group"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Демографія","dimension_label":"Країна клієнта","dimension_name":"client_country"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Статус клієнта","dimension_label":"Ознака співробітника","dimension_name":"is_staff"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Статус клієнта","dimension_label":"Ознака ПОБа","dimension_name":"is_pob"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Статус клієнта","dimension_label":"Ознака ЛІДа","dimension_name":"is_lid"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Верифікація","dimension_label":"Верифікація клієнта (статус)","dimension_name":"verification_status"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Верифікація","dimension_label":"Статус верифікації телефону","dimension_name":"phone_verification_status"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Верифікація","dimension_label":"Статус верифікації Email","dimension_name":"email_verification_status"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Верифікація","dimension_label":"Наявність першої верифікації клієнта NovaPay","dimension_name":"has_initial_verification_nova_pay"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Верифікація","dimension_label":"Дата верифікації клієнта","dimension_name":"verification_date"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Верифікація","dimension_label":"Остання дата верифікації","dimension_name":"last_verification_date"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація","dimension_label":"Сегмент активності","dimension_name":"activity_segment"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація","dimension_label":"RFM сегмент (загальний)","dimension_name":"rfm_segment"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація","dimension_label":"CLC сегмент","dimension_name":"clc_segment"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація","dimension_label":"CVO сегмент","dimension_name":"cvo_segment"},{"group":"2. B2B та Менеджмент","subgroup":"Сегментація","dimension_label":"Сегмент клієнта (місяць)","dimension_name":"client_segment_month"},{"group":"2. B2B та Менеджмент","subgroup":"Сегментація","dimension_label":"Сегмент клієнта (квартал)","dimension_name":"client_segment_quarter"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація за роллю","dimension_label":"RFM сегмент відправка","dimension_name":"rfm_segment_recipient"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація за роллю","dimension_label":"CLC сегмент відправка","dimension_name":"clc_segment_recipient"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація за роллю","dimension_label":"CVO сегмент відправка","dimension_name":"cvo_segment_recipient"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація за роллю","dimension_label":"RFM сегмент отримання","dimension_name":"rfm_segment_sender"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація за роллю","dimension_label":"CLC сегмент отримання","dimension_name":"clc_segment_sender"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація за роллю","dimension_label":"CVO сегмент отримання","dimension_name":"cvo_segment_sender"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація за роллю","dimension_label":"Сегмент активності за відправками","dimension_name":"activity_segment_sender"},{"group":"1. Профіль Клієнта (B2C)","subgroup":"Сегментація за роллю","dimension_label":"Сегмент активності за отриманням","dimension_name":"activity_segment_recipient"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"Тип контрагента","dimension_name":"counter_party_type"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"Категорія контрагента (Strategic, Regional...)","dimension_name":"counter_party_category"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"Бізнес тип діяльності контрагента","dimension_name":"counter_party_business_type"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"ПІБ представника","dimension_name":"representative_full_name"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"Роль представника","dimension_name":"representative_role"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"Email представника","dimension_name":"representative_email"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"ПІБ ЛПР компанії","dimension_name":"company_lpr_full_name"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"Телефон ЛПР компанії","dimension_name":"company_lpr_phone"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"Email ЛПР компанії","dimension_name":"company_lpr_email"},{"group":"2. B2B та Менеджмент","subgroup":"Профіль бізнес-клієнта","dimension_label":"Сегмент активності контрагента","dimension_name":"activity_segment_counter_party"},{"group":"2. B2B та Менеджмент","subgroup":"Управління (Менеджер)","dimension_label":"Закріплений менеджер по контрагенту","dimension_name":"counter_party_fixed_manager"},{"group":"2. B2B та Менеджмент","subgroup":"Управління (Менеджер)","dimension_label":"Відділ менеджера","dimension_name":"counter_party_fixed_manager_departement"},{"group":"2. B2B та Менеджмент","subgroup":"Управління (Менеджер)","dimension_label":"Дирекція менеджера","dimension_name":"counter_party_fixed_manager_administration"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Тип основного контрагента","dimension_name":"counter_party_type_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Код основного контрагента","dimension_name":"counter_party_code_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Код ЄДРПОУ/ІПН основного контрагента","dimension_name":"counter_party_edrpou_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Назва основного контрагента","dimension_name":"counter_party_name_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Сфера діяльності основного контрагента","dimension_name":"counter_party_group_activity_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Категорія основного контрагента","dimension_name":"counter_party_category_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Бізнес тип діяльності основного контрагента","dimension_name":"counter_party_business_type_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Веб-сайт основного контрагента","dimension_name":"counter_party_web_site_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Закріплений менеджер по основному контрагенту","dimension_name":"counter_party_fixed_manager_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Відділ менеджера основного контрагента","dimension_name":"counter_party_fixed_manager_departement_main"},{"group":"2. B2B та Менеджмент","subgroup":"Материнська компанія","dimension_label":"Дирекція менеджера основного контрагента","dimension_name":"counter_party_fixed_manager_administration_main"},{"group":"3. Параметри ЕН","subgroup":"Загальні дані","dimension_label":"Роль в ЕН (Відправник/Отримувач)","dimension_name":"user_role"},{"group":"3. Параметри ЕН","subgroup":"Загальні дані","dimension_label":"Тип сервісу","dimension_name":"service_type"},{"group":"3. Параметри ЕН","subgroup":"Загальні дані","dimension_label":"Платник","dimension_name":"payer_type"},{"group":"3. Параметри ЕН","subgroup":"Загальні дані","dimension_label":"Дата створення ЕН","dimension_name":"creation_date"},{"group":"3. Параметри ЕН","subgroup":"Загальні дані","dimension_label":"Дата закриття ЕН","dimension_name":"closing_date"},{"group":"3. Параметри ЕН","subgroup":"Загальні дані","dimension_label":"Місце створення","dimension_name":"creation_place"},{"group":"3. Параметри ЕН","subgroup":"Загальні дані","dimension_label":"Тип місця створення","dimension_name":"creation_place_type"},{"group":"3. Параметри ЕН","subgroup":"Загальні дані","dimension_label":"Тип останньої точки обслуговування","dimension_name":"last_service_point_type"},{"group":"3. Параметри ЕН","subgroup":"Тип та Категорія","dimension_label":"Вторинні ЕН","dimension_name":"secondary_en"},{"group":"3. Параметри ЕН","subgroup":"Тип та Категорія","dimension_label":"Причина повернення ЕН","dimension_name":"reason_return"},{"group":"3. Параметри ЕН","subgroup":"Тип та Категорія","dimension_label":"Вид проблеми з ЕН","dimension_name":"problem_type"},{"group":"3. Параметри ЕН","subgroup":"Тип та Категорія","dimension_label":"Категорія 1 рівень","dimension_name":"category_first_level"},{"group":"3. Параметри ЕН","subgroup":"Тип та Категорія","dimension_label":"Категорія 2 рівень","dimension_name":"category_second_level"},{"group":"3. Параметри ЕН","subgroup":"Тип та Категорія","dimension_label":"Категорія 3 рівень","dimension_name":"category_third_level"},{"group":"3. Параметри ЕН","subgroup":"Тип та Категорія","dimension_label":"Категорія 4 рівень","dimension_name":"category_fourth_level"},{"group":"3. Параметри ЕН","subgroup":"Логістика","dimension_label":"Імпорт (країна)","dimension_name":"import_country"},{"group":"3. Параметри ЕН","subgroup":"Логістика","dimension_label":"Експорт (країна)","dimension_name":"export_country"},{"group":"2. B2B та Менеджмент","subgroup":"Логістика","dimension_label":"Міжнародна доставка НПУ","dimension_name":"international_delivery_npu"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Тип (відправника/отримувача)","dimension_name":"ew_type"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"ЄДРПОУ / ІПН відправника","dimension_name":"ew_sender_edrpou"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"ЄДРПОУ / ІПН отримувача","dimension_name":"ew_recipient_edrpou"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Назва контрагента відправника","dimension_name":"ew_sender_counter_party_name"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Назва контрагента отримувача","dimension_name":"ew_recipient_counter_party_name"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Тип підрозділу відправника","dimension_name":"ew_sender_unit_type"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Тип підрозділу отримувача","dimension_name":"ew_recipient_unit_type"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Область відправника","dimension_name":"ew_sender_area"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Область отримувача","dimension_name":"ew_recipient_area"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Місто відправника","dimension_name":"ew_sender_city"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Місто отримувача","dimension_name":"ew_recipient_city"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Підрозділ (Відділення/Поштомат) відправника","dimension_name":"ew_sender_unit"},{"group":"3. Параметри ЕН","subgroup":"Відправник/Отримувач","dimension_label":"Підрозділ (Відділення/Поштомат) отримувача","dimension_name":"ew_recipient_unit"},{"group":"4. Фінанси та Вантаж","subgroup":"Характеристики вантажу","dimension_label":"Тип вантажу","dimension_name":"ew_cargo_type"},{"group":"4. Фінанси та Вантаж","subgroup":"Характеристики вантажу","dimension_label":"Опис вантажу","dimension_name":"ew_cargo_description"},{"group":"4. Фінанси та Вантаж","subgroup":"Характеристики вантажу","dimension_label":"Вага (розрахункова)","dimension_name":"ew_cargo_weight"},{"group":"4. Фінанси та Вантаж","subgroup":"Характеристики вантажу","dimension_label":"Оголошена вартість","dimension_name":"ew_cargo_declared_cost"},{"group":"4. Фінанси та Вантаж","subgroup":"Вартість та Оплата","dimension_label":"Сума по ЕН за доставку","dimension_name":"ew_delivery_price"},{"group":"4. Фінанси та Вантаж","subgroup":"Вартість та Оплата","dimension_label":"Сума за пакування","dimension_name":"ew_packaging_price"},{"group":"4. Фінанси та Вантаж","subgroup":"Вартість та Оплата","dimension_label":"Тип оплати","dimension_name":"ew_payment_method"},{"group":"4. Фінанси та Вантаж","subgroup":"Вартість та Оплата","dimension_label":"Наявність промокоду","dimension_name":"ew_promocode"},{"group":"4. Фінанси та Вантаж","subgroup":"Вартість та Оплата","dimension_label":"Наявність претензій","dimension_name":"has_claims"},{"group":"4. Фінанси та Вантаж","subgroup":"Грошовий переказ","dimension_label":"Наявність переказу","dimension_name":"has_money_transfer"},{"group":"4. Фінанси та Вантаж","subgroup":"Грошовий переказ","dimension_label":"Сума переказу","dimension_name":"money_transfer_amount"},{"group":"4. Фінанси та Вантаж","subgroup":"Додатково","dimension_label":"Ознака Маркетплейсу","dimension_name":"marketplace"},{"group":"5. Географія та Локації","subgroup":"Загальна географія","dimension_label":"Тип населеного пункту відправника","dimension_name":"sender_settlement_type"},{"group":"5. Географія та Локації","subgroup":"Загальна географія","dimension_label":"Тип населеного пункту отримувача","dimension_name":"recipient_settlement_type"},{"group":"5. Географія та Локації","subgroup":"Загальна географія","dimension_label":"Регіональний центр відправника","dimension_name":"sender_regional_center"},{"group":"5. Географія та Локації","subgroup":"Загальна географія","dimension_label":"Регіональний центр отримувача","dimension_name":"recipient_regional_center"},{"group":"5. Географія та Локації","subgroup":"Загальна географія","dimension_label":"Місто обл.центр (0/1)","dimension_name":"c_is_regional_capital_city"},{"group":"5. Географія та Локації","subgroup":"Загальна географія","dimension_label":"Місто обл.центр (0/1)","dimension_name":"b_is_regional_capital_city"},{"group":"5. Географія та Локації","subgroup":"Улюблена точка (Fav)","dimension_label":"Улюблена точка обслуговування (назва/номер)","dimension_name":"c_favorite_service_point_name_or_number"},{"group":"5. Географія та Локації","subgroup":"Улюблена точка (Fav)","dimension_label":"Улюблена точка обслуговування (назва/номер)","dimension_name":"b_favorite_service_point_name_or_number"},{"group":"5. Географія та Локації","subgroup":"Улюблена точка (Fav)","dimension_label":"Тип улюбленої точки контакту","dimension_name":"c_favorite_contact_point_type"},{"group":"5. Географія та Локації","subgroup":"Улюблена точка (Fav)","dimension_label":"Тип улюбленої точки контакту","dimension_name":"b_favorite_contact_point_type"},{"group":"5. Географія та Локації","subgroup":"Улюблена точка (Fav)","dimension_label":"Назва міста по улюбленій точці","dimension_name":"c_favorite_point_city_name"},{"group":"5. Географія та Локації","subgroup":"Улюблена точка (Fav)","dimension_label":"Назва міста по улюбленій точці","dimension_name":"b_favorite_point_city_name"},{"group":"5. Географія та Локації","subgroup":"Улюблена точка (Fav)","dimension_label":"Назва регіону по улюбленій точці","dimension_name":"c_favorite_point_region_name"},{"group":"5. Географія та Локації","subgroup":"Улюблена точка (Fav)","dimension_label":"Назва регіону по улюбленій точці","dimension_name":"b_favorite_point_region_name"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Місто останньої точки обслуговування","dimension_name":"c_last_service_point_city"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Місто останньої точки обслуговування","dimension_name":"b_last_service_point_city"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Остання точка обслуговування (назва)","dimension_name":"c_last_service_point_name"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Остання точка обслуговування (назва)","dimension_name":"b_last_service_point_name"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Тип останньої точки контакту","dimension_name":"c_last_contact_point_type"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Тип останньої точки контакту","dimension_name":"b_last_contact_point_type"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Назва міста по останній точці контакту","dimension_name":"c_last_contact_point_city_name"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Назва міста по останній точці контакту","dimension_name":"b_last_contact_point_city_name"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Назва регіону по останній точці контакту","dimension_name":"c_last_contact_point_region_name"},{"group":"5. Географія та Локації","subgroup":"Остання точка","dimension_label":"Назва регіону по останній точці контакту","dimension_name":"b_last_contact_point_region_name"},{"group":"5. Географія та Локації","subgroup":"Основні локації","dimension_label":"Місто основного відділення","dimension_name":"primary_branch_city"},{"group":"5. Географія та Локації","subgroup":"Основні локації","dimension_label":"Назва основного відділення","dimension_name":"primary_branch_name"},{"group":"5. Географія та Локації","subgroup":"Основні локації","dimension_label":"Місто основного поштомату","dimension_name":"primary_parcel_locker_city"},{"group":"5. Географія та Локації","subgroup":"Основні локації","dimension_label":"Назва основного поштомату","dimension_name":"primary_parcel_locker_name"},{"group":"5. Географія та Локації","subgroup":"Резервні локації","dimension_label":"Місто резервного відділення","dimension_name":"backup_branch_city"},{"group":"5. Географія та Локації","subgroup":"Резервні локації","dimension_label":"Назва резервного відділення","dimension_name":"backup_branch_name"},{"group":"5. Географія та Локації","subgroup":"Резервні локації","dimension_label":"Місто резервного поштомату","dimension_name":"backup_parcel_locker_city"},{"group":"5. Географія та Локації","subgroup":"Резервні локації","dimension_label":"Назва резервного поштомату","dimension_name":"backup_parcel_locker_name"},{"group":"6. Активність за Каналами","subgroup":"Транзакції (дати)","dimension_label":"Дата першої транзакції","dimension_name":"first_transaction_date"},{"group":"6. Активність за Каналами","subgroup":"Транзакції (дати)","dimension_label":"Дата останньої транзакції","dimension_name":"last_transaction_date"},{"group":"6. Активність за Каналами","subgroup":"Транзакції (дати)","dimension_label":"Днів без відправки/отримання","dimension_name":"c_days_without_sending_or_receiving"},{"group":"6. Активність за Каналами","subgroup":"Транзакції (дати)","dimension_label":"Днів без відправки/отримання","dimension_name":"b_days_without_sending_or_receiving"},{"group":"6. Активність за Каналами","subgroup":"Транзакції (дати)","dimension_label":"К-сть ЕН (загальна)","dimension_name":"c_ew_count_total"},{"group":"6. Активність за Каналами","subgroup":"Транзакції (дати)","dimension_label":"К-сть ЕН (загальна)","dimension_name":"b_ew_count_total"},{"group":"6. Активність за Каналами","subgroup":"Відділення та Поштомати","dimension_label":"Дата першої ЕН відділення","dimension_name":"first_branch_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Відділення та Поштомати","dimension_label":"Дата останньої ЕН відділення","dimension_name":"last_branch_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Відділення та Поштомати","dimension_label":"Дата першої ЕН поштомат","dimension_name":"first_parcel_locker_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Відділення та Поштомати","dimension_label":"Дата останньої ЕН поштомат","dimension_name":"last_parcel_locker_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Відділення та Поштомати","dimension_label":"Дата першої ЕН АО","dimension_name":"first_ao_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Відділення та Поштомати","dimension_label":"Дата останньої ЕН АО","dimension_name":"last_ao_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Інші канали","dimension_label":"Дата першої ЕН міжнародний напрямок","dimension_name":"first_international_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Інші канали","dimension_label":"Дата останньої ЕН міжнародний напрямок","dimension_name":"last_international_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Інші канали","dimension_label":"Дата першої ЕН Цифровий помічник","dimension_name":"first_digital_assistant_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Інші канали","dimension_label":"Дата останньої ЕН Цифровий помічник","dimension_name":"last_digital_assistant_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Специфіка B2B","dimension_label":"Фулфілмент","dimension_name":"is_fulfillment"},{"group":"6. Активність за Каналами","subgroup":"Специфіка B2B","dimension_label":"Дата першої відправленої ЕН","dimension_name":"first_sent_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Специфіка B2B","dimension_label":"Дата останньої відправленої ЕН","dimension_name":"last_sent_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Специфіка B2B","dimension_label":"Дата першої отриманої ЕН","dimension_name":"first_received_ew_date"},{"group":"6. Активність за Каналами","subgroup":"Специфіка B2B","dimension_label":"Дата останньої отриманої ЕН","dimension_name":"last_received_ew_date"},{"group":"7. Додаток та Пристрої","subgroup":"Статус додатка","dimension_label":"Користувач мобільного додатка (Так/Ні)","dimension_name":"is_mobile_app_user"},{"group":"7. Додаток та Пристрої","subgroup":"Статус додатка","dimension_label":"Наявність додатка (загальна)","dimension_name":"has_mobile_app"},{"group":"7. Додаток та Пристрої","subgroup":"Статус додатка","dimension_label":"Наявність додатка (загальна)","dimension_name":"has_mobile_app"},{"group":"7. Додаток та Пристрої","subgroup":"Статус додатка","dimension_label":"Наявність старого додатка","dimension_name":"has_old_app"},{"group":"7. Додаток та Пристрої","subgroup":"Статус додатка","dimension_label":"Наявність старого додатка","dimension_name":"has_old_app"},{"group":"7. Додаток та Пристрої","subgroup":"Статус додатка","dimension_label":"Наявність нового додатка","dimension_name":"has_new_app"},{"group":"7. Додаток та Пристрої","subgroup":"Статус додатка","dimension_label":"Наявність нового додатка","dimension_name":"has_new_app"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"Модель телефону","dimension_name":"phone_model"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"Девайс старого додатка","dimension_name":"old_app_device"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"ОС девайсу старого додатка","dimension_name":"old_app_device_os"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"Девайс нового додатка","dimension_name":"new_app_device"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"ОС девайсу нового додатка","dimension_name":"new_app_device_os"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"Мова Девайса старого додатку","dimension_name":"old_app_device_language"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"Мова старого застосунку","dimension_name":"old_app_language"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"Мова Девайса нового додатку","dimension_name":"new_app_device_language"},{"group":"7. Додаток та Пристрої","subgroup":"Технічні дані","dimension_label":"Мова нового застосунку","dimension_name":"new_app_language"},{"group":"7. Додаток та Пристрої","subgroup":"Активність в МД","dimension_label":"Дата останнього входу в старий дод.","dimension_name":"old_app_last_login_date"},{"group":"7. Додаток та Пристрої","subgroup":"Активність в МД","dimension_label":"Дата останнього входу в новий дод.","dimension_name":"new_app_last_login_date"},{"group":"7. Додаток та Пристрої","subgroup":"Активність в МД","dimension_label":"Дата першої активності в МД","dimension_name":"first_mobile_app_activity_date"},{"group":"7. Додаток та Пристрої","subgroup":"Активність в МД","dimension_label":"Дата останньої активності в МД","dimension_name":"last_mobile_app_activity_date"},{"group":"8. Сфери та Мерчанти","subgroup":"Сфера діяльності","dimension_label":"Сфера діяльності (категорія)","dimension_name":"activity_category"},{"group":"8. Сфери та Мерчанти","subgroup":"Сфера діяльності","dimension_label":"Дата першої ЕН по сфері","dimension_name":"first_activity_category_ew_date"},{"group":"8. Сфери та Мерчанти","subgroup":"Сфера діяльності","dimension_label":"Дата останньої ЕН по сфері","dimension_name":"last_activity_category_ew_date"},{"group":"8. Сфери та Мерчанти","subgroup":"Сфера діяльності","dimension_label":"К-сть ЕН по сфері","dimension_name":"activity_category_ew_count"},{"group":"8. Сфери та Мерчанти","subgroup":"Сфера діяльності","dimension_label":"Ймовірність наступної покупки в сфері _old","dimension_name":"next_purchase_probability_in_category_old"},{"group":"8. Сфери та Мерчанти","subgroup":"Сфера діяльності","dimension_label":"Ймовірність наступної покупки в сфері_new","dimension_name":"next_purchase_probability_in_category_new"},{"group":"8. Сфери та Мерчанти","subgroup":"Дані Мерчанта","dimension_label":"Код контрагента","dimension_name":"counterparty_code"},{"group":"8. Сфери та Мерчанти","subgroup":"Дані Мерчанта","dimension_label":"ЄДРПОУ контрагента","dimension_name":"counterparty_edrpou"},{"group":"8. Сфери та Мерчанти","subgroup":"Дані Мерчанта","dimension_label":"Назва контрагента","dimension_name":"counterparty_name"},{"group":"8. Сфери та Мерчанти","subgroup":"Дані Мерчанта","dimension_label":"Веб-сайт контрагента","dimension_name":"counterparty_website"},{"group":"8. Сфери та Мерчанти","subgroup":"Дані Мерчанта","dimension_label":"Дата першої ЕН по контрагенту","dimension_name":"first_counterparty_ew_date"},{"group":"8. Сфери та Мерчанти","subgroup":"Дані Мерчанта","dimension_label":"Дата останньої ЕН по контрагенту","dimension_name":"last_counterparty_ew_date"},{"group":"8. Сфери та Мерчанти","subgroup":"Дані Мерчанта","dimension_label":"К-сть ЕН по контрагенту","dimension_name":"counterparty_ew_count"},{"group":"9. Згоди та Комунікація","subgroup":"Маркетингові дозволи","dimension_label":"Згода на комун. про відкр. відд.","dimension_name":"consent_branch_opening_communications"},{"group":"9. Згоди та Комунікація","subgroup":"Маркетингові дозволи","dimension_label":"Згода на опитування","dimension_name":"consent_surveys"},{"group":"9. Згоди та Комунікація","subgroup":"Маркетингові дозволи","dimension_label":"Згода на проморозсилки","dimension_name":"consent_promotional_mailings"},{"group":"9. Згоди та Комунікація","subgroup":"Маркетингові дозволи","dimension_label":"Згода на пропозиції","dimension_name":"consent_offers"},{"group":"9. Згоди та Комунікація","subgroup":"Історія комунікацій","dimension_label":"Дата останнього промо повідомлення","dimension_name":"last_promo_message_date"}]
@@ -5515,8 +5876,9 @@
             map = L.map('map-container', { zoomControl: false }).setView([48.3794, 31.1656], 6);
             L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-            mapLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OSM'
+            mapLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+                subdomains: 'abcd', maxZoom: 20
             }).addTo(map);
 
             branchLayerGroup = L.layerGroup().addTo(map);
@@ -5611,20 +5973,24 @@
         function handleExcelUpload(event) {
             const file = event.target.files[0];
             if (!file || !map) return;
+            const ext = (file.name.split('.').pop() || '').toLowerCase();
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const content = e.target.result;
-                const lines = content.split('\n');
+            function processExcelRows(rows) {
                 let addedCount = 0;
+                rows.forEach((row, idx) => {
+                    let parts;
+                    if (Array.isArray(row)) {
+                        parts = row.map(c => String(c ?? '').trim());
+                    } else {
+                        parts = String(row).split(/[,;\t]/).map(p => p.trim());
+                    }
+                    if (parts.length < 1 || !parts[0]) return;
+                    if (idx === 0 && /location|локац|адрес|точк|коорд|target|ціль/i.test(parts[0])) return;
 
-                lines.forEach(line => {
-                    const parts = line.split(/[,;\t]/);
-                    if (parts.length < 2) return;
-
-                    const target = parts[0].trim();
-                    const radius = parseFloat(parts[1].trim());
-                    const excelTarget = parts.length >= 3 ? parts[2].trim() : null;
+                    const target = parts[0];
+                    const defaultR = parseFloat(document.getElementById('GeoRadius')?.value) || 5;
+                    const radius = parts.length >= 2 && parts[1] ? parseFloat(parts[1]) : defaultR;
+                    const excelTarget = parts.length >= 3 ? parts[2] : null;
                     if (!target || Number.isNaN(radius)) return;
 
                     const coordsParts = target.split(/\s+/);
@@ -5647,13 +6013,42 @@
                         addedCount++;
                     }
                 });
-
                 if (addedCount > 0 && selectedPoints.length > 0) {
                     map.fitBounds(L.featureGroup(selectedPoints.map(p => p.circle)).getBounds());
                     alert(`Додано ${addedCount} точок з файлу.`);
                 }
-            };
-            reader.readAsText(file);
+            }
+
+            if (ext === 'xlsx' || ext === 'xls') {
+                if (typeof XLSX === 'undefined') {
+                    alert('Бібліотека для Excel не завантажена. Спробуйте CSV/TXT або перезавантажте сторінку.');
+                    event.target.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const wb = XLSX.read(e.target.result, { type: 'array' });
+                        const ws = wb.Sheets[wb.SheetNames[0]];
+                        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false });
+                        processExcelRows(rows);
+                    } catch (err) {
+                        console.error(err);
+                        alert('Не вдалося прочитати Excel файл. Перевірте формат.');
+                    }
+                    event.target.value = '';
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const content = e.target.result;
+                    const lines = content.split('\n');
+                    processExcelRows(lines);
+                    event.target.value = '';
+                };
+                reader.readAsText(file);
+            }
         }
 
         function updateGeoSelectionUI() {
@@ -6002,7 +6397,7 @@
                 id: 'excel-' + paneId + '-' + slugHashExcel(sg + idx),
                 title: sg,
                 icon: pickSubgroupIconExcel(sg),
-                open: idx === 0,
+                open: false,
                 fields: bySubgroup.get(sg) || []
             }));
         }
@@ -6024,8 +6419,14 @@
             const segment = getActiveAudienceSegment();
 
             const seen = new Set();
-            const grpOrder = [];
-            const byGrp = new Map();
+            const mergedOrder = [];
+            const byMerged = new Map();
+            const mergedTitles = new Map();
+
+            function mergeKey(grp) {
+                const m = grp.match(/^(\d+)\.\s*/);
+                return m ? m[1] : grp;
+            }
 
             excel.forEach((row) => {
                 const grp = (row.group || '').trim();
@@ -6037,22 +6438,27 @@
                 if (segment === 'b2c' && grpUp.includes('B2B')) return;
                 if (segment === 'b2b' && grpUp.includes('B2C')) return;
 
-                const dedupe = id + '\n' + grp + '\n' + lab;
+                const key = mergeKey(grp);
+                const dedupe = id + '\n' + lab;
                 if (seen.has(dedupe)) return;
                 seen.add(dedupe);
-                if (!byGrp.has(grp)) {
-                    byGrp.set(grp, []);
-                    grpOrder.push(grp);
+                if (!byMerged.has(key)) {
+                    byMerged.set(key, []);
+                    mergedOrder.push(key);
+                    mergedTitles.set(key, grp);
                 }
-                byGrp.get(grp).push({ id, label: lab });
+                if (grp.length > (mergedTitles.get(key) || '').length) {
+                    mergedTitles.set(key, grp);
+                }
+                byMerged.get(key).push({ id, label: lab });
             });
 
-            return grpOrder.map((grp, idx) => ({
-                id: 'excel-grp-' + slugHashExcel(grp + '-' + idx),
-                title: grp,
-                icon: pickGroupIconExcel(grp),
-                open: idx === 0,
-                fields: byGrp.get(grp) || []
+            return mergedOrder.map((key, idx) => ({
+                id: 'excel-grp-' + slugHashExcel(key + '-' + idx),
+                title: mergedTitles.get(key) || key,
+                icon: pickGroupIconExcel(mergedTitles.get(key) || key),
+                open: false,
+                fields: byMerged.get(key) || []
             }));
         }
 
@@ -6060,11 +6466,10 @@
             const excel = typeof EXCEL_DIMENSION_ROWS !== 'undefined' ? EXCEL_DIMENSION_ROWS : [];
             const seen = new Set();
             excel.forEach((row) => {
-                const grp = (row.group || '').trim();
                 const id = (row.dimension_name || '').trim();
                 const lab = (row.dimension_label || id).trim();
-                if (!grp || !id) return;
-                seen.add(id + '\n' + grp + '\n' + lab);
+                if (!id) return;
+                seen.add(id + '\n' + lab);
             });
             return seen.size;
         }
@@ -10139,6 +10544,710 @@
             });
         });
     }
+
+    /* ── Geo-Targeting (modal) ── */
+    let geoMap = null;
+    let geoMapLayer = null;
+    let geoMarkers = L.layerGroup ? L.layerGroup() : null;
+    const geoPointItems = [];
+    const geoBranchItems = [];
+    const geoAddressItems = [];
+
+    let geoTempMarker = null;
+
+    function geoSwitchMode(btn) {
+        if (!btn) return;
+        btn.closest('.geo-mode-tabs').querySelectorAll('.geo-mode-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const mode = btn.dataset.geoMode;
+        document.getElementById('geo-modal-block-coords').style.display = mode === 'coords' ? 'block' : 'none';
+        document.getElementById('geo-modal-block-branches').style.display = mode === 'branches' ? 'block' : 'none';
+        document.getElementById('geo-modal-block-address').style.display = mode === 'address' ? 'block' : 'none';
+    }
+
+
+    function toggleGeoModalMode() {
+        const activeBtn = document.querySelector('.geo-mode-tab.active');
+        const mode = activeBtn?.dataset?.geoMode || 'coords';
+        document.getElementById('geo-modal-block-coords').style.display = (mode === 'coords' ? 'block' : 'none');
+        document.getElementById('geo-modal-block-branches').style.display = (mode === 'branches' ? 'block' : 'none');
+        document.getElementById('geo-modal-block-address').style.display = (mode === 'address' ? 'block' : 'none');
+    }
+
+    function geoModalGetTarget() {
+        return document.getElementById('geo-modal-target')?.selectedOptions[0]?.text || 'Відправлення';
+    }
+
+    function geoModalGetRadius() {
+        return parseFloat(document.getElementById('geo-modal-radius')?.value) || 5;
+    }
+
+    function geoModalRadiusChanged() {
+        const r = geoModalGetRadius();
+        geoPointItems.forEach(p => {
+            p.radiusKm = r;
+            const old = p.label;
+            p.label = old.replace(/\(R=[\d.]+км\)/, '(R=' + r + 'км)');
+        });
+        geoModalUpdateChips();
+        geoRedrawMarkersNoZoom();
+    }
+
+    function geoModalPushItem(label, lat, lng, radius, target) {
+        const t = target || geoModalGetTarget();
+        const renderedLabel = '[' + t + '] ' + label + ' (R=' + radius + 'км)';
+        geoPointItems.push({ label: renderedLabel, rawLabel: label, lat, lng, radiusKm: radius, target: t, id: Date.now() + Math.random() });
+        geoModalUpdateChips();
+        geoRedrawMarkers();
+    }
+
+    function geoModalUpdateChips() {
+        const chips = document.getElementById('geo-modal-chips');
+        const count = document.getElementById('geo-modal-count');
+        if (count) count.textContent = geoPointItems.length;
+        if (!chips) return;
+        if (geoPointItems.length === 0) {
+            chips.innerHTML = '<span class="text-muted" style="font-size:0.82rem;">Локації не вибрані...</span>';
+        } else {
+            chips.innerHTML = geoPointItems.map((p, i) => {
+                const typeLabel = (p.target || '').toLowerCase().includes('отримання') ? 'адреса' :
+                                  (p.rawLabel || '').match(/відд/i) ? 'відділення' : 'точка';
+                const display = escHtml(p.rawLabel || '') + (p.radiusKm ? ' (' + p.radiusKm + 'км)' : '');
+                return '<div class="geo-chip">' +
+                    '<span class="chip-text">' + typeLabel + ': ' + display + '</span>' +
+                    '<button class="chip-remove" onclick="geoModalRemoveItem(' + i + ')">&times;</button>' +
+                '</div>';
+            }).join('');
+        }
+    }
+
+    function geoModalRemoveItem(idx) {
+        geoPointItems.splice(idx, 1);
+        geoModalUpdateChips();
+        geoRedrawMarkers();
+    }
+
+    function geoClearAllModal() {
+        geoPointItems.length = 0;
+        geoModalUpdateChips();
+        if (geoMarkers) geoMarkers.clearLayers();
+        if (geoTempMarker && geoMap) { geoMap.removeLayer(geoTempMarker); geoTempMarker = null; }
+    }
+
+    function geoModalAddManualPoint() {
+        const lat = parseFloat(document.getElementById('geo-modal-lat')?.value);
+        const lng = parseFloat(document.getElementById('geo-modal-lng')?.value);
+        if (isNaN(lat) || isNaN(lng)) { alert('Введіть коректні координати!'); return; }
+        geoModalPushItem(lat.toFixed(5) + ', ' + lng.toFixed(5), lat, lng, geoModalGetRadius());
+        if (geoMap) geoMap.flyTo([lat, lng], 11, { duration: 0.5 });
+    }
+
+    function geoModalAddAddress() {
+        const addr = document.getElementById('geo-modal-address')?.value?.trim();
+        if (!addr) return;
+        const resolved = geoResolveCoords(addr);
+        geoModalPushItem(addr, resolved?.lat ?? null, resolved?.lng ?? null, geoModalGetRadius());
+        if (resolved && geoMap) geoMap.flyTo([resolved.lat, resolved.lng], 11, { duration: 0.5 });
+        document.getElementById('geo-modal-address').value = '';
+    }
+
+    function geoModalHandleBranch() {
+        const city = document.getElementById('geo-modal-city')?.value?.trim();
+        const branch = document.getElementById('geo-modal-branch-search')?.value?.trim();
+        if (!city && !branch) return;
+        const found = geoFindCity(city);
+        const lat = found ? found.lat + (Math.random() - 0.5) * 0.008 : null;
+        const lng = found ? found.lng + (Math.random() - 0.5) * 0.008 : null;
+        const label = [city, branch ? ('Відд. №' + branch) : ''].filter(Boolean).join(', ');
+        geoModalPushItem(label, lat, lng, geoModalGetRadius());
+        if (lat && lng && geoMap) geoMap.flyTo([lat, lng], 13, { duration: 0.5 });
+        document.getElementById('geo-modal-branch-search').value = '';
+    }
+
+    function geoModalAddBulk() {
+        const area = document.getElementById('geo-modal-bulk');
+        const defaultRadius = geoModalGetRadius();
+        const defaultTarget = geoModalGetTarget();
+        const lines = (area?.value || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        if (!lines.length) return;
+        let added = 0;
+        lines.forEach(line => {
+            const parsed = geoParsePointLine(line, defaultRadius);
+            if (!parsed) return;
+            geoModalPushItem(parsed.label, parsed.lat, parsed.lng, parsed.radius, parsed.target || defaultTarget);
+            added++;
+        });
+        if (area) area.value = '';
+        if (added) alert('Додано ' + added + ' точок зі списку.');
+    }
+
+    function geoModalImportFile(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const nameEl = document.getElementById('geo-file-name-display');
+        if (nameEl) nameEl.textContent = file.name;
+        const ext = (file.name.split('.').pop() || '').toLowerCase();
+        const defaultRadius = geoModalGetRadius();
+        const defaultTarget = geoModalGetTarget();
+
+        function processRows(rows) {
+            let added = 0;
+            rows.forEach((row, idx) => {
+                let parts;
+                if (Array.isArray(row)) {
+                    parts = row.map(c => String(c ?? '').trim());
+                } else {
+                    parts = String(row).split(/[,;\t]/).map(p => p.trim());
+                }
+                if (parts.length < 1 || !parts[0]) return;
+                if (idx === 0 && /location|локац|адрес|точк|коорд|target|ціль/i.test(parts[0])) return;
+                const location = parts[0];
+                const radius = parts.length >= 2 && parts[1] ? parseFloat(parts[1].replace(',', '.')) : defaultRadius;
+                const target = parts.length >= 3 && parts[2] ? parts[2] : defaultTarget;
+                if (!location || isNaN(radius)) return;
+                const resolved = geoResolveCoords(location);
+                geoModalPushItem(location, resolved?.lat ?? null, resolved?.lng ?? null, radius, target);
+                added++;
+            });
+            if (added) alert('Імпорт завершено. Додано ' + added + ' точок.');
+        }
+
+        if (ext === 'xlsx' || ext === 'xls') {
+            if (typeof XLSX === 'undefined') {
+                alert('Бібліотека для Excel не завантажена. Спробуйте CSV/TXT.');
+                event.target.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const wb = XLSX.read(e.target.result, { type: 'array' });
+                    const ws = wb.Sheets[wb.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false });
+                    processRows(rows);
+                } catch (err) { console.error(err); alert('Не вдалося прочитати файл.'); }
+                event.target.value = '';
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const rows = String(e.target.result || '').split(/\r?\n/);
+                processRows(rows);
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+    }
+
+    function geoModalApplyFilter() {
+        if (!geoPointItems.length) { alert('Спочатку виберіть хоча б одну точку!'); return; }
+        geoPointItems.forEach(item => {
+            if (typeof addEspoBlock === 'function') {
+                const cleanLabel = (item.rawLabel || '').replace(/\s*\[.*?\]\s*/g, '').replace(/\s*\(R=.*$/, '');
+                let dim = 'ew_sender_city';
+                if (item.target && item.target.includes('Отримання')) dim = 'ew_recipient_city';
+                addEspoBlock(dim, 'equals', cleanLabel);
+            }
+        });
+        const modal = bootstrap.Modal.getInstance(document.getElementById('geoTargetingModal'));
+        if (modal) modal.hide();
+        if (typeof updateState === 'function') updateState();
+        if (typeof updateFormulaView === 'function') updateFormulaView();
+    }
+
+    function initGeoMap() {
+        if (geoMap || typeof L === 'undefined') return;
+        const container = document.getElementById('geo-map');
+        if (!container) return;
+        geoMap = L.map(container, { zoomControl: false }).setView([48.3794, 31.1656], 6);
+        L.control.zoom({ position: 'bottomright' }).addTo(geoMap);
+        geoMapLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd', maxZoom: 20
+        }).addTo(geoMap);
+        geoMarkers = L.layerGroup().addTo(geoMap);
+
+        geoMap.on('click', function (e) {
+            if (geoTempMarker) geoMap.removeLayer(geoTempMarker);
+
+            const radiusVal = geoModalGetRadius();
+            const activeBtn = document.querySelector('.geo-mode-tab.active');
+            const mode = activeBtn?.dataset?.geoMode || 'coords';
+
+            const latInp = document.getElementById('geo-modal-lat');
+            const lngInp = document.getElementById('geo-modal-lng');
+            if (latInp) latInp.value = e.latlng.lat.toFixed(6);
+            if (lngInp) lngInp.value = e.latlng.lng.toFixed(6);
+
+            if (mode === 'coords') {
+                const label = e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5);
+                geoModalPushItem(label, e.latlng.lat, e.latlng.lng, radiusVal);
+            } else {
+                geoTempMarker = L.layerGroup([
+                    L.marker([e.latlng.lat, e.latlng.lng]).bindPopup(
+                        '<b>' + e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5) + '</b><br>R=' + radiusVal + ' км'
+                    ).openPopup(),
+                    L.circle([e.latlng.lat, e.latlng.lng], {
+                        radius: radiusVal * 1000,
+                        color: '#3b82f6', fillColor: '#93c5fd', fillOpacity: 0.22, weight: 2.5, dashArray: '6 3'
+                    })
+                ]).addTo(geoMap);
+            }
+        });
+    }
+
+    function geoRefreshMap() {
+        if (!geoMap) return;
+        setTimeout(() => {
+            geoMap.invalidateSize();
+            const allItems = [...geoPointItems, ...geoBranchItems, ...geoAddressItems];
+            const withCoords = allItems.filter(i => i.lat && i.lng);
+            if (withCoords.length) {
+                const bounds = L.latLngBounds(withCoords.map(i => [i.lat, i.lng]));
+                geoMap.fitBounds(bounds.pad(0.3));
+            }
+        }, 200);
+        setTimeout(() => { geoMap.invalidateSize(); }, 600);
+    }
+
+    function geoModalCityChanged(val) {
+        if (!val) return;
+        const city = geoFindCity(val);
+        if (city && geoMap) {
+            geoPreviewLocation(city.lat, city.lng, 12, city.name);
+        }
+    }
+
+    function initGeoTabs() {
+        document.querySelectorAll('.geo-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.geo-tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.geo-tab-content').forEach(c => c.classList.remove('active'));
+                const target = document.getElementById('geo-tab-' + btn.dataset.geoTab);
+                if (target) target.classList.add('active');
+            });
+        });
+    }
+
+    function geoRenderList(containerId, items) {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        if (!items.length) {
+            el.innerHTML = '<div class="text-muted text-center py-2" style="font-size:0.7rem;">Список порожній</div>';
+            return;
+        }
+        el.innerHTML = items.map((item, i) =>
+            `<div class="geo-selected-item"><span>${escHtml(item.label)}</span><button class="geo-remove-btn" onclick="geoRemoveItem('${containerId}',${i})"><i class="bi bi-x-lg"></i></button></div>`
+        ).join('');
+    }
+
+    function escHtml(s) {
+        const d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    function geoRemoveItem(containerId, idx) {
+        let arr;
+        if (containerId === 'geo-point-list') arr = geoPointItems;
+        else if (containerId === 'geo-branch-list') arr = geoBranchItems;
+        else arr = geoAddressItems;
+        arr.splice(idx, 1);
+        geoRenderList(containerId, arr);
+        geoRedrawMarkers();
+    }
+
+    function geoDrawMarkersToLayer() {
+        if (!geoMarkers || !geoMap) return [];
+        geoMarkers.clearLayers();
+        if (geoTempMarker) { geoMap.removeLayer(geoTempMarker); geoTempMarker = null; }
+        const allItems = [...geoPointItems, ...geoBranchItems, ...geoAddressItems];
+        const circles = [];
+        allItems.forEach(item => {
+            if (item.lat && item.lng) {
+                geoMarkers.addLayer(
+                    L.marker([item.lat, item.lng]).bindPopup('<b>' + item.label + '</b>')
+                );
+                if (item.radiusKm > 0) {
+                    const c = L.circle([item.lat, item.lng], {
+                        radius: item.radiusKm * 1000,
+                        color: '#ef4444', fillColor: '#fca5a5', fillOpacity: 0.22, weight: 2.5, dashArray: '6 3'
+                    });
+                    c.addTo(geoMarkers);
+                    circles.push(c);
+                }
+            }
+        });
+        return circles;
+    }
+
+    function geoRedrawMarkers() {
+        const circles = geoDrawMarkersToLayer();
+        if (!geoMap) return;
+        if (circles.length > 0) {
+            geoMap.fitBounds(L.featureGroup(circles).getBounds().pad(0.15), { maxZoom: 14 });
+        } else {
+            const withCoords = [...geoPointItems, ...geoBranchItems, ...geoAddressItems].filter(i => i.lat && i.lng);
+            if (withCoords.length === 1) {
+                geoMap.flyTo([withCoords[0].lat, withCoords[0].lng], 12, { duration: 0.5 });
+            } else if (withCoords.length > 1) {
+                geoMap.fitBounds(L.latLngBounds(withCoords.map(i => [i.lat, i.lng])).pad(0.3));
+            }
+        }
+    }
+
+    function geoRedrawMarkersNoZoom() {
+        geoDrawMarkersToLayer();
+    }
+
+    const GEO_CITY_COORDS = {
+        'Київ':[50.4501,30.5234],'Харків':[49.9935,36.2304],'Одеса':[46.4825,30.7233],
+        'Дніпро':[48.4647,35.0462],'Львів':[49.8397,24.0297],'Запоріжжя':[47.8388,35.1396],
+        'Вінниця':[49.2328,28.4816],'Полтава':[49.5883,34.5514],'Черкаси':[49.4444,32.0598],
+        'Чернігів':[51.4982,31.2893],'Тернопіль':[49.5535,25.5948],'Рівне':[50.6199,26.2516],
+        'Суми':[50.9077,34.7981],'Миколаїв':[46.975,31.9946],'Хмельницький':[49.4229,26.9871],
+        'Івано-Франківськ':[48.9226,24.7111],'Ужгород':[48.6208,22.2879],'Кропивницький':[48.5079,32.2623],
+        'Житомир':[50.2547,28.6587],'Луцьк':[50.7472,25.3254],'Чернівці':[48.2921,25.9358],
+        'Херсон':[46.6354,32.6169],'Біла Церква':[49.7989,30.1153],'Кременчук':[49.0707,33.4224],
+        'Маріуполь':[47.0958,37.5489],'Краматорськ':[48.7232,37.5556],'Бровари':[50.5119,30.7910],
+        'Мелітополь':[46.8487,35.3675],'Нікополь':[47.5719,34.3996],'Бердянськ':[46.7586,36.7984],
+        'Павлоград':[48.5331,35.8714],'Сєвєродонецьк':[48.9484,38.4933],'Каменець-Подільський':[48.6845,26.5811],
+        'Коростень':[50.9504,28.6504],'Конотоп':[51.2399,33.2048],'Шостка':[51.8599,33.4774]
+    };
+
+    const GEO_REGION_COORDS = {
+        'Вінницька':[49.23,28.47,8],'Волинська':[50.75,25.33,8],'Дніпропетровська':[48.46,35.05,8],
+        'Донецька':[48.00,37.80,8],'Житомирська':[50.25,28.66,8],'Закарпатська':[48.62,22.29,8],
+        'Запорізька':[47.84,35.14,8],'Івано-Франківська':[48.92,24.71,8],'Київська':[50.45,30.52,8],
+        'Кіровоградська':[48.51,32.26,8],'Луганська':[48.57,39.31,8],'Львівська':[49.84,24.03,8],
+        'Миколаївська':[46.97,31.99,8],'Одеська':[46.48,30.72,8],'Полтавська':[49.59,34.55,8],
+        'Рівненська':[50.62,26.25,8],'Сумська':[50.91,34.80,8],'Тернопільська':[49.55,25.59,8],
+        'Харківська':[49.99,36.23,8],'Херсонська':[46.64,32.62,8],'Хмельницька':[49.42,26.99,8],
+        'Черкаська':[49.44,32.06,8],'Чернівецька':[48.29,25.94,8],'Чернігівська':[51.50,31.29,8],
+        'м. Київ':[50.4501,30.5234,11]
+    };
+
+    function geoPreviewLocation(lat, lng, zoom, label) {
+        if (!geoMap) return;
+        if (geoTempMarker) { geoMap.removeLayer(geoTempMarker); geoTempMarker = null; }
+        geoTempMarker = L.layerGroup([
+            L.marker([lat, lng]).bindPopup('<b>' + escHtml(label) + '</b>').openPopup()
+        ]).addTo(geoMap);
+        geoMap.flyTo([lat, lng], zoom || 10, { duration: 0.6 });
+    }
+
+    function geoFindCity(text) {
+        if (!text) return null;
+        const t = text.toLowerCase().trim();
+        for (const [name, coords] of Object.entries(GEO_CITY_COORDS)) {
+            if (t === name.toLowerCase() || t.includes(name.toLowerCase())) return { name, lat: coords[0], lng: coords[1] };
+        }
+        return null;
+    }
+
+    function geoFindRegion(text) {
+        if (!text) return null;
+        return GEO_REGION_COORDS[text] || null;
+    }
+
+    function geoResolveCoords(text) {
+        if (!text) return null;
+        const cm = text.match(/(-?\d+[.,]\d+)\s*[,;\s]\s*(-?\d+[.,]\d+)/);
+        if (cm) return { lat: parseFloat(cm[1].replace(',','.')), lng: parseFloat(cm[2].replace(',','.')) };
+        const city = geoFindCity(text);
+        if (city) return { lat: city.lat, lng: city.lng };
+        return null;
+    }
+
+    function geoAddPoint() {
+        const addr = document.getElementById('geo-point-address')?.value?.trim();
+        const radius = parseFloat(document.getElementById('geo-point-radius')?.value) || 5;
+        if (!addr) return;
+
+        const resolved = geoResolveCoords(addr);
+        const lat = resolved?.lat ?? null;
+        const lng = resolved?.lng ?? null;
+
+        geoPushPointItem(addr, lat, lng, radius);
+        if (lat && lng && geoMap) geoMap.flyTo([lat, lng], 11, { duration: 0.5 });
+        document.getElementById('geo-point-address').value = '';
+    }
+
+    function geoPushPointItem(label, lat, lng, radius, target) {
+        const targetLabel = target || document.getElementById('geo-point-target')?.selectedOptions[0]?.text || 'Відправлення';
+        const renderedLabel = '[' + targetLabel + '] ' + label + ' (R=' + radius + 'км)';
+        geoPointItems.push({ label: renderedLabel, rawLabel: label, lat, lng, radiusKm: radius, target: targetLabel });
+        geoRenderList('geo-point-list', geoPointItems);
+        geoRedrawMarkers();
+    }
+
+    function geoParsePointLine(line, defaultRadius) {
+        const text = String(line || '').trim();
+        if (!text) return null;
+        const parts = text.split(/[;\t]/).map(p => p.trim()).filter(Boolean);
+        const location = parts[0] || '';
+        const radiusRaw = parts[1] || '';
+        const targetRaw = parts[2] || '';
+        const radius = radiusRaw ? parseFloat(radiusRaw.replace(',', '.')) : defaultRadius;
+        if (!location || Number.isNaN(radius)) return null;
+        const resolved = geoResolveCoords(location);
+        return {
+            label: location,
+            lat: resolved?.lat ?? null,
+            lng: resolved?.lng ?? null,
+            radius,
+            target: targetRaw || null
+        };
+    }
+
+    function geoAddPointBulk() {
+        const area = document.getElementById('geo-point-bulk');
+        const defaultRadius = parseFloat(document.getElementById('geo-point-radius')?.value) || 5;
+        const lines = (area?.value || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        if (!lines.length) return;
+        let added = 0;
+        lines.forEach(line => {
+            const parsed = geoParsePointLine(line, defaultRadius);
+            if (!parsed) return;
+            geoPushPointItem(parsed.label, parsed.lat, parsed.lng, parsed.radius, parsed.target);
+            added++;
+        });
+        if (area) area.value = '';
+        if (added) alert('Додано ' + added + ' точок зі списку.');
+    }
+
+    function geoOpenPointImportDialog() {
+        document.getElementById('geo-point-import-file')?.click();
+    }
+
+    function geoImportPointsFromRows(rows) {
+        const defaultRadius = parseFloat(document.getElementById('geo-point-radius')?.value) || 5;
+        let added = 0;
+        rows.forEach((row, idx) => {
+            if (!Array.isArray(row) || !row.length) return;
+            const firstCol = String(row[0] ?? '').trim();
+            const secondCol = String(row[1] ?? '').trim();
+            const thirdCol = String(row[2] ?? '').trim();
+            if (!firstCol) return;
+            if (idx === 0 && /location|локац|адрес|точк|коорд|target|ціль/i.test(firstCol)) return;
+            const sourceLine = secondCol ? (firstCol + ';' + secondCol) : firstCol;
+            const parsed = geoParsePointLine(sourceLine, defaultRadius);
+            if (!parsed) return;
+            geoPushPointItem(parsed.label, parsed.lat, parsed.lng, parsed.radius, thirdCol || parsed.target);
+            added++;
+        });
+        return added;
+    }
+
+    function geoImportPointsFile(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const ext = (file.name.split('.').pop() || '').toLowerCase();
+
+        if (ext === 'xlsx') {
+            if (typeof XLSX === 'undefined') {
+                alert('Бібліотека для XLSX не завантажена. Використайте CSV/TXT або перезавантажте сторінку.');
+                event.target.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const wb = XLSX.read(e.target.result, { type: 'array' });
+                    const firstSheetName = wb.SheetNames[0];
+                    const ws = wb.Sheets[firstSheetName];
+                    const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false });
+                    const added = geoImportPointsFromRows(rows);
+                    alert('Імпорт завершено. Додано ' + added + ' точок.');
+                } catch (err) {
+                    console.error(err);
+                    alert('Не вдалося прочитати XLSX. Перевірте формат файлу.');
+                }
+                event.target.value = '';
+            };
+            reader.readAsArrayBuffer(file);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const text = String(e.target.result || '');
+            const rows = text
+                .split(/\r?\n/)
+                .map(line => line.split(/[,;\t]/));
+            const added = geoImportPointsFromRows(rows);
+            alert('Імпорт завершено. Додано ' + added + ' точок.');
+            event.target.value = '';
+        };
+        reader.readAsText(file);
+    }
+
+    function geoAddBranch() {
+        const region = document.getElementById('geo-branch-region')?.value?.trim();
+        const city = document.getElementById('geo-branch-city')?.value?.trim();
+        const num = document.getElementById('geo-branch-number')?.value?.trim();
+        const radius = parseFloat(document.getElementById('geo-branch-radius')?.value) || 0;
+        if (!city && !region && !num) return;
+
+        let lat = null, lng = null;
+        const found = geoFindCity(city);
+        if (found) {
+            lat = found.lat + (Math.random() - 0.5) * 0.008;
+            lng = found.lng + (Math.random() - 0.5) * 0.008;
+        } else if (region) {
+            const rc = geoFindRegion(region);
+            if (rc) { lat = rc[0]; lng = rc[1]; }
+        }
+
+        const parts = [region, city, num ? ('Відд. №' + num) : ''].filter(Boolean);
+        geoBranchItems.push({ label: parts.join(', ') + (radius ? ' (R=' + radius + 'км)' : ''), lat, lng, radiusKm: radius });
+        geoRenderList('geo-branch-list', geoBranchItems);
+        geoRedrawMarkers();
+        if (lat && lng && geoMap) geoMap.flyTo([lat, lng], 13, { duration: 0.5 });
+        document.getElementById('geo-branch-city').value = '';
+        document.getElementById('geo-branch-number').value = '';
+    }
+
+    function geoAddAddress() {
+        const region = document.getElementById('geo-addr-region')?.value?.trim();
+        const city = document.getElementById('geo-addr-city')?.value?.trim();
+        const street = document.getElementById('geo-addr-street')?.value?.trim();
+        const house = document.getElementById('geo-addr-house')?.value?.trim();
+        const radius = parseFloat(document.getElementById('geo-addr-radius')?.value) || 1;
+        if (!city && !street) return;
+
+        let lat = null, lng = null;
+        const found = geoFindCity(city);
+        if (found) {
+            lat = found.lat + (Math.random() - 0.5) * 0.005;
+            lng = found.lng + (Math.random() - 0.5) * 0.005;
+        } else if (region) {
+            const rc = geoFindRegion(region);
+            if (rc) { lat = rc[0]; lng = rc[1]; }
+        }
+
+        const parts = [region, city, street, house].filter(Boolean);
+        geoAddressItems.push({ label: parts.join(', ') + ' (R=' + radius + 'км)', lat, lng, radiusKm: radius });
+        geoRenderList('geo-address-list', geoAddressItems);
+        geoRedrawMarkers();
+        if (lat && lng && geoMap) geoMap.flyTo([lat, lng], 14, { duration: 0.5 });
+        document.getElementById('geo-addr-city').value = '';
+        document.getElementById('geo-addr-street').value = '';
+        document.getElementById('geo-addr-house').value = '';
+    }
+
+    function initGeoLivePreview() {
+        const pointAddr = document.getElementById('geo-point-address');
+        if (pointAddr) {
+            let debounce = null;
+            pointAddr.addEventListener('input', () => {
+                clearTimeout(debounce);
+                debounce = setTimeout(() => {
+                    const val = pointAddr.value.trim();
+                    const resolved = geoResolveCoords(val);
+                    if (resolved) {
+                        const r = parseFloat(document.getElementById('geo-point-radius')?.value) || 5;
+                        if (geoTempMarker) geoMap.removeLayer(geoTempMarker);
+                        geoTempMarker = L.layerGroup([
+                            L.marker([resolved.lat, resolved.lng]).bindPopup('<b>' + escHtml(val) + '</b>').openPopup(),
+                            L.circle([resolved.lat, resolved.lng], { radius: r * 1000, color: '#3b82f6', fillColor: '#93c5fd', fillOpacity: 0.15, weight: 2, dashArray: '6 4' })
+                        ]).addTo(geoMap);
+                        geoMap.flyTo([resolved.lat, resolved.lng], 11, { duration: 0.5 });
+                    }
+                }, 400);
+            });
+        }
+
+        const branchRegion = document.getElementById('geo-branch-region');
+        const branchCity = document.getElementById('geo-branch-city');
+        if (branchRegion) {
+            branchRegion.addEventListener('change', () => {
+                const val = branchRegion.value;
+                const rc = geoFindRegion(val);
+                if (rc) geoPreviewLocation(rc[0], rc[1], rc[2], val);
+            });
+        }
+        if (branchCity) {
+            let debounce = null;
+            branchCity.addEventListener('input', () => {
+                clearTimeout(debounce);
+                debounce = setTimeout(() => {
+                    const found = geoFindCity(branchCity.value);
+                    if (found) geoPreviewLocation(found.lat, found.lng, 12, found.name);
+                }, 400);
+            });
+        }
+
+        const addrRegion = document.getElementById('geo-addr-region');
+        const addrCity = document.getElementById('geo-addr-city');
+        if (addrRegion) {
+            addrRegion.addEventListener('change', () => {
+                const val = addrRegion.value;
+                const rc = geoFindRegion(val);
+                if (rc) geoPreviewLocation(rc[0], rc[1], rc[2], val);
+            });
+        }
+        if (addrCity) {
+            let debounce = null;
+            addrCity.addEventListener('input', () => {
+                clearTimeout(debounce);
+                debounce = setTimeout(() => {
+                    const found = geoFindCity(addrCity.value);
+                    if (found) geoPreviewLocation(found.lat, found.lng, 12, found.name);
+                }, 400);
+            });
+        }
+
+        const divisionSel = document.getElementById('geo-point-division');
+        if (divisionSel) {
+            divisionSel.addEventListener('change', () => {
+                const divMap = {
+                    'Центральний': [49.45, 31.5, 7], 'Західний': [49.2, 25.0, 7],
+                    'Східний': [48.8, 36.5, 7], 'Південний': [47.0, 33.0, 7], 'Північний': [51.0, 30.5, 7]
+                };
+                const c = divMap[divisionSel.value];
+                if (c) geoPreviewLocation(c[0], c[1], c[2], divisionSel.value + ' дивізіон');
+            });
+        }
+    }
+
+    function geoApplyToFilters(tabType) {
+        let items;
+        if (tabType === 'point') items = geoPointItems;
+        else if (tabType === 'branch') items = geoBranchItems;
+        else items = geoAddressItems;
+
+        if (!items.length) return;
+
+        items.forEach(item => {
+            if (item.lat && item.lng) {
+                if (typeof addEspoBlock === 'function') {
+                    const cleanLabel = (item.rawLabel || item.label).replace(/\s*\[.*?\]\s*/g, '').replace(/\s*\(R=.*$/, '');
+                    let dim = 'ew_sender_city';
+                    if (item.target && item.target.includes('Отримання')) dim = 'ew_recipient_city';
+                    addEspoBlock(dim, 'equals', cleanLabel);
+                }
+            }
+        });
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('geoTargetingModal'));
+        if (modal) modal.hide();
+        if (typeof updateState === 'function') updateState();
+        if (typeof updateFormulaView === 'function') updateFormulaView();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const geoModal = document.getElementById('geoTargetingModal');
+        if (geoModal) {
+            geoModal.addEventListener('shown.bs.modal', () => {
+                if (!geoMap) initGeoMap();
+                geoRefreshMap();
+                geoModalUpdateChips();
+            });
+        }
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
         ensureCsvBaselineLayout();
