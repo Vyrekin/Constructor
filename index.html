@@ -2797,11 +2797,6 @@
             align-items: start;
         }
 
-        .reborn-ui #view-constructor>div:first-child {
-            grid-column: 1 / -1;
-            margin-bottom: 0 !important;
-        }
-
         .reborn-ui #active-filters-summary {
             grid-column: 2;
             grid-row: 2;
@@ -3511,10 +3506,43 @@
             background-color: var(--tz-primary-btn) !important;
         }
 
-        .reborn-ui #view-constructor h5.fw-bold {
-            font-size: 2.05rem;
+        .reborn-ui .app-header-product-title {
+            font-size: 1.25rem;
             letter-spacing: -0.2px;
             margin-bottom: 0;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 1200px) {
+            .reborn-ui .app-header-product-title {
+                font-size: 1.45rem;
+            }
+        }
+
+        .reborn-ui .header-toolbar-audience {
+            display: none;
+            align-items: center;
+        }
+
+        body.reborn-ui.reborn-view-constructor .header-toolbar-audience {
+            display: inline-flex;
+        }
+
+        .reborn-ui .header-templates-figma {
+            display: none !important;
+        }
+
+        body.reborn-ui.reborn-view-constructor .header-templates-figma {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        body.reborn-ui.reborn-view-constructor .header-templates-icon {
+            display: none !important;
         }
 
         .reborn-ui .reset-all-btn {
@@ -3778,16 +3806,12 @@
             .reborn-ui .formula-card h6.fw-bold.mb-0 {
                 font-size: 1.25rem;
             }
-            .reborn-ui #view-constructor h5.fw-bold {
-                font-size: 1.6rem;
+            .reborn-ui .app-header-product-title {
+                font-size: 1.2rem;
             }
             .reborn-ui .figma-top-segments .seg {
                 padding: 5px 10px;
                 font-size: 0.75rem;
-            }
-            .reborn-ui .reset-all-btn {
-                font-size: 0.78rem !important;
-                padding: 5px 10px !important;
             }
         }
 
@@ -3838,18 +3862,22 @@
             .reborn-ui .np-global-nav .np-brand {
                 font-size: 1.2rem;
             }
-            .reborn-ui #view-constructor h5.fw-bold {
-                font-size: 1.3rem;
+            .reborn-ui .app-header-product-title {
+                font-size: 1.15rem;
+                white-space: normal;
             }
             .reborn-ui .formula-card h6.fw-bold.mb-0 {
                 font-size: 1.15rem;
             }
-            .reborn-ui .constructor-page-heading .d-flex {
-                flex-wrap: wrap;
+            .reborn-ui .header-title-segments-wrap {
+                flex-direction: column;
+                align-items: flex-start;
                 gap: 8px;
             }
-            .reborn-ui .figma-top-segments {
-                order: 3;
+            .reborn-ui .header-toolbar-audience {
+                width: 100%;
+            }
+            .reborn-ui .header-toolbar-audience .figma-top-segments {
                 width: 100%;
                 justify-content: center;
             }
@@ -3858,9 +3886,6 @@
                 text-align: center;
                 padding: 6px 8px;
                 font-size: 0.75rem;
-            }
-            .reborn-ui .reset-all-btn {
-                order: 2;
             }
             .reborn-ui .condition-block {
                 flex-direction: column;
@@ -3897,8 +3922,8 @@
                 padding-left: 8px !important;
                 padding-right: 8px !important;
             }
-            .reborn-ui #view-constructor h5.fw-bold {
-                font-size: 1.15rem;
+            .reborn-ui .app-header-product-title {
+                font-size: 1.05rem;
             }
             .reborn-ui .formula-card {
                 padding: 10px;
@@ -4017,7 +4042,7 @@
     </style>
 </head>
 
-<body class="reborn-ui">
+<body class="reborn-ui reborn-view-constructor">
     <div class="np-global-nav">
         <div class="d-flex align-items-center">
             <div class="np-brand">НОВА ПОШТА</div>
@@ -4049,13 +4074,23 @@
 
     <header class="app-header">
         <div class="container-fluid px-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 py-1 app-header-inner">
+                <div class="d-flex align-items-center gap-3 flex-shrink-1 min-w-0 header-brand-cluster">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
                         style="width:40px; height:40px; box-shadow: 0 5px 15px rgba(67,97,238,0.3);">
                         <i class="bi bi-layers-fill"></i>
                     </div>
-                    <h4 class="mb-0 fw-bold" style="color: var(--text-main);">Конструктор вибірок</h4>
+                    <div class="d-flex align-items-center gap-2 gap-sm-3 flex-wrap min-w-0 header-title-segments-wrap">
+                        <h4 class="mb-0 fw-bold app-header-product-title" style="color: var(--text-main);">Конструктор вибірок</h4>
+                        <div class="header-toolbar-audience">
+                            <div class="figma-top-segments" role="tablist" aria-label="Сегмент аудиторії">
+                                <span class="seg" data-audience-segment="b2b" role="button" tabindex="0">B2B</span>
+                                <span class="seg active" data-audience-segment="b2c" role="button" tabindex="0">B2C</span>
+                                <span class="seg" data-audience-segment="senders" role="button" tabindex="0">Відправники</span>
+                                <span class="seg" data-audience-segment="recipients" role="button" tabindex="0">Одержувачі</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="header-main-row flex-grow-1 d-flex justify-content-center">
@@ -4091,9 +4126,18 @@
                         <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
                     </button>
 
-                    <!-- My Segments (New Location) -->
+                    <!-- My Segments / Шаблони (Figma: підпис на екрані конструктора) -->
                     <div class="dropdown">
-                        <button class="btn btn-outline-primary border-0 p-2 position-relative" type="button"
+                        <button class="btn btn-primary btn-sm rounded-pill px-3 py-2 header-templates-figma position-relative" type="button"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside" title="Шаблони та збережені сегменти">
+                            <i class="bi bi-bookmark-fill"></i> Шаблони
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
+                                id="segments-badge-figma" style="display:none">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>
+                        </button>
+                        <button class="btn btn-outline-primary border-0 p-2 position-relative header-templates-icon" type="button"
                             data-bs-toggle="dropdown" data-bs-auto-close="outside" title="Мої сегменти">
                             <i class="bi bi-bookmark-star-fill fs-4"></i>
                             <span
@@ -4170,24 +4214,6 @@
 
                 <!-- VIEW 1: CONSTRUCTOR -->
                 <div id="view-constructor" class="view-section">
-                    <div class="constructor-page-heading mb-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center gap-3">
-                                <h5 class="fw-bold mb-0">Конструктор вибірок</h5>
-                                <div class="figma-top-segments" role="tablist" aria-label="Сегмент аудиторії">
-                                    <span class="seg" data-audience-segment="b2b" role="button" tabindex="0">B2B</span>
-                                    <span class="seg active" data-audience-segment="b2c" role="button" tabindex="0">B2C</span>
-                                    <span class="seg" data-audience-segment="senders" role="button" tabindex="0">Відправники</span>
-                                    <span class="seg" data-audience-segment="recipients" role="button" tabindex="0">Одержувачі</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-sm btn-outline-danger btn-light border-0 text-danger reset-all-btn"
-                                onclick="clearFilters()">
-                                <i class="bi bi-trash3 me-1"></i>Скинути все
-                            </button>
-                        </div>
-                    </div>
-
                     <!-- Active Filters Area -->
                     <div id="active-filters-summary" class="mb-3">
                         <div class="formula-card" id="main-formula-card">
@@ -5295,6 +5321,10 @@
                                         class="btn btn-sm btn-outline-primary border rounded-pill px-3 bg-white text-nowrap"
                                         onclick="fillAiPrompt('Відправники з Одеси, вантаж > 30кг')">🚛 Вантажні
                                         Одеса</button>
+                                    <button
+                                        class="btn btn-sm btn-outline-primary border rounded-pill px-3 bg-white text-nowrap"
+                                        onclick="fillAiPrompt('Відділення №12 Львів, радіус 5 км на карті + додай з карти')">📍
+                                        Гео + карта</button>
                                 </div>
 
                                 <button
@@ -5719,12 +5749,14 @@
                             <!-- Branches mode -->
                             <div id="geo-modal-block-branches" style="display:none;">
                                 <div class="geo-input-group">
-                                    <label>Пошук міста/відділення</label>
-                                    <input class="form-control form-control-sm mb-2" list="geo-city-datalist" id="geo-modal-city" placeholder="Місто..." onchange="geoModalCityChanged(this.value)">
+                                    <label>Місто (довідник «Нова пошта»)</label>
+                                    <input class="form-control form-control-sm mb-2" list="geo-city-datalist" id="geo-modal-city" placeholder="Оберіть або введіть місто..." onchange="geoModalCityChanged(this.value)" oninput="geoModalCityInputDebounced(this.value)">
+                                    <label>Відділення / поштомат</label>
                                     <div class="input-group input-group-sm">
-                                        <input class="form-control" id="geo-modal-branch-search" placeholder="Відділення №...">
+                                        <input class="form-control" id="geo-modal-branch-search" list="geo-np-warehouse-datalist" placeholder="№ відділення або вулиця..." autocomplete="off">
                                         <button class="btn btn-outline-primary" onclick="geoModalHandleBranch()"><i class="bi bi-plus-lg"></i></button>
                                     </div>
+                                    <div id="geo-np-branch-status" class="text-muted mt-1" style="font-size:0.68rem;min-height:1.1em;"></div>
                                 </div>
                             </div>
                             <!-- Address mode -->
@@ -5756,14 +5788,14 @@
                                 </div>
                             </div>
                             <textarea id="geo-modal-bulk" rows="2" class="form-control form-control-sm mb-2" placeholder="Київ&#10;50.4501,30.5234&#10;Одеса;10;Отримання" style="font-size:0.75rem;display:none;"></textarea>
-                            <button class="geo-add-btn" onclick="geoModalAddManualPoint()">
+                            <button type="button" class="geo-add-btn" onclick="geoModalAddActiveTab()">
                                 <i class="bi bi-plus-circle me-2"></i>Додати локацію
                             </button>
                         </div>
                         <div class="geo-map-col">
                             <div id="geo-map" style="height:100%;width:100%;"></div>
                             <div class="position-absolute top-0 end-0 p-2" style="z-index:1000;">
-                                <span class="badge bg-white text-dark border shadow-sm small" style="font-size:0.7rem;">Клікніть на мапу, щоб додати точку</span>
+                                <span class="badge bg-white text-dark border shadow-sm small" style="font-size:0.65rem;max-width:260px;white-space:normal;text-align:left;line-height:1.25;">Точка: введіть широту/довготу або клік на мапі — коло й маркер оновлюються одразу; «Додати локацію» — у список. Відділення — блакитний перегляд радіуса до додавання.</span>
                             </div>
                         </div>
                     </div>
@@ -5795,6 +5827,7 @@
         <option value="Маріуполь"><option value="Краматорськ"><option value="Бровари"><option value="Мелітополь">
         <option value="Нікополь"><option value="Бердянськ"><option value="Павлоград"><option value="Каменець-Подільський">
     </datalist>
+    <datalist id="geo-np-warehouse-datalist"></datalist>
 
     <!-- Save Segment Modal -->
     <div class="modal fade" id="saveSegmentModal" tabindex="-1" aria-labelledby="saveSegmentModalLabel"
@@ -8186,6 +8219,9 @@
         // --- 4. LOOK-A-LIKE / AI LOGIC ---
         // --- NEW VIEW SWITCHING ---
         function switchView(viewId) {
+            document.body.classList.remove('reborn-view-constructor', 'reborn-view-lookalike', 'reborn-view-ai');
+            document.body.classList.add('reborn-view-' + viewId);
+
             // Updated Nav Pias
             document.querySelectorAll('#app-views-nav .nav-link').forEach(btn => btn.classList.remove('active'));
             const navBtn = document.getElementById('nav-btn-' + viewId);
@@ -8233,7 +8269,7 @@
                     panel.innerHTML = `
                         <div class="ai-panel-header"><i class="bi bi-stars"></i> AI Помічник</div>
                         <textarea id="ai-inline-prompt" class="ai-panel-input" rows="3"
-                            placeholder="Опишіть цільову аудиторію, наприклад:\n• Жінки від 25 до 45 років, що відправляли з Одеси в Київ\n• Активні чоловіки з iPhone, RFM A\n• VIP клієнти без додатка, вага більше 30кг"></textarea>
+                            placeholder="Опишіть аудиторію або гео, наприклад:\n• Клієнти біля відділення №12 у Львові, радіус 3 км\n• 50.450100, 30.523400; радіус 5 км (точка на карті)\n• Додай з карти — підтягне обрані точки з гео-модалки / мапи"></textarea>
                         <div class="ai-panel-actions">
                             <button class="ai-panel-apply" onclick="executeAiQuery()"><i class="bi bi-magic"></i> Застосувати</button>
                             <button class="ai-panel-close" onclick="openAiMode()"><i class="bi bi-x-lg"></i></button>
@@ -8244,6 +8280,8 @@
                             <span class="ai-example" onclick="setAiExample(this)">Активні чоловіки з iPhone RFM A</span>
                             <span class="ai-example" onclick="setAiExample(this)">VIP відправники без додатка більше 100 посилок</span>
                             <span class="ai-example" onclick="setAiExample(this)">Неактивні клієнти з Харкова без верифікації</span>
+                            <span class="ai-example" onclick="setAiExample(this)">Відділення №45 Одеса, отримувачі, поштомат у Києві</span>
+                            <span class="ai-example" onclick="setAiExample(this)">50.4501, 30.5234 радіус 7 км на карті + додай з карти</span>
                         </div>`;
                     wrap.parentElement.insertBefore(panel, wrap.nextSibling);
                     document.getElementById('ai-inline-prompt').addEventListener('keydown', (e) => {
@@ -8263,19 +8301,48 @@
             if (prompt) { prompt.value = el.textContent; prompt.focus(); }
         }
 
+        /** Точки зі старої мапи (конструктор) — для AI «з карти» */
+        function collectLegacyMapGeoForAi() {
+            if (!selectedPoints || !selectedPoints.length) return [];
+            const desc = selectedPoints.map(p => `${p.label} (${p.radius}км)`).join('; ');
+            return [{
+                id: 'GeoLocation',
+                label: 'Географія (гео-таргетинг на карті)',
+                value: desc,
+                zone: window.currentFilterMode || 'Include',
+                fieldOp: null
+            }];
+        }
+
         function executeAiQuery() {
             const prompt = document.getElementById('ai-inline-prompt');
             const text = (prompt?.value || '').trim();
             if (!text) return;
 
-            const results = parseAiNaturalLanguage(text);
+            const wantsSavedGeo = /(?:^|[\s,.;])(\+?\s*обран(е|і)\s+гео|з\s+карт(?:и)?|с\s+карт(?:и)?|з\s+мап(?:и)?|гео\s+з\s+модал|з\s+модал(?:к[и]?)?\s+гео|обран(і|их)\s+точк|поточн\w*\s+гео|додай\s+обране\s+гео|додай\s+гео\s+з|включи\s+гео\s+з)/i.test(text);
+
+            let results = parseAiNaturalLanguage(text);
+            if (wantsSavedGeo) {
+                const seen = new Set(results.map(r => `${r.id}::${r.value}::${r.zone || 'Include'}`));
+                const append = (arr) => {
+                    (arr || []).forEach((r) => {
+                        const k = `${r.id}::${r.value}::${r.zone || 'Include'}`;
+                        if (seen.has(k)) return;
+                        seen.add(k);
+                        results.push(r);
+                    });
+                };
+                if (typeof window.collectGeoSelectionsForAi === 'function') append(window.collectGeoSelectionsForAi());
+                append(collectLegacyMapGeoForAi());
+            }
+
             const feedback = document.getElementById('ai-panel-feedback');
 
             if (!results.length) {
                 if (feedback) {
                     feedback.style.display = '';
                     feedback.className = 'ai-panel-feedback ai-feedback-warn';
-                    feedback.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Не вдалось розпізнати параметри. Спробуйте уточнити запит.';
+                    feedback.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Не вдалось розпізнати параметри. Спробуйте уточнити запит (місто, вік, координати, відділення або фразу «з карти» для обраного гео).';
                     setTimeout(() => { feedback.style.display = 'none'; }, 4000);
                 }
                 return;
@@ -8603,6 +8670,66 @@
             areaMap.forEach(([re, area]) => {
                 if (re.test(raw)) add('ew_sender_area', 'Область', area, 'Include');
             });
+
+            /* ============================================================
+             *  GEO-TARGETING — координати, радіус, відділення, поштомат, дивізіон
+             * ============================================================ */
+            const isRecvGeoCtx = has('отримувач', 'отримувачі', 'отримувача', 'одержувач', 'отриман', 'одержан', 'для отримувач', 'отримання');
+            const geoUnitId = isRecvGeoCtx ? 'ew_recipient_unit' : 'ew_sender_unit';
+            const geoUnitLbl = isRecvGeoCtx ? 'Підрозділ (Відділення/Поштомат) отримувача' : 'Підрозділ (Відділення/Поштомат) відправника';
+
+            const coordPair = raw.match(/(\d{1,2}[.,]\d{4,})\s*[,;]\s*(\d{1,2}[.,]\d{4,})/)
+                || raw.match(/(\d{1,2}[.,]\d{4,})\s+(\d{1,2}[.,]\d{4,})/);
+            if (coordPair) {
+                const lat = parseFloat(coordPair[1].replace(',', '.'));
+                const lng = parseFloat(coordPair[2].replace(',', '.'));
+                if (isFinite(lat) && isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
+                    let rKm = 5;
+                    const r1 = raw.match(/(?:радіус|радиус|radius|\br\b)\s*[:=]?\s*(\d{1,3})\s*(?:км|km)?/);
+                    const r2 = raw.match(/в\s+(?:радіусі\s+)?(\d{1,3})\s*км/);
+                    const r3 = raw.match(/на\s+відстані\s+(\d{1,3})\s*км/);
+                    if (r1) rKm = parseInt(r1[1], 10);
+                    else if (r2) rKm = parseInt(r2[1], 10);
+                    else if (r3) rKm = parseInt(r3[1], 10);
+                    else {
+                        const g = parseFloat(document.getElementById('GeoRadius')?.value || '');
+                        const gm = parseFloat(document.getElementById('geo-modal-radius')?.value || '');
+                        if (isFinite(g) && g > 0) rKm = g;
+                        else if (isFinite(gm) && gm > 0) rKm = gm;
+                    }
+                    add('GeoLocation', 'Географія (гео-таргетинг на карті)', `${lat.toFixed(6)}, ${lng.toFixed(6)}; R=${rKm} км`, 'Include');
+                }
+            }
+
+            const brMatch = raw.match(/(?:відділен(?:ня|ні|ь|ю)|отделен(?:ие|ия|ь|ю))\w*\s*(?:№|номер\w*)?\s*(\d{1,4})\b/);
+            if (brMatch) {
+                const cityU = detectCity(raw);
+                const v = cityU ? `№${brMatch[1]} — ${cityU}` : `№${brMatch[1]}`;
+                add(geoUnitId, geoUnitLbl, v, 'Include');
+            }
+
+            if (has(/\bпоштомат/)) {
+                const cityP = detectCity(raw);
+                const pv = cityP ? `Поштомат — ${cityP}` : 'Поштомат';
+                add(geoUnitId, geoUnitLbl, pv, 'Include');
+            }
+
+            const divGeoPatterns = [
+                [/центральн(?:ий|ого|ому)?\s+дивізіон/, 'Центральний'],
+                [/західн(?:ий|ого|ому)?\s+дивізіон/, 'Західний'],
+                [/східн(?:ий|ого|ому)?\s+дивізіон/, 'Східний'],
+                [/південн(?:ий|ого|ому)?\s+дивізіон/, 'Південний'],
+                [/північн(?:ий|ого|ому)?\s+дивізіон/, 'Північний']
+            ];
+            divGeoPatterns.forEach(([re, name]) => {
+                if (re.test(raw)) add('GeoLocation', 'Географія (гео-таргетинг на карті)', `Дивізіон: ${name}`, 'Include');
+            });
+
+            const nearCityM = raw.match(/в\s+(\d{1,3})\s*км\s+від\s+(\S+(?:\s+\S+)?)/);
+            if (nearCityM) {
+                const cNear = detectCity(nearCityM[2]);
+                if (cNear) add('GeoLocation', 'Географія (гео-таргетинг на карті)', `${cNear}, R=${nearCityM[1]} км`, 'Include');
+            }
 
             /* ============================================================
              *  PAYMENT METHOD
@@ -9171,13 +9298,11 @@
         function renderSavedSegments() {
             const list = document.getElementById('header-saved-segments-list');
             const saved = JSON.parse(localStorage.getItem('mySegments') || '[]');
-            const badge = document.getElementById('segments-badge');
-
-            if (saved.length > 0) {
-                if (badge) badge.style.display = 'block';
-            } else {
-                if (badge) badge.style.display = 'none';
-            }
+            const showBadge = saved.length > 0 ? 'block' : 'none';
+            ['segments-badge', 'segments-badge-figma'].forEach((bid) => {
+                const b = document.getElementById(bid);
+                if (b) b.style.display = showBadge;
+            });
 
             if (saved.length === 0) {
                 list.innerHTML = '<div class="text-center text-muted small py-3">Немає збережених сегментів</div>';
@@ -10555,6 +10680,463 @@
 
     let geoTempMarker = null;
 
+    /* Nova Poshta API (довідник: порожній apiKey) — відділення для гео-модалки */
+    let geoNpLoadSeq = 0;
+    let geoNpSelectedCityRef = null;
+    let geoNpSelectedCityDisplay = '';
+    let geoNpBaselineWarehouses = [];
+    let geoNpLastWarehouseResults = [];
+    let geoNpCityDebounce = null;
+    let geoNpMapLayer = null;
+    let geoNpMapWarehousesAll = [];
+    /** Коло радіуса до додавання в обрані (режим «Відділення») */
+    let geoNpRadiusPreviewGroup = null;
+    /** Живий перегляд точки з полів широта/довгота (режим «Точка») */
+    let geoCoordsLivePreviewGroup = null;
+    let geoCoordsModalInputTimer = null;
+    /** Відділення, обране кліком по мапі (очікує кнопку «Додати локацію») */
+    let geoNpPendingWarehouse = null;
+
+    async function npNpRequest(calledMethod, methodProperties) {
+        const res = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                apiKey: '',
+                modelName: 'Address',
+                calledMethod,
+                methodProperties
+            })
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+    }
+
+    function npPickCityRef(rows, wantedName) {
+        const w = (wantedName || '').trim().toLowerCase();
+        if (!rows || !rows.length) return null;
+        let hit = rows.find(r => (r.Description || '').toLowerCase() === w);
+        if (hit) return hit.Ref;
+        hit = rows.find(r => (r.DescriptionRu || '').toLowerCase() === (wantedName || '').trim().toLowerCase());
+        if (hit) return hit.Ref;
+        hit = rows.find(r => w.includes((r.Description || '').toLowerCase()) || (r.Description || '').toLowerCase().includes(w));
+        return (hit || rows[0]).Ref;
+    }
+
+    function geoNpWarehouseLabel(w) {
+        if (!w) return '';
+        return '№' + w.Number + ' — ' + (w.ShortAddress || w.Description || '');
+    }
+
+    /** Довідник НП інколи дає порожні або перепутані поля — перевірка по bbox України */
+    function geoNpParseLatLng(w) {
+        if (!w) return null;
+        let a = parseFloat(w.Latitude);
+        let b = parseFloat(w.Longitude);
+        if (!isFinite(a) || !isFinite(b)) return null;
+        if (a === 0 && b === 0) return null;
+        const inUa = (lat, lng) => lat >= 43.5 && lat <= 52.5 && lng >= 22.0 && lng <= 41.5;
+        if (inUa(a, b)) return { lat: a, lng: b };
+        if (inUa(b, a)) return { lat: b, lng: a };
+        return null;
+    }
+
+    function geoNpIsPostomat(w) {
+        const c = (w.CategoryOfWarehouse || '').toLowerCase();
+        const t = ((w.Description || '') + (w.ShortAddress || '')).toLowerCase();
+        return c.includes('postomat') || c.includes('поштомат') || t.includes('поштомат');
+    }
+
+    function geoNpClearMapWarehouses() {
+        geoNpMapWarehousesAll = [];
+        if (geoNpMapLayer) geoNpMapLayer.clearLayers();
+    }
+
+    function geoNpClearRadiusPreview() {
+        if (geoNpRadiusPreviewGroup) geoNpRadiusPreviewGroup.clearLayers();
+    }
+
+    /** Попередній перегляд радіуса навколо обраного/знайденого відділення (ще не в списку) */
+    function geoNpRefreshBranchRadiusPreview() {
+        if (!geoNpRadiusPreviewGroup || !geoMap) return;
+        geoNpRadiusPreviewGroup.clearLayers();
+        const mode = document.querySelector('.geo-mode-tab.active')?.dataset?.geoMode;
+        if (mode !== 'branches') return;
+        let p = null;
+        if (geoNpPendingWarehouse) p = geoNpParseLatLng(geoNpPendingWarehouse);
+        if (!p) {
+            const city = document.getElementById('geo-modal-city')?.value?.trim();
+            const branch = document.getElementById('geo-modal-branch-search')?.value?.trim();
+            if (city || branch) {
+                const wh = geoNpMatchWarehouse(city, branch);
+                if (wh) p = geoNpParseLatLng(wh);
+            }
+        }
+        if (!p) return;
+        const rKm = geoModalGetRadius();
+        const rM = Math.max(50, rKm * 1000);
+        const circle = L.circle([p.lat, p.lng], {
+            pane: 'geoNpRadiusPreviewPane',
+            radius: rM,
+            color: '#0ea5e9',
+            fillColor: '#38bdf8',
+            fillOpacity: 0.14,
+            weight: 2,
+            dashArray: '10 5'
+        });
+        circle.bindPopup('<b>Перегляд радіуса</b><br>R = ' + rKm + ' км<br><span style="font-size:0.85em;color:#64748b">Ще не додано в обрані</span>');
+        const dot = L.circleMarker([p.lat, p.lng], {
+            pane: 'geoNpRadiusPreviewPane',
+            radius: 8,
+            color: '#0369a1',
+            fillColor: '#ffffff',
+            fillOpacity: 1,
+            weight: 3
+        });
+        geoNpRadiusPreviewGroup.addLayer(circle);
+        geoNpRadiusPreviewGroup.addLayer(dot);
+    }
+
+    function geoCoordsClearLivePreview() {
+        if (geoCoordsLivePreviewGroup) geoCoordsLivePreviewGroup.clearLayers();
+    }
+
+    function geoParseLatLngFromModalInputs() {
+        const rawLat = document.getElementById('geo-modal-lat')?.value?.trim();
+        const rawLng = document.getElementById('geo-modal-lng')?.value?.trim();
+        if (rawLat === '' || rawLng === '' || rawLat == null || rawLng == null) return null;
+        const lat = parseFloat(String(rawLat).replace(',', '.'));
+        const lng = parseFloat(String(rawLng).replace(',', '.'));
+        if (!isFinite(lat) || !isFinite(lng)) return null;
+        if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+        return { lat, lng };
+    }
+
+    function geoCoordsRefreshLivePreview() {
+        if (!geoCoordsLivePreviewGroup || !geoMap) return;
+        geoCoordsLivePreviewGroup.clearLayers();
+        const mode = document.querySelector('.geo-mode-tab.active')?.dataset?.geoMode;
+        if (mode !== 'coords') return;
+        const p = geoParseLatLngFromModalInputs();
+        if (!p) return;
+        const rKm = geoModalGetRadius();
+        const rM = Math.max(50, rKm * 1000);
+        const circle = L.circle([p.lat, p.lng], {
+            pane: 'geoCoordsLivePane',
+            radius: rM,
+            color: '#2563eb',
+            fillColor: '#60a5fa',
+            fillOpacity: 0.18,
+            weight: 2.5,
+            dashArray: '6 4'
+        });
+        circle.bindPopup('<b>Перегляд точки</b><br>' + p.lat.toFixed(6) + ', ' + p.lng.toFixed(6) + '<br>R = ' + rKm + ' км<br><span style="font-size:0.85em;color:#64748b">Ще не в обраних</span>');
+        const dot = L.circleMarker([p.lat, p.lng], {
+            pane: 'geoCoordsLivePane',
+            radius: 9,
+            color: '#1d4ed8',
+            fillColor: '#ffffff',
+            fillOpacity: 1,
+            weight: 3
+        });
+        geoCoordsLivePreviewGroup.addLayer(circle);
+        geoCoordsLivePreviewGroup.addLayer(dot);
+    }
+
+    function geoModalCoordsInputsDebounced() {
+        clearTimeout(geoCoordsModalInputTimer);
+        geoCoordsModalInputTimer = setTimeout(() => {
+            geoCoordsRefreshLivePreview();
+            const p = geoParseLatLngFromModalInputs();
+            if (p && geoMap) geoMap.panTo([p.lat, p.lng], { animate: true });
+        }, 280);
+    }
+
+    function initGeoModalCoordsLivePreview() {
+        const latEl = document.getElementById('geo-modal-lat');
+        const lngEl = document.getElementById('geo-modal-lng');
+        if (!latEl || !lngEl || latEl.dataset.geoLiveInit === '1') return;
+        latEl.dataset.geoLiveInit = '1';
+        lngEl.dataset.geoLiveInit = '1';
+        const kick = () => geoModalCoordsInputsDebounced();
+        latEl.addEventListener('input', kick);
+        lngEl.addEventListener('input', kick);
+    }
+
+    function geoNpRedrawMapWarehouseMarkers(warehouses) {
+        if (!geoNpMapLayer || !geoMap) return;
+        if (!warehouses || !warehouses.length) {
+            geoNpMapLayer.clearLayers();
+            return;
+        }
+        geoNpMapLayer.clearLayers();
+        warehouses.forEach(w => {
+            const p = geoNpParseLatLng(w);
+            if (!p) return;
+            const postomat = geoNpIsPostomat(w);
+            const cm = L.circleMarker([p.lat, p.lng], {
+                pane: 'geoNpWhPane',
+                radius: postomat ? 6 : 5,
+                color: postomat ? '#7c3aed' : '#15803d',
+                fillColor: postomat ? '#a78bfa' : '#4ade80',
+                fillOpacity: 0.88,
+                weight: 1.5
+            });
+            const tip = escHtml(geoNpWarehouseLabel(w));
+            cm.bindTooltip(tip, { direction: 'top', opacity: 0.95 });
+            cm.on('click', (ev) => {
+                L.DomEvent.stopPropagation(ev);
+                geoNpSelectWarehouseOnMap(w);
+            });
+            cm.addTo(geoNpMapLayer);
+        });
+    }
+
+    async function geoNpLoadAllWarehousesForMap(cityRef, seq) {
+        if (!cityRef || !geoNpMapLayer) return;
+        const merged = [];
+        const seen = new Set();
+        const status = document.getElementById('geo-np-branch-status');
+        try {
+            for (let page = 1; page <= 20; page++) {
+                if (seq !== geoNpLoadSeq) return;
+                const wh = await npNpRequest('getWarehouses', { CityRef: cityRef, Limit: 500, Page: page });
+                if (seq !== geoNpLoadSeq) return;
+                if (!wh.success || !wh.data || !wh.data.length) break;
+                wh.data.forEach(x => {
+                    if (x.Ref && !seen.has(x.Ref)) {
+                        seen.add(x.Ref);
+                        merged.push(x);
+                    }
+                });
+                if (status && merged.length) {
+                    status.textContent = 'На карті: ' + merged.length + ' відділень/поштоматів (завантаження…)';
+                }
+                if (wh.data.length < 500) break;
+            }
+        } catch (e) {
+            console.warn('geoNpLoadAllWarehousesForMap', e);
+        }
+        if (seq !== geoNpLoadSeq) return;
+        geoNpMapWarehousesAll = merged;
+        geoNpRedrawMapWarehouseMarkers(merged);
+        const pts = merged.map(geoNpParseLatLng).filter(Boolean);
+        if (pts.length && geoMap) {
+            try {
+                geoMap.fitBounds(L.latLngBounds(pts.map(p => [p.lat, p.lng])).pad(0.06), { maxZoom: 14, animate: true });
+            } catch (err) { console.warn('fitBounds NP', err); }
+        }
+        if (status && merged.length) {
+            const withCoords = pts.length;
+            status.textContent = 'На карті: ' + withCoords + ' точок з координатами з ' + merged.length + ' записів довідника';
+        }
+    }
+
+    function geoNpSelectWarehouseOnMap(w) {
+        const p = geoNpParseLatLng(w);
+        if (!p) {
+            alert('У довіднику НП для цього відділення немає коректних координат.');
+            return;
+        }
+        geoNpPendingWarehouse = w;
+        const br = document.getElementById('geo-modal-branch-search');
+        if (br) br.value = geoNpWarehouseLabel(w);
+        if (geoMap) {
+            const z = Math.max(geoMap.getZoom(), 15);
+            geoMap.setView([p.lat, p.lng], z, { animate: true });
+        }
+        const st = document.getElementById('geo-np-branch-status');
+        if (st) {
+            st.textContent = 'Обрано на мапі: ' + geoNpWarehouseLabel(w) + '. Радіус на карті оновлюється від поля «Радіус»; натисніть «Додати локацію».';
+            st.classList.remove('text-danger');
+        }
+        geoNpRefreshBranchRadiusPreview();
+    }
+
+    function escAttr(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    }
+
+    function geoNpFillDatalist(warehouses) {
+        const dl = document.getElementById('geo-np-warehouse-datalist');
+        if (!dl) return;
+        if (!warehouses || !warehouses.length) {
+            dl.innerHTML = '';
+            return;
+        }
+        dl.innerHTML = warehouses.map(w => {
+            const label = geoNpWarehouseLabel(w);
+            return '<option value="' + escAttr(label) + '"></option>';
+        }).join('');
+    }
+
+    function geoModalClearNpWarehouses() {
+        geoNpSelectedCityRef = null;
+        geoNpSelectedCityDisplay = '';
+        geoNpBaselineWarehouses = [];
+        geoNpLastWarehouseResults = [];
+        geoNpPendingWarehouse = null;
+        geoNpFillDatalist([]);
+        geoNpClearMapWarehouses();
+        geoNpClearRadiusPreview();
+    }
+
+    async function geoNpLoadWarehousesForCityRef(cityRef, cityDisplay, findByString, seq) {
+        const isSearch = findByString && String(findByString).trim().length >= 2;
+        const methodProperties = { CityRef: cityRef, Limit: isSearch ? 50 : 120, Page: 1 };
+        if (isSearch) methodProperties.FindByString = String(findByString).trim();
+        const wh = await npNpRequest('getWarehouses', methodProperties);
+        if (seq !== geoNpLoadSeq) return;
+        if (!wh.success) throw new Error((wh.errors && wh.errors[0]) || 'getWarehouses');
+        const list = wh.data || [];
+        const status = document.getElementById('geo-np-branch-status');
+        const total = wh.info && wh.info.totalCount != null ? wh.info.totalCount : list.length;
+
+        if (isSearch) {
+            if (list.length) {
+                geoNpLastWarehouseResults = list;
+                geoNpFillDatalist(list);
+                if (status) {
+                    status.textContent = 'За запитом: ' + list.length + ' варіант(ів)';
+                    status.classList.remove('text-danger');
+                }
+            } else {
+                geoNpLastWarehouseResults = geoNpBaselineWarehouses.slice();
+                geoNpFillDatalist(geoNpLastWarehouseResults);
+                if (status) {
+                    status.textContent = 'За цим запитом нічого не знайдено — показано перші ' + geoNpBaselineWarehouses.length + ' відділень міста';
+                    status.classList.remove('text-danger');
+                }
+            }
+        } else {
+            geoNpLastWarehouseResults = list;
+            geoNpBaselineWarehouses = list.slice();
+            geoNpFillDatalist(list);
+            if (status) {
+                status.textContent = list.length
+                    ? ('Завантажено ' + list.length + (total > list.length ? ' з ≈' + total + ' відділень у місті. Уточнюйте пошук за номером або вулицею.' : ' відділень.'))
+                    : 'У цьому місті відділень не знайдено';
+                status.classList.remove('text-danger');
+            }
+            geoNpRedrawMapWarehouseMarkers(list);
+            geoNpLoadAllWarehousesForMap(cityRef, seq);
+        }
+    }
+
+    function geoModalCityInputDebounced(val) {
+        clearTimeout(geoNpCityDebounce);
+        geoNpCityDebounce = setTimeout(() => { geoNpOnCityInputChanged((val || '').trim()); }, 400);
+    }
+
+    async function geoNpOnCityInputChanged(cityInput) {
+        const status = document.getElementById('geo-np-branch-status');
+        const branchInp = document.getElementById('geo-modal-branch-search');
+        if (!cityInput || cityInput.length < 2) {
+            geoModalClearNpWarehouses();
+            if (status) status.textContent = '';
+            return;
+        }
+        const seq = ++geoNpLoadSeq;
+        if (status) {
+            status.textContent = 'Завантаження міста та відділень НП…';
+            status.classList.remove('text-danger');
+        }
+        geoNpSelectedCityRef = null;
+        geoNpBaselineWarehouses = [];
+        geoNpLastWarehouseResults = [];
+        geoNpMapWarehousesAll = [];
+        geoNpPendingWarehouse = null;
+        if (geoNpMapLayer) geoNpMapLayer.clearLayers();
+        geoNpClearRadiusPreview();
+        geoNpFillDatalist([]);
+        if (branchInp) branchInp.value = '';
+        try {
+            const cities = await npNpRequest('getCities', { FindByString: cityInput, Limit: 40 });
+            if (seq !== geoNpLoadSeq) return;
+            if (!cities.success || !cities.data || cities.data.length === 0) {
+                if (status) {
+                    status.textContent = 'Місто не знайдено в API «Нова пошта». Спробуйте іншу назву.';
+                    status.classList.add('text-danger');
+                }
+                return;
+            }
+            const ref = npPickCityRef(cities.data, cityInput);
+            const row = cities.data.find(r => r.Ref === ref);
+            geoNpSelectedCityRef = ref;
+            geoNpSelectedCityDisplay = row?.Description || cityInput;
+            await geoNpLoadWarehousesForCityRef(ref, geoNpSelectedCityDisplay, '', seq);
+        } catch (e) {
+            if (seq !== geoNpLoadSeq) return;
+            console.warn('NP API', e);
+            if (status) {
+                status.textContent = 'Не вдалося завантажити відділення. Перевірте інтернет або спробуйте пізніше.';
+                status.classList.add('text-danger');
+            }
+        }
+    }
+
+    let geoNpBranchDebounce = null;
+    function initGeoNpBranchSearch() {
+        const inp = document.getElementById('geo-modal-branch-search');
+        if (!inp || inp.dataset.npInit) return;
+        inp.dataset.npInit = '1';
+        inp.addEventListener('input', () => {
+            clearTimeout(geoNpBranchDebounce);
+            const q = inp.value.trim();
+            geoNpBranchDebounce = setTimeout(async () => {
+                if (!geoNpSelectedCityRef) return;
+                const seq = geoNpLoadSeq;
+                const status = document.getElementById('geo-np-branch-status');
+                try {
+                    if (q.length < 2) {
+                        geoNpLastWarehouseResults = geoNpBaselineWarehouses.slice();
+                        geoNpFillDatalist(geoNpLastWarehouseResults);
+                        if (status && geoNpBaselineWarehouses.length) {
+                            status.textContent = 'Показано перші ' + geoNpBaselineWarehouses.length + ' відділень. Введіть 2+ символи для уточнення.';
+                            status.classList.remove('text-danger');
+                        }
+                    } else {
+                        if (status) status.textContent = 'Пошук у довіднику НП…';
+                        await geoNpLoadWarehousesForCityRef(geoNpSelectedCityRef, geoNpSelectedCityDisplay, q, seq);
+                    }
+                } catch (e) {
+                    if (seq !== geoNpLoadSeq) return;
+                    console.warn('NP branch search', e);
+                    if (status) {
+                        status.textContent = 'Помилка пошуку відділень.';
+                        status.classList.add('text-danger');
+                    }
+                } finally {
+                    geoNpRefreshBranchRadiusPreview();
+                }
+            }, 350);
+        });
+    }
+
+    function geoNpMatchWarehouse(city, branchInput) {
+        if (!branchInput || !branchInput.trim()) return null;
+        const q = branchInput.trim();
+        let w = geoNpLastWarehouseResults.find(x => geoNpWarehouseLabel(x) === q);
+        if (w) return w;
+        const numOnly = q.replace(/^№\s*/, '').split(/[\s—\-]/)[0];
+        if (/^\d+$/.test(numOnly)) {
+            w = geoNpLastWarehouseResults.find(x => String(x.Number) === numOnly);
+            if (w) return w;
+            w = geoNpBaselineWarehouses.find(x => String(x.Number) === numOnly);
+            if (w) return w;
+        }
+        const low = q.toLowerCase();
+        w = geoNpLastWarehouseResults.find(x =>
+            (x.ShortAddress && x.ShortAddress.toLowerCase().includes(low)) ||
+            (x.Description && x.Description.toLowerCase().includes(low))
+        );
+        if (w) return w;
+        return geoNpBaselineWarehouses.find(x =>
+            (x.ShortAddress && x.ShortAddress.toLowerCase().includes(low)) ||
+            (x.Description && x.Description.toLowerCase().includes(low))
+        ) || null;
+    }
+
     function geoSwitchMode(btn) {
         if (!btn) return;
         btn.closest('.geo-mode-tabs').querySelectorAll('.geo-mode-tab').forEach(b => b.classList.remove('active'));
@@ -10563,6 +11145,20 @@
         document.getElementById('geo-modal-block-coords').style.display = mode === 'coords' ? 'block' : 'none';
         document.getElementById('geo-modal-block-branches').style.display = mode === 'branches' ? 'block' : 'none';
         document.getElementById('geo-modal-block-address').style.display = mode === 'address' ? 'block' : 'none';
+        if (mode !== 'branches') {
+            geoNpPendingWarehouse = null;
+            geoNpClearMapWarehouses();
+            geoNpClearRadiusPreview();
+        } else {
+            initGeoNpBranchSearch();
+            const c = document.getElementById('geo-modal-city')?.value?.trim();
+            if (c) geoNpOnCityInputChanged(c);
+        }
+        if (mode !== 'coords') {
+            geoCoordsClearLivePreview();
+        } else {
+            setTimeout(() => geoCoordsRefreshLivePreview(), 80);
+        }
     }
 
 
@@ -10591,14 +11187,17 @@
         });
         geoModalUpdateChips();
         geoRedrawMarkersNoZoom();
+        geoNpRefreshBranchRadiusPreview();
+        geoCoordsRefreshLivePreview();
     }
 
-    function geoModalPushItem(label, lat, lng, radius, target) {
+    function geoModalPushItem(label, lat, lng, radius, target, opts) {
         const t = target || geoModalGetTarget();
         const renderedLabel = '[' + t + '] ' + label + ' (R=' + radius + 'км)';
         geoPointItems.push({ label: renderedLabel, rawLabel: label, lat, lng, radiusKm: radius, target: t, id: Date.now() + Math.random() });
         geoModalUpdateChips();
-        geoRedrawMarkers();
+        if (opts && opts.noFitBounds) geoRedrawMarkersNoZoom();
+        else geoRedrawMarkers();
     }
 
     function geoModalUpdateChips() {
@@ -10631,15 +11230,25 @@
         geoPointItems.length = 0;
         geoModalUpdateChips();
         if (geoMarkers) geoMarkers.clearLayers();
+        geoNpClearMapWarehouses();
+        geoNpClearRadiusPreview();
+        geoCoordsClearLivePreview();
         if (geoTempMarker && geoMap) { geoMap.removeLayer(geoTempMarker); geoTempMarker = null; }
     }
 
+    function geoModalAddActiveTab() {
+        const mode = document.querySelector('.geo-mode-tab.active')?.dataset?.geoMode || 'coords';
+        if (mode === 'branches') geoModalHandleBranch();
+        else if (mode === 'address') geoModalAddAddress();
+        else geoModalAddManualPoint();
+    }
+
     function geoModalAddManualPoint() {
-        const lat = parseFloat(document.getElementById('geo-modal-lat')?.value);
-        const lng = parseFloat(document.getElementById('geo-modal-lng')?.value);
-        if (isNaN(lat) || isNaN(lng)) { alert('Введіть коректні координати!'); return; }
-        geoModalPushItem(lat.toFixed(5) + ', ' + lng.toFixed(5), lat, lng, geoModalGetRadius());
-        if (geoMap) geoMap.flyTo([lat, lng], 11, { duration: 0.5 });
+        const p = geoParseLatLngFromModalInputs();
+        if (!p) { alert('Введіть коректні координати!'); return; }
+        geoModalPushItem(p.lat.toFixed(5) + ', ' + p.lng.toFixed(5), p.lat, p.lng, geoModalGetRadius());
+        geoCoordsClearLivePreview();
+        if (geoMap) geoMap.flyTo([p.lat, p.lng], 11, { duration: 0.5 });
     }
 
     function geoModalAddAddress() {
@@ -10654,14 +11263,45 @@
     function geoModalHandleBranch() {
         const city = document.getElementById('geo-modal-city')?.value?.trim();
         const branch = document.getElementById('geo-modal-branch-search')?.value?.trim();
-        if (!city && !branch) return;
-        const found = geoFindCity(city);
-        const lat = found ? found.lat + (Math.random() - 0.5) * 0.008 : null;
-        const lng = found ? found.lng + (Math.random() - 0.5) * 0.008 : null;
-        const label = [city, branch ? ('Відд. №' + branch) : ''].filter(Boolean).join(', ');
-        geoModalPushItem(label, lat, lng, geoModalGetRadius());
-        if (lat && lng && geoMap) geoMap.flyTo([lat, lng], 13, { duration: 0.5 });
+        if (!city && !branch && !geoNpPendingWarehouse) return;
+
+        let wh = null;
+        if (geoNpPendingWarehouse) {
+            const pl = geoNpWarehouseLabel(geoNpPendingWarehouse);
+            const numPending = String(geoNpPendingWarehouse.Number);
+            const branchNum = branch ? branch.replace(/^№\s*/, '').replace(/\s.*$/, '').trim() : '';
+            if (!branch || pl === branch || (branchNum && branchNum === numPending)) wh = geoNpPendingWarehouse;
+        }
+        if (!wh) wh = geoNpMatchWarehouse(city, branch);
+        let lat = null;
+        let lng = null;
+        let label = '';
+
+        const npPos = wh ? geoNpParseLatLng(wh) : null;
+        if (npPos) {
+            lat = npPos.lat;
+            lng = npPos.lng;
+            const cityPart = geoNpSelectedCityDisplay || city;
+            label = 'НП №' + wh.Number + ' — ' + (wh.ShortAddress || wh.Description || '') + ' (' + cityPart + ')';
+        } else if (wh) {
+            alert('Для обраного відділення в довіднику НП немає коректних координат (або вони поза картою України).');
+            return;
+        } else {
+            const found = geoFindCity(city);
+            if (branch && !found) {
+                alert('Оберіть місто з довідника «Нова пошта», дочекайтесь списку відділень і оберіть пункт або введіть його номер.');
+                return;
+            }
+            lat = found ? found.lat + (Math.random() - 0.5) * 0.008 : null;
+            lng = found ? found.lng + (Math.random() - 0.5) * 0.008 : null;
+            label = [city, branch ? ('Відд. №' + branch) : ''].filter(Boolean).join(', ');
+        }
+
+        geoModalPushItem(label, lat, lng, geoModalGetRadius(), undefined, npPos ? { noFitBounds: true } : undefined);
+        if (lat && lng && geoMap) geoMap.flyTo([lat, lng], 15, { duration: 0.5 });
         document.getElementById('geo-modal-branch-search').value = '';
+        geoNpPendingWarehouse = null;
+        geoNpClearRadiusPreview();
     }
 
     function geoModalAddBulk() {
@@ -10742,12 +11382,17 @@
 
     function geoModalApplyFilter() {
         if (!geoPointItems.length) { alert('Спочатку виберіть хоча б одну точку!'); return; }
+        const zone = window.currentFilterMode || 'Include';
         geoPointItems.forEach(item => {
             if (typeof addEspoBlock === 'function') {
                 const cleanLabel = (item.rawLabel || '').replace(/\s*\[.*?\]\s*/g, '').replace(/\s*\(R=.*$/, '');
                 let dim = 'ew_sender_city';
-                if (item.target && item.target.includes('Отримання')) dim = 'ew_recipient_city';
-                addEspoBlock(dim, 'equals', cleanLabel);
+                let fieldLabel = 'Гео-таргетинг';
+                if (item.target && item.target.includes('Отримання')) {
+                    dim = 'ew_recipient_city';
+                    fieldLabel = 'Місто отримувача';
+                }
+                addEspoBlock(dim, fieldLabel, cleanLabel, zone, 'ТА');
             }
         });
         const modal = bootstrap.Modal.getInstance(document.getElementById('geoTargetingModal'));
@@ -10760,41 +11405,38 @@
         if (geoMap || typeof L === 'undefined') return;
         const container = document.getElementById('geo-map');
         if (!container) return;
-        geoMap = L.map(container, { zoomControl: false }).setView([48.3794, 31.1656], 6);
+        geoMap = L.map(container, { zoomControl: false, preferCanvas: true }).setView([48.3794, 31.1656], 6);
         L.control.zoom({ position: 'bottomright' }).addTo(geoMap);
+        geoMap.createPane('geoNpWhPane');
+        const npPane = geoMap.getPane('geoNpWhPane');
+        if (npPane) npPane.style.zIndex = 450;
         geoMapLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
             subdomains: 'abcd', maxZoom: 20
         }).addTo(geoMap);
+        geoNpMapLayer = L.layerGroup().addTo(geoMap);
+        geoMap.createPane('geoNpRadiusPreviewPane');
+        const rPane = geoMap.getPane('geoNpRadiusPreviewPane');
+        if (rPane) rPane.style.zIndex = 500;
+        geoNpRadiusPreviewGroup = L.layerGroup().addTo(geoMap);
+        geoMap.createPane('geoCoordsLivePane');
+        const coordsPane = geoMap.getPane('geoCoordsLivePane');
+        if (coordsPane) coordsPane.style.zIndex = 502;
+        geoCoordsLivePreviewGroup = L.layerGroup().addTo(geoMap);
         geoMarkers = L.layerGroup().addTo(geoMap);
 
         geoMap.on('click', function (e) {
-            if (geoTempMarker) geoMap.removeLayer(geoTempMarker);
-
-            const radiusVal = geoModalGetRadius();
             const activeBtn = document.querySelector('.geo-mode-tab.active');
             const mode = activeBtn?.dataset?.geoMode || 'coords';
+            if (mode === 'branches' || mode === 'address') return;
 
             const latInp = document.getElementById('geo-modal-lat');
             const lngInp = document.getElementById('geo-modal-lng');
             if (latInp) latInp.value = e.latlng.lat.toFixed(6);
             if (lngInp) lngInp.value = e.latlng.lng.toFixed(6);
-
-            if (mode === 'coords') {
-                const label = e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5);
-                geoModalPushItem(label, e.latlng.lat, e.latlng.lng, radiusVal);
-            } else {
-                geoTempMarker = L.layerGroup([
-                    L.marker([e.latlng.lat, e.latlng.lng]).bindPopup(
-                        '<b>' + e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5) + '</b><br>R=' + radiusVal + ' км'
-                    ).openPopup(),
-                    L.circle([e.latlng.lat, e.latlng.lng], {
-                        radius: radiusVal * 1000,
-                        color: '#3b82f6', fillColor: '#93c5fd', fillOpacity: 0.22, weight: 2.5, dashArray: '6 3'
-                    })
-                ]).addTo(geoMap);
-            }
+            geoCoordsRefreshLivePreview();
         });
+        if (geoNpMapWarehousesAll && geoNpMapWarehousesAll.length) geoNpRedrawMapWarehouseMarkers(geoNpMapWarehousesAll);
     }
 
     function geoRefreshMap() {
@@ -10817,6 +11459,8 @@
         if (city && geoMap) {
             geoPreviewLocation(city.lat, city.lng, 12, city.name);
         }
+        clearTimeout(geoNpCityDebounce);
+        geoNpOnCityInputChanged(String(val).trim());
     }
 
     function initGeoTabs() {
@@ -11221,13 +11865,18 @@
 
         if (!items.length) return;
 
+        const zone = window.currentFilterMode || 'Include';
         items.forEach(item => {
             if (item.lat && item.lng) {
                 if (typeof addEspoBlock === 'function') {
                     const cleanLabel = (item.rawLabel || item.label).replace(/\s*\[.*?\]\s*/g, '').replace(/\s*\(R=.*$/, '');
                     let dim = 'ew_sender_city';
-                    if (item.target && item.target.includes('Отримання')) dim = 'ew_recipient_city';
-                    addEspoBlock(dim, 'equals', cleanLabel);
+                    let fieldLabel = 'Гео-таргетинг';
+                    if (item.target && item.target.includes('Отримання')) {
+                        dim = 'ew_recipient_city';
+                        fieldLabel = 'Місто отримувача';
+                    }
+                    addEspoBlock(dim, fieldLabel, cleanLabel, zone, 'ТА');
                 }
             }
         });
@@ -11238,13 +11887,38 @@
         if (typeof updateFormulaView === 'function') updateFormulaView();
     }
 
+    /** Повертає фільтри з гео-модалки у форматі AI (для executeAiQuery + «з карти») */
+    window.collectGeoSelectionsForAi = function collectGeoSelectionsForAi() {
+        const out = [];
+        const zone = window.currentFilterMode || 'Include';
+        const pts = typeof geoPointItems !== 'undefined' ? geoPointItems : [];
+        const brs = typeof geoBranchItems !== 'undefined' ? geoBranchItems : [];
+        const addrs = typeof geoAddressItems !== 'undefined' ? geoAddressItems : [];
+        [].concat(pts, brs, addrs).forEach((item) => {
+            if (!item.lat || !item.lng) return;
+            const cleanLabel = (item.rawLabel || item.label).replace(/\s*\[.*?\]\s*/g, '').replace(/\s*\(R=.*$/, '');
+            let dim = 'ew_sender_city';
+            let fieldLabel = 'Гео-таргетинг';
+            if (item.target && String(item.target).includes('Отримання')) {
+                dim = 'ew_recipient_city';
+                fieldLabel = 'Місто отримувача';
+            }
+            out.push({ id: dim, label: fieldLabel, value: cleanLabel, zone, fieldOp: null });
+        });
+        return out;
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         const geoModal = document.getElementById('geoTargetingModal');
         if (geoModal) {
             geoModal.addEventListener('shown.bs.modal', () => {
                 if (!geoMap) initGeoMap();
+                else if (geoNpMapWarehousesAll && geoNpMapWarehousesAll.length) geoNpRedrawMapWarehouseMarkers(geoNpMapWarehousesAll);
                 geoRefreshMap();
                 geoModalUpdateChips();
+                initGeoNpBranchSearch();
+                initGeoModalCoordsLivePreview();
+                setTimeout(() => geoCoordsRefreshLivePreview(), 150);
             });
         }
     });
