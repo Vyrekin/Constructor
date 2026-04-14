@@ -1461,7 +1461,7 @@
             top: 132px;
             /* Adjusted to sit below the formula card */
             z-index: 890;
-            background: var(--bg-app);
+            background-color: rgba(245, 246, 248, 0);
             padding-bottom: 10px;
             margin-bottom: 5px;
         }
@@ -2705,6 +2705,84 @@
             white-space: nowrap;
             flex: 1;
         }
+        .geo-target-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .geo-target-info {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            border: 1px solid #94a3b8;
+            color: #64748b;
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: help;
+            user-select: none;
+            line-height: 1;
+        }
+        .geo-target-tooltip {
+            position: absolute;
+            left: -8px;
+            top: calc(100% + 8px);
+            transform: translateY(-4px);
+            z-index: 1200;
+            width: 280px;
+            max-width: min(78vw, 280px);
+            background: #fff;
+            border: 1px solid #dbe3ee;
+            border-radius: 10px;
+            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16);
+            padding: 10px 12px;
+            color: #334155;
+            font-size: 0.72rem;
+            font-weight: 500;
+            line-height: 1.45;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+            pointer-events: none;
+            text-align: left;
+        }
+        .geo-target-tooltip::after {
+            content: "";
+            position: absolute;
+            left: 14px;
+            bottom: 100%;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-left: 1px solid #dbe3ee;
+            border-top: 1px solid #dbe3ee;
+            transform: rotate(45deg) translateY(5px);
+        }
+        .geo-target-info:hover .geo-target-tooltip,
+        .geo-target-info:focus-within .geo-target-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .geo-target-multi {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 10px;
+            margin-top: 2px;
+        }
+        .geo-target-option {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            color: #334155;
+        }
+        .geo-target-option input {
+            margin: 0;
+        }
         .geo-add-btn {
             width: 100%;
             background: #f0fdf4;
@@ -2722,8 +2800,220 @@
             background: var(--tz-primary-btn);
             color: #fff;
         }
+        /* Підказка над точками НП на мапі (режим «Відділення») */
+        .leaflet-tooltip.geo-np-wh-tooltip {
+            padding: 0;
+            margin: 6px 0 0;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(15, 23, 42, 0.06);
+            background: #fff;
+            color: #1e293b;
+            min-width: min(240px, calc(100vw - 32px));
+            max-width: min(340px, calc(100vw - 24px));
+            white-space: normal;
+            pointer-events: none;
+            overflow: visible;
+        }
+        .leaflet-tooltip.geo-np-wh-tooltip::before {
+            display: none;
+        }
+        .geo-np-wh-tooltip-inner {
+            padding: 14px 16px 16px;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .geo-np-wh-tooltip-inner .geo-np-wh-head {
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .geo-np-wh-tooltip-inner .geo-np-wh-kind {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #64748b;
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 999px;
+            margin-bottom: 0;
+        }
+        .geo-np-wh-tooltip-inner .geo-np-wh-kind--post {
+            color: #5b21b6;
+            background: linear-gradient(180deg, #f5f3ff 0%, #ede9fe 100%);
+            border-color: #ddd6fe;
+        }
+        .geo-np-wh-tooltip-inner .geo-np-wh-title {
+            font-weight: 700;
+            font-size: 13px;
+            color: #0f172a;
+            margin: 10px 0 0;
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: normal;
+        }
+        .geo-np-wh-tooltip-inner .geo-np-wh-sub {
+            margin-top: 8px;
+            font-size: 11.5px;
+            color: #64748b;
+            line-height: 1.4;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: normal;
+        }
+        .geo-np-wh-tooltip-inner .geo-np-wh-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        /* Підпис зверху, значення на повну ширину — інакше сітка дає ~0px на текст і «буква в ряд» */
+        .geo-np-wh-tooltip-inner .geo-np-wh-item {
+            display: block;
+        }
+        .geo-np-wh-tooltip-inner .geo-np-wh-lbl {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #94a3b8;
+            line-height: 1.35;
+            margin-bottom: 4px;
+        }
+        .geo-np-wh-tooltip-inner .geo-np-wh-val {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #334155;
+            line-height: 1.45;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: normal;
+        }
         .geo-chips-section {
             margin-top: 20px;
+        }
+        .geo-chips-head {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .geo-import-excel-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #198754;
+            background: #198754;
+            color: #fff;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            line-height: 1;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .geo-import-excel-btn:hover {
+            background: #157347;
+            border-color: #157347;
+        }
+        .geo-import-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+        .geo-import-tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 0;
+            z-index: 1200;
+            width: 340px;
+            max-width: min(86vw, 340px);
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #dbe3ee;
+            border-radius: 12px;
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.08);
+            padding: 12px 14px;
+            color: #334155;
+            font-size: 0.74rem;
+            line-height: 1.5;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(4px);
+            transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+            pointer-events: none;
+            white-space: normal;
+        }
+        .geo-import-tooltip::after {
+            content: "";
+            position: absolute;
+            left: 18px;
+            top: 100%;
+            width: 12px;
+            height: 12px;
+            background: #f8fafc;
+            border-right: 1px solid #dbe3ee;
+            border-bottom: 1px solid #dbe3ee;
+            transform: rotate(45deg) translateY(-6px);
+        }
+        .geo-import-wrap:hover .geo-import-tooltip,
+        .geo-import-wrap:focus-within .geo-import-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .geo-import-tooltip-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #0f172a;
+            font-size: 0.77rem;
+            letter-spacing: 0.01em;
+        }
+        .geo-import-tooltip-list {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .geo-import-tooltip-list li {
+            margin-bottom: 4px;
+        }
+        .geo-import-tooltip-list li:last-child {
+            margin-bottom: 0;
+        }
+        .geo-import-tooltip-note {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #dbe3ee;
+            color: #475569;
+            font-size: 0.7rem;
+            line-height: 1.45;
+        }
+        .geo-import-tooltip-example {
+            margin-top: 6px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.68rem;
+            color: #0f172a;
+            white-space: normal;
+            overflow: visible;
+            word-break: break-word;
+        }
+        .geo-import-excel-file {
+            margin-top: 4px;
+            font-size: 0.7rem;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 280px;
         }
         .geo-chips-row {
             display: flex;
@@ -2996,21 +3286,29 @@
         .reborn-ui .sidebar-search-ai {
             background: #fff;
             border-radius: 12px 12px 0 0;
+            align-items: center;
         }
 
         .reborn-ui .sidebar-search-ai .field-search-wrap {
             min-width: 0;
             margin: 0 !important;
+            display: flex;
+            align-items: stretch;
         }
 
         .reborn-ui .sidebar-search-ai .field-search-input {
-            height: 32px;
-            padding-left: 28px;
+            /* Одна висота з кнопкою AI; min-height з Bootstrap інакше розтягує поле */
+            height: 38px;
+            min-height: 38px;
+            max-height: 38px;
+            padding: 0 10px 0 30px;
             font-size: 0.8125rem;
-            border-radius: 6px;
+            line-height: 1.25;
+            border-radius: 8px;
+            box-sizing: border-box;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: 8px center;
+            background-position: 10px center;
         }
 
         .reborn-ui .field-search-input {
@@ -3206,15 +3504,46 @@
 
         .reborn-ui .figma-ai-btn--labeled {
             min-width: auto;
-            padding: 6px 10px !important;
-            background: #e5e7eb !important;
-            border-color: #d1d5db !important;
-            color: #4b5563 !important;
+            width: auto !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px;
+            padding: 0 14px !important;
+            gap: 8px;
+            box-sizing: border-box;
+            white-space: nowrap;
+            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #f0fdf9 0%, #ecfdf5 100%) !important;
+            border: 1px solid #a7f3d0 !important;
+            color: #047857 !important;
+            box-shadow: 0 1px 2px rgba(16, 185, 129, 0.12);
+        }
+
+        .reborn-ui .figma-ai-btn--labeled:hover {
+            background: #d1fae5 !important;
+            border-color: var(--tz-primary-btn) !important;
+            color: var(--tz-primary-btn-hover) !important;
+        }
+
+        .reborn-ui .figma-ai-btn--labeled.ai-active {
+            background: #1e293b !important;
+            border-color: #1e293b !important;
+            color: #fbbf24 !important;
+            box-shadow: none;
         }
 
         .reborn-ui .figma-ai-btn--labeled .ai-btn-label {
             font-size: 0.8125rem;
             font-weight: 600;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .reborn-ui .figma-ai-btn--labeled > .bi {
+            flex-shrink: 0;
+            font-size: 1rem;
         }
 
         .reborn-ui #filterTabs {
@@ -3555,7 +3884,7 @@
         }
 
         .reborn-ui .sidebar-sticky {
-            top: 96px !important;
+            top: 70px !important;
         }
 
         .reborn-ui .figma-ai-btn {
@@ -4275,8 +4604,8 @@
                                     <input id="field-search-input" type="text" class="form-control field-search-input"
                                         placeholder="Search" aria-label="Пошук полів">
                                 </div>
-                                <button type="button" class="figma-ai-btn figma-ai-btn--labeled flex-shrink-0 d-inline-flex align-items-center gap-1 px-2"
-                                    onclick="openAiMode()" title="AI помічник"><i class="bi bi-stars"></i><span
+                                <button type="button" class="figma-ai-btn figma-ai-btn--labeled flex-shrink-0 d-inline-flex align-items-center"
+                                    onclick="openAiMode()" title="AI помічник"><i class="bi bi-stars" aria-hidden="true"></i><span
                                         class="ai-btn-label">AI</span></button>
                             </div>
                             <div class="sidebar-browser">
@@ -5376,7 +5705,7 @@
 
             <!-- Sidebar -->
             <div class="col-lg-3">
-                <div class="sidebar-sticky" style="top: 90px;">
+                <div class="sidebar-sticky" style="top: 70px;">
                     <!-- 1. Counter (Always Top) -->
                     <div class="counter-box mx-0" id="counter-box-clickable" role="button" tabindex="0"
                         data-bs-toggle="modal" data-bs-target="#analyticsModal"
@@ -5770,21 +6099,24 @@
                                 </div>
                             </div>
                             <div class="geo-input-group">
-                                <label>Ціль (оператор)</label>
-                                <select class="form-select form-select-sm" id="geo-modal-target">
-                                    <option value="Sender">Відправлення</option>
-                                    <option value="Recipient">Отримання</option>
-                                    <option value="AppLocation_New">Локація (Новий додаток)</option>
-                                    <option value="AppLocation_Old">Локація (Старий додаток)</option>
-                                </select>
-                            </div>
-                            <div class="geo-section-label mt-1">АБО</div>
-                            <div class="geo-input-group">
-                                <label>Завантажити масив данних</label>
-                                <div class="geo-file-upload" onclick="document.getElementById('geo-modal-import-file').click()">
-                                    <span class="geo-file-btn">Оберіть файл</span>
-                                    <span class="geo-file-name" id="geo-file-name-display">файл не вибрано</span>
-                                    <i class="bi bi-file-earmark-arrow-up text-muted"></i>
+                                <label class="geo-target-label">
+                                    Ціль (оператор)
+                                    <span class="geo-target-info" tabindex="0">
+                                        i
+                                        <span class="geo-target-tooltip">
+                                            Оберіть, кого саме шукаємо за гео:<br>
+                                            • Відправлення - відправників<br>
+                                            • Отримання - отримувачів<br>
+                                            • Локація (Новий додаток) - останнє гео з нового додатку<br>
+                                            • Локація (Старий додаток) - останнє гео зі старого додатку
+                                        </span>
+                                    </span>
+                                </label>
+                                <div id="geo-modal-target" class="geo-target-multi">
+                                    <label class="geo-target-option"><input type="checkbox" value="Відправлення" checked>Відправлення</label>
+                                    <label class="geo-target-option"><input type="checkbox" value="Отримання">Отримання</label>
+                                    <label class="geo-target-option"><input type="checkbox" value="Локація (Новий додаток)">Локація (Новий додаток)</label>
+                                    <label class="geo-target-option"><input type="checkbox" value="Локація (Старий додаток)">Локація (Старий додаток)</label>
                                 </div>
                             </div>
                             <textarea id="geo-modal-bulk" rows="2" class="form-control form-control-sm mb-2" placeholder="Київ&#10;50.4501,30.5234&#10;Одеса;10;Отримання" style="font-size:0.75rem;display:none;"></textarea>
@@ -5801,7 +6133,30 @@
                     </div>
                     <!-- Bottom: selected chips -->
                     <div class="geo-chips-section">
-                        <div class="geo-section-label">ОБРАНІ ЛОКАЦІЇ:</div>
+                        <div class="geo-chips-head">
+                            <div class="geo-section-label mb-0">ОБРАНІ ЛОКАЦІЇ:</div>
+                            <div class="geo-import-wrap">
+                                <button type="button" class="geo-import-excel-btn" onclick="document.getElementById('geo-modal-import-file').click()">
+                                    <i class="bi bi-file-earmark-excel"></i>
+                                    Імпорт
+                                </button>
+                                <div class="geo-import-tooltip">
+                                    <div class="geo-import-tooltip-title">Формат Excel для імпорту</div>
+                                    <ol class="geo-import-tooltip-list">
+                                        <li>Місто (текст): <b>Київ</b></li>
+                                        <li>Тип точки: <b>Точка</b>, <b>Відділення</b> або <b>Адреса</b></li>
+                                        <li>Радіус: число в <b>км</b> (наприклад, <b>10</b>)</li>
+                                        <li>Значення: координати (<b>50.4501,30.5234</b>) / № відділення / адреса</li>
+                                        <li>Ціль: <b>Відправлення</b>, <b>Отримання</b>, <b>Локація (Новий додаток)</b>, <b>Локація (Старий додаток)</b> (можна кілька через кому)</li>
+                                    </ol>
+                                    <div class="geo-import-tooltip-note">
+                                        Для мультивибору в одній клітинці "Ціль" вкажіть кілька значень через кому (приклад: <b>Відправлення, Отримання</b>). Якщо "Ціль" порожня - застосуються цілі, вибрані в інтерфейсі.
+                                        <div class="geo-import-tooltip-example">Київ | Точка | 10 | 50.4501,30.5234 | Відправлення, Отримання</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="geo-import-excel-file" id="geo-file-name-display">Файл не вибрано</div>
+                        </div>
                         <div id="geo-modal-chips" class="geo-chips-row">
                             <span class="text-muted" style="font-size:0.82rem;">Локації не вибрані...</span>
                         </div>
@@ -10728,6 +11083,53 @@
         return '№' + w.Number + ' — ' + (w.ShortAddress || w.Description || '');
     }
 
+    /** Короткий рядок графіку з об'єкта Schedule API НП */
+    function geoNpWarehouseScheduleSnippet(w) {
+        const s = w && w.Schedule;
+        if (!s || typeof s !== 'object') return '';
+        const chunks = [];
+        for (const v of Object.values(s)) {
+            if (v == null) continue;
+            const t = String(v).trim();
+            if (t && t !== 'null' && chunks.indexOf(t) < 0) chunks.push(t);
+        }
+        if (!chunks.length) return '';
+        return chunks.slice(0, 2).join(' · ') + (chunks.length > 2 ? '…' : '');
+    }
+
+    /** HTML для підказки при наведенні на відділення / поштомат (дані з getWarehouses) */
+    function geoNpWarehouseTooltipHtml(w) {
+        if (!w) return '';
+        const postomat = geoNpIsPostomat(w);
+        const kind = postomat ? 'Поштомат' : 'Відділення';
+        const titleLine = escHtml(geoNpWarehouseLabel(w));
+        const desc = (w.Description || '').trim();
+        const shortA = (w.ShortAddress || '').trim();
+        const showDesc = desc && shortA && desc !== shortA;
+        const city = [w.SettlementDescription, w.CityDescription].map(x => (x || '').trim()).filter(Boolean);
+        const cityStr = city.length ? escHtml([...new Set(city)].join(', ')) : '';
+        const region = escHtml((w.SettlementAreaDescription || '').trim());
+        const phone = escHtml((w.Phone || '').trim());
+        const status = escHtml((w.WarehouseStatus || '').trim());
+        const schedule = escHtml(geoNpWarehouseScheduleSnippet(w));
+        const kindClass = postomat ? 'geo-np-wh-kind geo-np-wh-kind--post' : 'geo-np-wh-kind';
+        let html = '<div class="geo-np-wh-tooltip-inner">';
+        html += '<div class="geo-np-wh-head">';
+        html += '<span class="' + kindClass + '">' + escHtml(kind) + '</span>';
+        if (titleLine) html += '<div class="geo-np-wh-title">' + titleLine + '</div>';
+        if (showDesc) html += '<div class="geo-np-wh-sub">' + escHtml(desc) + '</div>';
+        html += '</div>';
+        const metaParts = [];
+        if (cityStr) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Місто</span><span class="geo-np-wh-val">' + cityStr + '</span></div>');
+        if (region) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Область</span><span class="geo-np-wh-val">' + region + '</span></div>');
+        if (phone) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Телефон</span><span class="geo-np-wh-val">' + phone + '</span></div>');
+        if (status) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Статус</span><span class="geo-np-wh-val">' + status + '</span></div>');
+        if (schedule) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Графік</span><span class="geo-np-wh-val">' + schedule + '</span></div>');
+        if (metaParts.length) html += '<div class="geo-np-wh-meta">' + metaParts.join('') + '</div>';
+        html += '</div>';
+        return html;
+    }
+
     /** Довідник НП інколи дає порожні або перепутані поля — перевірка по bbox України */
     function geoNpParseLatLng(w) {
         if (!w) return null;
@@ -10882,8 +11284,12 @@
                 fillOpacity: 0.88,
                 weight: 1.5
             });
-            const tip = escHtml(geoNpWarehouseLabel(w));
-            cm.bindTooltip(tip, { direction: 'top', opacity: 0.95 });
+            cm.bindTooltip(geoNpWarehouseTooltipHtml(w), {
+                direction: 'top',
+                opacity: 1,
+                sticky: true,
+                className: 'geo-np-wh-tooltip'
+            });
             cm.on('click', (ev) => {
                 L.DomEvent.stopPropagation(ev);
                 geoNpSelectWarehouseOnMap(w);
@@ -11170,8 +11576,47 @@
         document.getElementById('geo-modal-block-address').style.display = (mode === 'address' ? 'block' : 'none');
     }
 
-    function geoModalGetTarget() {
-        return document.getElementById('geo-modal-target')?.selectedOptions[0]?.text || 'Відправлення';
+    function geoModalGetTargets() {
+        const checks = Array.from(document.querySelectorAll('#geo-modal-target input[type="checkbox"]:checked'));
+        const targets = checks.map(x => String(x.value || '').trim()).filter(Boolean);
+        return targets.length ? targets : ['Відправлення'];
+    }
+
+    function geoModalNormalizeTargets(rawTarget, fallbackTargets) {
+        if (Array.isArray(rawTarget)) {
+            const arr = rawTarget.map(v => String(v || '').trim()).filter(Boolean);
+            return arr.length ? arr : (fallbackTargets || geoModalGetTargets());
+        }
+        if (rawTarget === null || rawTarget === undefined || rawTarget === '') {
+            return (fallbackTargets && fallbackTargets.length) ? fallbackTargets : geoModalGetTargets();
+        }
+
+        const aliases = {
+            'sender': 'Відправлення',
+            'відправлення': 'Відправлення',
+            'відправник': 'Відправлення',
+            'recipient': 'Отримання',
+            'отримання': 'Отримання',
+            'отримувач': 'Отримання',
+            'applocation_new': 'Локація (Новий додаток)',
+            'новий': 'Локація (Новий додаток)',
+            'новий додаток': 'Локація (Новий додаток)',
+            'локація (новий додаток)': 'Локація (Новий додаток)',
+            'applocation_old': 'Локація (Старий додаток)',
+            'старий': 'Локація (Старий додаток)',
+            'старий додаток': 'Локація (Старий додаток)',
+            'локація (старий додаток)': 'Локація (Старий додаток)'
+        };
+
+        const tokens = String(rawTarget).split(/[|,\/]+/).map(v => v.trim()).filter(Boolean);
+        if (!tokens.length) return (fallbackTargets && fallbackTargets.length) ? fallbackTargets : geoModalGetTargets();
+
+        const norm = tokens.map(token => {
+            const k = token.toLowerCase();
+            return aliases[k] || token;
+        }).filter(Boolean);
+
+        return norm.length ? norm : ((fallbackTargets && fallbackTargets.length) ? fallbackTargets : geoModalGetTargets());
     }
 
     function geoModalGetRadius() {
@@ -11192,12 +11637,18 @@
     }
 
     function geoModalPushItem(label, lat, lng, radius, target, opts) {
-        const t = target || geoModalGetTarget();
-        const renderedLabel = '[' + t + '] ' + label + ' (R=' + radius + 'км)';
-        geoPointItems.push({ label: renderedLabel, rawLabel: label, lat, lng, radiusKm: radius, target: t, id: Date.now() + Math.random() });
+        const targets = geoModalNormalizeTargets(target, geoModalGetTargets());
+        const cleanTargets = targets.map(t => String(t || '').trim()).filter(Boolean);
+        const finalTargets = cleanTargets.length ? cleanTargets : ['Відправлення'];
+        const baseId = Date.now() + Math.random();
+        finalTargets.forEach((t, idx) => {
+            const renderedLabel = '[' + t + '] ' + label + ' (R=' + radius + 'км)';
+            geoPointItems.push({ label: renderedLabel, rawLabel: label, lat, lng, radiusKm: radius, target: t, id: baseId + idx / 1000 });
+        });
         geoModalUpdateChips();
         if (opts && opts.noFitBounds) geoRedrawMarkersNoZoom();
         else geoRedrawMarkers();
+        return finalTargets.length;
     }
 
     function geoModalUpdateChips() {
@@ -11307,15 +11758,14 @@
     function geoModalAddBulk() {
         const area = document.getElementById('geo-modal-bulk');
         const defaultRadius = geoModalGetRadius();
-        const defaultTarget = geoModalGetTarget();
+        const defaultTargets = geoModalGetTargets();
         const lines = (area?.value || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
         if (!lines.length) return;
         let added = 0;
         lines.forEach(line => {
             const parsed = geoParsePointLine(line, defaultRadius);
             if (!parsed) return;
-            geoModalPushItem(parsed.label, parsed.lat, parsed.lng, parsed.radius, parsed.target || defaultTarget);
-            added++;
+            added += geoModalPushItem(parsed.label, parsed.lat, parsed.lng, parsed.radius, parsed.target || defaultTargets);
         });
         if (area) area.value = '';
         if (added) alert('Додано ' + added + ' точок зі списку.');
@@ -11328,7 +11778,7 @@
         if (nameEl) nameEl.textContent = file.name;
         const ext = (file.name.split('.').pop() || '').toLowerCase();
         const defaultRadius = geoModalGetRadius();
-        const defaultTarget = geoModalGetTarget();
+        const defaultTargets = geoModalGetTargets();
 
         function processRows(rows) {
             let added = 0;
@@ -11343,11 +11793,11 @@
                 if (idx === 0 && /location|локац|адрес|точк|коорд|target|ціль/i.test(parts[0])) return;
                 const location = parts[0];
                 const radius = parts.length >= 2 && parts[1] ? parseFloat(parts[1].replace(',', '.')) : defaultRadius;
-                const target = parts.length >= 3 && parts[2] ? parts[2] : defaultTarget;
+                const target = parts.length >= 3 ? parts[2] : '';
                 if (!location || isNaN(radius)) return;
                 const resolved = geoResolveCoords(location);
-                geoModalPushItem(location, resolved?.lat ?? null, resolved?.lng ?? null, radius, target);
-                added++;
+                const targetsToApply = geoModalNormalizeTargets(target, defaultTargets);
+                added += geoModalPushItem(location, resolved?.lat ?? null, resolved?.lng ?? null, radius, targetsToApply);
             });
             if (added) alert('Імпорт завершено. Додано ' + added + ' точок.');
         }
@@ -11933,6 +12383,21 @@
         applySavedDesign();
         initMotionEnhancements();
         renderEspoUI();
+        const syncConstructorColumnsTop = () => {
+            const right = document.querySelector('.col-lg-3 .sidebar-sticky');
+            const left = document.querySelector('#view-constructor #active-filters-summary');
+            if (!right || !left) return;
+            if (window.innerWidth <= 991) {
+                right.style.marginTop = '0px';
+                return;
+            }
+            right.style.marginTop = '0px';
+            const delta = Math.round(left.getBoundingClientRect().top - right.getBoundingClientRect().top);
+            right.style.marginTop = delta + 'px';
+        };
+        window.addEventListener('resize', syncConstructorColumnsTop);
+        requestAnimationFrame(syncConstructorColumnsTop);
+        setTimeout(syncConstructorColumnsTop, 120);
         if (sessionStorage.getItem('reenter_design_mode') === 'true') {
             sessionStorage.removeItem('reenter_design_mode');
             setTimeout(() => { if (!designModeActive) toggleDesignMode(); }, 500);
