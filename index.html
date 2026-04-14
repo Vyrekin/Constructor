@@ -8624,7 +8624,7 @@
                     panel.innerHTML = `
                         <div class="ai-panel-header"><i class="bi bi-stars"></i> AI Помічник</div>
                         <textarea id="ai-inline-prompt" class="ai-panel-input" rows="3"
-                            placeholder="Опишіть аудиторію або гео, наприклад:\n• Клієнти біля відділення №12 у Львові, радіус 3 км\n• 50.450100, 30.523400; радіус 5 км (точка на карті)\n• Додай з карти — підтягне обрані точки з гео-модалки / мапи"></textarea>
+                            placeholder="Опишіть аудиторію або гео, наприклад:\n• VIP з Києва, крім Одеси та Харкова\n• виключення: жінки до 30\n• вул. Хрещатик 22, Київ — 5 км\n• «з карти» — обрані точки з гео-модалки"></textarea>
                         <div class="ai-panel-actions">
                             <button class="ai-panel-apply" onclick="executeAiQuery()"><i class="bi bi-magic"></i> Застосувати</button>
                             <button class="ai-panel-close" onclick="openAiMode()"><i class="bi bi-x-lg"></i></button>
@@ -8636,7 +8636,10 @@
                             <span class="ai-example" onclick="setAiExample(this)">VIP відправники без додатка більше 100 посилок</span>
                             <span class="ai-example" onclick="setAiExample(this)">Неактивні клієнти з Харкова без верифікації</span>
                             <span class="ai-example" onclick="setAiExample(this)">Відділення №45 Одеса, отримувачі, поштомат у Києві</span>
-                            <span class="ai-example" onclick="setAiExample(this)">50.4501, 30.5234 радіус 7 км на карті + додай з карти</span>
+                            <span class="ai-example" onclick="setAiExample(this)">VIP з Києва, крім Львова</span>
+                            <span class="ai-example" onclick="setAiExample(this)">Одеса метро Театральна радіус 4 км</span>
+                            <span class="ai-example" onclick="setAiExample(this)">вул. Бандери 36, Львів, 3 км</span>
+                            <span class="ai-example" onclick="setAiExample(this)">50.4501, 30.5234 радіус 7 км + з карти</span>
                         </div>`;
                     wrap.parentElement.insertBefore(panel, wrap.nextSibling);
                     document.getElementById('ai-inline-prompt').addEventListener('keydown', (e) => {
@@ -8669,14 +8672,16 @@
             }];
         }
 
-        function executeAiQuery() {
+        async function executeAiQuery() {
             const prompt = document.getElementById('ai-inline-prompt');
             const text = (prompt?.value || '').trim();
             if (!text) return;
 
             const wantsSavedGeo = /(?:^|[\s,.;])(\+?\s*обран(е|і)\s+гео|з\s+карт(?:и)?|с\s+карт(?:и)?|з\s+мап(?:и)?|гео\s+з\s+модал|з\s+модал(?:к[и]?)?\s+гео|обран(і|их)\s+точк|поточн\w*\s+гео|додай\s+обране\s+гео|додай\s+гео\s+з|включи\s+гео\s+з)/i.test(text);
 
-            let results = parseAiNaturalLanguage(text);
+            const parsed = parseAiNaturalLanguage(text);
+            let results = parsed.filters || [];
+            const geoPlacements = parsed.geoPlacements || [];
             if (wantsSavedGeo) {
                 const seen = new Set(results.map(r => `${r.id}::${r.value}::${r.zone || 'Include'}`));
                 const append = (arr) => {
@@ -8693,12 +8698,52 @@
 
             const feedback = document.getElementById('ai-panel-feedback');
 
-            if (!results.length) {
+            let mapPointsAdded = 0;
+            let mapPointsFailed = 0;
+            if (geoPlacements.length) {
+                if (typeof initGeoMap === 'function') initGeoMap();
+                const uiZone = window.currentFilterMode || 'Include';
+                for (const p of geoPlacements) {
+                    const zone = p.zone || uiZone;
+                    let lat = p.lat;
+                    let lng = p.lng;
+                    if (lat == null || lng == null) {
+                        const resolved = typeof geoAiResolvePlacementCoords === 'function'
+                            ? await geoAiResolvePlacementCoords(p)
+                            : null;
+                        if (resolved && isFinite(resolved.lat) && isFinite(resolved.lng)) {
+                            lat = resolved.lat;
+                            lng = resolved.lng;
+                        }
+                    }
+                    if (lat != null && lng != null && typeof geoModalPushItem === 'function') {
+                        const tgt = p.target || 'Відправлення';
+                        geoModalPushItem(p.label, lat, lng, p.radiusKm, tgt, { noFitBounds: true });
+                        mapPointsAdded++;
+                        if (typeof addEspoBlock === 'function') {
+                            const cleanLabel = String(p.label || '').replace(/\s*\[.*?\]\s*/g, '').replace(/\s*\(R=.*$/i, '').trim();
+                            let dim = 'ew_sender_city';
+                            let fieldLabel = 'Гео-таргетинг';
+                            if (String(tgt).includes('Отримання')) {
+                                dim = 'ew_recipient_city';
+                                fieldLabel = 'Місто отримувача';
+                            }
+                            if (cleanLabel) addEspoBlock(dim, fieldLabel, cleanLabel, zone, 'ТА');
+                        }
+                    } else {
+                        mapPointsFailed++;
+                    }
+                }
+                if (mapPointsAdded && typeof geoRedrawMarkers === 'function') geoRedrawMarkers();
+                if (typeof geoModalUpdateChips === 'function') geoModalUpdateChips();
+            }
+
+            if (!results.length && !mapPointsAdded) {
                 if (feedback) {
                     feedback.style.display = '';
                     feedback.className = 'ai-panel-feedback ai-feedback-warn';
-                    feedback.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Не вдалось розпізнати параметри. Спробуйте уточнити запит (місто, вік, координати, відділення або фразу «з карти» для обраного гео).';
-                    setTimeout(() => { feedback.style.display = 'none'; }, 4000);
+                    feedback.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Не вдалось розпізнати параметри або поставити точку на карті. Спробуйте місто/адресу/метро з радіусом, координати, перевірте мережу (геокод) або «з карти».';
+                    setTimeout(() => { feedback.style.display = 'none'; }, 5000);
                 }
                 return;
             }
@@ -8710,24 +8755,90 @@
             if (feedback) {
                 feedback.style.display = '';
                 feedback.className = 'ai-panel-feedback ai-feedback-ok';
-                const names = results.map(r => `<b>${r.label}</b>: ${r.value}`).join(', ');
-                feedback.innerHTML = `<i class="bi bi-check-circle-fill"></i> Додано ${results.length} фільтр(ів): ${names}`;
-                setTimeout(() => { feedback.style.display = 'none'; }, 6000);
+                const parts = results.map((r) => {
+                    const z = (r.zone && r.zone !== 'Include') ? ` <span style="opacity:.85">(${r.zone})</span>` : '';
+                    return `<b>${r.label}</b>${z}: ${r.value}`;
+                });
+                if (mapPointsAdded) parts.push(`<b>Гео на карті</b>: додано ${mapPointsAdded} точок`);
+                if (mapPointsFailed) parts.push(`<b>Гео</b>: не вдалось координат для ${mapPointsFailed}`);
+                feedback.innerHTML = `<i class="bi bi-check-circle-fill"></i> ${parts.join(', ')}`;
+                setTimeout(() => { feedback.style.display = 'none'; }, 7000);
             }
             prompt.value = '';
         }
 
-        function parseAiNaturalLanguage(text) {
-            const raw = text.toLowerCase().replace(/['''`]+/g, "'").replace(/[;.!?]+/g, ' ').replace(/\s+/g, ' ').trim();
+        function parseAiNaturalLanguage(text, segmentZone = 'Include') {
+            const zSeg = segmentZone === 'Exclude' ? 'Exclude' : 'Include';
+
+            if (zSeg === 'Include') {
+                const onlyEx = String(text || '').trim().match(/^(?:виключення|виключити|exclude)\s*:\s*(.+)$/i);
+                if (onlyEx && onlyEx[1].trim()) {
+                    return parseAiNaturalLanguage(onlyEx[1].trim(), 'Exclude');
+                }
+                const splitRe = /\s*(?:[,;]|\b(?:та|і)\b)?\s*(?:(?:але\s+)?(?:виключи(?:ти|вши)?|виключення)|з\s+виключенням|не\s+брати|исключить|исключая|кроме|exclude|excluding|(?:^|\s)(?:крім|окрім)(?=\s+(?!чорн)))\s*:?\s*/i;
+                const chunks = String(text || '').split(splitRe).map((s) => s.trim()).filter(Boolean);
+                if (chunks.length > 1) {
+                    const mergedFilters = [];
+                    const mergedGeo = [];
+                    const seenF = new Set();
+                    const seenG = new Set();
+                    chunks.forEach((chunk, idx) => {
+                        const z = idx === 0 ? 'Include' : 'Exclude';
+                        const sub = parseAiNaturalLanguage(chunk, z);
+                        (sub.filters || []).forEach((f) => {
+                            const k = `${f.id}::${f.value}::${f.zone || 'Include'}::${f.fieldOp || ''}`;
+                            if (seenF.has(k)) return;
+                            seenF.add(k);
+                            mergedFilters.push(f);
+                        });
+                        (sub.geoPlacements || []).forEach((g) => {
+                            const kg = `${g.label}|${g.geocodeQuery || ''}|${g.lat ?? ''}|${g.lng ?? ''}|${g.radiusKm}|${g.target || ''}|${g.zone || ''}|${g.precise ? '1' : ''}|${g.resolveMode || ''}|${g.npCity || ''}|${g.npBranch ?? ''}`;
+                            if (seenG.has(kg)) return;
+                            seenG.add(kg);
+                            mergedGeo.push(g);
+                        });
+                    });
+                    return { filters: mergedFilters, geoPlacements: mergedGeo };
+                }
+            }
+
+            const raw = String(text || '').toLowerCase().replace(/['''`]+/g, "'").replace(/[;.!?]+/g, ' ').replace(/\s+/g, ' ').trim();
             const q = ' ' + raw + ' ';
-            const results = [];
+            const filters = [];
+            const geoPlacements = [];
             const used = new Set();
+            const geoPlaceSeen = new Set();
 
             const add = (id, label, value, zone, fieldOp) => {
-                const key = id + '::' + value + '::' + (zone || 'Include');
+                let effZone = zone;
+                if (effZone === undefined || effZone === null || effZone === '') effZone = zSeg;
+                const key = id + '::' + value + '::' + effZone + '::' + (fieldOp || '');
                 if (used.has(key)) return;
                 used.add(key);
-                results.push({ id, label, value, zone: zone || 'Include', fieldOp: fieldOp || null });
+                filters.push({ id, label, value, zone: effZone, fieldOp: fieldOp || null });
+            };
+
+            const placeGeo = (obj) => {
+                let rk = parseFloat(obj.radiusKm);
+                if (!isFinite(rk) || rk <= 0) rk = 5;
+                rk = Math.min(500, Math.max(1, rk));
+                const gz = obj.zone || zSeg;
+                const gk = `${obj.label}|${obj.geocodeQuery || ''}|${obj.lat ?? ''}|${obj.lng ?? ''}|${rk}|${obj.target || ''}|${gz}|${obj.precise ? '1' : ''}|${obj.resolveMode || ''}|${obj.npCity || ''}|${obj.npBranch ?? ''}`;
+                if (geoPlaceSeen.has(gk)) return;
+                geoPlaceSeen.add(gk);
+                geoPlacements.push({
+                    label: obj.label,
+                    lat: obj.lat,
+                    lng: obj.lng,
+                    geocodeQuery: obj.geocodeQuery,
+                    radiusKm: rk,
+                    target: obj.target,
+                    zone: gz,
+                    precise: obj.precise === true,
+                    resolveMode: obj.resolveMode || null,
+                    npCity: obj.npCity || null,
+                    npBranch: obj.npBranch != null ? obj.npBranch : null
+                });
             };
 
             const has = (...pp) => pp.some(p => typeof p === 'string' ? q.includes(p) : p.test(q));
@@ -8778,8 +8889,8 @@
             const maleRe = /чоловік|чоловіч|чоловіки|чоловіків|мужчин|мужск|мужик|\bmale\b|хлопц|хлопець|хлопці/;
             const isFemale = femaleRe.test(raw);
             const isMale = maleRe.test(raw);
-            if (isFemale) add('gender', 'Стать', 'Жіноча', 'Include');
-            if (isMale) add('gender', 'Стать', 'Чоловіча', 'Include');
+            if (isFemale) add('gender', 'Стать', 'Жіноча');
+            if (isMale) add('gender', 'Стать', 'Чоловіча');
 
             /* ============================================================
              *  AGE — "від X до Y", "X-Y років", "25-45", "старше 60"…
@@ -8788,15 +8899,15 @@
             const ageDash = !ageFromTo && m(/(\d{1,3})\s*[-–—]\s*(\d{1,3})\s*(?:рок|год|літ|лет|years|р\.)?/);
             const ageSingle = !ageFromTo && !ageDash && m(/(?:вік|віком|возраст)\w*\s*(\d{1,3})/);
             if (ageFromTo) {
-                add('age_group', 'Вікова група', ageFromTo[1] + '-' + ageFromTo[2] + ' років', 'Include');
+                add('age_group', 'Вікова група', ageFromTo[1] + '-' + ageFromTo[2] + ' років');
             } else if (ageDash) {
-                add('age_group', 'Вікова група', ageDash[1] + '-' + ageDash[2] + ' років', 'Include');
+                add('age_group', 'Вікова група', ageDash[1] + '-' + ageDash[2] + ' років');
             } else if (ageSingle) {
-                add('age_group', 'Вікова група', ageSingle[1] + ' років', 'Include');
+                add('age_group', 'Вікова група', ageSingle[1] + ' років');
             } else {
-                if (has(/до\s*18/, /менше\s*18/, /<\s*18/)) add('age_group', 'Вікова група', '<18', 'Include');
-                else if (has('молод')) add('age_group', 'Вікова група', '18-25', 'Include');
-                else if (has(/старш[іе]\s*55/, /старш[іе]\s*60/, '55+', '60+', /більше\s*60/)) add('age_group', 'Вікова група', '61-80', 'Include');
+                if (has(/до\s*18/, /менше\s*18/, /<\s*18/)) add('age_group', 'Вікова група', '<18');
+                else if (has('молод')) add('age_group', 'Вікова група', '18-25');
+                else if (has(/старш[іе]\s*55/, /старш[іе]\s*60/, '55+', '60+', /більше\s*60/)) add('age_group', 'Вікова група', '61-80');
             }
 
             /* ============================================================
@@ -8819,11 +8930,11 @@
                     const fromCity = detectCity(dm[1]);
                     const toCity = detectCity(dm[2]);
                     if (fromCity && !senderCityDetected) {
-                        add('ew_sender_city', 'Місто відправника', fromCity, 'Include');
+                        add('ew_sender_city', 'Місто відправника', fromCity);
                         senderCityDetected = true;
                     }
                     if (toCity && !recipientCityDetected) {
-                        add('ew_recipient_city', 'Місто отримувача', toCity, 'Include');
+                        add('ew_recipient_city', 'Місто отримувача', toCity);
                         recipientCityDetected = true;
                     }
                 }
@@ -8833,7 +8944,7 @@
                 CITIES.forEach(c => {
                     c.keys.forEach(k => {
                         if (!raw.includes(k)) return;
-                        add('City', 'Місто', c.name, 'Include');
+                        add('City', 'Місто', c.name);
                     });
                 });
             }
@@ -8845,30 +8956,30 @@
             const recvVerbs = /отриму|отримав|отримал|одержу|одержав|одержал|приймал|приймав|забирал|забирав|получал|получил/;
 
             if (has('відправник', 'відправниц', 'відправники', 'відправників', 'відправлен', 'отправител')) {
-                add('user_role', 'Роль в ЕН', 'Відправник', 'Include');
+                add('user_role', 'Роль в ЕН', 'Відправник');
                 roleSenderInferred = true;
             } else if (sendVerbs.test(raw)) {
-                add('user_role', 'Роль в ЕН', 'Відправник', 'Include');
+                add('user_role', 'Роль в ЕН', 'Відправник');
                 roleSenderInferred = true;
             }
 
             if (has('отримувач', 'отримувачі', 'отримувачів', 'получател', 'одержувач')) {
-                add('user_role', 'Роль в ЕН', 'Отримувач', 'Include');
+                add('user_role', 'Роль в ЕН', 'Отримувач');
                 roleRecipientInferred = true;
             } else if (recvVerbs.test(raw) && !roleSenderInferred) {
-                add('user_role', 'Роль в ЕН', 'Отримувач', 'Include');
+                add('user_role', 'Роль в ЕН', 'Отримувач');
                 roleRecipientInferred = true;
             }
 
             /* ============================================================
              *  COUNTRY
              * ============================================================ */
-            if (has('україн', 'украин', 'ukrain')) add('client_country', 'Країна', 'Україна', 'Include');
-            if (has('польщ', /\bполь/, 'poland')) add('client_country', 'Країна', 'Польща', 'Include');
-            if (has('молдов', 'moldov')) add('client_country', 'Країна', 'Молдова', 'Include');
-            if (has(/\bімпорт/)) add('import_country', 'Імпорт (країна)', 'Так', 'Include');
-            if (has(/\bекспорт/)) add('export_country', 'Експорт (країна)', 'Так', 'Include');
-            if (has('міжнародн')) add('international_delivery_npu', 'Міжнародна доставка', 'Так', 'Include');
+            if (has('україн', 'украин', 'ukrain')) add('client_country', 'Країна', 'Україна');
+            if (has('польщ', /\bполь/, 'poland')) add('client_country', 'Країна', 'Польща');
+            if (has('молдов', 'moldov')) add('client_country', 'Країна', 'Молдова');
+            if (has(/\bімпорт/)) add('import_country', 'Імпорт (країна)', 'Так');
+            if (has(/\bекспорт/)) add('export_country', 'Експорт (країна)', 'Так');
+            if (has('міжнародн')) add('international_delivery_npu', 'Міжнародна доставка', 'Так');
 
             /* ============================================================
              *  ACTIVITY SEGMENT
@@ -8879,96 +8990,96 @@
             const isNew = has(/\bнов[іий]\b/, /\bnew\b/, 'новачк', 'новачок');
             const isVip = has(/\bvip\b/);
             const isActive = has('активн') && !isInactive;
-            if (isInactive) add('activity_segment', 'Сегмент активності', 'Неактивний', 'Include');
-            else if (isSleeping) add('activity_segment', 'Сегмент активності', 'Замовкший', 'Include');
-            else if (isChurn) add('activity_segment', 'Сегмент активності', 'Архівний', 'Include');
-            else if (isNew) add('activity_segment', 'Сегмент активності', 'Новий', 'Include');
-            else if (isVip || isActive) add('activity_segment', 'Сегмент активності', 'Активний', 'Include');
+            if (isInactive) add('activity_segment', 'Сегмент активності', 'Неактивний');
+            else if (isSleeping) add('activity_segment', 'Сегмент активності', 'Замовкший');
+            else if (isChurn) add('activity_segment', 'Сегмент активності', 'Архівний');
+            else if (isNew) add('activity_segment', 'Сегмент активності', 'Новий');
+            else if (isVip || isActive) add('activity_segment', 'Сегмент активності', 'Активний');
 
             /* ============================================================
              *  RFM / CLC / CVO SEGMENTS
              * ============================================================ */
             const rfmMatch = m(/rfm\s*(?:сегмент[іау]?)?\s*([a-dа-д])/i);
-            if (rfmMatch) add('rfm_segment', 'RFM сегмент', rfmMatch[1].toUpperCase(), 'Include');
-            if (has('cross sell', 'cross-sell', 'кросс')) add('clc_segment', 'CLC сегмент', 'Cross sell', 'Include');
-            if (has('retention')) add('clc_segment', 'CLC сегмент', 'Retention', 'Include');
-            if (has('lapsed')) add('clc_segment', 'CLC сегмент', 'Lapsed', 'Include');
-            if (has('engagement')) add('clc_segment', 'CLC сегмент', 'Engagement', 'Include');
-            if (has('stimulation')) add('clc_segment', 'CLC сегмент', 'Stimulation', 'Include');
+            if (rfmMatch) add('rfm_segment', 'RFM сегмент', rfmMatch[1].toUpperCase());
+            if (has('cross sell', 'cross-sell', 'кросс')) add('clc_segment', 'CLC сегмент', 'Cross sell');
+            if (has('retention')) add('clc_segment', 'CLC сегмент', 'Retention');
+            if (has('lapsed')) add('clc_segment', 'CLC сегмент', 'Lapsed');
+            if (has('engagement')) add('clc_segment', 'CLC сегмент', 'Engagement');
+            if (has('stimulation')) add('clc_segment', 'CLC сегмент', 'Stimulation');
             const cvoMatch = m(/cvo\s*(?:сегмент[іау]?)?\s*([1-4])/i);
-            if (cvoMatch) add('cvo_segment', 'CVO сегмент', cvoMatch[1], 'Include');
+            if (cvoMatch) add('cvo_segment', 'CVO сегмент', cvoMatch[1]);
 
             /* ============================================================
              *  DEVICE / OS / MOBILE APP
              * ============================================================ */
-            if (has('iphone', 'apple', /\bios\b/, 'айфон')) add('new_app_device_os', 'ОС девайсу', 'iOS', 'Include');
-            if (has('android', 'андроїд', 'андроід', 'samsung', 'самсунг', 'xiaomi', 'сяомі')) add('new_app_device_os', 'ОС девайсу', 'Android', 'Include');
+            if (has('iphone', 'apple', /\bios\b/, 'айфон')) add('new_app_device_os', 'ОС девайсу', 'iOS');
+            if (has('android', 'андроїд', 'андроід', 'samsung', 'самсунг', 'xiaomi', 'сяомі')) add('new_app_device_os', 'ОС девайсу', 'Android');
 
             const noApp = has(/без\s+(?:мобільн|додат|аплік|застосунк|апп)/, /не\s+(?:має|мають|мав|встановив)\s+(?:мобільн|додат)/, 'no app', /не\s+корист\w*\s+додат/);
             const yesApp = has(/з\s+додат/, /є\s+додат/, /має\s+додат/, /корист\w*\s+додат/, /встанов\w*\s+додат/, /мобільн\w*\s+додат/) && !noApp;
-            if (noApp) add('is_mobile_app_user', 'Мобільний додаток', 'Ні', 'Include');
-            else if (yesApp) add('is_mobile_app_user', 'Мобільний додаток', 'Так', 'Include');
+            if (noApp) add('is_mobile_app_user', 'Мобільний додаток', 'Ні');
+            else if (yesApp) add('is_mobile_app_user', 'Мобільний додаток', 'Так');
 
             /* ============================================================
              *  VERIFICATION
              * ============================================================ */
             const notVerified = has(/не\s*верифіков/, 'неверифіков', 'unverified');
-            if (notVerified) add('verification_status', 'Верифікація', 'Ні', 'Include');
-            else if (has('верифіков', 'verified')) add('verification_status', 'Верифікація', 'Так', 'Include');
+            if (notVerified) add('verification_status', 'Верифікація', 'Ні');
+            else if (has('верифіков', 'verified')) add('verification_status', 'Верифікація', 'Так');
 
             /* ============================================================
              *  STAFF / POB / LID
              * ============================================================ */
             const exclStaff = has(/без\s+співробітник/, /виключити\s+співробітник/, /не\s+співробітник/, /окрім\s+співроб/);
             if (exclStaff) add('is_staff', 'Співробітник', 'Так', 'Exclude');
-            else if (has('співробітник', 'сотрудник', 'staff')) add('is_staff', 'Співробітник', 'Так', 'Include');
-            if (has(/\bпоб\b/)) add('is_pob', 'ПОБ', 'Так', 'Include');
-            if (has(/\bлід\b/, /\blead\b/)) add('is_lid', 'ЛІД', 'Так', 'Include');
+            else if (has('співробітник', 'сотрудник', 'staff')) add('is_staff', 'Співробітник', 'Так');
+            if (has(/\bпоб\b/)) add('is_pob', 'ПОБ', 'Так');
+            if (has(/\bлід\b/, /\blead\b/)) add('is_lid', 'ЛІД', 'Так');
 
             /* ============================================================
              *  SERVICE TYPE / PAYER
              * ============================================================ */
-            if (has('склад-склад', /склад\s+склад/, 'w-w', /warehouse\s*-?\s*warehouse/)) add('service_type', 'Тип сервісу', 'Склад-Склад', 'Include');
-            if (has('двері-двері', /двері\s+двері/, 'd-d', /door\s*-?\s*door/)) add('service_type', 'Тип сервісу', 'Двері-Двері', 'Include');
-            if (has(/платник.*відправ/, /відправ.*плат/, /плат\w*\s*-?\s*відправ/)) add('payer_type', 'Платник', 'Відправник', 'Include');
-            if (has(/платник.*отрим/, /отрим.*плат/, /плат\w*\s*-?\s*отрим/)) add('payer_type', 'Платник', 'Отримувач', 'Include');
+            if (has('склад-склад', /склад\s+склад/, 'w-w', /warehouse\s*-?\s*warehouse/)) add('service_type', 'Тип сервісу', 'Склад-Склад');
+            if (has('двері-двері', /двері\s+двері/, 'd-d', /door\s*-?\s*door/)) add('service_type', 'Тип сервісу', 'Двері-Двері');
+            if (has(/платник.*відправ/, /відправ.*плат/, /плат\w*\s*-?\s*відправ/)) add('payer_type', 'Платник', 'Відправник');
+            if (has(/платник.*отрим/, /отрим.*плат/, /плат\w*\s*-?\s*отрим/)) add('payer_type', 'Платник', 'Отримувач');
 
             /* ============================================================
              *  CARGO TYPE
              * ============================================================ */
-            if (has('посилк', 'парцел', 'parcel')) add('ew_cargo_type', 'Тип вантажу', 'Посилка', 'Include');
-            if (has('документ', 'document')) add('ew_cargo_type', 'Тип вантажу', 'Документи', 'Include');
-            if (has('палет', 'pallet')) add('ew_cargo_type', 'Тип вантажу', 'Палета', 'Include');
+            if (has('посилк', 'парцел', 'parcel')) add('ew_cargo_type', 'Тип вантажу', 'Посилка');
+            if (has('документ', 'document')) add('ew_cargo_type', 'Тип вантажу', 'Документи');
+            if (has('палет', 'pallet')) add('ew_cargo_type', 'Тип вантажу', 'Палета');
 
             /* ============================================================
              *  MONEY TRANSFER
              * ============================================================ */
-            if (has(/без\s+переказ/)) add('has_money_transfer', 'Грошовий переказ', 'Ні', 'Include');
-            else if (has('переказ', 'transfer')) add('has_money_transfer', 'Грошовий переказ', 'Так', 'Include');
+            if (has(/без\s+переказ/)) add('has_money_transfer', 'Грошовий переказ', 'Ні');
+            else if (has('переказ', 'transfer')) add('has_money_transfer', 'Грошовий переказ', 'Так');
 
             /* ============================================================
              *  PROMO / MARKETPLACE / FULFILLMENT / CLAIMS
              * ============================================================ */
-            if (has('промокод', 'promo')) add('ew_promocode', 'Промокод', 'Так', 'Include');
-            if (has('маркетплейс', 'marketplace')) add('marketplace', 'Маркетплейс', 'Так', 'Include');
-            if (has('фулфілмент', 'fulfill')) add('is_fulfillment', 'Фулфілмент', 'Так', 'Include');
-            if (has('претенз', /claim/)) add('has_claims', 'Наявність претензій', 'Так', 'Include');
+            if (has('промокод', 'promo')) add('ew_promocode', 'Промокод', 'Так');
+            if (has('маркетплейс', 'marketplace')) add('marketplace', 'Маркетплейс', 'Так');
+            if (has('фулфілмент', 'fulfill')) add('is_fulfillment', 'Фулфілмент', 'Так');
+            if (has('претенз', /claim/)) add('has_claims', 'Наявність претензій', 'Так');
 
             /* ============================================================
              *  CONSENT / MARKETING PERMISSIONS
              * ============================================================ */
-            if (has(/згод.*промо/, /промо.*розсил/, /дозвіл.*промо/)) add('consent_promotional_mailings', 'Згода на промо', 'Так', 'Include');
-            if (has(/згод.*опитуван/)) add('consent_surveys', 'Згода на опитування', 'Так', 'Include');
-            if (has(/згод.*пропозиц/)) add('consent_offers', 'Згода на пропозиції', 'Так', 'Include');
-            if (has(/згод.*відкр.*відд/)) add('consent_branch_opening_communications', 'Згода на комун. про відкр. відд.', 'Так', 'Include');
+            if (has(/згод.*промо/, /промо.*розсил/, /дозвіл.*промо/)) add('consent_promotional_mailings', 'Згода на промо', 'Так');
+            if (has(/згод.*опитуван/)) add('consent_surveys', 'Згода на опитування', 'Так');
+            if (has(/згод.*пропозиц/)) add('consent_offers', 'Згода на пропозиції', 'Так');
+            if (has(/згод.*відкр.*відд/)) add('consent_branch_opening_communications', 'Згода на комун. про відкр. відд.', 'Так');
 
             /* ============================================================
              *  SETTLEMENT TYPE / COUNTER PARTY
              * ============================================================ */
-            if (has(/\bсело\b/, 'сільськ')) add('sender_settlement_type', 'Тип нас. пункту', 'Село', 'Include');
-            if (has(/\bсмт\b/)) add('sender_settlement_type', 'Тип нас. пункту', 'СМТ', 'Include');
-            if (has('юридичн', /бізнес[\s-]*клієнт/, /\bb2b\b/)) add('counter_party_type', 'Тип контрагента', 'Юридична особа', 'Include');
-            if (has(/фізичн\w*\s+особ/, /\bb2c\b/)) add('counter_party_type', 'Тип контрагента', 'Фізична особа', 'Include');
+            if (has(/\bсело\b/, 'сільськ')) add('sender_settlement_type', 'Тип нас. пункту', 'Село');
+            if (has(/\bсмт\b/)) add('sender_settlement_type', 'Тип нас. пункту', 'СМТ');
+            if (has('юридичн', /бізнес[\s-]*клієнт/, /\bb2b\b/)) add('counter_party_type', 'Тип контрагента', 'Юридична особа');
+            if (has(/фізичн\w*\s+особ/, /\bb2c\b/)) add('counter_party_type', 'Тип контрагента', 'Фізична особа');
 
             /* ============================================================
              *  NUMERIC / COMPARISON FILTERS
@@ -8982,9 +9093,9 @@
                 const moreRe2 = new RegExp('(?:більше|більш|понад|>|від)\\s*(\\d[\\d\\s]*)\\s*(?:' + ws + ')');
                 const lessRe2 = new RegExp('(?:менше|менш|<|до)\\s*(\\d[\\d\\s]*)\\s*(?:' + ws + ')');
                 let r = m(moreRe) || m(moreRe2);
-                if (r) add(fieldId, fieldLabel, '> ' + r[1].replace(/\s/g, ''), 'Include', 'більше');
+                if (r) add(fieldId, fieldLabel, '> ' + r[1].replace(/\s/g, ''), undefined, 'більше');
                 r = m(lessRe) || m(lessRe2);
-                if (r) add(fieldId, fieldLabel, '< ' + r[1].replace(/\s/g, ''), 'Include', 'менше');
+                if (r) add(fieldId, fieldLabel, '< ' + r[1].replace(/\s/g, ''), undefined, 'менше');
             };
 
             numPat(['посилок','посилк','ен\\b','відправок','відправлен','раз\\b'], 'ParcelsCount', 'Кількість посилок');
@@ -8994,9 +9105,9 @@
             numPat(['переказ','transfer'], 'money_transfer_amount', 'Сума переказу');
 
             const daysMatch = m(/(\d+)\s*(?:днів|дні|дней)\s*(?:без)/);
-            if (daysMatch) add('c_days_without_sending_or_receiving', 'Днів без активності', '> ' + daysMatch[1], 'Include', 'більше');
+            if (daysMatch) add('c_days_without_sending_or_receiving', 'Днів без активності', '> ' + daysMatch[1], undefined, 'більше');
             const daysMatch2 = m(/(?:без\s+активн|без\s+відправ)\w*\s*(?:більше|понад|>)\s*(\d+)/);
-            if (daysMatch2 && !daysMatch) add('c_days_without_sending_or_receiving', 'Днів без активності', '> ' + daysMatch2[1], 'Include', 'більше');
+            if (daysMatch2 && !daysMatch) add('c_days_without_sending_or_receiving', 'Днів без активності', '> ' + daysMatch2[1], undefined, 'більше');
 
             /* ============================================================
              *  EXCLUDE PATTERNS — "без ...", "виключити ...", "крім ..."
@@ -9023,7 +9134,7 @@
                 [/луганськ\w*\s*обл/, 'Луганська']
             ];
             areaMap.forEach(([re, area]) => {
-                if (re.test(raw)) add('ew_sender_area', 'Область', area, 'Include');
+                if (re.test(raw)) add('ew_sender_area', 'Область', area);
             });
 
             /* ============================================================
@@ -9052,21 +9163,15 @@
                         if (isFinite(g) && g > 0) rKm = g;
                         else if (isFinite(gm) && gm > 0) rKm = gm;
                     }
-                    add('GeoLocation', 'Географія (гео-таргетинг на карті)', `${lat.toFixed(6)}, ${lng.toFixed(6)}; R=${rKm} км`, 'Include');
+                    placeGeo({
+                        label: `${lat.toFixed(6)}, ${lng.toFixed(6)}; R=${rKm} км`,
+                        lat,
+                        lng,
+                        radiusKm: rKm,
+                        geocodeQuery: null,
+                        target: isRecvGeoCtx ? 'Отримання' : 'Відправлення'
+                    });
                 }
-            }
-
-            const brMatch = raw.match(/(?:відділен(?:ня|ні|ь|ю)|отделен(?:ие|ия|ь|ю))\w*\s*(?:№|номер\w*)?\s*(\d{1,4})\b/);
-            if (brMatch) {
-                const cityU = detectCity(raw);
-                const v = cityU ? `№${brMatch[1]} — ${cityU}` : `№${brMatch[1]}`;
-                add(geoUnitId, geoUnitLbl, v, 'Include');
-            }
-
-            if (has(/\bпоштомат/)) {
-                const cityP = detectCity(raw);
-                const pv = cityP ? `Поштомат — ${cityP}` : 'Поштомат';
-                add(geoUnitId, geoUnitLbl, pv, 'Include');
             }
 
             const divGeoPatterns = [
@@ -9077,39 +9182,196 @@
                 [/північн(?:ий|ого|ому)?\s+дивізіон/, 'Північний']
             ];
             divGeoPatterns.forEach(([re, name]) => {
-                if (re.test(raw)) add('GeoLocation', 'Географія (гео-таргетинг на карті)', `Дивізіон: ${name}`, 'Include');
+                if (re.test(raw)) add('GeoLocation', 'Географія (гео-таргетинг на карті)', `Дивізіон: ${name}`);
             });
 
             const nearCityM = raw.match(/в\s+(\d{1,3})\s*км\s+від\s+(\S+(?:\s+\S+)?)/);
             if (nearCityM) {
                 const cNear = detectCity(nearCityM[2]);
-                if (cNear) add('GeoLocation', 'Географія (гео-таргетинг на карті)', `${cNear}, R=${nearCityM[1]} км`, 'Include');
+                const rKmNear = Math.min(500, Math.max(1, parseInt(nearCityM[1], 10) || 5));
+                if (cNear) {
+                    placeGeo({
+                        label: `${cNear}, R=${rKmNear} км`,
+                        geocodeQuery: cNear + ', Ukraine',
+                        radiusKm: rKmNear,
+                        target: isRecvGeoCtx ? 'Отримання' : 'Відправлення'
+                    });
+                } else {
+                    placeGeo({
+                        label: `R=${rKmNear} км від ${nearCityM[2].trim()}`,
+                        geocodeQuery: nearCityM[2].trim() + ', Ukraine',
+                        radiusKm: rKmNear,
+                        target: isRecvGeoCtx ? 'Отримання' : 'Відправлення'
+                    });
+                }
+            }
+
+            const extractRadiusKmFromAiTextOnly = () => {
+                let mR = raw.match(/(?:радіус|в\s+радіусі|r\s*[:=])\s*(\d{1,3})\s*(?:км|km)?/);
+                if (mR) return Math.min(500, Math.max(1, parseInt(mR[1], 10)));
+                mR = raw.match(/(?:^|[\s,;])(\d{1,3})\s*км(?:\b|[\s,;]|$)/);
+                if (mR) {
+                    const n = parseInt(mR[1], 10);
+                    if (n >= 1 && n <= 500) return n;
+                }
+                return null;
+            };
+
+            let firstCityInText = null;
+            for (const c of CITIES) {
+                if (c.keys.some((k) => raw.includes(k))) {
+                    firstCityInText = c.name;
+                    break;
+                }
+            }
+
+            const metroM = text.match(/(?:станці(?:ї|я|ю)\s+)?метро\s+([a-zа-яіїєґA-ZА-ЯІЇЄҐ0-9.'’ʼ\-\s]{2,52}?)(?=\s+(?:радіус|радиус|radius|\br\b|\d{1,3}\s*км)\b|[,;]|$)/i);
+            const metroName = metroM ? metroM[1].trim().replace(/\s+/g, ' ') : '';
+
+            const nearAlt1 = raw.match(/(?:на\s+)?відстан\w*\s+(\d{1,3})\s*км\s+від\s+(\S+(?:\s+\S+){0,3}?)(?=\s|$|,|;)/);
+            if (nearAlt1) {
+                const cA = detectCity(nearAlt1[2]);
+                const rA = Math.min(500, Math.max(1, parseInt(nearAlt1[1], 10) || 5));
+                if (cA) {
+                    placeGeo({
+                        label: `${cA}, R=${rA} км`,
+                        geocodeQuery: cA + ', Ukraine',
+                        radiusKm: rA,
+                        target: isRecvGeoCtx ? 'Отримання' : 'Відправлення'
+                    });
+                } else {
+                    placeGeo({
+                        label: `R=${rA} км від ${nearAlt1[2].trim()}`,
+                        geocodeQuery: nearAlt1[2].trim() + ', Ukraine',
+                        radiusKm: rA,
+                        target: isRecvGeoCtx ? 'Отримання' : 'Відправлення'
+                    });
+                }
+            }
+
+            const nearAlt2 = raw.match(/(\S+(?:\s+\S+){0,2})\s+в\s+(\d{1,3})\s*км(?:\b|[\s,;]|$)/);
+            if (nearAlt2) {
+                const cB = detectCity(nearAlt2[1]);
+                const rB = Math.min(500, Math.max(1, parseInt(nearAlt2[2], 10) || 5));
+                if (cB) {
+                    placeGeo({
+                        label: `${cB}, R=${rB} км`,
+                        geocodeQuery: cB + ', Ukraine',
+                        radiusKm: rB,
+                        target: isRecvGeoCtx ? 'Отримання' : 'Відправлення'
+                    });
+                }
+            }
+
+            const addrLike = /(?:вул\.?\s|вулиц|проспект|просп\.|бульвар|шосе|провул|проїзд|узвіз|пл\.|площ(?!а)|адрес\w*\s*[:\-]|\d+\s*,\s*\d+|[а-яіїєґ''ʼ-]{3,}\s+\d{1,4}\b)/i.test(text);
+            const geoCtxWords = /(?:\b(?:біля|коло|поблизу|навколо|гео|геолокац|гео-таргет|на карті|точк\w*\s+на\s+карті)\b)/i.test(raw);
+
+            const rKmWords = extractRadiusKmFromAiTextOnly();
+            let hasValidCoordGeo = false;
+            if (coordPair) {
+                const latChk = parseFloat(coordPair[1].replace(',', '.'));
+                const lngChk = parseFloat(coordPair[2].replace(',', '.'));
+                hasValidCoordGeo = isFinite(latChk) && isFinite(lngChk) && Math.abs(latChk) <= 90 && Math.abs(lngChk) <= 180;
+            }
+
+            const aiGeoTarget = isRecvGeoCtx ? 'Отримання' : 'Відправлення';
+
+            const brMatch = raw.match(/(?:відділен(?:ня|ні|ь|ю)|отделен(?:ие|ия|ь|ю)|\bнп\b)\w*\s*(?:№|номер\w*)?\s*(\d{1,4})\b/);
+            if (brMatch) {
+                const cityU = detectCity(raw);
+                const v = cityU ? `№${brMatch[1]} — ${cityU}` : `№${brMatch[1]}`;
+                add(geoUnitId, geoUnitLbl, v);
+                const rBr = rKmWords != null ? rKmWords : (parseFloat(document.getElementById('geo-modal-radius')?.value || document.getElementById('GeoRadius')?.value || '') || 5);
+                placeGeo({
+                    label: v,
+                    resolveMode: 'np_branch',
+                    npCity: cityU || '',
+                    npBranch: brMatch[1],
+                    radiusKm: Math.min(500, Math.max(1, rBr)),
+                    target: aiGeoTarget,
+                    precise: true
+                });
+            }
+
+            if (has(/\bпоштомат/)) {
+                const cityP = detectCity(raw);
+                const pv = cityP ? `Поштомат — ${cityP}` : 'Поштомат';
+                add(geoUnitId, geoUnitLbl, pv);
+                if (cityP) {
+                    const rPo = rKmWords != null ? rKmWords : (parseFloat(document.getElementById('geo-modal-radius')?.value || '') || 5);
+                    placeGeo({
+                        label: pv,
+                        resolveMode: 'np_branch',
+                        npCity: cityP,
+                        npBranch: 'поштомат',
+                        radiusKm: Math.min(500, Math.max(1, rPo)),
+                        target: aiGeoTarget,
+                        precise: true
+                    });
+                }
+            }
+
+            if (metroName) {
+                const bits = [];
+                if (firstCityInText) bits.push(firstCityInText);
+                bits.push(`метро «${metroName}»`);
+                const r = rKmWords != null ? rKmWords : 5;
+                bits.push(`R=${r} км`);
+                const gq = [firstCityInText, 'метро', metroName, 'Україна'].filter(Boolean).join(' ');
+                placeGeo({ label: bits.join(', '), geocodeQuery: gq, radiusKm: r, target: aiGeoTarget, precise: true });
+            } else if (addrLike && text.trim().length >= 6 && !hasValidCoordGeo) {
+                const clip = text.trim().replace(/\s+/g, ' ');
+                let addrLine = clip.length > 220 ? clip.slice(0, 217) + '…' : clip;
+                if (rKmWords != null) addrLine += `; R=${rKmWords} км`;
+                const rAddr = rKmWords != null ? rKmWords : 5;
+                placeGeo({ label: addrLine, geocodeQuery: clip, radiusKm: rAddr, target: aiGeoTarget, precise: true });
+            } else if (firstCityInText && rKmWords != null && !hasValidCoordGeo) {
+                const fullQ = text.trim().replace(/\s+/g, ' ');
+                const st = /\bметро\b/i.test(text) || geoAiTextHasStreetLevelDetail(text);
+                placeGeo({
+                    label: `${firstCityInText}, R=${rKmWords} км`,
+                    geocodeQuery: st ? fullQ : firstCityInText + ', Ukraine',
+                    radiusKm: rKmWords,
+                    target: aiGeoTarget,
+                    precise: !!st
+                });
+            } else if (firstCityInText && geoCtxWords && !hasValidCoordGeo) {
+                const fullQ = text.trim().replace(/\s+/g, ' ');
+                const st = /\bметро\b/i.test(text) || geoAiTextHasStreetLevelDetail(text);
+                const r = rKmWords != null ? rKmWords : 5;
+                placeGeo({
+                    label: `${firstCityInText}, R=${r} км`,
+                    geocodeQuery: st ? fullQ : firstCityInText + ', Ukraine',
+                    radiusKm: r,
+                    target: aiGeoTarget,
+                    precise: !!st
+                });
             }
 
             /* ============================================================
              *  PAYMENT METHOD
              * ============================================================ */
-            if (has('готівк', 'наличн', 'cash')) add('ew_payment_method', 'Тип оплати', 'Готівка', 'Include');
-            if (has('терміна', 'terminal', 'карт')) add('ew_payment_method', 'Тип оплати', 'Термінал', 'Include');
-            if (has(/оплат\w*\s+(?:в\s+)?додат/, /оплат\w*\s+(?:через\s+)?апп/)) add('ew_payment_method', 'Тип оплати', 'Додаток', 'Include');
+            if (has('готівк', 'наличн', 'cash')) add('ew_payment_method', 'Тип оплати', 'Готівка');
+            if (has('терміна', 'terminal', 'карт')) add('ew_payment_method', 'Тип оплати', 'Термінал');
+            if (has(/оплат\w*\s+(?:в\s+)?додат/, /оплат\w*\s+(?:через\s+)?апп/)) add('ew_payment_method', 'Тип оплати', 'Додаток');
 
             /* ============================================================
              *  TIME-BASED CONTEXTUAL FILTERS
              *  "за останній місяць", "цього року", "з 2024 року"
              * ============================================================ */
-            if (has('за останній місяць', 'за останні 30 дн', 'за місяць')) add('creation_date', 'Дата створення ЕН', 'цього місяця', 'Include', 'цього місяця');
-            if (has('за останній тиждень', 'за тиждень', 'за останні 7 дн')) add('creation_date', 'Дата створення ЕН', 'цього тижня', 'Include', 'цього тижня');
-            if (has('сьогодні', 'today')) add('creation_date', 'Дата створення ЕН', 'сьогодні', 'Include', 'сьогодні');
-            if (has('вчора', 'yesterday')) add('creation_date', 'Дата створення ЕН', 'вчора', 'Include', 'вчора');
+            if (has('за останній місяць', 'за останні 30 дн', 'за місяць')) add('creation_date', 'Дата створення ЕН', 'цього місяця', undefined, 'цього місяця');
+            if (has('за останній тиждень', 'за тиждень', 'за останні 7 дн')) add('creation_date', 'Дата створення ЕН', 'цього тижня', undefined, 'цього тижня');
+            if (has('сьогодні', 'today')) add('creation_date', 'Дата створення ЕН', 'сьогодні', undefined, 'сьогодні');
+            if (has('вчора', 'yesterday')) add('creation_date', 'Дата створення ЕН', 'вчора', undefined, 'вчора');
 
             /* ============================================================
              *  SPHERE OF ACTIVITY / MERCHANT
              * ============================================================ */
-            if (has(/сфер\w*\s+діяльн/, 'activity_category')) add('activity_category', 'Сфера діяльності', 'Так', 'Include');
+            if (has(/сфер\w*\s+діяльн/, 'activity_category')) add('activity_category', 'Сфера діяльності', 'Так');
             const spheres = { 'retail': 'Retail', 'fmcg': 'FMCG', 'e-commerce': 'E-commerce', 'ecommerce': 'E-commerce', 'it': 'IT', 'auto': 'Auto', 'pharma': 'Pharma', 'фарма': 'Pharma', 'авто': 'Auto' };
-            Object.entries(spheres).forEach(([k, v]) => { if (has(k)) add('activity_category', 'Сфера діяльності', v, 'Include'); });
+            Object.entries(spheres).forEach(([k, v]) => { if (has(k)) add('activity_category', 'Сфера діяльності', v); });
 
-            return results;
+            return { filters, geoPlacements };
         }
 
         function handleAiRequest() {
@@ -11702,12 +11964,39 @@
         if (geoMap) geoMap.flyTo([p.lat, p.lng], 11, { duration: 0.5 });
     }
 
-    function geoModalAddAddress() {
+    async function geoModalAddAddress() {
         const addr = document.getElementById('geo-modal-address')?.value?.trim();
         if (!addr) return;
-        const resolved = geoResolveCoords(addr);
-        geoModalPushItem(addr, resolved?.lat ?? null, resolved?.lng ?? null, geoModalGetRadius());
-        if (resolved && geoMap) geoMap.flyTo([resolved.lat, resolved.lng], 11, { duration: 0.5 });
+        const radius = geoModalGetRadius();
+        let lat = null;
+        let lng = null;
+        const cm = addr.match(/(-?\d+[.,]\d+)\s*[,;\s]\s*(-?\d+[.,]\d+)/);
+        if (cm) {
+            lat = parseFloat(cm[1].replace(',', '.'));
+            lng = parseFloat(cm[2].replace(',', '.'));
+            if (!isFinite(lat) || !isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) { lat = null; lng = null; }
+        } else if (!geoAiMustNotUseCityCenterShortcut(addr)) {
+            const resolved = geoResolveCoords(addr);
+            if (resolved && isFinite(resolved.lat) && isFinite(resolved.lng)) {
+                lat = resolved.lat;
+                lng = resolved.lng;
+            }
+        }
+        if (lat == null || lng == null || !isFinite(lat) || !isFinite(lng)) {
+            if (typeof geoGeocodeNominatim === 'function') {
+                const nom = await geoGeocodeNominatim(addr, {});
+                if (nom && isFinite(nom.lat) && isFinite(nom.lng)) {
+                    lat = nom.lat;
+                    lng = nom.lng;
+                }
+            }
+        }
+        if ((lat == null || lng == null || !isFinite(lat) || !isFinite(lng)) && typeof geoAiFallbackCityCoords === 'function') {
+            const cf = geoAiFallbackCityCoords(addr);
+            if (cf) { lat = cf.lat; lng = cf.lng; }
+        }
+        geoModalPushItem(addr, lat, lng, radius);
+        if (lat != null && lng != null && geoMap) geoMap.flyTo([lat, lng], 11, { duration: 0.5 });
         document.getElementById('geo-modal-address').value = '';
     }
 
@@ -12055,17 +12344,312 @@
         return null;
     }
 
-    function geoAddPoint() {
+    let geoNomLastAt = 0;
+    function geoNomPickBestResult(data, queryHasDigit, preferStreet) {
+        if (!data || !data.length) return null;
+        const isAdm = (d) => d.class === 'boundary' || d.type === 'administrative' || d.type === 'postcode';
+        const isBroadPlace = (d) => {
+            const t = String(d.type || '').toLowerCase();
+            const c = String(d.class || '').toLowerCase();
+            if (c === 'boundary') return true;
+            return /^(city|town|village|hamlet|county|state|province|region|municipality|administrative|postcode)$/.test(t);
+        };
+        const roadish = (d) => {
+            const blob = String(d.class || '') + ',' + String(d.type || '');
+            if (/highway|road|residential|tertiary|secondary|primary|pedestrian|footway|path/.test(blob.toLowerCase())) return true;
+            const addr = d.address || {};
+            return !!(addr.road || addr.pedestrian || addr.path || addr.neighbourhood);
+        };
+        const houseish = (d) => {
+            const blob = String(d.class || '') + ',' + String(d.type || '');
+            if (/house|building|amenity|shop|highway|railway|place|tourism|leisure|aeroway/.test(blob)) return true;
+            const addr = d.address || {};
+            if (addr.house_number) return true;
+            return false;
+        };
+        const score = (d) => {
+            let s = parseFloat(d.importance) || 0;
+            const addr = d.address || {};
+            if (queryHasDigit) {
+                if (addr.house_number) s += 4;
+                if (addr.road || addr.pedestrian || addr.path || addr.neighbourhood) s += 1.2;
+            }
+            if (preferStreet) {
+                if (roadish(d)) s += 2.8;
+                if (addr.house_number) s += 2.5;
+                if (isBroadPlace(d)) s -= 4.0;
+            }
+            if (isAdm(d)) s -= 2.5;
+            return s;
+        };
+        const sorted = [...data].sort((a, b) => score(b) - score(a));
+        if (preferStreet) {
+            const streetFirst = sorted.find((d) => !isAdm(d) && !isBroadPlace(d) && (roadish(d) || houseish(d)));
+            if (streetFirst) return streetFirst;
+            return null;
+        }
+        if (queryHasDigit) {
+            const h = sorted.find((d) => houseish(d) && !isAdm(d));
+            if (h) return h;
+        }
+        const nonAdm = sorted.find((d) => !isAdm(d));
+        if (nonAdm) return nonAdm;
+        return sorted[0];
+    }
+
+    async function geoGeocodeNominatim(query, opts) {
+        if (!query || !String(query).trim()) return null;
+        let q = String(query).trim();
+        const preferStreet = !!(opts && opts.preferStreet);
+        if (!/\bukraine\b|\bукраїн/i.test(q)) q = q + ', Ukraine';
+        const noKm = q.replace(/\b\d{1,3}\s*км\b/gi, '').trim();
+        const queryHasDigit = /\d/.test(noKm);
+        const limit = queryHasDigit ? '12' : '6';
+        const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=' + limit + '&countrycodes=ua&addressdetails=1&q=' + encodeURIComponent(q);
+        try {
+            const gap = 1100 - (Date.now() - geoNomLastAt);
+            if (gap > 0) await new Promise(function (res) { setTimeout(res, gap); });
+            geoNomLastAt = Date.now();
+            const res = await fetch(url, {
+                headers: {
+                    'Accept-Language': 'uk,en'
+                }
+            });
+            if (!res.ok) return null;
+            const data = await res.json();
+            if (!data || !data.length) return null;
+            const pick = geoNomPickBestResult(data, queryHasDigit, preferStreet);
+            if (!pick) return null;
+            const lat = parseFloat(pick.lat);
+            const lng = parseFloat(pick.lon);
+            if (!isFinite(lat) || !isFinite(lng)) return null;
+            return { lat, lng };
+        } catch (e) {
+            console.warn('geoGeocodeNominatim', e);
+            return null;
+        }
+    }
+
+    async function geoGeocodeArcgis(query) {
+        if (!query || !String(query).trim()) return null;
+        const q = String(query).trim();
+        const url = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&maxLocations=5&outFields=*&forStorage=false&sourceCountry=UKR&singleLine=' + encodeURIComponent(q);
+        try {
+            const res = await fetch(url, { headers: { 'Accept-Language': 'uk,en' } });
+            if (!res.ok) return null;
+            const data = await res.json();
+            const arr = Array.isArray(data && data.candidates) ? data.candidates : [];
+            if (!arr.length) return null;
+            const good = arr.find((c) => {
+                const score = parseFloat(c && c.score);
+                const t = String((c && c.attributes && (c.attributes.Addr_type || c.attributes.Type)) || '').toLowerCase();
+                return isFinite(score) && score >= 70 && /pointaddress|streetaddress|streetname|subaddress|poi|postalext/.test(t);
+            }) || arr.find((c) => {
+                const score = parseFloat(c && c.score);
+                return isFinite(score) && score >= 80;
+            });
+            if (!good || !good.location) return null;
+            const lat = parseFloat(good.location.y);
+            const lng = parseFloat(good.location.x);
+            if (!isFinite(lat) || !isFinite(lng)) return null;
+            return { lat, lng };
+        } catch (e) {
+            console.warn('geoGeocodeArcgis', e);
+            return null;
+        }
+    }
+
+    function geoAiTextHasStreetLevelDetail(t) {
+        return /(?:вул\.?\s|вулиц|проспект|просп\.|бульвар|шосе|провул|проїзд|узвіз|навпроти|пл\.|площ(?!а)|буд\.?|будинок|корп\.?\s*|кв\.|кварти|\bтц\b|\bбц\b)/i.test(String(t || ''));
+    }
+
+    /** Не брати центр міста з geoResolveCoords, якщо рядок схожий на адресу / кілька слів (підрядок «Київ» у «Київ Хрещатик 22»). */
+    function geoAiMustNotUseCityCenterShortcut(q) {
+        const t = String(q || '').trim();
+        if (!t) return true;
+        const core = t.replace(/\s*;\s*R=\s*\d+[\d.]*\s*км\s*$/i, '').replace(/,?\s*(ukraine|україн(а|и)?)\s*$/i, '').trim();
+        const noKm = core.replace(/\b\d{1,3}\s*км\b/gi, '').trim();
+        if (/\d/.test(noKm)) return true;
+        if (geoAiTextHasStreetLevelDetail(core)) return true;
+        const words = core.split(/\s+/).filter(Boolean);
+        if (words.length >= 2) return true;
+        return false;
+    }
+
+    function geoAiFallbackCityCoords(q) {
+        if (!q || typeof geoFindCity !== 'function') return null;
+        const city = geoFindCity(String(q));
+        if (!city) return null;
+        if (!isFinite(city.lat) || !isFinite(city.lng)) return null;
+        return { lat: city.lat, lng: city.lng };
+    }
+
+    function geoAiNormalizeGeocodeQuery(q) {
+        let s = String(q || '').trim();
+        if (!s) return s;
+        s = s.replace(/(?:^|[\s,;])(?:радіус|радиус|radius|\br\b)\s*[:=]?\s*\d{1,3}(?:[.,]\d+)?\s*(?:км|km)?\b/gi, ' ');
+        s = s.replace(/(?:^|[\s,;])\d{1,3}(?:[.,]\d+)?\s*(?:км|km)\b/gi, ' ');
+        s = s.replace(/\s+/g, ' ').trim();
+        return s;
+    }
+
+    function geoAiQueryLooksAddressLike(q) {
+        const s = String(q || '');
+        if (geoAiTextHasStreetLevelDetail(s)) return true;
+        if (/[а-яіїєґ''ʼ-]{3,}\s+\d{1,4}\b/i.test(s)) return true;
+        return false;
+    }
+
+    function geoAiAddressAliasVariants(q) {
+        const src = String(q || '').trim();
+        if (!src) return [];
+        const out = [src];
+        const aliasMap = [
+            [/джона\s+маккейн[ауыі]*/gi, 'Івана Кудрі'],
+            [/ивана\s+кудр[ыиії]/gi, 'Джона Маккейна']
+        ];
+        aliasMap.forEach(([re, rep]) => {
+            if (re.test(src)) out.push(src.replace(re, rep));
+        });
+        return Array.from(new Set(out));
+    }
+
+    function geoAiAddressCandidateQueries(q) {
+        const src = geoAiNormalizeGeocodeQuery(String(q || ''));
+        if (!src) return [];
+        const out = [src];
+        const cityHit = geoAiFallbackCityCoords(src);
+        const cityName = cityHit && cityHit.name ? cityHit.name : '';
+        let streetPart = src;
+        if (cityName) {
+            const esc = cityName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            streetPart = streetPart
+                .replace(new RegExp('\\b' + esc + '\\b', 'i'), ' ')
+                .replace(/^[,\s]+|[,\s]+$/g, '')
+                .replace(/\s+/g, ' ');
+        }
+        if (streetPart && cityName) {
+            out.push(streetPart + ', ' + cityName);
+            out.push(cityName + ', ' + streetPart);
+            out.push(streetPart + ', ' + cityName + ', Ukraine');
+        }
+        return Array.from(new Set(out.filter(Boolean)));
+    }
+
+    async function geoAiResolveNpBranchLatLng(cityName, branchToken) {
+        try {
+            const cityInput = String(cityName || '').trim();
+            if (!cityInput) return null;
+            const brRaw = String(branchToken != null ? branchToken : '').replace(/^№\s*/, '').trim();
+            if (!brRaw) return null;
+            const cities = await npNpRequest('getCities', { FindByString: cityInput, Limit: 40 });
+            if (!cities.success || !cities.data || !cities.data.length) return null;
+            const ref = npPickCityRef(cities.data, cityInput);
+            if (!ref) return null;
+            const isPostomatSearch = /поштомат/i.test(brRaw);
+            const numOnly = brRaw.split(/[\s—\-/]/)[0];
+            const findStr = /^\d+$/.test(numOnly) ? numOnly : (brRaw.length >= 2 ? brRaw : numOnly);
+            const wh = await npNpRequest('getWarehouses', { CityRef: ref, FindByString: findStr || '', Limit: 150, Page: 1 });
+            if (!wh.success || !wh.data || !wh.data.length) return null;
+            let w = null;
+            if (/^\d+$/.test(numOnly)) w = wh.data.find((x) => String(x.Number) === numOnly);
+            if (!w && isPostomatSearch) w = wh.data.find((x) => geoNpIsPostomat(x));
+            if (!w) w = wh.data[0];
+            return geoNpParseLatLng(w);
+        } catch (e) {
+            console.warn('geoAiResolveNpBranchLatLng', e);
+            return null;
+        }
+    }
+
+    async function geoAiResolvePlacementCoords(p) {
+        if (p == null) return null;
+        if (p.lat != null && p.lng != null && isFinite(p.lat) && isFinite(p.lng)) return { lat: p.lat, lng: p.lng };
+        const qfull = String((p.geocodeQuery != null && p.geocodeQuery !== '') ? p.geocodeQuery : p.label || '').trim();
+        if (!qfull) return null;
+        const cm = qfull.match(/(-?\d+[.,]\d+)\s*[,;\s]\s*(-?\d+[.,]\d+)/);
+        if (cm) {
+            const la = parseFloat(cm[1].replace(',', '.'));
+            const lg = parseFloat(cm[2].replace(',', '.'));
+            if (isFinite(la) && isFinite(lg) && Math.abs(la) <= 90 && Math.abs(lg) <= 180) return { lat: la, lng: lg };
+        }
+        const qNorm = geoAiNormalizeGeocodeQuery(qfull.replace(/\s*;\s*R=\s*\d+[\d.]*\s*км\s*$/i, '').trim());
+        if (p.resolveMode === 'np_branch') {
+            const np = await geoAiResolveNpBranchLatLng(p.npCity, p.npBranch != null ? p.npBranch : '');
+            if (np && isFinite(np.lat) && isFinite(np.lng)) return np;
+        }
+        const needPrecise = p.precise === true || p.resolveMode === 'np_branch' || geoAiTextHasStreetLevelDetail(qNorm) || geoAiMustNotUseCityCenterShortcut(qNorm);
+        if (!needPrecise && typeof geoResolveCoords === 'function') {
+            const c = geoResolveCoords(qNorm);
+            if (c && isFinite(c.lat) && isFinite(c.lng)) return { lat: c.lat, lng: c.lng };
+        }
+        if (typeof geoGeocodeNominatim === 'function') {
+            const preferStreet = geoAiQueryLooksAddressLike(qNorm) || /\bметро\b/i.test(qNorm);
+            const nom = await geoGeocodeNominatim(qNorm, { preferStreet });
+            if (nom && isFinite(nom.lat) && isFinite(nom.lng)) return nom;
+            if (geoAiQueryLooksAddressLike(qNorm)) {
+                const aliasSeeds = geoAiAddressAliasVariants(qNorm);
+                const candidates = [];
+                aliasSeeds.forEach((seed) => {
+                    geoAiAddressCandidateQueries(seed).forEach((c) => candidates.push(c));
+                });
+                for (const candidate of Array.from(new Set(candidates))) {
+                    const nomAlias = await geoGeocodeNominatim(candidate, { preferStreet: true });
+                    if (nomAlias && isFinite(nomAlias.lat) && isFinite(nomAlias.lng)) return nomAlias;
+                }
+            }
+        }
+        if (geoAiQueryLooksAddressLike(qNorm) && typeof geoGeocodeArcgis === 'function') {
+            const arc0 = await geoGeocodeArcgis(qNorm);
+            if (arc0 && isFinite(arc0.lat) && isFinite(arc0.lng)) return arc0;
+            for (const candidate of geoAiAddressCandidateQueries(qNorm)) {
+                const arc = await geoGeocodeArcgis(candidate);
+                if (arc && isFinite(arc.lat) && isFinite(arc.lng)) return arc;
+            }
+        }
+        if (!geoAiMustNotUseCityCenterShortcut(qNorm) && typeof geoResolveCoords === 'function') {
+            const c2 = geoResolveCoords(qNorm);
+            if (c2 && isFinite(c2.lat) && isFinite(c2.lng)) return { lat: c2.lat, lng: c2.lng };
+        }
+        const cityFallback = geoAiFallbackCityCoords(qNorm);
+        if (cityFallback) return cityFallback;
+        return null;
+    }
+
+    async function geoAddPoint() {
         const addr = document.getElementById('geo-point-address')?.value?.trim();
         const radius = parseFloat(document.getElementById('geo-point-radius')?.value) || 5;
         if (!addr) return;
 
-        const resolved = geoResolveCoords(addr);
-        const lat = resolved?.lat ?? null;
-        const lng = resolved?.lng ?? null;
-
+        let lat = null;
+        let lng = null;
+        const cm = addr.match(/(-?\d+[.,]\d+)\s*[,;\s]\s*(-?\d+[.,]\d+)/);
+        if (cm) {
+            lat = parseFloat(cm[1].replace(',', '.'));
+            lng = parseFloat(cm[2].replace(',', '.'));
+            if (!isFinite(lat) || !isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) { lat = null; lng = null; }
+        } else if (!geoAiMustNotUseCityCenterShortcut(addr)) {
+            const resolved = geoResolveCoords(addr);
+            if (resolved && isFinite(resolved.lat) && isFinite(resolved.lng)) {
+                lat = resolved.lat;
+                lng = resolved.lng;
+            }
+        }
+        if (lat == null || lng == null || !isFinite(lat) || !isFinite(lng)) {
+            if (typeof geoGeocodeNominatim === 'function') {
+                const nom = await geoGeocodeNominatim(addr, {});
+                if (nom && isFinite(nom.lat) && isFinite(nom.lng)) {
+                    lat = nom.lat;
+                    lng = nom.lng;
+                }
+            }
+        }
+        if ((lat == null || lng == null || !isFinite(lat) || !isFinite(lng)) && typeof geoAiFallbackCityCoords === 'function') {
+            const cf = geoAiFallbackCityCoords(addr);
+            if (cf) { lat = cf.lat; lng = cf.lng; }
+        }
         geoPushPointItem(addr, lat, lng, radius);
-        if (lat && lng && geoMap) geoMap.flyTo([lat, lng], 11, { duration: 0.5 });
+        if (lat != null && lng != null && geoMap) geoMap.flyTo([lat, lng], 11, { duration: 0.5 });
         document.getElementById('geo-point-address').value = '';
     }
 
