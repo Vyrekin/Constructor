@@ -2805,12 +2805,12 @@
             padding: 0;
             margin: 6px 0 0;
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(15, 23, 42, 0.06);
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.06);
             background: #fff;
             color: #1e293b;
-            min-width: min(240px, calc(100vw - 32px));
-            max-width: min(340px, calc(100vw - 24px));
+            min-width: min(210px, calc(100vw - 32px));
+            max-width: min(280px, calc(100vw - 24px));
             white-space: normal;
             pointer-events: none;
             overflow: visible;
@@ -2819,13 +2819,13 @@
             display: none;
         }
         .geo-np-wh-tooltip-inner {
-            padding: 14px 16px 16px;
-            font-size: 12px;
-            line-height: 1.45;
+            padding: 10px 12px 12px;
+            font-size: 11px;
+            line-height: 1.35;
         }
         .geo-np-wh-tooltip-inner .geo-np-wh-head {
-            padding-bottom: 12px;
-            margin-bottom: 12px;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
             border-bottom: 1px solid #f1f5f9;
         }
         .geo-np-wh-tooltip-inner .geo-np-wh-kind {
@@ -2848,17 +2848,17 @@
         }
         .geo-np-wh-tooltip-inner .geo-np-wh-title {
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             color: #0f172a;
-            margin: 10px 0 0;
+            margin: 7px 0 0;
             line-height: 1.4;
             word-wrap: break-word;
             overflow-wrap: break-word;
             word-break: normal;
         }
         .geo-np-wh-tooltip-inner .geo-np-wh-sub {
-            margin-top: 8px;
-            font-size: 11.5px;
+            margin-top: 6px;
+            font-size: 10.5px;
             color: #64748b;
             line-height: 1.4;
             word-wrap: break-word;
@@ -2868,7 +2868,7 @@
         .geo-np-wh-tooltip-inner .geo-np-wh-meta {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
         /* Підпис зверху, значення на повну ширину — інакше сітка дає ~0px на текст і «буква в ряд» */
         .geo-np-wh-tooltip-inner .geo-np-wh-item {
@@ -2876,20 +2876,20 @@
         }
         .geo-np-wh-tooltip-inner .geo-np-wh-lbl {
             display: block;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             color: #94a3b8;
             line-height: 1.35;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .geo-np-wh-tooltip-inner .geo-np-wh-val {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: #334155;
-            line-height: 1.45;
+            line-height: 1.3;
             word-wrap: break-word;
             overflow-wrap: break-word;
             word-break: normal;
@@ -11468,11 +11468,11 @@
         if (showDesc) html += '<div class="geo-np-wh-sub">' + escHtml(desc) + '</div>';
         html += '</div>';
         const metaParts = [];
-        if (cityStr) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Місто</span><span class="geo-np-wh-val">' + cityStr + '</span></div>');
-        if (region) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Область</span><span class="geo-np-wh-val">' + region + '</span></div>');
+        const cityRegion = [cityStr, region].filter(Boolean).join(', ');
+        if (cityRegion) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Місто / Область</span><span class="geo-np-wh-val">' + cityRegion + '</span></div>');
         if (phone) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Телефон</span><span class="geo-np-wh-val">' + phone + '</span></div>');
-        if (status) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Статус</span><span class="geo-np-wh-val">' + status + '</span></div>');
-        if (schedule) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Графік</span><span class="geo-np-wh-val">' + schedule + '</span></div>');
+        const statusSchedule = [status, schedule].filter(Boolean).join(' · ');
+        if (statusSchedule) metaParts.push('<div class="geo-np-wh-item"><span class="geo-np-wh-lbl">Статус / Графік</span><span class="geo-np-wh-val">' + statusSchedule + '</span></div>');
         if (metaParts.length) html += '<div class="geo-np-wh-meta">' + metaParts.join('') + '</div>';
         html += '</div>';
         return html;
@@ -11630,13 +11630,20 @@
                 color: postomat ? '#7c3aed' : '#15803d',
                 fillColor: postomat ? '#a78bfa' : '#4ade80',
                 fillOpacity: 0.88,
-                weight: 1.5
+                weight: 1.5,
+                interactive: true
             });
             cm.bindTooltip(geoNpWarehouseTooltipHtml(w), {
-                direction: 'top',
+                direction: 'bottom',
                 opacity: 1,
                 sticky: true,
                 className: 'geo-np-wh-tooltip'
+            });
+            cm.on('mouseover', function () {
+                this.openTooltip();
+            });
+            cm.on('mouseout', function () {
+                this.closeTooltip();
             });
             cm.on('click', (ev) => {
                 L.DomEvent.stopPropagation(ev);
