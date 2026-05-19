@@ -2886,9 +2886,6 @@
         updateSegInfo(seg);
     }
 
-    // Init info panel on page load
-    document.addEventListener('DOMContentLoaded', () => updateSegInfo('b2b'));
-
     const SEG_META = {
       b2b: {
         emoji: '🏢',
@@ -3608,6 +3605,9 @@
         if (firstFields && firstFields.childElementCount === 0) {
             buildFieldListForCategory('c4', firstFields);
         }
+
+        // Init seg info panel for the default active tab
+        updateSegInfo('b2b');
     });
     </script>
 
