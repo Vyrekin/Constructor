@@ -3043,6 +3043,9 @@
         // Close banner
         document.getElementById('seg-info-banner').classList.remove('open');
 
+        // Clear existing filters first
+        if (typeof window.clearFilters === 'function') window.clearFilters();
+
         // Add each filter as a condition block
         if (typeof window.addEspoBlock === 'function') {
             tpl.filters.forEach(f => {

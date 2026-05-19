@@ -759,6 +759,7 @@
         }
         window.removeEspoBlock = removeEspoBlock;
         window.addEspoBlock = addEspoBlock;
+        window.clearFilters = clearFilters;
         window.updateInterOp = updateInterOp;
         window.openFilterPicker = openFilterPicker;
 
