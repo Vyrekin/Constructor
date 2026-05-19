@@ -84,12 +84,14 @@
     <div class="page-subheader">
         <h4 class="page-title">Конструктор вибірок</h4>
 
-        <!-- Segment tabs: B2B / B2C / Відправники / Одержувачі -->
+        <!-- Segment tabs: B2B / B2C / Відправники / Одержувачі / Продавці / Активність -->
         <div class="segment-tabs">
-            <button class="seg-tab active" onclick="switchSegment('b2b', this)">B2B</button>
-            <button class="seg-tab" onclick="switchSegment('b2c', this)">B2C</button>
-            <button class="seg-tab" onclick="switchSegment('senders', this)">Відправники</button>
-            <button class="seg-tab" onclick="switchSegment('recipients', this)">Одержувачі</button>
+            <button class="seg-tab active" onclick="switchSegment('b2b', this)">B2B <span class="seg-hint-icon" onclick="showSegInfo('b2b', event)">ⓘ</span></button>
+            <button class="seg-tab" onclick="switchSegment('b2c', this)">B2C <span class="seg-hint-icon" onclick="showSegInfo('b2c', event)">ⓘ</span></button>
+            <button class="seg-tab" onclick="switchSegment('senders', this)">Відправники <span class="seg-hint-icon" onclick="showSegInfo('senders', event)">ⓘ</span></button>
+            <button class="seg-tab" onclick="switchSegment('recipients', this)">Одержувачі <span class="seg-hint-icon" onclick="showSegInfo('recipients', event)">ⓘ</span></button>
+            <button class="seg-tab" onclick="switchSegment('merchants', this)">Продавці <span class="seg-hint-icon" onclick="showSegInfo('merchants', event)">ⓘ</span></button>
+            <button class="seg-tab" onclick="switchSegment('activity', this)">Активність <span class="seg-hint-icon" onclick="showSegInfo('activity', event)">ⓘ</span></button>
         </div>
 
         <div class="ms-auto">
@@ -97,6 +99,20 @@
                 <i class="bi bi-bookmark"></i> Шаблони
             </button>
         </div>
+    </div>
+
+    <div id="seg-info-banner" class="seg-info-banner">
+      <div class="seg-info-inner">
+        <div class="seg-info-left">
+          <span class="seg-info-emoji" id="seg-info-emoji"></span>
+          <div>
+            <div class="seg-info-title" id="seg-info-title"></div>
+            <div class="seg-info-desc" id="seg-info-desc"></div>
+          </div>
+        </div>
+        <div class="seg-info-templates" id="seg-info-templates"></div>
+        <button class="seg-info-close" onclick="document.getElementById('seg-info-banner').classList.remove('open')" title="Закрити">✕</button>
+      </div>
     </div>
 
     <main class="container-fluid p-0">
@@ -2792,7 +2808,7 @@
         window.currentSegment = seg;
 
         // Map segment to field scope
-        const scopeMap = { b2b: 'b2b', b2c: 'b2c', senders: 'all', recipients: 'all' };
+        const scopeMap = { b2b: 'b2b', b2c: 'b2c', senders: 'all', recipients: 'all', merchants: 'all', activity: 'all' };
         const scope = scopeMap[seg] || 'all';
 
         // Update hidden scope radio
@@ -2816,6 +2832,85 @@
                 if (firstVisible) firstVisible.click();
             }
         }
+    }
+
+    const SEG_META = {
+      b2b: {
+        emoji: '🏢',
+        title: 'B2B — Бізнес-клієнти',
+        desc: 'Профілі компаній та ФОП — незалежно від наявності посилок. Для пошуку партнерів, ЛПР та реактивації корпоративних клієнтів. Базова таблиця: профіль бізнес-клієнта.',
+        templates: [
+          { name: 'Сплячі B2B для реактивації', filters: [['Сегмент активності контрагента','Сплячий','І'],['Днів без ЄН (B2B)','> 90','—']] },
+          { name: 'ЛПР з e-commerce', filters: [['Сфера діяльності основного','E-commerce','І'],['Тип контрагента','Юр. особа / ФОП','—']] }
+        ]
+      },
+      b2c: {
+        emoji: '👤',
+        title: 'B2C — Приватні клієнти',
+        desc: 'Профілі фізичних осіб — навіть без активних посилок. Для персоналізованих кампаній, сегментації та роботи з відтоком. Базова таблиця: профіль фіз. особи.',
+        templates: [
+          { name: 'VIP зі згодою на промо', filters: [['Сегмент активності','VIP','І'],['Згода на проморозсилки','Так','—']] },
+          { name: 'Клієнти з ризиком відтоку', filters: [['RFM сегмент','At Risk або Hibernating','І'],['Згода на проморозсилки','Так','—']] }
+        ]
+      },
+      senders: {
+        emoji: '📦',
+        title: 'Відправники',
+        desc: 'Клієнти, які здають посилки у відділеннях, поштоматах або через кур\'єра. Результат вибірки: телефони та контакти відправників за вашими критеріями.',
+        templates: [
+          { name: 'Активні відправники з міста', filters: [['Місто відправника','напр. Харків','І'],['Кількість ЄН','від 3','—']] },
+          { name: 'Відправники за категорією товару', filters: [['Сфера діяльності','напр. Зоотовари','АБО'],['Опис вантажу','містить ключове слово','—']] }
+        ]
+      },
+      recipients: {
+        emoji: '📬',
+        title: 'Отримувачі',
+        desc: 'Клієнти, які отримують посилки. Для охоплення покупців інтернет-магазинів або отримувачів від конкретних відправників.',
+        templates: [
+          { name: 'Отримувачі в певному місті', filters: [['Місто отримувача','напр. Вінниця','І'],['Дата закриття ЄН','за останні 2 міс.','—']] },
+          { name: 'Отримувачі конкретного магазину', filters: [['Назва контрагента відправника','Назва магазину','І'],['Дата створення ЄН','за рік','—']] }
+        ]
+      },
+      merchants: {
+        emoji: '🛒',
+        title: 'Продавці (Мерчанти)',
+        desc: 'Компанії та підприємці, що продають товари та доставляють через НП. Для партнерських кампаній та аналізу торгових партнерів. Базова таблиця: growth_clients_merchant_v.',
+        templates: [
+          { name: 'Активні мерчанти у категорії', filters: [['Сфера діяльності','напр. Електроніка','І'],['К-сть ЄН по сфері','від 20','—']] },
+          { name: 'Мерчанти з прогнозом покупки', filters: [['Ймовірність покупки (new)','> 70%','—']] }
+        ]
+      },
+      activity: {
+        emoji: '📊',
+        title: 'Активність',
+        desc: 'Тільки клієнти з зафіксованими взаємодіями: мобільний додаток, канали тощо. Якщо клієнт є в базі але нічого не робив — він сюди не потрапить. Базова таблиця: growth_clients_activity_v.',
+        templates: [
+          { name: 'Користувачі додатку для реактивації', filters: [['Наявність нового додатка','Так','І'],['Останній вхід у додаток','> 30 днів тому','—']] },
+          { name: 'iOS-користувачі нового додатку', filters: [['Наявність нового додатка','Так','І'],['ОС девайсу нового додатка','iOS','—']] }
+        ]
+      }
+    };
+
+    function showSegInfo(seg, e) {
+      e.stopPropagation();
+      const meta = SEG_META[seg];
+      if (!meta) return;
+      document.getElementById('seg-info-emoji').textContent = meta.emoji;
+      document.getElementById('seg-info-title').textContent = meta.title;
+      document.getElementById('seg-info-desc').textContent = meta.desc;
+
+      document.getElementById('seg-info-templates').innerHTML = meta.templates.map(t => `
+        <div class="seg-tpl-card">
+          <div class="seg-tpl-name">⚡ ${t.name}</div>
+          <table class="seg-tpl-table">
+            <thead><tr><th>Параметр</th><th>Значення</th><th>Логіка</th></tr></thead>
+            <tbody>${t.filters.map(([p,v,l]) =>
+              `<tr><td>${p}</td><td>${v}</td><td class="logic-${l==='І'?'and':l==='АБО'?'or':'end'}">${l}</td></tr>`
+            ).join('')}</tbody>
+          </table>
+        </div>`).join('');
+
+      document.getElementById('seg-info-banner').classList.add('open');
     }
 
     // Page-level tab switcher (kept for compatibility)
