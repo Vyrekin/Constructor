@@ -2892,8 +2892,16 @@
         title: 'B2B — Бізнес-клієнти',
         desc: 'Таблиця: v_Growth_catalog_clients_B. Вивід: телефон ЛПР (Phone_number_main_contact) або email ЛПР. Представники — з dimCatalogContacts_CRM. Підходить для роботи з корпоративними клієнтами без прив\'язки до факту ЄН.',
         templates: [
-          { name: 'Сплячі B2B — реактивація', filters: [['Сегмент активності контрагента','Сплячий','І'],['Днів без ЄН (B2B)','> 90','І'],['Закріплений менеджер','вказати менеджера','—']] },
-          { name: 'ЛПР e-commerce компаній', filters: [['Сфера діяльності основного контрагента','E-commerce','І'],['Тип контрагента','Юр. особа / ФОП','І'],['Категорія контрагента','Regional або Strategic','—']] }
+          { name: 'Сплячі B2B — реактивація', filters: [
+            { id: 'activity_segment_counter_party', label: 'Сегмент активності контрагента', value: 'Сплячий', logic: 'І', op: 'ТА' },
+            { id: 'b_days_without_sending_or_receiving', label: 'Днів без ЄН (B2B)', value: '> 90', logic: 'І', op: 'ТА' },
+            { id: 'counter_party_fixed_manager', label: 'Закріплений менеджер', value: '', logic: '—', op: 'ТА' }
+          ]},
+          { name: 'ЛПР e-commerce компаній', filters: [
+            { id: 'counter_party_group_activity_main', label: 'Сфера діяльності основного контрагента', value: 'E-commerce', logic: 'І', op: 'ТА' },
+            { id: 'counter_party_type', label: 'Тип контрагента', value: 'Юр. особа / ФОП', logic: 'І', op: 'ТА' },
+            { id: 'counter_party_category', label: 'Категорія контрагента', value: 'Regional', logic: '—', op: 'ТА' }
+          ]}
         ]
       },
       b2c: {
@@ -2901,8 +2909,16 @@
         title: 'B2C — Приватні клієнти',
         desc: 'Таблиця: v_Growth_catalog_clients_C. Вивід: профільний телефон (PhoneClient) або CID. Якщо клієнт є в базі але не відправляв — він все одно потрапить у вибірку. RFM, CLC, CVO сегменти доступні.',
         templates: [
-          { name: 'VIP зі згодою — промо-розсилка', filters: [['Сегмент активності','VIP','І'],['Згода на проморозсилки','Так','І'],['Дата останньої транзакції','за останні 6 міс.','—']] },
-          { name: 'At Risk — реактивація через додаток', filters: [['RFM сегмент (загальний)','At Risk','І'],['Наявність нового додатка','Так','І'],['Згода на проморозсилки','Так','—']] }
+          { name: 'VIP зі згодою — промо-розсилка', filters: [
+            { id: 'activity_segment', label: 'Сегмент активності', value: 'VIP', logic: 'І', op: 'ТА' },
+            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: 'І', op: 'ТА' },
+            { id: 'last_transaction_date', label: 'Дата останньої транзакції', value: '', logic: '—', op: 'ТА' }
+          ]},
+          { name: 'At Risk — реактивація через додаток', filters: [
+            { id: 'rfm_segment', label: 'RFM сегмент (загальний)', value: 'At Risk', logic: 'І', op: 'ТА' },
+            { id: 'has_new_app', label: 'Наявність нового додатка', value: 'Так', logic: 'І', op: 'ТА' },
+            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: '—', op: 'ТА' }
+          ]}
         ]
       },
       senders: {
@@ -2910,8 +2926,16 @@
         title: 'Відправники',
         desc: 'Таблиця: client_parcels_detail_365d. Вивід: SenderPhone — телефон з конкретної ЄН, не профільний. Один клієнт може мати різні телефони в різних ЄН. Для таргетингу тих, хто фізично здає посилки.',
         templates: [
-          { name: 'Відправники через поштомат у місті', filters: [['Місто відправника','напр. Харків','І'],['Тип місця створення','Поштомат','І'],['Дата створення ЄН','за останні 3 міс.','—']] },
-          { name: 'Відправники певної категорії товару', filters: [['Опис вантажу','напр. Одяг','І'],['Тип підрозділу відправника','Відділення','І'],['Дата створення ЄН','за останні 6 міс.','—']] }
+          { name: 'Відправники через поштомат у місті', filters: [
+            { id: 'ew_sender_city', label: 'Місто відправника', value: '', logic: 'І', op: 'ТА' },
+            { id: 'creation_place_type', label: 'Тип місця створення', value: 'Поштомат', logic: 'І', op: 'ТА' },
+            { id: 'creation_date', label: 'Дата створення ЄН', value: '', logic: '—', op: 'ТА' }
+          ]},
+          { name: 'Відправники певної категорії товару', filters: [
+            { id: 'ew_cargo_description', label: 'Опис вантажу', value: '', logic: 'І', op: 'ТА' },
+            { id: 'ew_sender_unit_type', label: 'Тип підрозділу відправника', value: 'Відділення', logic: 'І', op: 'ТА' },
+            { id: 'creation_date', label: 'Дата створення ЄН', value: '', logic: '—', op: 'ТА' }
+          ]}
         ]
       },
       recipients: {
@@ -2919,8 +2943,16 @@
         title: 'Одержувачі',
         desc: 'Таблиця: client_parcels_detail_365d. Вивід: RecipientPhone — телефон з конкретної ЄН. Дозволяє охопити покупців конкретних магазинів або одержувачів у певному регіоні, навіть якщо вони не зареєстровані в NPS.',
         templates: [
-          { name: 'Покупці конкретного магазину', filters: [['Назва контрагента відправника','назва магазину','І'],['Дата закриття ЄН','за останні 2 міс.','І'],['Місто отримувача','напр. Вінниця','—']] },
-          { name: 'Одержувачі з поверненнями', filters: [['Причина повернення ЄН','будь-яка','І'],['Область отримувача','напр. Київська','І'],['Дата закриття ЄН','за останні 3 міс.','—']] }
+          { name: 'Покупці конкретного магазину', filters: [
+            { id: 'ew_sender_counter_party_name', label: 'Назва контрагента відправника', value: '', logic: 'І', op: 'ТА' },
+            { id: 'closing_date', label: 'Дата закриття ЄН', value: '', logic: 'І', op: 'ТА' },
+            { id: 'ew_recipient_city', label: 'Місто отримувача', value: '', logic: '—', op: 'ТА' }
+          ]},
+          { name: 'Одержувачі з поверненнями', filters: [
+            { id: 'reason_return', label: 'Причина повернення ЄН', value: '', logic: 'І', op: 'ТА' },
+            { id: 'ew_recipient_area', label: 'Область отримувача', value: '', logic: 'І', op: 'ТА' },
+            { id: 'closing_date', label: 'Дата закриття ЄН', value: '', logic: '—', op: 'ТА' }
+          ]}
         ]
       },
       merchants: {
@@ -2928,8 +2960,15 @@
         title: 'Продавці (Мерчанти)',
         desc: 'Таблиця: growth_clients_merchant_v. Прямого телефону немає — контакти тільки через dimCatalogContacts_CRM (представники з CRM). Підходить для аналізу торгових партнерів та партнерських кампаній.',
         templates: [
-          { name: 'Активні мерчанти у категорії', filters: [['Сфера діяльності (категорія)','напр. Електроніка','І'],['К-сть ЄН по контрагенту','> 50','І'],['Дата останньої ЄН по контрагенту','за останні 3 міс.','—']] },
-          { name: 'Мерчанти з високою ймовірністю покупки', filters: [['Ймовірність наступної покупки в сфері_new','> 70%','І'],['Дата першої ЄН по контрагенту','> 6 міс. тому','—']] }
+          { name: 'Активні мерчанти у категорії', filters: [
+            { id: 'activity_category', label: 'Сфера діяльності (категорія)', value: '', logic: 'І', op: 'ТА' },
+            { id: 'counterparty_ew_count', label: 'К-сть ЄН по контрагенту', value: '> 50', logic: 'І', op: 'ТА' },
+            { id: 'last_counterparty_ew_date', label: 'Дата останньої ЄН по контрагенту', value: '', logic: '—', op: 'ТА' }
+          ]},
+          { name: 'Мерчанти з прогнозом покупки', filters: [
+            { id: 'next_purchase_probability_in_category_new', label: 'Ймовірність покупки в сфері (new)', value: '> 70%', logic: 'І', op: 'ТА' },
+            { id: 'first_counterparty_ew_date', label: 'Дата першої ЄН по контрагенту', value: '', logic: '—', op: 'ТА' }
+          ]}
         ]
       },
       activity: {
@@ -2937,8 +2976,16 @@
         title: 'Активність',
         desc: 'Таблиця: growth_clients_activity_v. Телефон — через join з профілем клієнта. Якщо клієнт є в базі але нічого не робив — він сюди не потрапить. Є ймовірність наступної покупки (probability) по сферах.',
         templates: [
-          { name: 'Реактивація користувачів нового додатку', filters: [['Наявність нового додатка','Так','І'],['Дата останнього входу в новий дод.','> 30 днів тому','І'],['Згода на проморозсилки','Так','—']] },
-          { name: 'iOS-юзери з прогнозом покупки', filters: [['ОС девайсу нового додатка','iOS','І'],['Ймовірність наступної покупки в сфері_new','> 65%','І'],['Наявність нового додатка','Так','—']] }
+          { name: 'Реактивація користувачів нового додатку', filters: [
+            { id: 'has_new_app', label: 'Наявність нового додатка', value: 'Так', logic: 'І', op: 'ТА' },
+            { id: 'new_app_last_login_date', label: 'Дата останнього входу в новий дод.', value: '', logic: 'І', op: 'ТА' },
+            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: '—', op: 'ТА' }
+          ]},
+          { name: 'iOS-юзери з прогнозом покупки', filters: [
+            { id: 'new_app_device_os', label: 'ОС девайсу нового додатка', value: 'iOS', logic: 'І', op: 'ТА' },
+            { id: 'next_purchase_probability_in_category_new', label: 'Ймовірність покупки в сфері (new)', value: '> 65%', logic: 'І', op: 'ТА' },
+            { id: 'has_new_app', label: 'Наявність нового додатка', value: 'Так', logic: '—', op: 'ТА' }
+          ]}
         ]
       }
     };
@@ -2956,8 +3003,8 @@
           <div class="seg-tpl-name">⚡ ${t.name}</div>
           <table class="seg-tpl-table">
             <thead><tr><th>Параметр</th><th>Значення</th><th>Логіка</th></tr></thead>
-            <tbody>${t.filters.map(([p,v,l]) =>
-              `<tr><td>${p}</td><td>${v}</td><td class="logic-${l==='І'?'and':l==='АБО'?'or':'end'}">${l}</td></tr>`
+            <tbody>${t.filters.map(f =>
+              `<tr><td>${f.label}</td><td>${f.value || '—'}</td><td class="logic-${f.logic==='І'?'and':f.logic==='АБО'?'or':'end'}">${f.logic}</td></tr>`
             ).join('')}</tbody>
           </table>
           <button class="seg-tpl-apply-btn" onclick="applySegTemplate('${seg}', ${idx})">▶ Застосувати шаблон</button>
@@ -2996,10 +3043,28 @@
 
     // Apply segment template from ⓘ panel
     function applySegTemplate(seg, idx) {
+        const meta = SEG_META[seg];
+        if (!meta || !meta.templates[idx]) return;
+        const tpl = meta.templates[idx];
+
+        // Switch to correct segment tab
         const tabBtn = document.querySelector(`.seg-tab[onclick*="'${seg}'"]`);
         if (tabBtn) switchSegment(seg, tabBtn);
+
+        // Close banner
         document.getElementById('seg-info-banner').classList.remove('open');
-        if (typeof showToast === 'function') showToast('Шаблон застосовано — налаштуйте значення фільтрів', 'info');
+
+        // Add each filter as a condition block
+        if (typeof window.addEspoBlock === 'function') {
+            tpl.filters.forEach(f => {
+                const op = f.op || (f.logic === 'АБО' ? 'АБО' : 'ТА');
+                window.addEspoBlock(f.id, f.label, f.value || '', 'Include', op, null, null, null);
+            });
+        }
+
+        if (typeof showToast === 'function') {
+            showToast(`Шаблон "${tpl.name}" застосовано — заповніть порожні значення`, 'success');
+        }
     }
 
     // ── TEMPLATE MODAL HELPERS ─────────────────────────────────
