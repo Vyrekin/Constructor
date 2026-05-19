@@ -86,12 +86,12 @@
 
         <!-- Segment tabs: B2B / B2C / Відправники / Одержувачі / Продавці / Активність -->
         <div class="segment-tabs">
-            <button class="seg-tab active" onclick="switchSegment('b2b', this)">B2B <span class="seg-hint-icon" onclick="showSegInfo('b2b', event)">ⓘ</span></button>
-            <button class="seg-tab" onclick="switchSegment('b2c', this)">B2C <span class="seg-hint-icon" onclick="showSegInfo('b2c', event)">ⓘ</span></button>
-            <button class="seg-tab" onclick="switchSegment('senders', this)">Відправники <span class="seg-hint-icon" onclick="showSegInfo('senders', event)">ⓘ</span></button>
-            <button class="seg-tab" onclick="switchSegment('recipients', this)">Одержувачі <span class="seg-hint-icon" onclick="showSegInfo('recipients', event)">ⓘ</span></button>
-            <button class="seg-tab" onclick="switchSegment('merchants', this)">Продавці <span class="seg-hint-icon" onclick="showSegInfo('merchants', event)">ⓘ</span></button>
-            <button class="seg-tab" onclick="switchSegment('activity', this)">Активність <span class="seg-hint-icon" onclick="showSegInfo('activity', event)">ⓘ</span></button>
+            <button class="seg-tab active" onclick="switchSegment('b2b', this)">B2B</button>
+            <button class="seg-tab" onclick="switchSegment('b2c', this)">B2C</button>
+            <button class="seg-tab" onclick="switchSegment('senders', this)">Відправники</button>
+            <button class="seg-tab" onclick="switchSegment('recipients', this)">Одержувачі</button>
+            <button class="seg-tab" onclick="switchSegment('merchants', this)">Продавці</button>
+            <button class="seg-tab" onclick="switchSegment('activity', this)">Активність</button>
         </div>
 
         <div class="ms-auto">
@@ -103,15 +103,12 @@
 
     <div id="seg-info-banner" class="seg-info-banner">
       <div class="seg-info-inner">
-        <div class="seg-info-left">
-          <span class="seg-info-emoji" id="seg-info-emoji"></span>
-          <div>
-            <div class="seg-info-title" id="seg-info-title"></div>
-            <div class="seg-info-desc" id="seg-info-desc"></div>
-          </div>
+        <span class="seg-info-emoji" id="seg-info-emoji"></span>
+        <div class="seg-info-text">
+          <div class="seg-info-title" id="seg-info-title"></div>
+          <div class="seg-info-desc" id="seg-info-desc"></div>
         </div>
         <div class="seg-info-templates" id="seg-info-templates"></div>
-        <button class="seg-info-close" onclick="document.getElementById('seg-info-banner').classList.remove('open')" title="Закрити">✕</button>
       </div>
     </div>
 
@@ -2884,7 +2881,13 @@
                 if (firstVisible) firstVisible.click();
             }
         }
+
+        // Always update info panel when switching tabs
+        updateSegInfo(seg);
     }
+
+    // Init info panel on page load
+    document.addEventListener('DOMContentLoaded', () => updateSegInfo('b2b'));
 
     const SEG_META = {
       b2b: {
@@ -2990,27 +2993,16 @@
       }
     };
 
-    function showSegInfo(seg, e) {
-      e.stopPropagation();
+    function updateSegInfo(seg) {
       const meta = SEG_META[seg];
       if (!meta) return;
       document.getElementById('seg-info-emoji').textContent = meta.emoji;
       document.getElementById('seg-info-title').textContent = meta.title;
       document.getElementById('seg-info-desc').textContent = meta.desc;
-
-      document.getElementById('seg-info-templates').innerHTML = meta.templates.map((t, idx) => `
-        <div class="seg-tpl-card">
-          <div class="seg-tpl-name">⚡ ${t.name}</div>
-          <table class="seg-tpl-table">
-            <thead><tr><th>Параметр</th><th>Значення</th><th>Логіка</th></tr></thead>
-            <tbody>${t.filters.map(f =>
-              `<tr><td>${f.label}</td><td>${f.value || '—'}</td><td class="logic-${f.logic==='І'?'and':f.logic==='АБО'?'or':'end'}">${f.logic}</td></tr>`
-            ).join('')}</tbody>
-          </table>
-          <button class="seg-tpl-apply-btn" onclick="applySegTemplate('${seg}', ${idx})">▶ Застосувати шаблон</button>
-        </div>`).join('');
-
-      document.getElementById('seg-info-banner').classList.add('open');
+      document.getElementById('seg-info-templates').innerHTML = meta.templates.map((t, idx) => {
+        const tooltip = t.filters.map(f => `${f.label}: ${f.value || '?'}`).join(' | ');
+        return `<button class="seg-tpl-quick-btn" onclick="applySegTemplate('${seg}', ${idx})" title="${tooltip}">⚡ ${t.name}</button>`;
+      }).join('');
     }
 
     // Page-level tab switcher (kept for compatibility)
