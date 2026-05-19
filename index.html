@@ -2685,63 +2685,115 @@
                     <!-- Template items -->
                     <div id="templates-list">
                         <div class="template-item">
-                            <div class="template-item-left">
-                                <span class="template-type-badge badge-b2b">B2B</span>
-                                <div>
-                                    <div class="fw-semibold" style="font-size:0.85rem;">Люди, з сіл Вінницької області</div>
-                                    <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
-                                        ID: 88883232229
-                                        <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', this)" title="Скопіювати ID"></i>
+                            <div class="template-item-header" onclick="toggleTemplateDetails(this)">
+                                <div class="template-item-left">
+                                    <span class="template-type-badge badge-b2b">B2B</span>
+                                    <div>
+                                        <div class="fw-semibold" style="font-size:0.85rem;">Люди, з сіл Вінницької області</div>
+                                        <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
+                                            ID: 88883232229
+                                            <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', event, this)" title="Скопіювати ID"></i>
+                                        </div>
                                     </div>
-                                    <div class="text-muted" style="font-size:0.75rem;">Міntракторів в селах Вінницької обл.</div>
+                                </div>
+                                <div class="tpl-header-right">
+                                    <i class="bi bi-chevron-down tpl-chevron"></i>
+                                    <button class="btn-template-delete" onclick="deleteTemplate(event, this)" title="Видалити"><i class="bi bi-trash3"></i></button>
                                 </div>
                             </div>
-                            <button class="btn-template-delete" onclick="deleteTemplate(this)" title="Видалити"><i class="bi bi-trash3"></i></button>
+                            <div class="template-item-details">
+                                <table class="tpl-detail-table">
+                                    <thead><tr><th>Параметр</th><th>Значення</th><th>Логіка</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Місто клієнта</td><td>Вінницька обл., село</td><td class="logic-and">І</td></tr>
+                                        <tr><td>Тип населеного пункту</td><td>село</td><td class="logic-end">—</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <div class="template-item">
-                            <div class="template-item-left">
-                                <span class="template-type-badge badge-b2c">B2C</span>
-                                <div>
-                                    <div class="fw-semibold" style="font-size:0.85rem;">Люди, які отримували зоотовари</div>
-                                    <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
-                                        ID: 88883232229
-                                        <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', this)" title="Скопіювати ID"></i>
+                            <div class="template-item-header" onclick="toggleTemplateDetails(this)">
+                                <div class="template-item-left">
+                                    <span class="template-type-badge badge-b2c">B2C</span>
+                                    <div>
+                                        <div class="fw-semibold" style="font-size:0.85rem;">Люди, які отримували зоотовари</div>
+                                        <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
+                                            ID: 88883232229
+                                            <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', event, this)" title="Скопіювати ID"></i>
+                                        </div>
                                     </div>
-                                    <div class="text-muted" style="font-size:0.75rem;">Зоомагазин біля м. Дарниця</div>
+                                </div>
+                                <div class="tpl-header-right">
+                                    <i class="bi bi-chevron-down tpl-chevron"></i>
+                                    <button class="btn-template-delete" onclick="deleteTemplate(event, this)" title="Видалити"><i class="bi bi-trash3"></i></button>
                                 </div>
                             </div>
-                            <button class="btn-template-delete" onclick="deleteTemplate(this)" title="Видалити"><i class="bi bi-trash3"></i></button>
+                            <div class="template-item-details">
+                                <table class="tpl-detail-table">
+                                    <thead><tr><th>Параметр</th><th>Значення</th><th>Логіка</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Назва контрагента відправника</td><td>Зоомагазин біля м. Дарниця</td><td class="logic-and">І</td></tr>
+                                        <tr><td>Дата закриття ЄН</td><td>за останні 3 міс.</td><td class="logic-end">—</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <div class="template-item">
-                            <div class="template-item-left">
-                                <span class="template-type-badge badge-senders">Відправники</span>
-                                <div>
-                                    <div class="fw-semibold" style="font-size:0.85rem;">Люди, які отримували зоотовари2</div>
-                                    <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
-                                        ID: 88883232229
-                                        <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', this)" title="Скопіювати ID"></i>
+                            <div class="template-item-header" onclick="toggleTemplateDetails(this)">
+                                <div class="template-item-left">
+                                    <span class="template-type-badge badge-senders">Відправники</span>
+                                    <div>
+                                        <div class="fw-semibold" style="font-size:0.85rem;">Відправники зоотоварів (Київ)</div>
+                                        <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
+                                            ID: 88883232230
+                                            <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232230', event, this)" title="Скопіювати ID"></i>
+                                        </div>
                                     </div>
-                                    <div class="text-muted" style="font-size:0.75rem;">Зоомагазин біля м. Дарниця</div>
+                                </div>
+                                <div class="tpl-header-right">
+                                    <i class="bi bi-chevron-down tpl-chevron"></i>
+                                    <button class="btn-template-delete" onclick="deleteTemplate(event, this)" title="Видалити"><i class="bi bi-trash3"></i></button>
                                 </div>
                             </div>
-                            <button class="btn-template-delete" onclick="deleteTemplate(this)" title="Видалити"><i class="bi bi-trash3"></i></button>
+                            <div class="template-item-details">
+                                <table class="tpl-detail-table">
+                                    <thead><tr><th>Параметр</th><th>Значення</th><th>Логіка</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Місто відправника</td><td>Київ</td><td class="logic-and">І</td></tr>
+                                        <tr><td>Опис вантажу</td><td>Зоотовари</td><td class="logic-end">—</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         <div class="template-item">
-                            <div class="template-item-left">
-                                <span class="template-type-badge badge-recipients">Одержувачі</span>
-                                <div>
-                                    <div class="fw-semibold" style="font-size:0.85rem;">Люди, які отримували зоотовари2</div>
-                                    <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
-                                        ID: 88883232229
-                                        <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', this)" title="Скопіювати ID"></i>
+                            <div class="template-item-header" onclick="toggleTemplateDetails(this)">
+                                <div class="template-item-left">
+                                    <span class="template-type-badge badge-recipients">Одержувачі</span>
+                                    <div>
+                                        <div class="fw-semibold" style="font-size:0.85rem;">Люди, які отримували зоотовари</div>
+                                        <div class="text-muted d-flex align-items-center gap-1" style="font-size:0.75rem;">
+                                            ID: 88883232229
+                                            <i class="bi bi-clipboard" style="cursor:pointer;" onclick="copyTemplateId('88883232229', event, this)" title="Скопіювати ID"></i>
+                                        </div>
                                     </div>
-                                    <div class="text-muted" style="font-size:0.75rem;">Зоомагазин біля м. Дарниця</div>
+                                </div>
+                                <div class="tpl-header-right">
+                                    <i class="bi bi-chevron-down tpl-chevron"></i>
+                                    <button class="btn-template-delete" onclick="deleteTemplate(event, this)" title="Видалити"><i class="bi bi-trash3"></i></button>
                                 </div>
                             </div>
-                            <button class="btn-template-delete" onclick="deleteTemplate(this)" title="Видалити"><i class="bi bi-trash3"></i></button>
+                            <div class="template-item-details">
+                                <table class="tpl-detail-table">
+                                    <thead><tr><th>Параметр</th><th>Значення</th><th>Логіка</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Назва контрагента відправника</td><td>Зоомагазин біля м. Дарниця</td><td class="logic-and">І</td></tr>
+                                        <tr><td>Місто отримувача</td><td>Київ</td><td class="logic-end">—</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2899,7 +2951,7 @@
       document.getElementById('seg-info-title').textContent = meta.title;
       document.getElementById('seg-info-desc').textContent = meta.desc;
 
-      document.getElementById('seg-info-templates').innerHTML = meta.templates.map(t => `
+      document.getElementById('seg-info-templates').innerHTML = meta.templates.map((t, idx) => `
         <div class="seg-tpl-card">
           <div class="seg-tpl-name">⚡ ${t.name}</div>
           <table class="seg-tpl-table">
@@ -2908,6 +2960,7 @@
               `<tr><td>${p}</td><td>${v}</td><td class="logic-${l==='І'?'and':l==='АБО'?'or':'end'}">${l}</td></tr>`
             ).join('')}</tbody>
           </table>
+          <button class="seg-tpl-apply-btn" onclick="applySegTemplate('${seg}', ${idx})">▶ Застосувати шаблон</button>
         </div>`).join('');
 
       document.getElementById('seg-info-banner').classList.add('open');
@@ -2941,14 +2994,24 @@
         if (modal) modal.hide();
     }
 
-    // Template apply stub
-    function applyTemplate(id) {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('templatesModal'));
-        if (modal) modal.hide();
-        console.log('Applying template:', id);
+    // Apply segment template from ⓘ panel
+    function applySegTemplate(seg, idx) {
+        const tabBtn = document.querySelector(`.seg-tab[onclick*="'${seg}'"]`);
+        if (tabBtn) switchSegment(seg, tabBtn);
+        document.getElementById('seg-info-banner').classList.remove('open');
+        if (typeof showToast === 'function') showToast('Шаблон застосовано — налаштуйте значення фільтрів', 'info');
     }
 
     // ── TEMPLATE MODAL HELPERS ─────────────────────────────────
+    function toggleTemplateDetails(headerEl) {
+        const item = headerEl.closest('.template-item');
+        const details = item.querySelector('.template-item-details');
+        const chevron = headerEl.querySelector('.tpl-chevron');
+        const isOpen = item.classList.toggle('expanded');
+        if (details) details.style.display = isOpen ? 'block' : 'none';
+        if (chevron) chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+    }
+
     function filterTemplates(q) {
         const items = document.querySelectorAll('#templates-list .template-item');
         const lower = q.toLowerCase();
@@ -2958,13 +3021,15 @@
         });
     }
 
-    function copyTemplateId(id, icon) {
+    function copyTemplateId(id, e, icon) {
+        if (e) e.stopPropagation();
         navigator.clipboard.writeText(id).catch(() => {});
         icon.className = 'bi bi-clipboard-check text-success';
         setTimeout(() => { icon.className = 'bi bi-clipboard'; }, 2000);
     }
 
-    function deleteTemplate(btn) {
+    function deleteTemplate(e, btn) {
+        if (e) e.stopPropagation();
         const item = btn.closest('.template-item');
         if (item) item.remove();
     }
