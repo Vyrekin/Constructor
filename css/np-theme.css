@@ -1546,10 +1546,12 @@ main.container-fluid { padding: 0 !important; }
 .seg-info-desc {
   font-size: 0.73rem;
   color: var(--text-muted);
-  white-space: nowrap;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 480px;
+  max-width: 560px;
 }
 .seg-info-templates { display: flex; gap: 8px; flex: 1; align-items: center; }
 
