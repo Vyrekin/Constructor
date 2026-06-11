@@ -2890,50 +2890,35 @@
       b2b: {
         emoji: '🏢',
         title: 'B2B — Бізнес-клієнти',
-        desc: 'Компанії та ФОП, що співпрацюють з Новою Поштою. Вивантажуються контакти ЛПР — навіть якщо компанія давно не відправляла посилок.',
+        desc: 'Отримуєш список компаній та ФОП з контактами ЛПР — ім\'я, телефон та email особи, яка приймає рішення.',
         templates: [
           { name: 'Сплячі B2B — реактивація', filters: [
             { id: 'activity_segment_counter_party', label: 'Сегмент активності контрагента', value: 'Сплячий', logic: 'І', op: 'ТА' },
             { id: 'b_days_without_sending_or_receiving', label: 'Днів без ЄН (B2B)', value: '> 90', logic: 'І', op: 'ТА' },
             { id: 'counter_party_fixed_manager', label: 'Закріплений менеджер', value: '', logic: '—', op: 'ТА' }
-          ]},
-          { name: 'ЛПР e-commerce компаній', filters: [
-            { id: 'counter_party_group_activity_main', label: 'Сфера діяльності основного контрагента', value: 'E-commerce', logic: 'І', op: 'ТА' },
-            { id: 'counter_party_type', label: 'Тип контрагента', value: 'Юр. особа / ФОП', logic: 'І', op: 'ТА' },
-            { id: 'counter_party_category', label: 'Категорія контрагента', value: 'Regional', logic: '—', op: 'ТА' }
           ]}
         ]
       },
       b2c: {
         emoji: '👤',
         title: 'B2C — Приватні клієнти',
-        desc: 'Фізичні особи з бази клієнтів НП. Підходить для персональних кампаній — навіть якщо людина давно нічого не відправляла, вона є в базі і до неї можна звернутись.',
+        desc: 'Отримуєш список фізичних осіб з профільними телефонами — навіть тих, хто давно не користувався сервісом НП.',
         templates: [
-          { name: 'VIP зі згодою — промо-розсилка', filters: [
+          { name: 'VIP клієнти зі згодою на розсилку', filters: [
             { id: 'activity_segment', label: 'Сегмент активності', value: 'VIP', logic: 'І', op: 'ТА' },
             { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: 'І', op: 'ТА' },
             { id: 'last_transaction_date', label: 'Дата останньої транзакції', value: '', logic: '—', op: 'ТА' }
-          ]},
-          { name: 'At Risk — реактивація через додаток', filters: [
-            { id: 'rfm_segment', label: 'RFM сегмент (загальний)', value: 'At Risk', logic: 'І', op: 'ТА' },
-            { id: 'has_new_app', label: 'Наявність нового додатка', value: 'Так', logic: 'І', op: 'ТА' },
-            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: '—', op: 'ТА' }
           ]}
         ]
       },
       senders: {
         emoji: '📦',
         title: 'Відправники',
-        desc: 'Люди, які здавали посилки за останній рік — у відділеннях, поштоматах або через кур\'єра. Вивантажується телефон, вказаний при відправці.',
+        desc: 'Отримуєш телефони людей, які фізично здавали посилки. Номер береться з накладної — може відрізнятись від профільного.',
         templates: [
-          { name: 'Відправники через поштомат у місті', filters: [
-            { id: 'ew_sender_city', label: 'Місто відправника', value: '', logic: 'І', op: 'ТА' },
-            { id: 'creation_place_type', label: 'Тип місця створення', value: 'Поштомат', logic: 'І', op: 'ТА' },
-            { id: 'creation_date', label: 'Дата створення ЄН', value: '', logic: '—', op: 'ТА' }
-          ]},
           { name: 'Відправники певної категорії товару', filters: [
             { id: 'ew_cargo_description', label: 'Опис вантажу', value: '', logic: 'І', op: 'ТА' },
-            { id: 'ew_sender_unit_type', label: 'Тип підрозділу відправника', value: 'Відділення', logic: 'І', op: 'ТА' },
+            { id: 'ew_sender_city', label: 'Місто відправника', value: '', logic: 'І', op: 'ТА' },
             { id: 'creation_date', label: 'Дата створення ЄН', value: '', logic: '—', op: 'ТА' }
           ]}
         ]
@@ -2941,50 +2926,36 @@
       recipients: {
         emoji: '📬',
         title: 'Одержувачі',
-        desc: 'Люди, які отримували посилки за останній рік. Можна знайти покупців конкретного магазину або одержувачів у певному місті — навіть якщо вони не зареєстровані як клієнти НП.',
+        desc: 'Отримуєш телефони людей, які отримували посилки — включно з покупцями магазинів, що не зареєстровані в НП.',
         templates: [
           { name: 'Покупці конкретного магазину', filters: [
             { id: 'ew_sender_counter_party_name', label: 'Назва контрагента відправника', value: '', logic: 'І', op: 'ТА' },
             { id: 'closing_date', label: 'Дата закриття ЄН', value: '', logic: 'І', op: 'ТА' },
             { id: 'ew_recipient_city', label: 'Місто отримувача', value: '', logic: '—', op: 'ТА' }
-          ]},
-          { name: 'Одержувачі з поверненнями', filters: [
-            { id: 'reason_return', label: 'Причина повернення ЄН', value: '', logic: 'І', op: 'ТА' },
-            { id: 'ew_recipient_area', label: 'Область отримувача', value: '', logic: 'І', op: 'ТА' },
-            { id: 'closing_date', label: 'Дата закриття ЄН', value: '', logic: '—', op: 'ТА' }
           ]}
         ]
       },
       merchants: {
         emoji: '🛒',
         title: 'Продавці (Мерчанти)',
-        desc: 'Інтернет-магазини та підприємці, що регулярно відправляють товари через НП. Підходить для партнерських кампаній та роботи з e-commerce сегментом.',
+        desc: 'Отримуєш список інтернет-магазинів та підприємців з даними по відправках — кількість ЄН, категорія, дати активності.',
         templates: [
           { name: 'Активні мерчанти у категорії', filters: [
             { id: 'activity_category', label: 'Сфера діяльності (категорія)', value: '', logic: 'І', op: 'ТА' },
             { id: 'counterparty_ew_count', label: 'К-сть ЄН по контрагенту', value: '> 50', logic: 'І', op: 'ТА' },
             { id: 'last_counterparty_ew_date', label: 'Дата останньої ЄН по контрагенту', value: '', logic: '—', op: 'ТА' }
-          ]},
-          { name: 'Мерчанти з прогнозом покупки', filters: [
-            { id: 'next_purchase_probability_in_category_new', label: 'Ймовірність покупки в сфері (new)', value: '> 70%', logic: 'І', op: 'ТА' },
-            { id: 'first_counterparty_ew_date', label: 'Дата першої ЄН по контрагенту', value: '', logic: '—', op: 'ТА' }
           ]}
         ]
       },
       activity: {
         emoji: '📊',
         title: 'Активність',
-        desc: 'Клієнти, у яких є реальна активність — заходили в додаток, користувались сервісами. Якщо людина просто є в базі, але нічого не робила — вона сюди не потрапить.',
+        desc: 'Отримуєш список клієнтів, які реально взаємодіяли з додатком або сервісами НП — з телефоном та даними про останню активність.',
         templates: [
           { name: 'Реактивація користувачів нового додатку', filters: [
             { id: 'has_new_app', label: 'Наявність нового додатка', value: 'Так', logic: 'І', op: 'ТА' },
             { id: 'new_app_last_login_date', label: 'Дата останнього входу в новий дод.', value: '', logic: 'І', op: 'ТА' },
             { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: '—', op: 'ТА' }
-          ]},
-          { name: 'iOS-юзери з прогнозом покупки', filters: [
-            { id: 'new_app_device_os', label: 'ОС девайсу нового додатка', value: 'iOS', logic: 'І', op: 'ТА' },
-            { id: 'next_purchase_probability_in_category_new', label: 'Ймовірність покупки в сфері (new)', value: '> 65%', logic: 'І', op: 'ТА' },
-            { id: 'has_new_app', label: 'Наявність нового додатка', value: 'Так', logic: '—', op: 'ТА' }
           ]}
         ]
       }
