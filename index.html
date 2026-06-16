@@ -2890,11 +2890,11 @@
       b2b: {
         emoji: '🏢',
         title: 'B2B — Бізнес-клієнти',
-        desc: 'Отримуєш список компаній та ФОП з контактами ЛПР — ім\'я, телефон та email особи, яка приймає рішення.',
+        desc: 'Вибірка охоплює компанії та ФОП, що відправляють або отримують посилки через НП, з даними по ЛПР.',
         templates: [
-          { name: 'Сплячі B2B — реактивація', filters: [
-            { id: 'activity_segment_counter_party', label: 'Сегмент активності контрагента', value: 'Сплячий', logic: 'І', op: 'ТА' },
-            { id: 'b_days_without_sending_or_receiving', label: 'Днів без ЄН (B2B)', value: '> 90', logic: 'І', op: 'ТА' },
+          { name: 'Бізнес-клієнти певного типу контрагента', filters: [
+            { id: 'counter_party_type', label: 'Тип контрагента', value: '', logic: 'І', op: 'ТА' },
+            { id: 'client_segment_quarter', label: 'Сегмент клієнта (квартал)', value: '', logic: 'І', op: 'ТА' },
             { id: 'counter_party_fixed_manager', label: 'Закріплений менеджер', value: '', logic: '—', op: 'ТА' }
           ]}
         ]
@@ -2902,36 +2902,36 @@
       b2c: {
         emoji: '👤',
         title: 'B2C — Приватні клієнти',
-        desc: 'Отримуєш список фізичних осіб з профільними телефонами — навіть тих, хто давно не користувався сервісом НП.',
+        desc: 'Вибірка охоплює приватних клієнтів НП — активних та тих, хто давно не користувався сервісом.',
         templates: [
-          { name: 'VIP клієнти зі згодою на розсилку', filters: [
-            { id: 'activity_segment', label: 'Сегмент активності', value: 'VIP', logic: 'І', op: 'ТА' },
-            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: 'І', op: 'ТА' },
-            { id: 'last_transaction_date', label: 'Дата останньої транзакції', value: '', logic: '—', op: 'ТА' }
+          { name: 'Приватні клієнти за сегментом активності', filters: [
+            { id: 'activity_segment', label: 'Сегмент активності', value: '', logic: 'І', op: 'ТА' },
+            { id: 'age_group', label: 'Вікова група', value: '', logic: 'І', op: 'ТА' },
+            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: '—', op: 'ТА' }
           ]}
         ]
       },
       senders: {
         emoji: '📦',
         title: 'Відправники',
-        desc: 'Отримуєш телефони людей, які фізично здавали посилки. Номер береться з накладної — може відрізнятись від профільного.',
+        desc: 'Вибірка охоплює клієнтів, які відправляли посилки через НП.',
         templates: [
-          { name: 'Відправники певної категорії товару', filters: [
-            { id: 'ew_cargo_description', label: 'Опис вантажу', value: '', logic: 'І', op: 'ТА' },
+          { name: 'Активні відправники з міста', filters: [
+            { id: 'activity_segment_sender', label: 'Сегмент активності за відправками', value: '', logic: 'І', op: 'ТА' },
             { id: 'ew_sender_city', label: 'Місто відправника', value: '', logic: 'І', op: 'ТА' },
-            { id: 'creation_date', label: 'Дата створення ЄН', value: '', logic: '—', op: 'ТА' }
+            { id: 'last_sent_ew_date', label: 'Дата останньої відправленої ЄН', value: '', logic: '—', op: 'ТА' }
           ]}
         ]
       },
       recipients: {
         emoji: '📬',
         title: 'Одержувачі',
-        desc: 'Отримуєш телефони людей, які отримували посилки — включно з покупцями магазинів, що не зареєстровані в НП.',
+        desc: 'Вибірка охоплює клієнтів, які отримували посилки через НП.',
         templates: [
-          { name: 'Покупці конкретного магазину', filters: [
-            { id: 'ew_sender_counter_party_name', label: 'Назва контрагента відправника', value: '', logic: 'І', op: 'ТА' },
-            { id: 'closing_date', label: 'Дата закриття ЄН', value: '', logic: 'І', op: 'ТА' },
-            { id: 'ew_recipient_city', label: 'Місто отримувача', value: '', logic: '—', op: 'ТА' }
+          { name: 'Активні одержувачі з міста', filters: [
+            { id: 'activity_segment_recipient', label: 'Сегмент активності за отриманням', value: '', logic: 'І', op: 'ТА' },
+            { id: 'ew_recipient_city', label: 'Місто отримувача', value: '', logic: 'І', op: 'ТА' },
+            { id: 'last_received_ew_date', label: 'Дата останньої отриманої ЄН', value: '', logic: '—', op: 'ТА' }
           ]}
         ]
       },
