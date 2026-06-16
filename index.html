@@ -2895,7 +2895,7 @@
           { name: 'Бізнес-клієнти певного типу контрагента', filters: [
             { id: 'counter_party_type', label: 'Тип контрагента', value: 'ФОП', logic: 'І', op: 'ТА' },
             { id: 'activity_segment_counter_party', label: 'Сегмент активності контрагента', value: 'Активний', logic: 'І', op: 'ТА' },
-            { id: 'counter_party_fixed_manager', label: 'Закріплений менеджер', value: '', logic: '—', op: 'ТА' }
+            { id: 'counter_party_fixed_manager', label: 'Закріплений менеджер', value: 'Є', logic: '—', op: 'ТА' }
           ]}
         ]
       },
@@ -2907,7 +2907,7 @@
           { name: 'VIP клієнти зі згодою на розсилку', filters: [
             { id: 'activity_segment', label: 'Сегмент активності', value: 'VIP', logic: 'І', op: 'ТА' },
             { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: 'І', op: 'ТА' },
-            { id: 'age_group', label: 'Вікова група', value: '', logic: '—', op: 'ТА' }
+            { id: 'age_group', label: 'Вікова група', value: '25-34', logic: '—', op: 'ТА' }
           ]}
         ]
       },
@@ -2918,8 +2918,8 @@
         templates: [
           { name: 'Активні відправники з міста', filters: [
             { id: 'activity_segment_sender', label: 'Сегмент активності за відправками', value: 'Активний', logic: 'І', op: 'ТА' },
-            { id: 'ew_sender_city', label: 'Місто відправника', value: '', logic: 'І', op: 'ТА' },
-            { id: 'last_sent_ew_date', label: 'Дата останньої відправленої ЄН', value: '', logic: '—', op: 'ТА' }
+            { id: 'ew_sender_city', label: 'Місто відправника', value: 'Київ', logic: 'І', op: 'ТА' },
+            { id: 'last_sent_ew_date', label: 'Дата останньої відправленої ЄН', value: 'Останні 90 днів', logic: '—', op: 'ТА' }
           ]}
         ]
       },
@@ -2930,8 +2930,8 @@
         templates: [
           { name: 'Активні одержувачі з міста', filters: [
             { id: 'activity_segment_recipient', label: 'Сегмент активності за отриманням', value: 'Активний', logic: 'І', op: 'ТА' },
-            { id: 'ew_recipient_city', label: 'Місто отримувача', value: '', logic: 'І', op: 'ТА' },
-            { id: 'last_received_ew_date', label: 'Дата останньої отриманої ЄН', value: '', logic: '—', op: 'ТА' }
+            { id: 'ew_recipient_city', label: 'Місто отримувача', value: 'Київ', logic: 'І', op: 'ТА' },
+            { id: 'last_received_ew_date', label: 'Дата останньої отриманої ЄН', value: 'Останні 90 днів', logic: '—', op: 'ТА' }
           ]}
         ]
       },
@@ -2941,9 +2941,9 @@
         desc: 'Отримуєш список інтернет-магазинів та підприємців з даними по відправках — кількість ЄН, категорія, дати активності.',
         templates: [
           { name: 'Активні мерчанти у категорії', filters: [
-            { id: 'activity_category', label: 'Сфера діяльності (категорія)', value: '', logic: 'І', op: 'ТА' },
+            { id: 'activity_category', label: 'Сфера діяльності (категорія)', value: 'Одяг та взуття', logic: 'І', op: 'ТА' },
             { id: 'counterparty_ew_count', label: 'К-сть ЄН по контрагенту', value: '> 50', logic: 'І', op: 'ТА' },
-            { id: 'last_counterparty_ew_date', label: 'Дата останньої ЄН по контрагенту', value: '', logic: '—', op: 'ТА' }
+            { id: 'last_counterparty_ew_date', label: 'Дата останньої ЄН по контрагенту', value: 'Останні 30 днів', logic: '—', op: 'ТА' }
           ]}
         ]
       },
@@ -2954,7 +2954,7 @@
         templates: [
           { name: 'Реактивація користувачів нового додатку', filters: [
             { id: 'has_new_app', label: 'Наявність нового додатка', value: 'Так', logic: 'І', op: 'ТА' },
-            { id: 'new_app_last_login_date', label: 'Дата останнього входу в новий дод.', value: '', logic: 'І', op: 'ТА' },
+            { id: 'new_app_last_login_date', label: 'Дата останнього входу в новий дод.', value: 'Останні 30 днів', logic: 'І', op: 'ТА' },
             { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: '—', op: 'ТА' }
           ]}
         ]
