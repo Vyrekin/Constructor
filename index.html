@@ -2893,8 +2893,8 @@
         desc: 'Вибірка охоплює компанії та ФОП, що відправляють або отримують посилки через НП, з даними по ЛПР.',
         templates: [
           { name: 'Бізнес-клієнти певного типу контрагента', filters: [
-            { id: 'counter_party_type', label: 'Тип контрагента', value: '', logic: 'І', op: 'ТА' },
-            { id: 'client_segment_quarter', label: 'Сегмент клієнта (квартал)', value: '', logic: 'І', op: 'ТА' },
+            { id: 'counter_party_type', label: 'Тип контрагента', value: 'ФОП', logic: 'І', op: 'ТА' },
+            { id: 'activity_segment_counter_party', label: 'Сегмент активності контрагента', value: 'Активний', logic: 'І', op: 'ТА' },
             { id: 'counter_party_fixed_manager', label: 'Закріплений менеджер', value: '', logic: '—', op: 'ТА' }
           ]}
         ]
@@ -2904,10 +2904,10 @@
         title: 'B2C — Приватні клієнти',
         desc: 'Вибірка охоплює приватних клієнтів НП — активних та тих, хто давно не користувався сервісом.',
         templates: [
-          { name: 'Приватні клієнти за сегментом активності', filters: [
-            { id: 'activity_segment', label: 'Сегмент активності', value: '', logic: 'І', op: 'ТА' },
-            { id: 'age_group', label: 'Вікова група', value: '', logic: 'І', op: 'ТА' },
-            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: '—', op: 'ТА' }
+          { name: 'VIP клієнти зі згодою на розсилку', filters: [
+            { id: 'activity_segment', label: 'Сегмент активності', value: 'VIP', logic: 'І', op: 'ТА' },
+            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: 'І', op: 'ТА' },
+            { id: 'age_group', label: 'Вікова група', value: '', logic: '—', op: 'ТА' }
           ]}
         ]
       },
@@ -2917,7 +2917,7 @@
         desc: 'Вибірка охоплює клієнтів, які відправляли посилки через НП.',
         templates: [
           { name: 'Активні відправники з міста', filters: [
-            { id: 'activity_segment_sender', label: 'Сегмент активності за відправками', value: '', logic: 'І', op: 'ТА' },
+            { id: 'activity_segment_sender', label: 'Сегмент активності за відправками', value: 'Активний', logic: 'І', op: 'ТА' },
             { id: 'ew_sender_city', label: 'Місто відправника', value: '', logic: 'І', op: 'ТА' },
             { id: 'last_sent_ew_date', label: 'Дата останньої відправленої ЄН', value: '', logic: '—', op: 'ТА' }
           ]}
@@ -2929,7 +2929,7 @@
         desc: 'Вибірка охоплює клієнтів, які отримували посилки через НП.',
         templates: [
           { name: 'Активні одержувачі з міста', filters: [
-            { id: 'activity_segment_recipient', label: 'Сегмент активності за отриманням', value: '', logic: 'І', op: 'ТА' },
+            { id: 'activity_segment_recipient', label: 'Сегмент активності за отриманням', value: 'Активний', logic: 'І', op: 'ТА' },
             { id: 'ew_recipient_city', label: 'Місто отримувача', value: '', logic: 'І', op: 'ТА' },
             { id: 'last_received_ew_date', label: 'Дата останньої отриманої ЄН', value: '', logic: '—', op: 'ТА' }
           ]}
