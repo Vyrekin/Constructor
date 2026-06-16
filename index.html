@@ -84,14 +84,12 @@
     <div class="page-subheader">
         <h4 class="page-title">Конструктор вибірок</h4>
 
-        <!-- Segment tabs: B2B / B2C / Відправники / Одержувачі / Продавці / Активність -->
+        <!-- Segment tabs: B2B / B2C / Відправники / Одержувачі -->
         <div class="segment-tabs">
             <button class="seg-tab active" onclick="switchSegment('b2b', this)">B2B</button>
             <button class="seg-tab" onclick="switchSegment('b2c', this)">B2C</button>
             <button class="seg-tab" onclick="switchSegment('senders', this)">Відправники</button>
             <button class="seg-tab" onclick="switchSegment('recipients', this)">Одержувачі</button>
-            <button class="seg-tab" onclick="switchSegment('merchants', this)">Продавці</button>
-            <button class="seg-tab" onclick="switchSegment('activity', this)">Активність</button>
         </div>
 
         <div class="ms-auto">
@@ -2857,7 +2855,7 @@
         window.currentSegment = seg;
 
         // Map segment to field scope
-        const scopeMap = { b2b: 'b2b', b2c: 'b2c', senders: 'all', recipients: 'all', merchants: 'all', activity: 'all' };
+        const scopeMap = { b2b: 'b2b', b2c: 'b2c', senders: 'all', recipients: 'all' };
         const scope = scopeMap[seg] || 'all';
 
         // Update hidden scope radio
@@ -2932,30 +2930,6 @@
             { id: 'activity_segment_recipient', label: 'Сегмент активності за отриманням', value: 'Активний', logic: 'І', op: 'ТА' },
             { id: 'ew_recipient_city', label: 'Місто отримувача', value: 'Київ', logic: 'І', op: 'ТА' },
             { id: 'last_received_ew_date', label: 'Дата останньої отриманої ЄН', value: 'Останні 90 днів', logic: '—', op: 'ТА' }
-          ]}
-        ]
-      },
-      merchants: {
-        emoji: '🛒',
-        title: 'Продавці (Мерчанти)',
-        desc: 'Отримуєш список інтернет-магазинів та підприємців з даними по відправках — кількість ЄН, категорія, дати активності.',
-        templates: [
-          { name: 'Активні мерчанти у категорії', filters: [
-            { id: 'activity_category', label: 'Сфера діяльності (категорія)', value: 'Одяг та взуття', logic: 'І', op: 'ТА' },
-            { id: 'counterparty_ew_count', label: 'К-сть ЄН по контрагенту', value: '> 50', logic: 'І', op: 'ТА' },
-            { id: 'last_counterparty_ew_date', label: 'Дата останньої ЄН по контрагенту', value: 'Останні 30 днів', logic: '—', op: 'ТА' }
-          ]}
-        ]
-      },
-      activity: {
-        emoji: '📊',
-        title: 'Активність',
-        desc: 'Отримуєш список клієнтів, які реально взаємодіяли з додатком або сервісами НП — з телефоном та даними про останню активність.',
-        templates: [
-          { name: 'Реактивація користувачів нового додатку', filters: [
-            { id: 'has_new_app', label: 'Наявність нового додатка', value: 'Так', logic: 'І', op: 'ТА' },
-            { id: 'new_app_last_login_date', label: 'Дата останнього входу в новий дод.', value: 'Останні 30 днів', logic: 'І', op: 'ТА' },
-            { id: 'consent_promotional_mailings', label: 'Згода на проморозсилки', value: 'Так', logic: '—', op: 'ТА' }
           ]}
         ]
       }
